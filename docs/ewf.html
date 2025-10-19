@@ -1,0 +1,2112 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Expert Witness Compression Format (EWF) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="expert-witness-compression-format-ewf"><a class="header" href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></h1>
+<p>EWF is short for Expert Witness Compression Format. It is a file type used to
+store storage media images for digital forensic purposes. It is currently
+widely used in the field of computer forensics in proprietary tooling like
+EnCase en FTK. The <a href="http://www.asrdata.com/whitepaper-html">original specification</a>
+of the format was provided by ASR Data for the SMART application</p>
+<p>The EWF format was succeeded by the <a href="ewf2.html">Expert Witness Compression Format version 2</a>
+in EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version
+of EWF-L01 then its predecessors.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The Expert Witness Compression Format (EWF) is used to store:</p>
+<ul>
+<li>storage media images, such as hard disks, USB sticks, optical disks</li>
+<li>individual volumes or partitions</li>
+<li>"physical" RAM and process memory</li>
+</ul>
+<p>EWF can store data compressed or uncompressed, in a single image in one or more
+segment files. Each segment file consist of a standard header, followed by
+multiple sections. A single section cannot span multiple files. Sections are
+arranged back-to-back.</p>
+<h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
+<p>In this document when referred to the EWF format it refers to the original
+specification by ASR Data. The newer formats like that of EnCase are deducted
+from the original specification and will be referred to as the EWF-E01, because
+of the default file extension. Whereas the Logical File Evidence (LVF) format
+introduced in EnCase 5, which is also stored in the EWF format will be referred
+to as EWF-L01. The SMART format is viewed separately to allow for discussion if
+the implementation differs from the specification by ASR Data and will be
+referred to as the EWF-S01, because of the default file extension.</p>
+<p>All offsets are relative to the beginning of an individual section, unless
+otherwise noted. EnCase allows a maximum size of a segment file to be 2000 MiB.
+This has to do with the size of the offset of the chunk of media data. This is
+a 32 bit value where the most significant bit (MSB) is used as a compression
+flag. Therefore the maximum offset size (31 bit) can address about 2048 MiB. In
+EnCase 6.7 an addition was made to the table value to provide for a base offset
+to allow for segment files greater than 2048 MiB.</p>
+<p>A chunk is defined as the sector size (per default 512 bytes) multiplied by the
+block size, the number of sectors per chunk (block) (per default 64 sectors).
+The data within the EWF format is stored in little-endian. The terms block and
+chunk are used intermittently.</p>
+<h2 id="segment-file"><a class="header" href="#segment-file">Segment file</a></h2>
+<p>EWF stores data in one or more segment files (or segments). Each segment file
+consists of:</p>
+<ul>
+<li>A file header.</li>
+<li>One or more sections.</li>
+</ul>
+<h3 id="file-header"><a class="header" href="#file-header">File header</a></h3>
+<p>Each segment file starts with a file header.</p>
+<p>EWF defines that the file header consists of 2 parts, namely:</p>
+<ul>
+<li>a signature part</li>
+<li>fields part</li>
+</ul>
+<h4 id="ewf-ewf-e01-and-smart-ewf-s01"><a class="header" href="#ewf-ewf-e01-and-smart-ewf-s01">EWF, EWF-E01 and SMART (EWF-S01)</a></h4>
+<p>The file header, used by both the EWF-E01 and SMART (EWF-S01) formats, is 13
+bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td>"EVF\x09\x0d\x0a\xff\x00"</td><td>Signature</td></tr>
+<tr><td>8</td><td>1</td><td>0x01</td><td>Start of fields</td></tr>
+<tr><td>9</td><td>2</td><td></td><td>Segment number, which must be 1 or higher</td></tr>
+<tr><td>11</td><td>2</td><td>0x0000</td><td>End of fields</td></tr>
+</table></div>
+<p>The segment number contains a number which refers to the number of the segment
+file, starting with 1 for the first file.</p>
+<blockquote>
+<p>Note this means there could only be a maximum of 65535 (0xffff) files, if it
+is an unsigned value.</p>
+</blockquote>
+<h4 id="ewf-l01"><a class="header" href="#ewf-l01">EWF-L01</a></h4>
+<p>The file header, used by the EWF-L01 format, is 13 bytes in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td>"LVF\x09\x0d\x0a\xff\x00"</td><td>Signature</td></tr>
+<tr><td>8</td><td>1</td><td>0x01</td><td>Start of fields</td></tr>
+<tr><td>9</td><td>2</td><td></td><td>Segment number, which must be 1 or higher</td></tr>
+<tr><td>11</td><td>2</td><td>0x0000</td><td>End of fields</td></tr>
+</table></div>
+<p>The segment number contains a number which refers to the number of the segment
+file, starting with 1 for the first file.</p>
+<blockquote>
+<p>Note this means there could only be a maximum of 65535 (0xffff) files, if it
+is an unsigned value.</p>
+</blockquote>
+<h3 id="segment-file-extensions"><a class="header" href="#segment-file-extensions">Segment file extensions</a></h3>
+<p>The SMART (EWF-S01) and the EWF-E01 formats use a different naming convention
+for the segment files.</p>
+<h4 id="smart-ewf-s01"><a class="header" href="#smart-ewf-s01">SMART (EWF-S01)</a></h4>
+<p>The SMART (EWF-S01) extension naming has two distinct parts.</p>
+<ul>
+<li>The first segment file has the extension '.s01'.
+<ul>
+<li>The next segment file has the extension '.s02.</li>
+<li>This will continue up to '.s99'.</li>
+</ul>
+</li>
+<li>After which the next segment file has the extension '.saa'.
+<ul>
+<li>The next segment file has the extension '.sab'.</li>
+<li>This will continue up to '.saz'.</li>
+<li>The next segment file has the extension '.sba'.</li>
+<li>This will continue up to '.szz'.</li>
+<li>The next segment file has the extension '.faa'.</li>
+<li>This will continue up to '.zzz'.</li>
+<li>Not confirmed but other sources report it will even continue to the use the extensions '.{aa'.</li>
+</ul>
+</li>
+</ul>
+<p>Keramics supports extensions up to .zzz</p>
+<h4 id="ewf-e01"><a class="header" href="#ewf-e01">EWF-E01</a></h4>
+<p>The EWF-E01 extension naming has two distinct parts.</p>
+<ul>
+<li>The first segment file has the extension '.E01'.
+<ul>
+<li>The next segment file has the extension '.E02.</li>
+<li>This will continue up to '.E99'.</li>
+</ul>
+</li>
+<li>After which the next segment file has the extension '.EAA'.
+<ul>
+<li>The next segment file has the extension '.EAB'.</li>
+<li>This will continue up to '.EAZ'.</li>
+<li>The next segment file has the extension '.EBA'.</li>
+<li>This will continue up to '.EZZ'.</li>
+<li>The next segment file has the extension '.FAA'.</li>
+<li>This will continue up to '.ZZZ'.</li>
+<li>Not confirmed but other sources report it will even continue to the use the extensions '.[AA'.</li>
+</ul>
+</li>
+</ul>
+<p>Keramics supports extensions up to .ZZZ</p>
+<h4 id="ewf-l01-1"><a class="header" href="#ewf-l01-1">EWF-L01</a></h4>
+<p>The EWF-L01 extension naming has two distinct parts.</p>
+<ul>
+<li>The first segment file has the extension '.L01'.
+<ul>
+<li>The next segment file has the extension '.L02.</li>
+<li>This will continue up to '.L99'.</li>
+</ul>
+</li>
+<li>After which the next segment file has the extension '.LAA'.
+<ul>
+<li>The next segment file has the extension '.LAB'.</li>
+<li>This will continue up to '.LAZ'.</li>
+<li>The next segment file has the extension '.LBA'.</li>
+<li>This will continue up to '.LZZ'.</li>
+<li>The next segment file has the extension '.MAA'.</li>
+<li>This will continue up to '.ZZZ'.</li>
+<li>Not confirmed but other sources report it will even continue to the use the extensions '.[AA'.</li>
+</ul>
+</li>
+</ul>
+<p>Keramics supports extensions up to .ZZZ</p>
+<h3 id="segment-file-set-identifier-guid"><a class="header" href="#segment-file-set-identifier-guid">Segment file set identifier GUID</a></h3>
+<p>Segment file sets do not have a strict unique identifier. However the
+<a href="#volume_section">volume section</a> contains a GUID that can be used for this
+purpose. Where:</p>
+<ul>
+<li>linen 5 to 6 use a time and MAC address based version (1) of the GUID</li>
+<li>EnCase 5 to 7 and linen 6 to 7 use a random based version (4) of the GUID</li>
+</ul>
+<blockquote>
+<p>Note that in linen 6 the switch from a version 1 to 4 GUID was somewhere made
+between version 6.01 and 6.19.</p>
+</blockquote>
+<p>See RFC4122 for more information about the different GUID versions.</p>
+<h2 id="the-sections"><a class="header" href="#the-sections">The sections</a></h2>
+<p>The remainder of the segment file consists of sections. Every section starts
+with the same data this will be referred to as the section header. The section
+header could also be referred as the section header, but this allows for
+unnecessary confusion with the <a href="#header_section">header section</a>.</p>
+<h3 id="section-header"><a class="header" href="#section-header">Section header</a></h3>
+<p>The section header consist of 76 bytes, it contains information about a
+specific section.</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Section type, a string containing the section type definition, such as "header" or "volume"</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Next section offset, where the offset is relative from the start of the segment file</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Section size</td></tr>
+<tr><td>32</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>72</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section header.</td></tr>
+</table></div>
+<p>Some sections contain additional data, refer to paragraph section types for
+more information.</p>
+<blockquote>
+<p>Note Expert Witness 1.35 (for Windows) does not set the section size.</p>
+</blockquote>
+<blockquote>
+<p>Note that in EnCase 2 DOS version the padding itself does not contains 0-byte
+values but data, probably the memory is not filled with 0-byte values.</p>
+</blockquote>
+<h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
+<p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
+defines the following:</p>
+<ul>
+<li>Header section</li>
+<li>Volume section</li>
+<li>Table section</li>
+<li>Next and Done section</li>
+</ul>
+<p>The following sections type were found analyzing more recent EnCase files (EWF-E01):</p>
+<ul>
+<li>Header2 section</li>
+<li>Disk section</li>
+<li>Sectors section</li>
+<li>Table2 section</li>
+<li>Data section</li>
+<li>Error2 section</li>
+<li>Session section</li>
+<li>Hash section</li>
+<li>Digest section</li>
+</ul>
+<p>The following sections type were found analyzing more recent EnCase files (EWF-L01):</p>
+<ul>
+<li>Ltree section</li>
+<li>Ltypes section</li>
+</ul>
+<h3 id="header2-section"><a class="header" href="#header2-section">Header2 section</a></h3>
+<p>The header2 section is identified in the section data type field as "header2".
+Some aspects of this section are:</p>
+<ul>
+<li>Found in EWF-E01 in EnCase 4 to 7, and EWF-L01 in EnCase 5 to 7</li>
+<li>Found at the start of the first segment file. Not found in subsequent segment files.</li>
+<li>The same header2 section is found twice directly after one and other.</li>
+</ul>
+<p>The additional data this section contains is the following:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td><td></td></tr>
+</table></div>
+<p>The information about the acquired media consists of <a href="zlib.html">zlib compressed data</a>.
+It contains text in UTF16 format specifying information about the acquired
+media. The text multiple lines separated by an end of line character(s).</p>
+<p>The first 2 bytes of the UTF16 string are the byte order mark (BOM):</p>
+<ul>
+<li>0xff 0xfe for UTF-16 litte-endian</li>
+<li>0xfe 0xff for UTF-16 big-endian</li>
+</ul>
+<p>In the next paragraphs the various variants of the header2 section are described.</p>
+<h4 id="encase-4-ewf-e01"><a class="header" href="#encase-4-ewf-e01">EnCase 4 (EWF-E01)</a></h4>
+<p>In EnCase 4 (EWF-E01) the header2 information consist of 5 lines, and contains
+the equivalent information as the <a href="#header_section">header section</a>.</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>1</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>main</td><td>The name/type of the category provided</td></tr>
+<tr><td>3</td><td></td><td>Identifiers for the values in the 4th line</td></tr>
+<tr><td>4</td><td></td><td>The data for the different identifiers in the 3rd line</td></tr>
+<tr><td>5</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<p>The end of line character(s) is a newline (0x0a).</p>
+<blockquote>
+<p>Note this end of line character differs from the one used in the <a href="#header_section">header section</a>.</p>
+</blockquote>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>a</td><td>Unique description</td></tr>
+<tr><td>2</td><td>c</td><td>Case number</td></tr>
+<tr><td>3</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>av</td><td>Version, which contains the EnCase version used to acquire the media</td></tr>
+<tr><td>7</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>8</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>9</td><td>u</td><td>System date and time</td></tr>
+<tr><td>10</td><td>p</td><td>Password hash</td></tr>
+</table></div>
+<p>Also see <a href="#header2_values">header2 values</a></p>
+<blockquote>
+<p>Note the hashing algorithm is the same as for the <a href="#header_section">header section</a>.</p>
+</blockquote>
+<h4 id="encase-5-to-7-ewf-e01"><a class="header" href="#encase-5-to-7-ewf-e01">EnCase 5 to 7 (EWF-E01)</a></h4>
+<p>In EnCase 5 to 7 (EWF-E01) the header2 information consist of 17 lines, and
+contains:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>3</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>main</td><td>The name/type of the category provided</td></tr>
+<tr><td>3</td><td></td><td>Identifier for the values in the category</td></tr>
+<tr><td>4</td><td></td><td>The data for the different identifiers in the category</td></tr>
+<tr><td>5</td><td></td><td>(an empty line)</td></tr>
+<tr><td>6</td><td>srce</td><td>The name/type of the category provided, also see <a href="#sources_category1">sources category</a></td></tr>
+<tr><td>7</td><td></td><td></td></tr>
+<tr><td>8</td><td></td><td>Identifier for the values in the category</td></tr>
+<tr><td>9</td><td></td><td>The data for the different identifiers in the category</td></tr>
+<tr><td>10</td><td></td><td></td></tr>
+<tr><td>11</td><td></td><td>(an empty line)</td></tr>
+<tr><td>12</td><td>sub</td><td>The name/type of the category provided, also see <a href="#subjects_category1">subjects category</a></td></tr>
+<tr><td>13</td><td></td><td></td></tr>
+<tr><td>14</td><td></td><td>Identifier for the values in the category</td></tr>
+<tr><td>15</td><td></td><td>The data for the different identifiers in the category</td></tr>
+<tr><td>16</td><td></td><td></td></tr>
+<tr><td>17</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<p>The end of line character(s) is a newline (0x0a).</p>
+<h5 id="main-category"><a class="header" href="#main-category">Main category</a></h5>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
+<blockquote>
+<p>Note the actual values in this category are dependent on the version of
+EnCase.</p>
+</blockquote>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>a</td><td>Unique description</td></tr>
+<tr><td>2</td><td>c</td><td>Case number</td></tr>
+<tr><td>3</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>md</td><td>The model of the media, such as hard disk model (introduced in EnCase 6)</td></tr>
+<tr><td>7</td><td>sn</td><td>The serial number of media (introduced in EnCase 6)</td></tr>
+<tr><td>8</td><td>l</td><td>The device label (introduced in EnCase 6.19)</td></tr>
+<tr><td>9</td><td>av</td><td>Version, which contains the EnCase version used to acquire the media. EnCase limits this value to 12 characters</td></tr>
+<tr><td>10</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>11</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>12</td><td>u</td><td>System date and time</td></tr>
+<tr><td>13</td><td>p</td><td>Password hash</td></tr>
+<tr><td>14</td><td>pid</td><td>Process identifier, which contains the identifier of the process memory acquired (introduced in EnCase 6.12/Winen 6.11)</td></tr>
+<tr><td>15</td><td>dc</td><td>Unknown</td></tr>
+<tr><td>16</td><td>ext</td><td>Extents, which contains the extents of the process memory acquired (introduced in EnCase 6.12/Winen 6.11)</td></tr>
+</table></div>
+<p>Also see <a href="#header2_values">header2 values</a></p>
+<blockquote>
+<p>Note that both the acquiry and system date and time are empty in a file
+created by winen.</p>
+</blockquote>
+<blockquote>
+<p>Note that rhe date values in the <a href="#header_section">header section</a> (not the
+header2 section) are set to: Thu Jan  1 00:00:00 1970. Where the time is
+dependent on the time zone and daylight savings.</p>
+</blockquote>
+<h5 id="sources-category"><a class="header" href="#sources-category"><a name="sources_category1"></a>Sources category</a></h5>
+<p>Line 6 the srce category contains information about acquisition sources.</p>
+<p>TODO: describe what a source is in the context of EnCase.</p>
+<p>Line 7 consists of 2 values, namely the values are "0 1".</p>
+<p>The 8th line consist of the following tab (0x09) separated values. Note that
+the actual values in this category are dependent on the version of EnCase.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 8rd line</th><th>Meaning</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the source</td></tr>
+<tr><td>4</td><td>ev</td><td>Evidence number, which contains a string</td></tr>
+<tr><td>5</td><td>tb</td><td>Total bytes, which contains an integer</td></tr>
+<tr><td>6</td><td>lo</td><td>Logical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>7</td><td>po</td><td>Physical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>8</td><td>ah</td><td>MD5 hash, which contains a string with the MD5 hash of the source</td></tr>
+<tr><td>9</td><td>sh</td><td>SHA1 hash, contains a string with the SHA1 hash of the source (introduced in EnCase 6.19)</td></tr>
+<tr><td>10</td><td>gu</td><td>Device GUID, which contains a string with a GUID or "0" if not set</td></tr>
+<tr><td>11</td><td>pgu</td><td>Primary device GUID, which contains a string with a GUID or "0" if not set (introduced in EnCase 7)</td></tr>
+<tr><td>12</td><td>aq</td><td>Acquisition date and time, which contains an integer with a POSIX timestamp</td></tr>
+</table></div>
+<p>Line 9 consists of 2 values, namely the values are "0 0".</p>
+<p>Line 10 contains the values defined by line 8.</p>
+<blockquote>
+<p>Note the default values of some of these values has changed around EnCase
+6.12.</p>
+</blockquote>
+<p>If the "ha" value contains "00000000000000000000000000000000" this means the
+MD5 hash is not set. The same applies for the "sha" value when it contains
+"0000000000000000000000000000000000000000" the SHA1 has is not set.</p>
+<h5 id="subjects-category"><a class="header" href="#subjects-category"><a name="subjects_category1"></a>Subjects category</a></h5>
+<p>Line 12 the sub category contains information about subjects.</p>
+<p>TODO: describe what a subject is in the context of EnCase.</p>
+<p>Line 13 consists of 2 values, namely the values are "0 1".</p>
+<p>The 14th line consist of the following tab (0x09) separated values.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 14rd line</th><th>Meaning</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the subject</td></tr>
+<tr><td>4</td><td>nu</td><td>Unknown (Number)</td></tr>
+<tr><td>5</td><td>co</td><td>Unknown (Comment)</td></tr>
+<tr><td>6</td><td>gu</td><td>Unknown (GUID)</td></tr>
+</table></div>
+<p>Line 15 consists of 2 values, namely the values are "0 0".</p>
+<p>Line 16 contains the values defined by line 14. Note that the default values of
+some of these values has changed around EnCase 6.12.</p>
+<h4 id="encase-5-to-7-ewf-l01"><a class="header" href="#encase-5-to-7-ewf-l01">EnCase 5 to 7 (EWF-L01)</a></h4>
+<p>The EnCase 5 to 7 (EWF-E01) header2 section specification also applies to the
+EnCase 5 to 7 (EWF-L01) format. However:</p>
+<ul>
+<li>both the acquired and system date and time are not set</li>
+</ul>
+<h4 id="header2-values"><a class="header" href="#header2-values"><a name="header2_values"></a>Header2 values</a></h4>
+<div class="table-wrapper"><table><thead><th>Identifier</th><th>Description</th><th>Notes</th></thead><tr><td>a</td><td>Unique description</td><td>Free form string. Note that EnCase might not respond when this value is large e.g. &gt;= 1 MiB</td></tr>
+<tr><td>av</td><td>Version</td><td>Free form string. EnCase limits this string to 12 - 1 characters</td></tr>
+<tr><td>c</td><td>Case number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>dc</td><td>Unknown</td><td></td></tr>
+<tr><td>e</td><td>Examiner name</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>ext</td><td>Extents</td><td>Extents header value</td></tr>
+<tr><td>l</td><td>Device label</td><td>Free form string</td></tr>
+<tr><td>m</td><td>Acquisition date and time</td><td>String containing POSIX 32-bit epoch timestamp, e.g. "1142163845" which represents the date: March 12 2006, 11:44:05</td></tr>
+<tr><td>md</td><td>Model</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>n</td><td>Evidence number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>ov</td><td>Platform</td><td>Free form string. EnCase limits this string to 24 - 1 characters</td></tr>
+<tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>sn</td><td>Serial Number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>t</td><td>Notes</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>u</td><td>System date and time</td><td>String containing POSIX 32-bit epoch timestamp, e.g. "1142163845" which represents the date: March 12 2006, 11:44:05</td></tr>
+</table></div>
+<blockquote>
+<p>Note the restrictions were tested with EnCase 7.02.01, older versions could
+have a restriction of 40 characters instead of 3000 characters.</p>
+</blockquote>
+<h5 id="extents-header-value"><a class="header" href="#extents-header-value">Extents header value</a></h5>
+<p>An extents header value consist of:</p>
+<pre><code>number of entries
+entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
+</code></pre>
+<h4 id="header-section"><a class="header" href="#header-section"><a name="header_section"></a>Header section</a></h4>
+<p>The header section is identified in the section data type field as "header".
+Some aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Not found in subsequent segment files.</li>
+</ul>
+<p>The additional data this section contains is the following:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Number of bytes</th><th>Description</th></thead><tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td></tr>
+</table></div>
+<p>The information about the acquired media consists of <a href="zlib.html">zlib compressed data</a>.
+It contains text in ASCII format specifying information about the acquired
+media. The text multiple lines separated by an end of line character(s).</p>
+<p>In the next paragraphs the various variants of the header section are
+described. In all cases the information consists of at least 4 lines:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>1</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>main</td><td>The name/type of the category provided</td></tr>
+<tr><td>3</td><td></td><td>Identifiers for the values in the 4th line</td></tr>
+<tr><td>4</td><td></td><td>The data for the different identifiers in the 3rd line</td></tr>
+</table></div>
+<p>An additional 5th line is found in FTK Imager, EnCase 1 to 7 (EWF-E01).</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>5</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<h4 id="ewf-format"><a class="header" href="#ewf-format">EWF format</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of line character(s) is a newline (0x0a).</li>
+</ul>
+<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
+the 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>c</td><td>Case number</td></tr>
+<tr><td>2</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>3</td><td>a</td><td>Unique description</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>7</td><td>u</td><td>System date and time</td></tr>
+<tr><td>8</td><td>p</td><td>Password hash</td></tr>
+<tr><td>9</td><td>r</td><td>Compression level</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert Witness Compression uses 'f', fastest compression.</p>
+<h4 id="encase-1-ewf-e01"><a class="header" href="#encase-1-ewf-e01">EnCase 1 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The header section is defined only once.</li>
+<li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data itself is compressed using zlib.</li>
+<li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
+</ul>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values"</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>c</td><td>Case number</td></tr>
+<tr><td>2</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>3</td><td>a</td><td>Unique description</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>7</td><td>u</td><td>System date and time</td></tr>
+<tr><td>8</td><td>p</td><td>Password hash</td></tr>
+<tr><td>9</td><td>r</td><td>Compression level</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<h4 id="smart-ewf-s01-1"><a class="header" href="#smart-ewf-s01-1">SMART (EWF-S01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The header section is defined once.</li>
+<li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data is always processed by zlib, however the same compression level is used as for the chunks. This could mean compression level 0 which is no compression.</li>
+</ul>
+<blockquote>
+<p>The SMART format uses the FTK Imager (EWF-E01) specification for this section.
+Note that this could be something FTK Imager specific.</p>
+</blockquote>
+<h4 id="encase-2-and-3-ewf-e01"><a class="header" href="#encase-2-and-3-ewf-e01">EnCase 2 and 3 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The same header section defined twice.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data itself is compressed using zlib.</li>
+<li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
+</ul>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>c</td><td>Case number</td></tr>
+<tr><td>2</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>3</td><td>a</td><td>Unique description</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>av</td><td>Version, which contains the EnCase version used to acquire the media</td></tr>
+<tr><td>7</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>8</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>9</td><td>u</td><td>System date and time</td></tr>
+<tr><td>10</td><td>p</td><td>Password hash</td></tr>
+<tr><td>11</td><td>r</td><td>Compression level</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<h4 id="encase-4-to-7-ewf-e01"><a class="header" href="#encase-4-to-7-ewf-e01">EnCase 4 to 7 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The header is defined only once.</li>
+<li>It resides after the header2 sections of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data itself is compressed using zlib.</li>
+<li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
+</ul>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>c</td><td>Case number</td></tr>
+<tr><td>2</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>3</td><td>a</td><td>Unique description</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>av</td><td>Version, which contains the EnCase version used to acquire the media</td></tr>
+<tr><td>7</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>8</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>9</td><td>u</td><td>System date and time</td></tr>
+<tr><td>10</td><td>p</td><td>Password hash</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<h4 id="linen-5-to-7-ewf-e01"><a class="header" href="#linen-5-to-7-ewf-e01">linen 5 to 7 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The same header section defined twice.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data itself is compressed using zlib.</li>
+<li>The end of line character(s) is a newline (0x0a).</li>
+</ul>
+<p>The header information consist of 18 lines</p>
+<p>The remainder of the string contains the following information:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>3</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>main</td><td>The name/type of the category provided</td></tr>
+<tr><td>3</td><td></td><td>Identifier for the values in the 4th line</td></tr>
+<tr><td>4</td><td></td><td>The data for the different identifiers in the 3rd line</td></tr>
+<tr><td>5</td><td></td><td>(an empty line)</td></tr>
+<tr><td>6</td><td>srce</td><td>The name/type of the section provided, also see <a href="#sources_category2">Sources category</a></td></tr>
+<tr><td>7</td><td></td><td></td></tr>
+<tr><td>8</td><td></td><td>Identifier for the values in the section</td></tr>
+<tr><td>9</td><td></td><td></td></tr>
+<tr><td>10</td><td></td><td></td></tr>
+<tr><td>11</td><td></td><td>(an empty line)</td></tr>
+<tr><td>12</td><td>sub</td><td>The name/type of the section provided, also see <a href="#subjects_category2">Subjects category</a></td></tr>
+<tr><td>13</td><td></td><td></td></tr>
+<tr><td>14</td><td></td><td>Identifier for the values in the section</td></tr>
+<tr><td>15</td><td></td><td></td></tr>
+<tr><td>16</td><td></td><td></td></tr>
+<tr><td>17</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<p>The end of line character(s) is a newline (0x0a).</p>
+<h5 id="main-category---linen-5"><a class="header" href="#main-category---linen-5">Main category - linen 5</a></h5>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
+<blockquote>
+<p>Note the actual values in this category are dependent on the version of linen.</p>
+</blockquote>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>a</td><td>Unique description</td></tr>
+<tr><td>2</td><td>c</td><td>Case number</td></tr>
+<tr><td>3</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>av</td><td>Version, which contains the linen version used to acquire the media</td></tr>
+<tr><td>7</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>8</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>9</td><td>u</td><td>System date and time</td></tr>
+<tr><td>10</td><td>p</td><td>Password hash</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<h5 id="main-category---linen-6-to-7"><a class="header" href="#main-category---linen-6-to-7">Main category - linen 6 to 7</a></h5>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
+<blockquote>
+<p>Note the actual values in this category are dependent on the version of linen.</p>
+</blockquote>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>a</td><td>Unique description</td></tr>
+<tr><td>2</td><td>c</td><td>Case number</td></tr>
+<tr><td>3</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>md</td><td>The model of the media, such as hard disk model (Introduced in linen 6)</td></tr>
+<tr><td>7</td><td>sn</td><td>The serial number of media (Introduced in linen 6)</td></tr>
+<tr><td>8</td><td>l</td><td>The device label (Introduced in linen 6.19)</td></tr>
+<tr><td>9</td><td>av</td><td>Version, which contains the linen version used to acquire the media</td></tr>
+<tr><td>10</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>11</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>12</td><td>u</td><td>System date and time</td></tr>
+<tr><td>13</td><td>p</td><td>Password hash</td></tr>
+<tr><td>14</td><td>pid</td><td>Process identifier, which contains the identifier of the process memory acquired (Introduced in linen 6.19 or earlier)</td></tr>
+<tr><td>15</td><td>dc</td><td>Unknown (Introduced in linen 6)</td></tr>
+<tr><td>16</td><td>ext</td><td>Extents, which contains the extents of the process memory acquired (Introduced in linen 6.19 or earlier)</td></tr>
+</table></div>
+<blockquote>
+<p>Note as of linen 6.19 the acquire date and time is in UTC and the system date
+and time is in local time. Where as before both values were in local time.</p>
+</blockquote>
+<p>Also see <a href="#header_values">header values</a></p>
+<h5 id="sources-category-1"><a class="header" href="#sources-category-1"><a name="sources_category2"></a>Sources category</a></h5>
+<p>Line 6 the srce category contains information about acquisition sources</p>
+<p>TODO: describe what a source is in the context of EnCase.</p>
+<p>Line 7 consists of 2 values, namely the values are "0 1".</p>
+<p>The 8th line consist of the following tab (0x09) separated values.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 8rd line</th><th>Meaning</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the source</td></tr>
+<tr><td>4</td><td>ev</td><td>Evidence number, which contains a string</td></tr>
+<tr><td>5</td><td>tb</td><td>Total bytes, which contains an integer</td></tr>
+<tr><td>6</td><td>lo</td><td>Logical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>7</td><td>po</td><td>Physical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>8</td><td>ah</td><td>Unknown (MD5?), which contains a string</td></tr>
+<tr><td>9</td><td>sh</td><td>Unknown (SHA1?), which contains a string (Introduced in linen 6.19 or earlier)</td></tr>
+<tr><td>10</td><td>gu</td><td>Device GUID, which contains a string with a GUID or "0" if not set</td></tr>
+<tr><td>11</td><td>aq</td><td>Acquisition date and time, which contains an integer with a POSIX timestamp</td></tr>
+</table></div>
+<p>Line 9 consists of 2 values, namely the values are "0 0".</p>
+<p>Line 10 contains the values defined by line 8.</p>
+<blockquote>
+<p>Note the default values of some of these values has changed around linen 6.19
+or earlier.</p>
+</blockquote>
+<h5 id="subjects-category-1"><a class="header" href="#subjects-category-1"><a name="subjects_category2"></a>Subjects category</a></h5>
+<p>Line 12 the sub category contains information about subjects.</p>
+<p>TODO: describe what a subject is in the context of EnCase.</p>
+<p>Line 13 consists of 2 values, namely the values are "0 1".</p>
+<p>The 14th line consist of the following tab (0x09) separated values.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 14rd line</th><th>Meaning</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the subject</td></tr>
+<tr><td>4</td><td>nu</td><td>Unknown (Number)</td></tr>
+<tr><td>5</td><td>co</td><td>Unknown (Comment)</td></tr>
+<tr><td>6</td><td>gu</td><td>Unknown (GUID)</td></tr>
+</table></div>
+<p>Line 15 consists of 2 values, namely the values are "0 0".</p>
+<p>Line 16 contains the values defined by line 14.</p>
+<blockquote>
+<p>Note the default values of some of these values has changed around linen 6.19
+or earlier.</p>
+</blockquote>
+<h4 id="ftk-imager-ewf-e01"><a class="header" href="#ftk-imager-ewf-e01">FTK Imager (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>In FTK Imager (EWF-E01) the same header section defined twice.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>The header data itself is compressed using zlib. Note that the compression level can be none and therefore the header looks uncompressed.</li>
+<li>In FTK Imager the end of line character(s) is a newline (0x0a).</li>
+</ul>
+<p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead><tr><td>1</td><td>c</td><td>Case number</td></tr>
+<tr><td>2</td><td>n</td><td>Evidence number</td></tr>
+<tr><td>3</td><td>a</td><td>Unique description</td></tr>
+<tr><td>4</td><td>e</td><td>Examiner name</td></tr>
+<tr><td>5</td><td>t</td><td>Notes</td></tr>
+<tr><td>6</td><td>av</td><td>Version, which contains the FTK Imager version used to acquire the media</td></tr>
+<tr><td>7</td><td>ov</td><td>Platform, which contains the platform/operating system used to acquire the media</td></tr>
+<tr><td>8</td><td>m</td><td>Acquisition date and time</td></tr>
+<tr><td>9</td><td>u</td><td>System date and time</td></tr>
+<tr><td>10</td><td>p</td><td>Password hash</td></tr>
+<tr><td>11</td><td>r</td><td>Compression level</td></tr>
+</table></div>
+<p>Also see <a href="#header_values">header values</a></p>
+<h4 id="encase-5-to-7-ewf-l01-1"><a class="header" href="#encase-5-to-7-ewf-l01-1">EnCase 5 to 7 (EWF-L01)</a></h4>
+<p>The EnCase 4 to 7 (EWF-E01) header section specification is also used for the
+EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
+<ul>
+<li>In EnCase 5 both the acquired and system date and time are set to 0.</li>
+<li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the time is dependent on the local timezone and daylight savings)</li>
+</ul>
+<h4 id="header-values"><a class="header" href="#header-values"><a name="header_values"></a>Header values</a></h4>
+<div class="table-wrapper"><table><thead><th>Identifier</th><th>Description</th><th>Notes</th></thead><tr><td>a</td><td>Unique description</td><td>Free form string. Note that EnCase might not respond when this value is  large e.g. &gt;= 1 MiB</td></tr>
+<tr><td>av</td><td>Version</td><td>Free form string. EnCase limits this string to 12 - 1 characters</td></tr>
+<tr><td>c</td><td>Case number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>dc</td><td>Unknown</td><td></td></tr>
+<tr><td>e</td><td>Examiner name</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>ext</td><td>Extents</td><td><a href="#extents_header_value">Extents header value</a></td></tr>
+<tr><td>l</td><td>Device label</td><td>Free form string</td></tr>
+<tr><td>m</td><td>Acquisition date and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+<tr><td>md</td><td>Model</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>n</td><td>Evidence number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>ov</td><td>Platform</td><td>Free form string. EnCase limits this string to 24 -1 characters</td></tr>
+<tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>r</td><td>Compression level</td><td><a href="#compression_header_value">Compression header value</a></td></tr>
+<tr><td>sn</td><td>Serial Number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>t</td><td>Notes</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
+<tr><td>u</td><td>Systemdate and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+</table></div>
+<blockquote>
+<p>Note the restrictions were tested with EnCase 7.02.01, older versions could
+have a restriction of 40 characters instead of 3000 characters.</p>
+</blockquote>
+<h5 id="date-and-time-header-value"><a class="header" href="#date-and-time-header-value"><a name="date_time_header_value"></a>Date and time header value</a></h5>
+<p>In EnCase a date and time contains a string of individual values separated by a
+space, e.g. "2002 3 4 10 19 59", which represents March 4, 2002 10:19:59.</p>
+<p>In linen a date and time contains a string with a POSIX 32-bit epoch timestamp,
+e.g. "1142163845" which represents the date: March 12 2006, 11:44:05</p>
+<h5 id="extents-header-value-1"><a class="header" href="#extents-header-value-1"><a name="extents_header_value"></a>Extents header value</a></h5>
+<p>An extents header value consist of:</p>
+<pre><code>number of entries
+entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
+</code></pre>
+<h5 id="compression-header-value"><a class="header" href="#compression-header-value"><a name="compression_header_value"></a>Compression header value</a></h5>
+<p>A compression header value consist of a single character that represent the
+compression level.</p>
+<div class="table-wrapper"><table><thead><th>Character value</th><th>Meaning</th></thead><tr><td>b</td><td>Best compression is used</td></tr>
+<tr><td>f</td><td>Fastest compression is used</td></tr>
+<tr><td>n</td><td>No compression is used</td></tr>
+</table></div>
+<h5 id="notes"><a class="header" href="#notes">Notes</a></h5>
+<p>There should not be a tab, carriage return and newline characters within the
+text in the 4th line. Or is there a method to escape these characters?</p>
+<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
+states that these characters should not be used in the free form text. Need to
+confirm this, the specification only speaks of a newline character.</p>
+<p>Currently the password has no a additional value than allow an application
+check it. The data itself is not protected using the password. The password
+hashing algorithm is unknown. Need to find out. And does the algorithm differ
+per EnCase version? probably not. The algorithm does not differ in EnCase
+1 to 7. FTK Imager does not bother with a password.</p>
+<h3 id="volume-section"><a class="header" href="#volume-section"><a name="volume_section"></a>Volume section</a></h3>
+<p>The volume section is identified in the section data type field as "volume".
+Some aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found after the header section of the first segment file. Not found in subsequent segment files.</li>
+</ul>
+<p>In the next paragraphs the various versions of the volume section are described.</p>
+<h4 id="ewf-specification"><a class="header" href="#ewf-specification">EWF specification</a></h4>
+<p>The specification according to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</p>
+<p>The volume section data is 94 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>0x01</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk, which contains 64 per default.</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>The number of bytes per sectors, which contains 512 per default</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>The sectors count, the number of sectors within all segment files</td></tr>
+<tr><td>20</td><td>20</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+<tr><td>40</td><td>45</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>85</td><td>5</td><td></td><td>Signature, which contains the EWF file header signature</td></tr>
+<tr><td>90</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+</table></div>
+<p>The number of chunks is a 32-bit value this means it maximum of addressable
+chunks would be: 4294967295 (= 2^32 - 1). For a chunk size of 32768 x 4294967295 = about 127 TiB.
+The maximum segment file amount is 2^16 - 1 = 65535. This allows for an equal
+number of storage if a segment file is filled to its maximum number of chunks.</p>
+<p>However Keramics is restricted at 14295 segment files, due to the extension
+naming schema of the segment files.</p>
+<h4 id="smart-ewf-s01-2"><a class="header" href="#smart-ewf-s01-2">SMART (EWF-S01)</a></h4>
+<p>The SMART format uses the EWF specification for this section.</p>
+<p>In SMART the signature (reverse) value is the string "SMART" (0x53 0x4d 0x41
+0x52 0x54) instead of the file header signature.</p>
+<h4 id="ftk-imager-encase-1-to-7-and-linen-5-to-7-ewf-e01"><a class="header" href="#ftk-imager-encase-1-to-7-and-linen-5-to-7-ewf-e01">FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01)</a></h4>
+<p>The specification for FTK Imager, EnCase 1 to 7 and linen 5 to 7.</p>
+<p>The volume section data is 1052 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td></td><td><a href="#media_type">Media type</a></td></tr>
+<tr><td>1</td><td>3</td><td>0x00</td><td>Unknown (empty values)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk (or block size), which contains 64 per default. EnCase 5 is the first version which allows this value to be different than 64.</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>The number of bytes per sector</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>The sectors count, which contains the number of sectors within all segment files. This value probably has been changed in EnCase 6 from a 32-bit value to a 64-bit value to support media &gt;2TiB</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>The number of cylinders of the C:H:S value, which most of the time this value is empty (0x00)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>The number of heads of the C:H:S value, which most of the time this value is empty (0x00)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>The number of sectors of the C:H:S value, which most of the time this value is empty (0x00)</td></tr>
+<tr><td>36</td><td>1</td><td></td><td><a href="#media_flags">Media flags</a></td></tr>
+<tr><td>37</td><td>3</td><td>0x00</td><td>Unknown (empty values)</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>PALM volume start sector</td></tr>
+<tr><td>44</td><td>4</td><td>0x00</td><td>Unknown (empty values)</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>SMART logs start sector, which contains an offset relative from the end of media, e.g. a value of 10 would refer to sector = number of sectors - 10</td></tr>
+<tr><td>52</td><td>1</td><td></td><td><a href="#compression_level">Compression level</a> (Introduced in EnCase 5)</td></tr>
+<tr><td>53</td><td>3</td><td>0x00</td><td>Unknown (empty values, these values seem to be part of the compression level)</td></tr>
+<tr><td>56</td><td>4</td><td></td><td>The sector error granularity, which contains the error block size (Introduced in EnCase 5)</td></tr>
+<tr><td>60</td><td>4</td><td>0x00</td><td>Unknown (empty values)</td></tr>
+<tr><td>64</td><td>16</td><td></td><td>Segment file set identifier, which contains a GUID/UUID generated on the acquiry system probably used to uniquely identify a set of segment files (Introduced in EnCase 5)</td></tr>
+<tr><td>80</td><td>963</td><td>0x00</td><td>Unknown (empty values)</td></tr>
+<tr><td>1043</td><td>5</td><td>0x00</td><td>Unknown (Signature)</td></tr>
+<tr><td>1048</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+</table></div>
+<p>TODO: a value that could be in the volume is the RAID stripe size</p>
+<blockquote>
+<p>Note that EnCase requires for media that contains no partition table that the
+is physical media flag is not set and vice versa. Other tools like FTK check
+the actual storage media data.</p>
+</blockquote>
+<h4 id="encase-5-to-7-ewf-l01-2"><a class="header" href="#encase-5-to-7-ewf-l01-2">EnCase 5 to 7 (EWF-L01)</a></h4>
+<p>The EWF-L01 format uses the EnCase 5 (EWF-E01) volume section specification. However:</p>
+<ul>
+<li>the volume type contains 0x0e</li>
+<li>the number of chunks is 0</li>
+<li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file system block size</li>
+<li>the sectors count, represents some other value because ( sector_size x sector_amount != total_size ). The total size is in the ltree section.</li>
+</ul>
+<h4 id="media-type"><a class="header" href="#media-type"><a name="media_type"></a>Media type</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00</td><td></td><td>A removable storage media device</td></tr>
+<tr><td>0x01</td><td></td><td>A fixed storage media device</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x03</td><td></td><td>An optical disc (CD/DVD/BD)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x0e</td><td></td><td>Logical Evidence (LEF or L01)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x10</td><td></td><td>Physical Memory (RAM) or process memory</td></tr>
+</table></div>
+<blockquote>
+<p>Note that FTK imager versions, before version 2.9, set the storage media to
+fixed (0x01). The exact version of FTK imager where this behavior changed is
+unknown.</p>
+</blockquote>
+<h4 id="media-flags"><a class="header" href="#media-flags"><a name="media_flags"></a>Media flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x01</td><td></td><td>Is an image file. In FTK Imager, EnCase 1 to 7 this bit is always set, when not set EnCase seems to see the image file as a device</td></tr>
+<tr><td>0x02</td><td></td><td>Is physical device or device type, where 0 represents a non physical device (logical) and 1 represents a physical device</td></tr>
+<tr><td>0x04</td><td></td><td>Fastbloc write blocker used</td></tr>
+<tr><td>0x08</td><td></td><td>Tableau write blocker used. This was added in EnCase 6.13</td></tr>
+</table></div>
+<blockquote>
+<p>Note that if both the the Fastbloc and Tableau write blocker media flags are
+set EnCase only shows the Fastbloc.</p>
+</blockquote>
+<h4 id="compression-level"><a class="header" href="#compression-level"><a name="compression_level"></a>Compression level</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00</td><td></td><td>no compression</td></tr>
+<tr><td>0x01</td><td></td><td>good compression</td></tr>
+<tr><td>0x02</td><td></td><td>best compression</td></tr>
+</table></div>
+<blockquote>
+<p>Note that EnCase 7 no longer provides the fast and best compression options.</p>
+</blockquote>
+<h3 id="disk-section"><a class="header" href="#disk-section">Disk section</a></h3>
+<p>The disk section is identified in the section data type field as "disk". Some
+aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not found in SMART (EWF-S01).</li>
+</ul>
+<p>With a disk section in an FTK Imager 2.3 (EWF-E01) image it was confirmed that
+the disk section is the same as the volume section.</p>
+<blockquote>
+<p>Note that the disk section was found only in FTK Imager 2.3 when acquiring a
+physical disk not a floppy. This requires additional research, it is currently
+assumed that the disk section some old method to differentiate between a
+partition (volume) image or a physical disk image.</p>
+</blockquote>
+<h3 id="data-section"><a class="header" href="#data-section">Data section</a></h3>
+<p>The data section is identified in the section data type field as "data". Some
+aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7. Not found in SMART (EWF-S01).</li>
+<li>For multiple segment files it does not reside in the first segment file. For a single segment file it does.</li>
+<li>Found after the last table2 section in a single segment file or for multiple segment files at the start of the segment files, except for the first.</li>
+<li>The data section has data it should should contain the same information as the volume section.</li>
+</ul>
+<p>The data section is a copy of the <a href="#volume_section">volume section</a>.</p>
+<h4 id="ftk-imager-encase-1-to-7-and-linen-5-to-7-ewf-e01-1"><a class="header" href="#ftk-imager-encase-1-to-7-and-linen-5-to-7-ewf-e01-1">FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01)</a></h4>
+<blockquote>
+<p>Note that in Logicube products (Talon (firmware predating April 2013) and
+Forensic dossier (before version 3.3.3RC16)) the checksum is not calculated
+and set to 0.</p>
+</blockquote>
+<h3 id="sectors-section"><a class="header" href="#sectors-section">Sectors section</a></h3>
+<p>The sectors section is identified in the section data type field as "sectors".
+Some aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>The first sectors section can be found after the volume section in the first segment file or at the after the data section in subsequent segment files. Successive sector data sections are found after the sector table2 section.</li>
+</ul>
+<p>The sectors section contains the actual chunks of media data.</p>
+<ul>
+<li>The sectors section can contain multiple chunks.</li>
+<li>The default size of a chunk is 32768 bytes of data (64 standard sectors, with a size of 512 bytes per sector). It is possible in EnCase 5 and 6 and linen 5 and 6 to change the number of sectors per block to 64, 128, 256, 1024, 2048, 4096, 8192, 16384 or 32768. In EnCase 7 and linen 7 this has been reduced to 64, 128, 256, 1024.</li>
+</ul>
+<h4 id="data-chunk"><a class="header" href="#data-chunk">Data chunk</a></h4>
+<p>The first chunk is often located directly after the section header, although
+the format does not require this.</p>
+<p>When the data is compressed and the compressed data (with checksum) is larger
+than the uncompressed data (without the checksum) the data chunk is stored
+uncompressed. The default size of a chunk is 32768 bytes of data (64 standard
+sectors).</p>
+<p>An uncompressed data chunk is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>...</td><td></td><td>Uncompressed chunk data</td></tr>
+<tr><td>...</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of the chunk data</td></tr>
+</table></div>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The
+checksum of the compressed data chunk is part the zlib compressed data format.</p>
+<h4 id="optical-disc-images"><a class="header" href="#optical-disc-images">Optical disc images</a></h4>
+<p>For a MODE‑1 CD-ROM optical disc image EnCase only seems to support 2048 bytes
+per sector (the data).</p>
+<p>The raw sector size of a MODE-1 CD-ROM is 2352 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Synchronization bytes</td></tr>
+<tr><td>16</td><td>2048</td><td></td><td>Data</td></tr>
+<tr><td>2054</td><td>4</td><td></td><td>Error detection</td></tr>
+<tr><td>2058</td><td>8</td><td>0x00</td><td>Unknown (Empty values)</td></tr>
+<tr><td>2066</td><td>276</td><td></td><td>Error correction</td></tr>
+</table></div>
+<p>TODO: add information about Mode-2 and Mode-XA</p>
+<h3 id="table-section"><a class="header" href="#table-section">Table section</a></h3>
+<p>The table section is identified in the section data type field as "table". Some
+aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+</ul>
+<blockquote>
+<p>Note that the offsets within the section header are 8 bytes (64 bits) of
+size while the offsets in the table entry array are 4 bytes (32 bits) in size.</p>
+</blockquote>
+<p>In the next paragraphs the various versions of the table section are described.</p>
+<h4 id="ewf-specification-1"><a class="header" href="#ewf-specification-1">EWF specification</a></h4>
+<p>Some aspects of the table section according to the EWF specification are:</p>
+<ul>
+<li>The first table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>It can be found in every segment file.</li>
+</ul>
+<p>The table section consists of:</p>
+<ul>
+<li>the table header</li>
+<li>an array of table entries</li>
+<li>the data chunks</li>
+</ul>
+<h5 id="table-header"><a class="header" href="#table-header">Table header</a></h5>
+<p>The table header is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>The number of entries</td></tr>
+<tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+</table></div>
+<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></p>
+<ul>
+<li>the number of entries, contains 0x01</li>
+<li>the table can hold 16375 entries if more entries are required an additional table section should be created.</li>
+</ul>
+<h5 id="table-entry"><a class="header" href="#table-entry">Table entry</a></h5>
+<p>The table entry is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Chunk data offset</td></tr>
+</table></div>
+<p>The most significant bit (MSB) in the chunk data offset indicates if the chunk
+is compressed (1) or uncompressed (0).</p>
+<p>A chunk data offset points to the start of the chunk of media data, which
+resides in the same table section within the segment file. The offset contains
+a value relative to the start of the file.</p>
+<h5 id="data-chunk-1"><a class="header" href="#data-chunk-1">Data chunk</a></h5>
+<p>The first chunk is often located directly after the last table entry, although
+the format does not require this.</p>
+<p>A data chunk is always compressed even when no compression is required. This
+approach provides a checksum for each chunk. The default size of a chunk is
+32768 bytes of data (64 standard sectors). The resulting size of the
+"compressed" chunk can therefore be larger than the default chunk size.</p>
+<blockquote>
+<p>Note that this was deducted from the behavior of FTK Imager for SMART (EWF-S01).</p>
+</blockquote>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The
+checksum of the compressed data chunk is part the zlib compressed data format.</p>
+<h4 id="smart-ewf-s01-3"><a class="header" href="#smart-ewf-s01-3">SMART (EWF-S01)</a></h4>
+<p>The table section in the SMART (EWF-S01) format is equivalent to that of the
+EWF specification.</p>
+<h4 id="encase-1-ewf-e01-1"><a class="header" href="#encase-1-ewf-e01-1">EnCase 1 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>It can be found in every segment file.</li>
+</ul>
+<p>The table section consists of:</p>
+<ul>
+<li>the table header</li>
+<li>an array of table entries</li>
+<li>the table footer</li>
+<li>the data chunks</li>
+</ul>
+<h5 id="table-header-1"><a class="header" href="#table-header-1">Table header</a></h5>
+<p>The table header is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>The number of entries</td></tr>
+<tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+</table></div>
+<p>The table can hold 16375 entries if more entries are required an additional table section should be created.</p>
+<h5 id="table-entry-1"><a class="header" href="#table-entry-1">Table entry</a></h5>
+<p>The table entry is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Chunk data offset</td></tr>
+</table></div>
+<p>The most significant bit (MSB) in the chunk data offset indicates if the chunk
+is compressed (1) or uncompressed (0).</p>
+<p>A chunk data offset points to the start of the chunk of media data, which
+resides in the same table section within the segment file. The offset contains
+a value relative to the start of the file.</p>
+<h5 id="table-footer"><a class="header" href="#table-footer">Table footer</a></h5>
+<p>The table footer is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of the offset array</td></tr>
+</table></div>
+<h5 id="data-chunk-2"><a class="header" href="#data-chunk-2">Data chunk</a></h5>
+<p>The first chunk is often located directly after the table footer, although the
+format does not require this.</p>
+<p>When the data is compressed and the compressed data (with checksum) is larger
+than the uncompressed data (without the checksum) the data chunk is stored
+uncompressed. The default size of a chunk is 32768 bytes of data (64 standard
+sectors).</p>
+<p>An uncompressed data chunk is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>...</td><td></td><td>Uncompressed chunk data</td></tr>
+<tr><td>...</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of the chunk data</td></tr>
+</table></div>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The
+checksum of the compressed data chunk is part the zlib compressed data format.</p>
+<h4 id="ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01">FTK Imager and EnCase 2 to 5 and linen 5 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>The table section resides after the sectors section.</li>
+<li>It can be found in every segment file.</li>
+<li>The data chunks are no longer stored in this section but in the sectors section instead.</li>
+<li>The table2 section contains a mirror copy of the table section. In EWF-E01 it is always present.</li>
+</ul>
+<p>The table section consists of:</p>
+<ul>
+<li>the table header</li>
+<li>an array of table entries</li>
+<li>the table footer</li>
+</ul>
+<h5 id="table-header-2"><a class="header" href="#table-header-2">Table header</a></h5>
+<p>The sector table header is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>The number of entries</td></tr>
+<tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+</table></div>
+<p>The table section can hold 16375 entries. A new table section should be created
+to hold more entries. Both FTK Imager and EnCase 5 can handle more than 16375,
+FTK 1 cannot. To contain more than 16375 chunks new sectors, table and table2
+sections need to be created after the table2 section.</p>
+<h5 id="table-entry-2"><a class="header" href="#table-entry-2">Table entry</a></h5>
+<p>The table entry is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Chunk data offset</td></tr>
+</table></div>
+<p>The most significant bit (MSB) in the chunk data offset indicates if the chunk
+is compressed (1) or uncompressed (0).</p>
+<p>A chunk data offset points to the start of the chunk of media data, which
+resides in the preceding sectors section within the segment file. The offset
+contains a value relative to the start of the file.</p>
+<h5 id="table-footer-1"><a class="header" href="#table-footer-1">Table footer</a></h5>
+<p>The table footer is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of the offset array</td></tr>
+</table></div>
+<h4 id="encase-6-to-7-and-linen-6-to-7-ewf-e01"><a class="header" href="#encase-6-to-7-and-linen-6-to-7-ewf-e01">EnCase 6 to 7 and linen 6 to 7 (EWF-E01)</a></h4>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>Every segment file contains its own table section.</li>
+<li>It resides after the sectors section.</li>
+<li>The data chunks are no longer stored in this section but in the sectors section instead.</li>
+<li>The table2 section contains a mirror copy of the table section. In EWF-E01 it is always present.</li>
+</ul>
+<p>The table section consists of:</p>
+<ul>
+<li>the table header</li>
+<li>an array of table entries</li>
+<li>the table footer</li>
+</ul>
+<h5 id="table-header-3"><a class="header" href="#table-header-3">Table header</a></h5>
+<p>The sector table header is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>The number of entries</td></tr>
+<tr><td>4</td><td>4</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>The table base offset</td></tr>
+<tr><td>16</td><td>4</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+</table></div>
+<p>As of EnCase 6 the number of entries is no longer restricted to 16375 entries.
+The new limit seems to be 65534.</p>
+<h5 id="table-entry-3"><a class="header" href="#table-entry-3">Table entry</a></h5>
+<p>The table entry is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Chunk data offset</td></tr>
+</table></div>
+<p>The most significant bit (MSB) in the chunk data offset indicates if the chunk
+is compressed (1) or uncompressed (0).</p>
+<p>A chunk data offset points to the start of the chunk of media data, which
+resides in the preceding sectors section within the segment file. The offset
+contains a value relative to the table base offset.</p>
+<p>In EnCase 6.7.1 the sectors section can be larger than 2048Mb. The table
+entries offsets are 31 bit values in EnCase6 the offset in a table entry value
+will actually use <em>the full 32 bit</em> if the 2048Mb has been exceeded. This
+behavior is no longer present in EnCase 6.8 so it is assumed to be a bug.
+Libewf currently assumes that the if the 31 bit value overflows the following
+chunks are uncompressed. This allows EnCase 6.7.1 faulty EWF files to be
+converted by Keramics.</p>
+<h5 id="table-footer-2"><a class="header" href="#table-footer-2">Table footer</a></h5>
+<p>The table footer is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of the offset array</td></tr>
+</table></div>
+<h4 id="encase-6-to-7-ewf-l01"><a class="header" href="#encase-6-to-7-ewf-l01">EnCase 6 to 7 (EWF-L01)</a></h4>
+<p>The EWF-L01 format uses the EnCase 6 to 7 (EWF-E01) table section specification.</p>
+<h3 id="table2-section"><a class="header" href="#table2-section">Table2 section</a></h3>
+<p>The table2 section is identified in the section data type field as "table2".
+Some aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>Uses the same format as the table section.</li>
+<li>Resides directly after the table section.</li>
+</ul>
+<h4 id="ftk-imager-and-encase-2-to-7-and-linen-5-to-7-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-7-and-linen-5-to-7-ewf-e01">FTK Imager and EnCase 2 to 7 and linen 5 to 7 (EWF-E01)</a></h4>
+<p>The table2 section contains a mirror copy of the table section. Probably
+intended for recovery purposes.</p>
+<h4 id="encase-5-to-7-ewf-l01-3"><a class="header" href="#encase-5-to-7-ewf-l01-3">EnCase 5 to 7 (EWF-L01)</a></h4>
+<p>The EWF-L01 format uses the EWF-E01 table2 section specification.</p>
+<h3 id="next-section"><a class="header" href="#next-section">Next section</a></h3>
+<p>The next section is identified in the section data type field as "next". Some
+aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>The last section within a segment other than the last segment file.</li>
+<li>The offset to the next section in the section header of the next section point to itself (the start of the next section).</li>
+<li>It should be the last section in a segment file, other than the last segment file.</li>
+</ul>
+<h4 id="smart-ewf-s01-4"><a class="header" href="#smart-ewf-s01-4">SMART (EWF-S01)</a></h4>
+<p>It resides after the table or table2 section.</p>
+<h4 id="ftk-imager-encase-and-linen-ewf-e01"><a class="header" href="#ftk-imager-encase-and-linen-ewf-e01">FTK Imager, EnCase and linen (EWF-E01)</a></h4>
+<p>It resides after the data section in a single segment file or for multiple
+segment files after the table2 section.</p>
+<p>In the EnCase (EWF-E01) format the size in the section header is 0 instead of
+76 (the size of the section header).</p>
+<blockquote>
+<p>Note that FTK imager versions before 2.9 sets the section size to 76. At the
+moment it is unknown in which version this behavior was changed.</p>
+</blockquote>
+<h3 id="ltypes-section"><a class="header" href="#ltypes-section">Ltypes section</a></h3>
+<p>The ltypes section is identifier in the section data type field as "ltypes".
+Some aspects of this section are:</p>
+<ul>
+<li>Found in EWF-L01 in of EnCase 7</li>
+<li>Found in the last segment file after table2 section before tree section.</li>
+</ul>
+<p>The additional ltypes section data is 6 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Unknown</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Unknown</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Unknown</td></tr>
+</table></div>
+<h3 id="ltree-section"><a class="header" href="#ltree-section">Ltree section</a></h3>
+<p>The ltree section is identifier in the section data type field as "ltree". Some
+aspects of this section are:</p>
+<ul>
+<li>Found in EWF-L01 in of EnCase 5 to 7</li>
+<li>Found in the last segment file after ltypes section and before data section.</li>
+</ul>
+<p>The ltree section consists of:</p>
+<ul>
+<li>ltree header</li>
+<li>ltree data</li>
+</ul>
+<h4 id="ltree-header"><a class="header" href="#ltree-header">Ltree header</a></h4>
+<p>The ltree header is 48 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Integrity hash, which contains the MD5 of the ltree data</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Data size</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the ltree header where the checksum value itself is zeroed out.</td></tr>
+<tr><td>28</td><td>20</td><td></td><td>Unknown (empty values)</td></tr>
+</table></div>
+<h4 id="ltree-data"><a class="header" href="#ltree-data">Ltree data</a></h4>
+<p>The ltree data string consists of an UTF-16 little-endian encoded string without
+byte order mark. The ltree data is not strict UTF-16 since it allows for unpaired
+surrogates, such as "U+d800" and "U+dc00".</p>
+<p>Other observed characteristics where the names in the ltree deviate from
+the original source:</p>
+<ul>
+<li>[U+0001-U+0008] were converted to U+00ba</li>
+<li>[U+0009, U+000a] were stripped</li>
+<li>[U+000b, U+000c] were converted to U+0020</li>
+<li>U+000d was converted to U+0002</li>
+<li>U+00ba remained the same</li>
+</ul>
+<p>Note that this behavior could be related to EnCase as well and might not be
+specific for EWF-L01.</p>
+<p>The ltree data string contains the following information:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>5</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>rec</td><td>Information about unknown, also see <a href="#records_category3">Records category</a></td></tr>
+<tr><td>...</td><td></td><td>(an empty line)</td></tr>
+<tr><td>...</td><td>perm</td><td>Information about file permissions, also see <a href="#permissions_category3">Permissions category</a></td></tr>
+<tr><td>...</td><td></td><td>(an empty line)</td></tr>
+<tr><td>...</td><td>srce</td><td>Information about acquisition sources, also see <a href="#sources_category3">sources category</a></td></tr>
+<tr><td>...</td><td></td><td>(an empty line)</td></tr>
+<tr><td>...</td><td>sub</td><td>Information about unknown, also see <a href="#subjects_category3">subjects category</a></td></tr>
+<tr><td>...</td><td></td><td>(an empty line)</td></tr>
+<tr><td>...</td><td>entry</td><td>Information about file entries, also see <a href="#file_entries_category3">File entries category</a></td></tr>
+<tr><td>...</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<p>The end of line character(s) is a newline (0x0a).</p>
+<h4 id="records-category"><a class="header" href="#records-category"><a name="records_category3"></a>Records category</a></h4>
+<p>The rec category contains information about records.</p>
+<p>The 1st line of the category contains the string "rec".</p>
+<p>The 2nd line of the category contains tab (0x09) separated type indicators.</p>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Type indicator</th><th>Description</th></thead><tr><td>1</td><td>tb</td><td>Total bytes, which contains an integer with size of the logical file data (media data)</td></tr>
+<tr><td>2</td><td>cl</td><td>Unknown (Clusters?)</td></tr>
+<tr><td>3</td><td>n</td><td>Unknown (introduced in EnCase 6.19)</td></tr>
+<tr><td>4</td><td>fp</td><td>Unknown (introduced in EnCase 7)</td></tr>
+<tr><td>5</td><td>pg</td><td>Unknown (introduced in EnCase 7)</td></tr>
+<tr><td>6</td><td>lg</td><td>Unknown (introduced in EnCase 7)</td></tr>
+<tr><td>7</td><td>ig</td><td>Unknown (introduced in EnCase 7)</td></tr>
+</table></div>
+<p>The 3rd line of the category consist of the tab (0x09) separated values.</p>
+<h4 id="permissions-category"><a class="header" href="#permissions-category"><a name="permissions_category3"></a>Permissions category</a></h4>
+<p>The perm category contains information about file permissions.</p>
+<p>The 1st line of the category contains the string "perm".</p>
+<p>The 2nd line consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>The number of permission groups in the category</td></tr>
+<tr><td>2</td><td>1</td><td>Unknown</td></tr>
+</table></div>
+<p>The 3rd line of the category contains tab (0x09) separated type indicators. For
+more information see the sections below.</p>
+<p>The remaining lines in the category consist of:</p>
+<ul>
+<li>category root entry
+<ul>
+<li>zero or more permissions group entries
+<ul>
+<li>zero or more permission entries</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Each entry consist of 2 lines:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>Number of entries</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+</table></div>
+<p>The 1st line of the category root entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td></td><td>The number of permission groups in the category</td></tr>
+</table></div>
+<p>The 1st line of the permission group entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td></td><td>The number of permissions in the group</td></tr>
+</table></div>
+<p>The 1st line of the permission entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td>0</td><td>Unknown</td></tr>
+</table></div>
+<h5 id="permission-type-indicators"><a class="header" href="#permission-type-indicators">Permission type indicators</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Type indicator</th><th>Description</th></thead><tr><td>1</td><td>p</td><td>Is parent, where 1 represents if the entry is a category root or permissions group and 0 represents if the entry is a permission</td></tr>
+<tr><td>2</td><td>n</td><td>Name, which contains a string</td></tr>
+<tr><td>3</td><td>s</td><td>Security identifier, which contains a string with either a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#security-identifier">Windows NT security identifier (SID)</a> or a POSIX user (uid) or group identifier (gid) in the format " number:" such as " 99:"</td></tr>
+<tr><td>4</td><td>pr</td><td>Property type, also see <a href="#permission_types">permission types</a></td></tr>
+<tr><td>5</td><td>nta</td><td>Access mask</td></tr>
+<tr><td>6</td><td>nti</td><td>Unknown (Windows NT access control entry (ACE) flags?, which contains an integer with a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#access-control-entry-ace-flags">Windows NT access control entry (ACE) flags</a>).</td></tr>
+<tr><td>7</td><td>nts</td><td>Unknown (Permission?) (Removed in EnCase 6)</td></tr>
+</table></div>
+<h5 id="permission-types"><a class="header" href="#permission-types"><a name="permission_types"></a>Permission types</a></h5>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>(empty)</td><td></td><td>Owner or category root</td></tr>
+<tr><td>1</td><td></td><td>Group</td></tr>
+<tr><td>2</td><td></td><td>Allow</td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>6</td><td></td><td>Other</td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>10</td><td></td><td>Unknown (permissions group?)</td></tr>
+</table></div>
+<h5 id="access-mask"><a class="header" href="#access-mask">Access mask</a></h5>
+<p>Access mask seen in combination with property types 0, 1 and 6</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>(empty)</td><td></td><td>Owner or category root</td></tr>
+<tr><td>0x00000001</td><td><code>[Lst Fldr/Rd Data]</code></td><td>List folder / Read data</td></tr>
+<tr><td>0x00000002</td><td><code>[Crt Fl/W Data]</code></td><td>Create file / Write data</td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>0x00000020</td><td><code>[Trav Fldr/X Fl]</code></td><td>Traverse folder / Execute file</td></tr>
+</table></div>
+<p>Access mask seen in combination with property type 2</p>
+<pre><code>[0x001200a9] [R&amp;X] [R] [Sync]
+[0x001301bf] [M] [R&amp;X] [R] [W] [Sync]
+[0x001f01ff] [FC] [M] [R&amp;X] [R] [W] [Sync]
+</code></pre>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>(empty)</td><td></td><td>Owner or category root</td></tr>
+<tr><td>0x00000001</td><td></td><td></td></tr>
+<tr><td>0x00000002</td><td></td><td></td></tr>
+<tr><td>0x00000004</td><td></td><td></td></tr>
+<tr><td>0x00000008</td><td></td><td></td></tr>
+<tr><td>0x00000010</td><td></td><td></td></tr>
+<tr><td>0x00000020</td><td></td><td></td></tr>
+<tr><td>0x00000040</td><td></td><td></td></tr>
+<tr><td>0x00000080</td><td></td><td></td></tr>
+<tr><td>0x00000100</td><td></td><td></td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>0x00010000</td><td></td><td></td></tr>
+<tr><td>0x00020000</td><td></td><td></td></tr>
+<tr><td>0x00040000</td><td></td><td></td></tr>
+<tr><td>0x00080000</td><td></td><td></td></tr>
+<tr><td>0x00100000</td><td></td><td></td></tr>
+</table></div>
+<h4 id="sources-category-2"><a class="header" href="#sources-category-2"><a name="sources_category3"></a>Sources category</a></h4>
+<p>The srce category contains information about acquisition sources of the file entries.</p>
+<p>TODO: describe what an acquisition source is in the context of EnCase.</p>
+<p>The 1st line of the category contains the string "srce".</p>
+<p>The 2nd line consists of 2 values.</p>
+<div class="table-wrapper"><table><thead><th>Value index</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>The number of sources in the category</td></tr>
+<tr><td>2</td><td>1</td><td>Unknown</td></tr>
+</table></div>
+<p>The 3rd line of the category contains tab (0x09) separated type indicators. For
+more information see the sections below.</p>
+<p>The remaining lines in the category consist of:</p>
+<ul>
+<li>category root
+<ul>
+<li>zero or more source entries</li>
+</ul>
+</li>
+</ul>
+<p>Each entry consist of 2 lines:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>Number of entries</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+</table></div>
+<p>The 1st line of the category root entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td></td><td>The number of sources in the category</td></tr>
+</table></div>
+<p>The 1st line of the source entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td>0</td><td>Unknown</td></tr>
+</table></div>
+<h5 id="source-type-indicators"><a class="header" href="#source-type-indicators">Source type indicators</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Type indicator</th><th>Description</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the source</td></tr>
+<tr><td>4</td><td>ev</td><td>Evidence number, which contains a string</td></tr>
+<tr><td>5</td><td>do</td><td>Domain, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>6</td><td>loc</td><td>Location, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>7</td><td>se</td><td>Serial number, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>8</td><td>mfr</td><td>Manufacturer, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>9</td><td>mo</td><td>Model, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>10</td><td>tb</td><td>Total bytes, which contains an integer</td></tr>
+<tr><td>11</td><td>lo</td><td>Logical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>12</td><td>po</td><td>Physical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>13</td><td>ah</td><td>MD5 hash, which contains a string with the MD5 hash of the source</td></tr>
+<tr><td>14</td><td>sh</td><td>SHA1 hash, which contains a string with the SHA1 hash of the source (introduced in EnCase 6.19)</td></tr>
+<tr><td>15</td><td>gu</td><td>Device GUID, which contains a string with a GUID or "0" if not set</td></tr>
+<tr><td>16</td><td>pgu</td><td>Primary device GUID, which contains a string with a GUID or "0" if not set (introduced in EnCase 7)</td></tr>
+<tr><td>17</td><td>aq</td><td>Acquisition date and time, which contains an integer with a POSIX timestamp</td></tr>
+<tr><td>18</td><td>ip</td><td>IP address, which contains a string (introduced in EnCase 7.9)</td></tr>
+<tr><td>19</td><td>si</td><td>Unknown (Static IP address?), Contains 1 if static, empty otherwise (introduced in EnCase 7.9)</td></tr>
+<tr><td>20</td><td>ma</td><td>MAC address, which contains a string without separator characters (introduced in EnCase 7.9)</td></tr>
+<tr><td>21</td><td>dt</td><td>Drive type, which contains a single character (introduced in EnCase 7.9)</td></tr>
+</table></div>
+<p>The acquisition date and time is in the form of: "1142163845", which is a POSIX
+epoch timestamp and represents the date: March 12 2006, 11:44:05.</p>
+<p>If the "ha" value contains "00000000000000000000000000000000" this means the
+MD5 hash is not set. The same applies for the "sha" value when it contains
+"0000000000000000000000000000000000000000" the SHA1 has is not set.</p>
+<p>If the "ma" value contains "000000000000" this means the MAC address is not
+set.</p>
+<h5 id="drive-type"><a class="header" href="#drive-type">Drive type</a></h5>
+<div class="table-wrapper"><table><thead><th>Character value</th><th>Meaning</th></thead><tr><td>f</td><td>Fixed drive</td></tr>
+</table></div>
+<h4 id="subjects-category-2"><a class="header" href="#subjects-category-2"><a name="subjects_category3"></a>Subjects category</a></h4>
+<p>The sub category contains information about TODO</p>
+<p>TODO: describe what a subject is in the context of EnCase.</p>
+<p>The 1st line of the category contains the string "sub".</p>
+<p>The 2nd line consists of 2 values.</p>
+<div class="table-wrapper"><table><thead><th>Value index</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>The number of subjects in the category</td></tr>
+<tr><td>2</td><td>1</td><td>Unknown</td></tr>
+</table></div>
+<p>The 3rd line of the category contains tab (0x09) separated type indicators. For
+more information see the sections below.</p>
+<p>The remaining lines in the category consist of:</p>
+<ul>
+<li>category root
+<ul>
+<li>zero or more subject entries</li>
+</ul>
+</li>
+</ul>
+<p>Each entry consist of 2 lines:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>Number of entries</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+</table></div>
+<p>The 1st line of the category root entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td></td><td>The number of subject in the category</td></tr>
+</table></div>
+<p>The 1st line of the subject entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>0</td><td>Unknown</td></tr>
+<tr><td>2</td><td>0</td><td>Unknown</td></tr>
+</table></div>
+<h5 id="subject-type-indicators"><a class="header" href="#subject-type-indicators">Subject type indicators</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Type indicator</th><th>Description</th></thead><tr><td>1</td><td>p</td><td></td></tr>
+<tr><td>2</td><td>n</td><td></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, which contains an integer identifying the subject</td></tr>
+<tr><td>4</td><td>nu</td><td>Unknown (Number)</td></tr>
+<tr><td>5</td><td>co</td><td>Unknown (Comment)</td></tr>
+<tr><td>6</td><td>gu</td><td>Unknown (GUID)</td></tr>
+</table></div>
+<h4 id="file-entries-category"><a class="header" href="#file-entries-category"><a name="file_entries_category3"></a>File entries category</a></h4>
+<p>The entry category contains information about the file entries.</p>
+<p>The 1st line of the category contains the string "entry".</p>
+<p>The 2nd line consists of 2 values.</p>
+<div class="table-wrapper"><table><thead><th>Value index</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>The number of file entries in the category or 1 if unknown</td></tr>
+<tr><td>2</td><td>1</td><td>Unknown</td></tr>
+</table></div>
+<p>The 3rd line of the category contains tab (0x09) separated type indicators. For
+more information see the sections below.</p>
+<p>The remaining lines in the category consist of:</p>
+<ul>
+<li>category root
+<ul>
+<li>zero or more file entries
+<ul>
+<li>zero or more sub file entries
+<ul>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Each entry consist of 2 lines:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>Number of entries</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+</table></div>
+<p>The 1st line of the category root entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>0 if not set or 26 if Unknown</td></tr>
+<tr><td>2</td><td></td><td>The number of file entries in the category</td></tr>
+</table></div>
+<p>The 1st line of the file entry consists of the following 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>Number of file entries in the parent file entry or 0 if not set</td></tr>
+<tr><td>2</td><td></td><td>The number of sub file entries in the file entry</td></tr>
+</table></div>
+<h5 id="encase-5-and-6-ewf-l01-file-entry-type-indicators"><a class="header" href="#encase-5-and-6-ewf-l01-file-entry-type-indicators">EnCase 5 and 6 (EWF-L01) file entry type indicators</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 29th line</th><th>Meaning</th></thead><tr><td>1</td><td>p</td><td>Is parent, where 1 =&gt; if the entry is a directory and (empty) =&gt; if the entry is a file</td></tr>
+<tr><td>2</td><td>n</td><td><a href="#file_entry_name">Name</a></td></tr>
+<tr><td>3</td><td>id</td><td>Identifier, contains an integer identifying the file entry</td></tr>
+<tr><td>4</td><td>opr</td><td><a href="#file_entry_flags">File entry flags</a></td></tr>
+<tr><td>5</td><td>src</td><td>Source identifier, which contains an integer that corresponds to an identifier in the <a href="#sources_category3">Sources category</a></td></tr>
+<tr><td>6</td><td>sub</td><td>Subject identifier, which contains an integer that corresponds to an identifier in the <a href="#subjects_category3">Subjects category</a></td></tr>
+<tr><td>7</td><td>cid</td><td>Unknown (record type)</td></tr>
+<tr><td>8</td><td>jq</td><td>Unknown</td></tr>
+<tr><td>9</td><td>cr</td><td>Creation date and time</td></tr>
+<tr><td>10</td><td>ac</td><td>Access date and time, for which currently is assumed the precision is date only</td></tr>
+<tr><td>11</td><td>wr</td><td>(File) modification (last written) date and time</td></tr>
+<tr><td>12</td><td>mo</td><td>(File system) entry modification date and time</td></tr>
+<tr><td>13</td><td>dl</td><td>Deletion date and time</td></tr>
+<tr><td>14</td><td>aq</td><td>Acquisition date and time, which contains an integer with a POSIX timestamp</td></tr>
+<tr><td>15</td><td>ha</td><td>MD5 hash, which contains a string with the MD5 hash of the file data</td></tr>
+<tr><td>16</td><td>ls</td><td>File size in bytes. If the file size is 0 the data size should be 1</td></tr>
+<tr><td>17</td><td>du</td><td>Duplicate data offset, relative from the start of the media data</td></tr>
+<tr><td>18</td><td>lo</td><td>Logical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>19</td><td>po</td><td>Physical offset, which contains an integer which is -1 when value is not set (or does this value contain the segment file in which the start of the data is stored, -1 for a single segment file?)</td></tr>
+<tr><td>20</td><td>mid</td><td>GUID, which contains a string with a GUID (introduced in EnCase 6.19)</td></tr>
+<tr><td>21</td><td>cfi</td><td>Unknown (introduced in EnCase 6.14)</td></tr>
+<tr><td>22</td><td>be</td><td><a href="#binary_extents">Binary extents</a></td></tr>
+<tr><td>23</td><td>pm</td><td>Permissions group index, which contains an integer that corresponds to an identifier in the <a href="#permissions_category3">Permissions category</a> or -1 if not set.  The value is 0 by default</td></tr>
+<tr><td>24</td><td>lpt</td><td>Unknown (introduced in EnCase 6.19)</td></tr>
+</table></div>
+<p>The creation, access and last written date and time are in the form of:
+"1142163845", which is a POSIX epoch timestamp and represents the date: March
+12 2006, 11:44:05.</p>
+<p>The "ha" value (Hash) consist of a MD5 hash string when file entries are
+hashed. If the "ha" value contains "00000000000000000000000000000000" this
+means the MD5 hash is not set.</p>
+<h6 id="ltree-file-entries"><a class="header" href="#ltree-file-entries">Ltree file entries</a></h6>
+<p>The ltree entries of files and directories consist of entries starting with: 0
+followed by the number of sub file entries.</p>
+<p>The entries of files and directories:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>(empty)</td><td>The root directory</td></tr>
+<tr><td>2</td><td></td><td>The target drive/mount point</td></tr>
+<tr><td>3</td><td></td><td>The actual single file entries</td></tr>
+</table></div>
+<h5 id="encase-7-ewf-l01-file-entry-type-indicators"><a class="header" href="#encase-7-ewf-l01-file-entry-type-indicators">EnCase 7 (EWF-L01) file entry type indicators</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 29th line</th><th>Meaning</th></thead><tr><td>1</td><td>mid</td><td>GUID, which contains a string with a GUID</td></tr>
+<tr><td>2</td><td>ls</td><td>File size, in bytes. If the file size is 0 the data size should be 1</td></tr>
+<tr><td>3</td><td>be</td><td><a href="#binary_extents">Binary extents</a></td></tr>
+<tr><td>4</td><td>id</td><td>Identifier, which contains an integer identifying the file entry</td></tr>
+<tr><td>5</td><td>cr</td><td>Creation date and time</td></tr>
+<tr><td>6</td><td>ac</td><td>Access date and time</td></tr>
+<tr><td>7</td><td>wr</td><td>(File) modification (last written) date and time</td></tr>
+<tr><td>8</td><td>mo</td><td>(File system) entry modification date and time</td></tr>
+<tr><td>9</td><td>dl</td><td>Deletion date and time</td></tr>
+<tr><td>10</td><td>sig</td><td>Unknown (Introduced in EnCase 7)</td></tr>
+<tr><td>11</td><td>ha</td><td>MD5 hash, which contains a string with the MD5 hash of the file data</td></tr>
+<tr><td>12</td><td>sha</td><td>SHA1 hash, which contains a string with the SHA1 hash of the file data. (Introduced in EnCase 7)</td></tr>
+<tr><td>13</td><td>ent</td><td>Unknown, seen "B" (Introduced in EnCase 7.9)</td></tr>
+<tr><td>14</td><td>snh</td><td><a href="#short_name">Short name</a> (or DOS 8.3 name) (Introduced in EnCase 7.9)</td></tr>
+<tr><td>15</td><td>p</td><td>Is parent, where "1" represents that the entry is a directory and "" (an empty string) that the entry is a file</td></tr>
+<tr><td>16</td><td>n</td><td><a href="#file_entry_name">Name</a></td></tr>
+<tr><td>17</td><td>du</td><td>Duplicate data offset, relative from the start of the media data</td></tr>
+<tr><td>18</td><td>lo</td><td>Logical offset, which contains an integer which is -1 when value is not set</td></tr>
+<tr><td>19</td><td>po</td><td>Physical offset, which contains an integer which is -1 when value is not set (or does this value contain the segment file in which the start of the data is stored, -1 for a single segment file?)</td></tr>
+<tr><td>20</td><td>pm</td><td>Permissions group index, which contains an integer that corresponds to an identifier in the <a href="#permissions_category3">Permissions category</a> or -1 if not set.  The value is 0 by default</td></tr>
+<tr><td>21</td><td>oes</td><td>Unknown (Original extents?) (Introduced in EnCase 7)</td></tr>
+<tr><td>22</td><td>opr</td><td><a href="#file_entry_flags">File entry flags</a></td></tr>
+<tr><td>23</td><td>src</td><td>Source identifier, which contains an integer that corresponds to an identifier in the <a href="#sources_category3">Sources category</a></td></tr>
+<tr><td>24</td><td>sub</td><td>Subject identifier, which contains an integer that corresponds to an identifier in the <a href="#subjects_category3">Subjects category</a></td></tr>
+<tr><td>25</td><td>cid</td><td>Unknown (record type?)</td></tr>
+<tr><td>26</td><td>jq</td><td>Unknown</td></tr>
+<tr><td>27</td><td>alt</td><td>Unknown (Introduced in EnCase 7)</td></tr>
+<tr><td>28</td><td>ep</td><td>Unknown (Introduced in EnCase 7)</td></tr>
+<tr><td>29</td><td>aq</td><td>Acquisition date and time, which contains an integer with a POSIX timestamp</td></tr>
+<tr><td>30</td><td>cfi</td><td>Unknown</td></tr>
+<tr><td>31</td><td>sg</td><td>Unknown (Introduced in EnCase 7)</td></tr>
+<tr><td>32</td><td>ea</td><td><a href="#extended_attributes">Extended attributes</a> (Introduced in EnCase 7.9)</td></tr>
+<tr><td>33</td><td>lpt</td><td>Unknown</td></tr>
+</table></div>
+<p>If the "ha" value contains "00000000000000000000000000000000" this means the
+MD5 hash is not set. The same applies for the "sha" value when it contains
+"0000000000000000000000000000000000000000" the SHA1 has is not set.</p>
+<h6 id="file-entry-name"><a class="header" href="#file-entry-name"><a name="file_entry_name"></a>File entry name</a></h6>
+<p>A file entry name ("n" value):</p>
+<ul>
+<li>can contain path segment separator characters like "\" and "/"</li>
+<li>uses the "MIDDLE DOT" Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name seperator</li>
+</ul>
+<blockquote>
+<p>Note that a regular "MIDDLE DOT" Unicode character will be encoded in the
+same way so no real way to reliably tell the difference.</p>
+</blockquote>
+<p>An empty name has been observed to be represented as "NoName".</p>
+<h6 id="short-name"><a class="header" href="#short-name"><a name="short_name"></a>Short name</a></h6>
+<p>The short name ("snh") value contains 2 values:</p>
+<div class="table-wrapper"><table><thead><th>Value number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td></td><td>The number of characters in the short name including the end-of-string character</td></tr>
+<tr><td>2</td><td></td><td>The short name string, without an end-of-string character</td></tr>
+</table></div>
+<p>For example: "13 FILE10~1.TXT"</p>
+<h6 id="original-extents"><a class="header" href="#original-extents">Original extents</a></h6>
+<p>TODO: add some text</p>
+<pre><code>1 30a555b 30a6000 12011ae00 9008d7 3f 43 1 12011ae00 30a6000 120113 30a6 9008d7 18530
+</code></pre>
+<h6 id="ltree-file-entries-1"><a class="header" href="#ltree-file-entries-1">Ltree file entries</a></h6>
+<p>The ltree entries of files and directories consist of entries starting with: 26
+followed by the number of sub file entries.</p>
+<p>The entries of files and directories:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>LogicalEntries</td><td>The root directory</td></tr>
+<tr><td>2</td><td></td><td>The target drive/mount point</td></tr>
+<tr><td>3</td><td></td><td>The actual single file entries</td></tr>
+</table></div>
+<h5 id="file-entry-flags"><a class="header" href="#file-entry-flags"><a name="file_entry_flags"></a>File entry flags</a></h5>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td></td><td>Unknown (Is read-only?)</td></tr>
+<tr><td>0x00000002</td><td>Hidden</td><td>Is hidden</td></tr>
+<tr><td>0x00000004</td><td>System</td><td>Is system</td></tr>
+<tr><td>0x00000008</td><td>Archive</td><td>Is archive</td></tr>
+<tr><td>0x00000010</td><td>Sym Link</td><td>Is symbolic link, junction or reparse point</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00000080</td><td>Deleted</td><td>Is deleted</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00001000</td><td>Hard Linked</td><td>Is hard link</td></tr>
+<tr><td>0x00002000</td><td>Stream</td><td>Is stream</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00100000</td><td>Internal</td><td>Is internal (used in combination with 0x00000006?)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00200000</td><td>Unallocated Clusters</td><td>Unknown</td></tr>
+<tr><td>0x00400000</td><td></td><td>Unknown</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x01000000</td><td></td><td>Unknown</td></tr>
+<tr><td>0x02000000</td><td>Folder</td><td>Is folder</td></tr>
+<tr><td>0x04000000</td><td></td><td>Data is sparse.</td></tr>
+</table></div>
+<p>If 0x00002000 or 0x02000000 are not set the file entry is of type "File".</p>
+<p>If the sparse data flag is set:</p>
+<ul>
+<li>the data size should be 1 and data should consist of a single byte value.</li>
+<li>the data size should be equal to the file size and data should be the same.</li>
+</ul>
+<p>If the duplicate data offset value is not set the single byte value in the data
+should be used to reconstruct the file data. E.g. if the file size is 4096 and
+the data contains the byte value 0x00 the resulting file should consists of
+4096 x 0x00 byte values.</p>
+<p>If the duplicate data offset value is set the single byte in the data is
+ignored and the duplicate data offset refers to the location where the data
+stored.</p>
+<h5 id="binary-extents-value"><a class="header" href="#binary-extents-value"><a name="binary_extents"></a>Binary extents value</a></h5>
+<p>The binary extents value contains 3 values separated by a space:</p>
+<pre><code>Unknown Offset Size
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>unknown always is 1, could this be the number of extents?</li>
+<li>extent data offset, relative from the start of the media data</li>
+<li>extent data size</li>
+</ul>
+<p>The offset and size are specified in hexadecimal values.</p>
+<blockquote>
+<p>Note that the binary extents value contains only 1 value for the first single file entry.</p>
+</blockquote>
+<h5 id="extended-attributes-value"><a class="header" href="#extended-attributes-value"><a name="extended_attributes"></a>Extended attributes value</a></h5>
+<p>The extended attributes value contains base-16 encoded data, which consists of:</p>
+<ul>
+<li>Extended attributes header (stored as an extended attribute)</li>
+<li>One or more extended attributes</li>
+</ul>
+<h6 id="extended-attributes-header"><a class="header" href="#extended-attributes-header">Extended attributes header</a></h6>
+<p>The extended attributes header is 37 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>0</td><td>Unknown (0 =&gt; root, 1 =&gt; otherwise)</td></tr>
+<tr><td>4</td><td>1</td><td>1</td><td>Unknown (0 =&gt; is leaf node, 1 =&gt; is branch node?)</td></tr>
+<tr><td>5</td><td>4</td><td>11</td><td>Number of characters in name string including the end-of-string character</td></tr>
+<tr><td>9</td><td>4</td><td>1</td><td>Number of characters in value string including the end-of-string character</td></tr>
+<tr><td>13</td><td>22</td><td>"Attributes\0"</td><td>Name string, which contains an UTF-16 little-endian encoded string including end-of-string character</td></tr>
+<tr><td>35</td><td>2</td><td>"\0"</td><td>Value string, which contains an UTF-16 little-endian encoded string including end-of-string character</td></tr>
+</table></div>
+<h6 id="extended-attribute"><a class="header" href="#extended-attribute">Extended attribute</a></h6>
+<p>An extended attributes is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Unknown (0 =&gt; root, 1 =&gt; otherwise)</td></tr>
+<tr><td>4</td><td>1</td><td></td><td>Unknown (0 =&gt; is leaf node, 1 =&gt; is branch node?)</td></tr>
+<tr><td>5</td><td>4</td><td></td><td>Number of characters in name string including the end-of-string character</td></tr>
+<tr><td>9</td><td>4</td><td></td><td>Number of characters in value string including the end-of-string character</td></tr>
+<tr><td>13</td><td>...</td><td></td><td>Name string, which contains an UTF-16 little-endian encoded string including end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Value string, which contains an UTF-16 little-endian encoded string including end-of-string character</td></tr>
+</table></div>
+<p>TODO: complete section</p>
+<blockquote>
+<p>Note that branch nodes are presuably used to group attributes, however these
+are not used consistently and are not shown by EnCase 7.</p>
+</blockquote>
+<h3 id="map-section"><a class="header" href="#map-section">Map section</a></h3>
+<p>Some aspects of this section are:</p>
+<ul>
+<li>Found in EWF-L01 in of EnCase 7 (First seen in EnCase 7.4.1.10)</li>
+<li>Found in the last segment file after data section before done section.</li>
+</ul>
+<p>The map consists of:</p>
+<ul>
+<li>map string</li>
+<li>map entries array</li>
+</ul>
+<h4 id="map-string"><a class="header" href="#map-string">Map string</a></h4>
+<p>The map string consists of an UTF-16 little-endian encoded string without the
+UTF-16 endian byte order mark.</p>
+<p>The map string contains the following information:</p>
+<div class="table-wrapper"><table><thead><th>Line number</th><th>Value</th><th>Description</th></thead><tr><td>1</td><td>1</td><td>The number of categories provided</td></tr>
+<tr><td>2</td><td>r</td><td>Probably the type of information provided</td></tr>
+<tr><td>3</td><td>c</td><td>Identifier for the values in the 4th line</td></tr>
+<tr><td>4</td><td></td><td>The data for the different identifiers in the 3rd line</td></tr>
+<tr><td>5</td><td></td><td>(an empty line)</td></tr>
+</table></div>
+<h5 id="map-string-values"><a class="header" href="#map-string-values">Map string values</a></h5>
+<div class="table-wrapper"><table><thead><th>Identifier number</th><th>Character in 29th line</th><th>Meaning</th></thead><tr><td>1</td><td>C</td><td>Number of map entries (count)</td></tr>
+</table></div>
+<p>The number of map entries should match the number of file entries in the ltree.</p>
+<h4 id="map-entry"><a class="header" href="#map-entry">Map entry</a></h4>
+<p>A map entry is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (empty values or part of previous value)</td></tr>
+<tr><td>8</td><td>16</td><td></td><td>Unknown</td></tr>
+</table></div>
+<h3 id="session-section"><a class="header" href="#session-section">Session section</a></h3>
+<p>The session section is identifier in the section data type field as "session". Some aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>It is not found in SMART (EWF-S01) and FTK Imager (EWF-E01).</li>
+<li>It is found in EnCase 5 and 6 (EWF-E01) files.</li>
+<li>It is only added to the last segment file for images of optical disc (CD/DVD/BD) media.</li>
+<li>It is found after the data section and before the error2 section.</li>
+</ul>
+<p>The session section data consists of:</p>
+<ul>
+<li>The session header</li>
+<li>The session entries array</li>
+<li>The session footer</li>
+</ul>
+<h4 id="session-header"><a class="header" href="#session-header">Session header</a></h4>
+<p>The session header is 36 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Number of sessions</td></tr>
+<tr><td>4</td><td>28</td><td></td><td>Unknown (empty values)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional session section data.</td></tr>
+</table></div>
+<h4 id="session-entry"><a class="header" href="#session-entry">Session entry</a></h4>
+<p>A session entry is 32 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Flags</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Start sector</td></tr>
+<tr><td>8</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
+</table></div>
+<p>EnCase stores audio tracks as 0 byte data with a sector size of 2048.</p>
+<blockquote>
+<p>Note that for a CD the first session sector is stored as 16, although the
+actual session starts at sector 0. Could this value be overloaded to indicate
+the size of the reserved space between the start of the session and the ISO
+9660 volume descriptor.</p>
+</blockquote>
+<h4 id="session-flags"><a class="header" href="#session-flags">Session flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td></td><td>If set the track is an audio track otherwise the track is a data track</td></tr>
+</table></div>
+<h4 id="session-footer"><a class="header" href="#session-footer">Session footer</a></h4>
+<p>The session footer is 4 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the session entries array</td></tr>
+</table></div>
+<h3 id="error2-section"><a class="header" href="#error2-section">Error2 section</a></h3>
+<p>The error2 section is identifier in the section data type field as "error2".
+Some aspects of this section are:</p>
+<ul>
+<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>It is not found in SMART (EWF-S01).</li>
+<li>It is found in, EnCase 3 to 7 and linen 5 to 7 (EWF-E01) files.</li>
+<li>It is only added to the last segment file when errors were encountered while reading the input.</li>
+</ul>
+<p>TODO: check FTK Imager, EnCase 1 and 2 for presence of the error2 section.</p>
+<p>It contains the sectors that have read errors. The sector where a read error
+occurred are filled with zero's during acquiry by EnCase.</p>
+<p>The error2 section data consists of:</p>
+<ul>
+<li>The error2 header</li>
+<li>The error2 entries array</li>
+<li>The error2 footer</li>
+</ul>
+<h4 id="error2-header"><a class="header" href="#error2-header">Error2 header</a></h4>
+<p>The error2 header is 520 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+<tr><td>4</td><td>512</td><td></td><td>Unknown (empty values)</td></tr>
+<tr><td>516</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the error2 header data.</td></tr>
+</table></div>
+<h4 id="error2-entry"><a class="header" href="#error2-entry">Error2 entry</a></h4>
+<p>An error2 entry is 8 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Start sector</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of sectors</td></tr>
+</table></div>
+<h4 id="error2-footer"><a class="header" href="#error2-footer">Error2 footer</a></h4>
+<p>The error2 footer is 4 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the error2 entries array</td></tr>
+</table></div>
+<h3 id="digest-section"><a class="header" href="#digest-section">Digest section</a></h3>
+<p>The digest section is identified in the section data type field as "digest".
+Some aspects of this section are:</p>
+<ul>
+<li>It is found in EnCase 6 to 7 files, as of EnCase 6.12 and linen 6.12 (EWF-E01).</li>
+</ul>
+<p>The digest section contains a MD5 and/or SHA1 hash of the data within the chunks.</p>
+<p>The digest section data is 80 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>MD5 hash of the media data</td></tr>
+<tr><td>16</td><td>20</td><td></td><td>SHA1 hash of the media data</td></tr>
+<tr><td>36</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+<tr><td>76</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the digest section data.</td></tr>
+</table></div>
+<h3 id="hash-section"><a class="header" href="#hash-section">Hash section</a></h3>
+<p>The hash section is identified in the section data type field as "hash". Some
+aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>It is found in SMART (EWF-S01) and FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) files.</li>
+<li>It is not found in EnCase 5 (EWF-L01).</li>
+<li>The hash section is optional, it does not need to be present. If it does it resides in the last segment file before the done section.</li>
+</ul>
+<p>The hash section contains a MD5 hash of the data within the chunks.</p>
+<p>The hash section data is 36 byte in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>MD5 hash of the media data</td></tr>
+<tr><td>16</td><td>16</td><td></td><td>Unknown</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional hash section data.</td></tr>
+</table></div>
+<h4 id="notes-1"><a class="header" href="#notes-1">Notes</a></h4>
+<p>Observations regarding the unknown value:</p>
+<ul>
+<li>is zero in SMART</li>
+<li>is zero in EnCase 3 and below</li>
+<li>in EnCase 4 the first 4 bytes are 0, the next 8 bytes seem random, the last 4 bytes seem fixed</li>
+<li>in EnCase 5 and 6 the first 8 bytes seem random, the last 8 bytes equal the file header signature</li>
+<li>in linen 5 the first and last set of 4 bytes seem the same, the second set of 4 bytes seem to be random, the third set of 4 bytes seem to contain a piece of the file header signature</li>
+<li>in linen 6 the first and third set of 4 bytes seem random, the second and last set of 4 bytes seem to be the same</li>
+<li>EnCase5 seems to contain a GUID of the acquired device?</li>
+</ul>
+<p>Test with EnCase 4 show that:</p>
+<ul>
+<li>The value does not equal the checksum of the media data</li>
+<li>Does not differentiate for the same media acquired within the same program session, using different formats, but differ for different media and different program sessions</li>
+</ul>
+<h3 id="done-section"><a class="header" href="#done-section">Done section</a></h3>
+<p>The done section is identified in the section data type field as "done". Some
+aspects of this section are:</p>
+<ul>
+<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5 (EWF-L01) files.</li>
+<li>The done section is the last section within the last segment file.</li>
+<li>The offset to the next section in the section header of the done section point to itself (the start of the done section).</li>
+<li>It should be the last section in the last segment file.</li>
+</ul>
+<h4 id="smart-ewf-s01-5"><a class="header" href="#smart-ewf-s01-5">SMART (EWF-S01)</a></h4>
+<p>It resides after the table or table2 section.</p>
+<h4 id="ftk-imager-encase-and-linen-ewf-e01-1"><a class="header" href="#ftk-imager-encase-and-linen-ewf-e01-1">FTK Imager, EnCase and linen (EWF-E01)</a></h4>
+<p>It resides after the data section in a single segment file or for multiple
+segment files after the table2 section.</p>
+<p>In the EnCase (EWF-E01) format the size in the section header is 0 instead of
+76 (the size of the section header).</p>
+<blockquote>
+<p>Note that FTK imager versions before 2.9 sets the section size to 76. At the
+moment it is unknown in which version this behavior was changed.</p>
+</blockquote>
+<h4 id="incomplete-section"><a class="header" href="#incomplete-section">Incomplete section</a></h4>
+<p>The incomplete section is identified in the section data type field as
+"incomplete".</p>
+<p>This section is seen rarely. It was seen in an EnCase 6.13 (EWF-E01) file as
+the last last section within the last segment file. The incomplete section was
+preceded by a hash and digest section, although later in the set of EWF files
+another hash and digest section were defined.</p>
+<p>It is currently assumed that the incomplete section indicates an incomplete
+image created using remote imaging. The incomplete section contains data but
+currently there is no indication what purpose the data has.</p>
+<h2 id="ewf-x"><a class="header" href="#ewf-x">EWF-X</a></h2>
+<p>EWF-X (extended) is an experimental format to enhance the EWF format. EWF-X is
+based on the EWF-E01 format. EWF-X does not limit the table entries to 16375.
+EWF-X is not the same as version 2 of EWF.</p>
+<p>TODO: add note about the table entry limit.</p>
+<h3 id="sections"><a class="header" href="#sections">Sections</a></h3>
+<p>Additional sections provided in the EWF-X format are:</p>
+<ul>
+<li>xheader</li>
+<li>xhash</li>
+</ul>
+<h4 id="xheader"><a class="header" href="#xheader">Xheader</a></h4>
+<p>The xheader section contains <a href="zlib.html">zlib compressed data</a> containing XML
+data containing the header values.</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xheader&gt;
+        &lt;case_number&gt;1&lt;/case_number&gt;
+        &lt;description&gt;Description&lt;/description&gt;
+        &lt;examiner_name&gt;John D.&lt;/examiner_name&gt;
+        &lt;evidence_number&gt;1.1&lt;/evidence_number&gt;
+        &lt;notes&gt;Just a floppy in my system&lt;/notes&gt;
+        &lt;acquiry_operating_system&gt;Linux&lt;/acquiry_operating_system&gt;
+        &lt;acquiry_date&gt;Sat Jan 20 18:32:08 2007 CET&lt;/acquiry_date&gt;
+        &lt;acquiry_software&gt;ewfacquire&lt;/acquiry_software&gt;
+        &lt;acquiry_software_version&gt;20070120&lt;/acquiry_software_version&gt;
+&lt;/xheader&gt;
+</code></pre>
+<h4 id="xhash"><a class="header" href="#xhash">Xhash</a></h4>
+<p>The xhash section contains <a href="zlib.html">zlib compressed data</a> containing XML data
+containing the hash values.</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xhash&gt;
+        &lt;md5&gt;ae1ce8f5ac079d3ee93f97fe3792bda3&lt;/md5&gt;
+        &lt;sha1&gt;31a58f090460b92220d724b28eeb2838a1df6184&lt;/sha1&gt;
+&lt;/xhash&gt;
+</code></pre>
+<h3 id="guid"><a class="header" href="#guid">GUID</a></h3>
+<p>EWF-X uses a random based version of the GUID</p>
+<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios">Corruption scenarios</a></h2>
+<p>This chapter contains several corruption scenarios that have been encountered
+"in the wild".</p>
+<h3 id="corrupt-uncompressed-chunk"><a class="header" href="#corrupt-uncompressed-chunk">Corrupt uncompressed chunk</a></h3>
+<p>TODO: add description</p>
+<h3 id="corrupt-compressed-chunk"><a class="header" href="#corrupt-compressed-chunk">Corrupt compressed chunk</a></h3>
+<p>TODO: add description</p>
+<h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
+<p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
+<p>In this corruption scenarion the copy of uncompressed data size value of the
+<a href="zlib.html">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s
+complement of the uncompressed data size.</p>
+<p>Libewf currently does not handle this corruption scenario.</p>
+<h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
+<p>TODO: add description</p>
+<pre><code>reading section header from file IO pool entry: 1 at offset: 415912423
+type                      : table2
+next offset               : 415978027
+size                      : 65604
+checksum                  : 0xf35f03e0
+number of offsets         : 16375
+base offset               : 0x00000000
+checksum                  : 0x180d0137
+
+reading section header from file IO pool entry: 1 at offset: 415978027
+type                      : sectors
+next offset               : 415978027
+size                      : 0
+checksum                  : 0x1ad00464
+</code></pre>
+<h3 id="corrupt-table-section"><a class="header" href="#corrupt-table-section">Corrupt table section</a></h3>
+<p>TODO: add description</p>
+<p>Scenarios:</p>
+<ul>
+<li>with and with out table 2</li>
+<li>corruption in number of entries</li>
+<li>corruption in entry data</li>
+</ul>
+<h3 id="corrupted-segment-file-header"><a class="header" href="#corrupted-segment-file-header">Corrupted segment file header</a></h3>
+<p>TODO: add description</p>
+<h3 id="partial-segment-file"><a class="header" href="#partial-segment-file">Partial segment file</a></h3>
+<p>TODO: add description</p>
+<h3 id="missing-segment-files"><a class="header" href="#missing-segment-files">Missing segment file(s)</a></h3>
+<p>TODO: add description</p>
+<h3 id="dual-image-section-size-versus-offset"><a class="header" href="#dual-image-section-size-versus-offset">Dual image: section size versus offset</a></h3>
+<p>The section headers define both the next section offset and the size of the
+section. If an implementation reads only one of the two to determine the next
+section, a dual EWF image can be crafted that consists of two separate images
+including hashes.</p>
+<p>Keramics will mark such an image as corrupted.</p>
+<h3 id="table-entries-offset-overflow"><a class="header" href="#table-entries-offset-overflow">Table entries offset overflow</a></h3>
+<p>In EnCase 6.7.1 the sectors section can be larger than 2048 MiB. The table
+entries offsets are 31 bit values in EnCase6 the offset in a table entry value
+will actually use the full 32 bit if the 2048 MiB has been exceeded. This
+behavior is no longer present in EnCase 6.8 so it is assumed to be a bug.</p>
+<p>Libewf currently assumes that the if the 31 bit value overflows the following
+chunks are uncompressed. This allows EnCase 6.7.1 faulty EWF files to be
+converted by Keramics.</p>
+<h3 id="multiple-incomplete-segment-file-set-identifiers"><a class="header" href="#multiple-incomplete-segment-file-set-identifiers">Multiple incomplete segment file set identifiers</a></h3>
+<p>Although rare it can occur that a set of EWF image files changes its segment
+file set identifier. This was seen in an image created by EnCase 6.13,
+presumably using remote imaging. The image contained 3 different segment file
+set identifiers. The first changes after an incomplete section. The second one
+changed without any clear indication. The corresponding data section also
+changed in some extent e.g. compression method and media flags, the is physical
+flag being dropped. The change was consistent across multiple segment files. It
+is unlikely that deliberate manipulation is involved. EnCase considers the
+image as invalid.</p>
+<p>Although with some tweaking of the individual segment file sets could be read.
+In this case the data read from the segment file sets was heavily corrupted.
+For now Keramics does not support reading multiple segment files sets from a
+single image, but this might change in the future.</p>
+<h2 id="ad-encryption"><a class="header" href="#ad-encryption">AD encryption</a></h2>
+<p>As of version 2.8 FTK Imager supports "AD encryption". Although the output file
+uses the EWF extensions the file actually is a AES-256 encrypted container. The
+EWF can be encrypted using a pass-phrase or a certificate.</p>
+<p>TODO: link to format definition</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li><a href="http://www.ietf.org/rfc/rfc4122.txt">RFC4122 - A Universally Unique Identifier (UUID) URN Namespace</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="storage_media_image.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ewf2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="storage_media_image.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ewf2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Virtual Hard Disk version 2 (VHDX) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="virtual-hard-disk-version-2-vhdx-image-format"><a class="header" href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX) image format</a></h1>
+<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft vitualization
+products as one of its image formats. It is both used the store hard disk images
+and snapshots.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>A VHDX image file consist of:</p>
+<ul>
+<li>file header</li>
+<li>2x image headers</li>
+<li>2x region tables</li>
+<li>log or metadata journal</li>
+<li>block allocation table (BAT) region</li>
+<li>metadata region
+<ul>
+<li>metadata table</li>
+<li>metadata items</li>
+</ul>
+</li>
+<li>image (content) data</li>
+</ul>
+<p>The elements are stored in 64 KiB (65536 bytes) aligned blocks</p>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<tr><td>Date and time values</td><td>N/A</td></tr>
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+</table></div>
+<p>The number of bytes per sector is 512 or 4096 depending on the logical sector size.</p>
+<h2 id="file-hader"><a class="header" href="#file-hader">File hader</a></h2>
+<p>The file header of (file type identifier) is 64 KiB (65536 bytes) in size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td>"vhdxfile"</td><td>Signature</td></tr>
+<tr><td>8</td><td>512</td><td></td><td>Creator application and version, with contains an UCS-2 little-endian string with end-of-string character</td></tr>
+<tr><td>520</td><td>65016</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<h2 id="image-header"><a class="header" href="#image-header">Image header</a></h2>
+<p>The image header is 4 KiB (4096 bytes) in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"head"</td><td>Signature</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Sequence number</td></tr>
+<tr><td>16</td><td>16</td><td></td><td>File write identifier, which contains a GUID</td></tr>
+<tr><td>32</td><td>16</td><td></td><td>Data write identifier, which contains a GUID</td></tr>
+<tr><td>48</td><td>16</td><td></td><td>Log identifier, which contains a GUID</td></tr>
+<tr><td>64</td><td>2</td><td></td><td>Log format version</td></tr>
+<tr><td>66</td><td>2</td><td>1</td><td>Format version</td></tr>
+<tr><td>68</td><td>4</td><td></td><td>Log size, which according to MS-VHDX this value must be a multitude of 1 MiB</td></tr>
+<tr><td>72</td><td>8</td><td></td><td>Log offset, which according to MS-VHDX this value must be a multitude of 1 MiB and greater than or equal to 1 MiB</td></tr>
+<tr><td>80</td><td>4016</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+</table></div>
+<h3 id="checksum-calculation"><a class="header" href="#checksum-calculation">Checksum calculation</a></h3>
+<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial
+value of 0 is used to calculate the checksum.</p>
+<p>The checksum is calculated over the 4 KiB bytes of data of the image header,
+where the image header checkum value is considered to be 0 during calculation.</p>
+<h2 id="region-table"><a class="header" href="#region-table">Region table</a></h2>
+<p>The region table is stored in a block of 64 KiB (65536 bytes) and consists of:</p>
+<ul>
+<li>region table header</li>
+<li>0 or more region table entries</li>
+<li>Unknown (reserved)</li>
+</ul>
+<p>TODO: determine if 0 entries is actually supported</p>
+<h3 id="region-table-header"><a class="header" href="#region-table-header">Region table header</a></h3>
+<p>The region table header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"regi"</td><td>Signature</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of table entries, which according to MS-VHDX this value must be less than or equal to 2047</td></tr>
+<tr><td>12</td><td>4</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+</table></div>
+<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial
+value of 0 is used to calculate the checksum.</p>
+<p>The checksum is calculated over the 64 KiB bytes of data of the region table
+where the image header checkum value is considered to be 0 during calculation.</p>
+<h3 id="region-table-entry"><a class="header" href="#region-table-entry">Region table entry</a></h3>
+<p>The region table entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td><a href="#region_type_identifiers">Region type identifier</a>, which contains a GUID</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Region data offset, which contains an offset relative to the start of the file. According to MS-VHDX this value must be a multitude of 1 MiB and greater than or equal to 1 MiB</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Region data size, which according to MS-VHDX this value must be a multitude of 1 MiB</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Is required flag, which contains 1 to indicate the region type needs to be supported.</td></tr>
+</table></div>
+<h3 id="region-type-identifiers"><a class="header" href="#region-type-identifiers"><a name="region_type_identifiers"></a>Region type identifiers</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>2dc27766-f623-4200-9d64-115e9bfd4a08</td><td></td><td>Block allocation table (BAT) region</td></tr>
+<tr><td>8b7ca206-4790-4b9a-b8fe-575f050f886e</td><td></td><td>Metadata region</td></tr>
+</table></div>
+<h2 id="metadata-region"><a class="header" href="#metadata-region">Metadata region</a></h2>
+<p>The metadata region contains:</p>
+<ul>
+<li>metadata table</li>
+<li>metadata items</li>
+</ul>
+<h3 id="metadata-table"><a class="header" href="#metadata-table">Metadata table</a></h3>
+<p>The metadata table is stored in a block of 64 KiB (65536 bytes) and consists of:</p>
+<ul>
+<li>metadata table header</li>
+<li>0 or more metadata table entries</li>
+<li>Unknown (reserved)</li>
+</ul>
+<p>TODO: determine if 0 entries is actually supported</p>
+<h4 id="metadata-table-header"><a class="header" href="#metadata-table-header">Metadata table header</a></h4>
+<p>The metadata table header is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td>"metadata"</td><td>Signature</td></tr>
+<tr><td>8</td><td>2</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Number of table entries, which according to MS-VHDX this value must be less than or equal to 2047</td></tr>
+<tr><td>12</td><td>20</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+</table></div>
+<h4 id="metadata-table-entry"><a class="header" href="#metadata-table-entry">Metadata table entry</a></h4>
+<p>The metdata table entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td><a href="#metdata_item_identifiers">Metadata item identifier</a>, which contains a GUID</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Metadata item offset, which contains an offset relative to the start of the metadata region. According to MS-VHDX this value must be greater than 64 KiB</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Metadata item size</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Unknown</td></tr>
+</table></div>
+<p>TODO: describe last 8 bytes</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>IsUser</td><td></td></tr>
+<tr><td>0x00000002</td><td>IsVirtualDisk</td><td></td></tr>
+<tr><td>0x00000004</td><td>IsRequired</td><td></td></tr>
+</table></div>
+<h3 id="metadata-items"><a class="header" href="#metadata-items">Metadata items</a></h3>
+<h4 id="metadata-item-identifiers"><a class="header" href="#metadata-item-identifiers"><a name="metdata_item_identifiers"></a>Metadata item identifiers</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>2fa54224-cd1b-4876-b211-5dbed83bf4b8</td><td></td><td>Virtual disk size</td></tr>
+<tr><td>8141bf1d-a96f-4709-ba47-f233a8faab5f</td><td></td><td>Logical sector size</td></tr>
+<tr><td>a8d35f2d-b30b-454d-abf7-d3d84834ab0c</td><td></td><td>Parent locator</td></tr>
+<tr><td>beca12ab-b2e6-4523-93ef-c309e000c746</td><td></td><td>Virtual disk identifier</td></tr>
+<tr><td>caa16737-fa36-4d43-b3b6-33f0aa44e76b</td><td></td><td>File parameters</td></tr>
+<tr><td>cda348c7-445d-4471-9cc9-e9885251c556</td><td></td><td>Physical sector size</td></tr>
+</table></div>
+<h4 id="file-parameters-metadata-item"><a class="header" href="#file-parameters-metadata-item">File parameters metadata item</a></h4>
+<p>The file parameters metadata item is 8 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Block size, which according to MS-VHDX this value must be a power of 2 and greater than or equal to 1 MiB and not greater than 256 MiB</td></tr>
+<tr><td>4.0</td><td>1 bit</td><td></td><td>Blocks remain allocated flag, which is used to indicate the file is a fixed-size image</td></tr>
+<tr><td>4.1</td><td>1 bit</td><td></td><td>Has parent flag, which indicates if the VHDX file contains a differential image that has a parent image</td></tr>
+<tr><td>4.2</td><td>30 bits</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+</table></div>
+<h4 id="logical-sector-size-metadata-item"><a class="header" href="#logical-sector-size-metadata-item">Logical sector size metadata item</a></h4>
+<p>The logical sector size metadata item is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Logical sector size, which according to MS-VHDX this value must be either 512 or 4096</td></tr>
+</table></div>
+<h4 id="parent-locator-metadata-item"><a class="header" href="#parent-locator-metadata-item">Parent locator metadata item</a></h4>
+<p>The parent locator metadata item is of variable size and consits of:</p>
+<ul>
+<li>parent locator header</li>
+<li>0 or more parent locator entry</li>
+<li>parent locator key and value data</li>
+</ul>
+<p>TODO: determine if 0 entries is actually supported</p>
+<h5 id="parent-locator-header"><a class="header" href="#parent-locator-header">Parent locator header</a></h5>
+<p>The parent locator header is 20 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Parent locator type indicator, which contains the GUID: b04aefb7-d19e-4a81-b789-25b8e9445913</td></tr>
+<tr><td>16</td><td>2</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Number of entries (or key-value pairs)</td></tr>
+</table></div>
+<h5 id="parent-locator-entry"><a class="header" href="#parent-locator-entry">Parent locator entry</a></h5>
+<p>The parent locator entry is 12 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Key data offset, which contains the offset relative from the start of the parent locator header</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Value data offset, which contains the offset relative from the start of the parent locator header</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Key data size</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Value data size</td></tr>
+</table></div>
+<h5 id="parent-locator-key-and-value-data"><a class="header" href="#parent-locator-key-and-value-data">Parent locator key and value data</a></h5>
+<p>A parent locator key or value is stored as UCS-2 little-endian string without
+end-of-string character.</p>
+<p>Known keys are:</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>absolute_win32_path</td><td>The value contains an absolute drive Windows path "\?\c:\file.vhdx"</td></tr>
+<tr><td>parent_linkage</td><td>The value contains a string of a GUID. This GUID should correspond to the data write identifier of the parent image</td></tr>
+<tr><td>parent_linkage2</td><td>The value contains a string of a GUID</td></tr>
+<tr><td>relative_path</td><td>The value contains a relative Windows path "..\file.vhdx"</td></tr>
+<tr><td>volume_path</td><td>The value contains an absolute volume Windows path with "\?\Volume{%GUID%}\file.vhdx"</td></tr>
+</table></div>
+<h4 id="physical-sector-size-metadata-item"><a class="header" href="#physical-sector-size-metadata-item">Physical sector size metadata item</a></h4>
+<p>The physical sector size metadata item is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Physical sector size, which according to MS-VHDX this value must be either 512 or 4096</td></tr>
+</table></div>
+<h4 id="virtual-disk-identifier-metadata-item"><a class="header" href="#virtual-disk-identifier-metadata-item">Virtual disk identifier metadata item</a></h4>
+<p>The virtual disk identifier metadata item is 16 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Virtual disk identifier, which contains a GUID</td></tr>
+</table></div>
+<blockquote>
+<p>Note that in contrast to VHD (version 1) the virtual disk identifier does
+not change between a differential image and its parent. The data write
+identifier seems to be used instead.</p>
+</blockquote>
+<h4 id="virtual-disk-size-metadata-item"><a class="header" href="#virtual-disk-size-metadata-item">Virtual disk size metadata item</a></h4>
+<p>The virtual disk size metadata item is 8 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Virtual disk size</td></tr>
+</table></div>
+<h2 id="block-allocation-table-bat-region"><a class="header" href="#block-allocation-table-bat-region">Block allocation table (BAT) region</a></h2>
+<p>The block allocation table (BAT) region contains the block allocation table.
+The entries of this table describe the location of either blocks containing
+image content data (or payload blocks) or blocks containing a sector bitmap.</p>
+<p>The size of an individual sector bitmap block is 1 MiB which allows for <code>2^23</code>
+sectors to be represented by the bitmap.</p>
+<p>Block allocation table (BAT) entries are grouped in chunks. The size of a chunk
+can be calculated as following:</p>
+<pre><code>number of entries per chunk = ( 2^23 * logical sector size ) / block size
+</code></pre>
+<p>The block allocation table (BAT) consists of:</p>
+<ul>
+<li>one or more chunks containing:
+<ul>
+<li>number of entries per chunk x BAT entry describing image content data</li>
+<li>1 x BAT entry describing the a sector bitmap</li>
+</ul>
+</li>
+</ul>
+<p>Unused BAT entries are filled with 0-byte values.</p>
+<p>The block allocation table (BAT) of:</p>
+<ul>
+<li>a fixed-size image does not contain sector bitmap entries;</li>
+<li>a dynamic-size image does contain sector bitmap entries, although according to MS-VHDX are not used;</li>
+<li>a differential image does contain sector bitmap entries.</li>
+</ul>
+<h3 id="block-allocation-table-bat-entry"><a class="header" href="#block-allocation-table-bat-entry">Block allocation table (BAT) entry</a></h3>
+<p>The block allocation table (BAT) entry is 64 bits in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0</td><td>3 bits</td><td></td><td>Block state</td></tr>
+<tr><td>0.3</td><td>17 bits</td><td>0</td><td>Unknown (reserved), which according to MS-VHDX this value must be set to 0</td></tr>
+<tr><td>2.4</td><td>44 bits</td><td></td><td>Block offset, which contains the offset relative from the start of the file as a multitude of 1 MiB</td></tr>
+</table></div>
+<h3 id="block-states"><a class="header" href="#block-states">Block states</a></h3>
+<h4 id="payload-block-states"><a class="header" href="#payload-block-states">Payload block states</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td>PAYLOAD_BLOCK_NOT_PRESENT</td><td>Block is new and therefore not (yet) stored in the file</td></tr>
+<tr><td>1</td><td>PAYLOAD_BLOCK_UNDEFINED</td><td>Block is not stored in the file</td></tr>
+<tr><td>2</td><td>PAYLOAD_BLOCK_ZERO</td><td>Block is sparse and therefore filled with 0-byte values</td></tr>
+<tr><td>3</td><td>PAYLOAD_BLOCK_UNMAPPED</td><td>Block has been unmapped</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>6</td><td>PAYLOAD_BLOCK_FULLY_PRESENT</td><td>Block is stored in the file</td></tr>
+<tr><td>7</td><td>PAYLOAD_BLOCK_PARTIALLY_PRESENT</td><td>Block is stored in the parent</td></tr>
+</table></div>
+<h4 id="sector-bitmap-block-states"><a class="header" href="#sector-bitmap-block-states">Sector bitmap block states</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td>SB_BLOCK_NOT_PRESENT</td><td>Block is new and therefore not (yet) stored in the file</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>6</td><td>SB_BLOCK_PRESENT</td><td>Block is stored in the file</td></tr>
+</table></div>
+<h3 id="sector-bitmap"><a class="header" href="#sector-bitmap">Sector bitmap</a></h3>
+<p>In differential disk images the sector bitmap indicates which sectors are stored
+within the image (bit set to 1) or in the parent (bit set to 0).</p>
+<p>The bitmap is stored in a 1 MiB block.</p>
+<p>The bitmap is stored on a per-byte basis with the LSB represents the first bit
+in the bitmap.</p>
+<h2 id="log-metadata-journal"><a class="header" href="#log-metadata-journal">Log (metadata journal)</a></h2>
+<p>TODO: complete section</p>
+<p>The log serves as metadata journal is of variable size and consist of contiguous
+circular (ring) buffer that contains log entries.</p>
+<h3 id="log-entry"><a class="header" href="#log-entry">Log entry</a></h3>
+<p>TODO: complete section</p>
+<p>4 KiB (4096 bytes) in size</p>
+<h4 id="log-entry-header"><a class="header" href="#log-entry-header">Log entry header</a></h4>
+<p>TODO: complete section</p>
+<h4 id="zero-descriptor"><a class="header" href="#zero-descriptor">Zero descriptor</a></h4>
+<p>TODO: complete section</p>
+<h4 id="data-descriptor"><a class="header" href="#data-descriptor">Data descriptor</a></h4>
+<p>TODO: complete section</p>
+<h4 id="data-sector"><a class="header" href="#data-sector">Data sector</a></h4>
+<p>TODO: complete section</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477">MS-VHDX: Virtual Hard Disk v2 (VHDX) File Format</a>, by Microsoft</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="vhd.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="volume_system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="vhd.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="volume_system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

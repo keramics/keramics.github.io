@@ -1,0 +1,1202 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Extended File System (ext) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="extended-file-system-ext-format"><a class="header" href="#extended-file-system-ext-format">Extended File System (ext) format</a></h1>
+<p>The Extended File System (ext) is one of the more common file system used in
+Linux.</p>
+<p>There are multiple version of ext.</p>
+<div class="table-wrapper"><table><thead><th>Version</th><th>Remarks</th></thead><tr><td>1</td><td>Introduced in April 1992</td></tr>
+<tr><td>2</td><td>Introduced in January 1993</td></tr>
+<tr><td>3</td><td>Introduced in November 2001, which featured journaling, dynamic growth and large directory indexing (HTree)</td></tr>
+<tr><td>4</td><td>Introduces in October 2006 as unstable and becmae stable in October 2008, which featured extents and improved timestamps</td></tr>
+</table></div>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>An Extended File System (ext) consists of:</p>
+<ul>
+<li>one or more block groups</li>
+</ul>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian, with the exception of UUID values that are stored in big-endian.</td></tr>
+<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 (POSIX epoch), disregarding leap seconds. Or number of nanoseconds, when extra precision is enabled. Date and time values are stored in UTC.</td></tr>
+<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage.</td></tr>
+</table></div>
+<h2 id="block-group"><a class="header" href="#block-group">Block group</a></h2>
+<p>A block group consists of:</p>
+<ul>
+<li>optional 1024 bytes of boot code or zero bytes (at offset: 0)</li>
+<li>optional superblock</li>
+<li>optional group descriptor table</li>
+<li>block bitmap</li>
+<li>inode bitmap</li>
+<li>allocated and unallocated blocks</li>
+</ul>
+<p>The primary superblock is stored at offset 1024 relative from the start of the
+volume. Backup superblocks are stored at offset 1024 relative from the start of
+the block group if block size &lt;= 1024 or otherwise at offset 0 from the start
+of the block group.</p>
+<p>The group descriptor table is stored in the block after the superblock.</p>
+<p>The ext2 revision 0 stores a copy at the start of every block group, along with
+backups of the group descriptor table. Later revisions can reduce the number of
+backup copies by only putting backups in specific groups (sparse superblock
+feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<blockquote>
+<p>Note backup superblocks can be empty (filled with 0-byte values) or contain
+remnant data on an Android ext file system with sparse_super.</p>
+</blockquote>
+<blockquote>
+<p>Note that not all values in a backup superblock and backup group descriptor
+tables always match those of the primary superblock and group descriptor
+table.</p>
+</blockquote>
+<h3 id="flex-block-groups"><a class="header" href="#flex-block-groups">Flex block groups</a></h3>
+<p>Flex (or flexible) block groups are a set of block groups that treated as
+a single logical block group. Metadata such as the superblock, group
+descriptors, data block bitmaps spans the entire logical block group and
+not the individual block groups part of the set.</p>
+<h3 id="meta-block-groups"><a class="header" href="#meta-block-groups">Meta block groups</a></h3>
+<p>Meta block groups (META_BG) are a set (or cluster) of block groups, for which
+its group descriptor structures can be stored in a single block.</p>
+<p>The first meta block group value in the superblock indicates what the first</p>
+<p>meta block group value is 256, and the number of group descriptors that can be
+stored in a single block 64, then the group descriptors for the block groups
+[0, 16383] are stored in the group descriptor table after the primary
+superblock and corresponding locations of backups.</p>
+<p>Successive group descriptor tables, for example [16384, 16447], are stored in
+the first block group of a meta block group and backups in the second and last
+block groups of the meta block group.</p>
+<h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
+<p>The volume is devided in blocks:</p>
+<pre><code>block offset = block number x block size
+</code></pre>
+<p>The block size is defined in the superblock.</p>
+<h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
+<h3 id="the-ext2-superblock"><a class="header" href="#the-ext2-superblock">The ext2 superblock</a></h3>
+<p>The ext2 superblock is 208 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Number of inodes</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Number of unallocated inodes</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>First data block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Block size, which contains the number of bits to shift 1024 to the MSB (left)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Fragment size, which contains the number of bits to shift 1024 to the MSB (left)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of blocks per block group</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Number of fragments per block group</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>Number of inodes per block group</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Last mount time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Last written time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>52</td><td>2</td><td></td><td>The (current) mount count</td></tr>
+<tr><td>54</td><td>2</td><td></td><td>Maximum mount count</td></tr>
+<tr><td>56</td><td>2</td><td>"\x53\xef"</td><td>Signature</td></tr>
+<tr><td>58</td><td>2</td><td></td><td><a href="#file_system_state_flags">File system state flags</a></td></tr>
+<tr><td>60</td><td>2</td><td></td><td><a href="#error_handling_status">Error-handling status</a></td></tr>
+<tr><td>62</td><td>2</td><td></td><td>Minor format revision</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Last consistency check time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>68</td><td>4</td><td></td><td>Consistency check interval, which which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
+<tr><td>82</td><td>2</td><td></td><td>Reserved block group identifier (GID)</td></tr>
+<tr><td colspan="4"> <em>Dynamic inode information, if major version is EXT2_DYNAMIC_REV</em></tr>
+<tr><td>84</td><td>4</td><td></td><td>First non-reserved inode</td></tr>
+<tr><td>88</td><td>2</td><td></td><td>Inode size. Note that the inode size must be a power of 2 larger or equal to 128, the maximum supported by mke2fs is 1024</td></tr>
+<tr><td>90</td><td>2</td><td></td><td>Block group, which contains a block group number</td></tr>
+<tr><td>92</td><td>4</td><td></td><td><a href="#compatible_feature_flags">Compatible feature flags</a></td></tr>
+<tr><td>96</td><td>4</td><td></td><td><a href="#incompatible_feature_flags">Incompatible feature flags</a></td></tr>
+<tr><td>100</td><td>4</td><td></td><td><a href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></td></tr>
+<tr><td>104</td><td>16</td><td></td><td>File system identifier, which contains a big-endian UUID</td></tr>
+<tr><td>120</td><td>16</td><td></td><td>Volume label, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>136</td><td>64</td><td></td><td>Last mount path, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>200</td><td>4</td><td></td><td>Algorithm usage bitmap</td></tr>
+<tr><td colspan="4"> <em>Performance hints, if EXT2_COMPAT_PREALLOC is set</em></tr>
+<tr><td>204</td><td>1</td><td></td><td>Number of pre-allocated blocks per file</td></tr>
+<tr><td>205</td><td>1</td><td></td><td>Number of pre-allocated blocks per directory</td></tr>
+<tr><td>206</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+</table></div>
+<h3 id="the-ext3-superblock"><a class="header" href="#the-ext3-superblock">The ext3 superblock</a></h3>
+<p>The ext3 superblock is 336 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Number of inodes</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Number of unallocated inodes</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>First data block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Block size, which contains the number of bits to shift 1024 to the MSB (left)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Fragment size, which contains the number of bits to shift 1024 to the MSB (left)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of blocks per block group</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Number of fragments per block group</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>Number of inodes per block group, which can be 0 in combination with EXT3_FEATURE_INCOMPAT_JOURNAL_DEV</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Last mount time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Last written time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>52</td><td>2</td><td></td><td>The (current) mount count</td></tr>
+<tr><td>54</td><td>2</td><td></td><td>Maximum mount count</td></tr>
+<tr><td>56</td><td>2</td><td>"\x53\xef"</td><td>Signature</td></tr>
+<tr><td>58</td><td>2</td><td></td><td><a href="#file_system_state_flags">File system state flags</a></td></tr>
+<tr><td>60</td><td>2</td><td></td><td><a href="#error_handling_status">Error-handling status</a></td></tr>
+<tr><td>62</td><td>2</td><td></td><td>Minor format revision</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Last consistency check time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>68</td><td>4</td><td></td><td>Consistency check interval, which which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
+<tr><td>82</td><td>2</td><td></td><td>Reserved block group identifier (GID)</td></tr>
+<tr><td colspan="4"> <em>Dynamic inode information, if major version is EXT2_DYNAMIC_REV</em></tr>
+<tr><td>84</td><td>4</td><td></td><td>First non-reserved inode</td></tr>
+<tr><td>88</td><td>2</td><td></td><td>Inode size. Note that the inode size must be a power of 2 larger or equal to 128, the maximum supported by mke2fs is 1024</td></tr>
+<tr><td>90</td><td>2</td><td></td><td>Block group, which contains a block group number</td></tr>
+<tr><td>92</td><td>4</td><td></td><td><a href="#compatible_feature_flags">Compatible feature flags</a></td></tr>
+<tr><td>96</td><td>4</td><td></td><td><a href="#incompatible_feature_flags">Incompatible feature flags</a></td></tr>
+<tr><td>100</td><td>4</td><td></td><td><a href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></td></tr>
+<tr><td>104</td><td>16</td><td></td><td>File system identifier, which contains a big-endian UUID</td></tr>
+<tr><td>120</td><td>16</td><td></td><td>Volume label, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>136</td><td>64</td><td></td><td>Last mount path, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>200</td><td>4</td><td></td><td>Algorithm usage bitmap</td></tr>
+<tr><td colspan="4"> <em>Performance hints, if EXT2_COMPAT_PREALLOC is set</em></tr>
+<tr><td>204</td><td>1</td><td></td><td>Number of pre-allocated blocks per file</td></tr>
+<tr><td>205</td><td>1</td><td></td><td>Number of pre-allocated blocks per directory</td></tr>
+<tr><td>206</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td colspan="4"> <em>Journalling support, if EXT3_FEATURE_COMPAT_HAS_JOURNAL is set</em></tr>
+<tr><td>208</td><td>16</td><td></td><td>Journal identifier, which contains a big-endian UUID</td></tr>
+<tr><td>224</td><td>4</td><td></td><td>Journal inode</td></tr>
+<tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
+<tr><td>252</td><td>1</td><td></td><td>Default hash version</td></tr>
+<tr><td>253</td><td>1</td><td></td><td>Journal backup type</td></tr>
+<tr><td>254</td><td>2</td><td></td><td>Group descriptor size</td></tr>
+<tr><td>256</td><td>4</td><td></td><td>Default mount options</td></tr>
+<tr><td>260</td><td>4</td><td></td><td>First meta block group (or metablock)</td></tr>
+<tr><td>264</td><td>4</td><td></td><td>File system creation time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>268</td><td>17 x 4</td><td></td><td>Backup journal inodes</td></tr>
+</table></div>
+<h3 id="the-ext4-superblock"><a class="header" href="#the-ext4-superblock">The ext4 superblock</a></h3>
+<p>The superblock is 1024 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Number of inodes</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Number of blocks, which contains the lower 32-bit of the value</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks, which contains the lower 32-bit of the value. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks, which contains the lower 32-bit of the value</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Number of unallocated inodes, which contains the lower 32-bit of the value</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Root group block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Block size, which contains the number of bits to shift 1024 to the most-significant-bit (MSB)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Fragment size, which contains the number of bits to shift 1024 to the most-significant-bit (MSB)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of blocks per block group</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Number of fragments per block group</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>Number of inodes per block group, which can be 0 in combination with EXT4_FEATURE_INCOMPAT_JOURNAL_DEV</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Last mount time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Last written time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>52</td><td>2</td><td></td><td>The (current) mount count</td></tr>
+<tr><td>54</td><td>2</td><td></td><td>Maximum mount count</td></tr>
+<tr><td>56</td><td>2</td><td>"\x53\xef"</td><td>Signature</td></tr>
+<tr><td>58</td><td>2</td><td></td><td><a href="#file_system_state_flags">File system state flags</a></td></tr>
+<tr><td>60</td><td>2</td><td></td><td><a href="#error_handling_status">Error-handling status</a></td></tr>
+<tr><td>62</td><td>2</td><td></td><td>Minor format revision</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Last consistency check time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>68</td><td>4</td><td></td><td>Consistency check interval, which which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
+<tr><td>82</td><td>2</td><td></td><td>Reserved block group identifier (GID)</td></tr>
+<tr><td colspan="4"> <em>Dynamic inode information, if major version is EXT2_DYNAMIC_REV</em></tr>
+<tr><td>84</td><td>4</td><td></td><td>First non-reserved inode</td></tr>
+<tr><td>88</td><td>2</td><td></td><td>Inode size. Note that the inode size must be a power of 2 larger or equal to 128, the maximum supported by mke2fs is 1024</td></tr>
+<tr><td>90</td><td>2</td><td></td><td>Block group</td></tr>
+<tr><td>92</td><td>4</td><td></td><td><a href="#compatible_feature_flags">Compatible feature flags</a></td></tr>
+<tr><td>96</td><td>4</td><td></td><td><a href="#incompatible_feature_flags">Incompatible feature flags</a></td></tr>
+<tr><td>100</td><td>4</td><td></td><td><a href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></td></tr>
+<tr><td>104</td><td>16</td><td></td><td>File system identifier, which contains a big-endian UUID</td></tr>
+<tr><td>120</td><td>16</td><td></td><td>Volume label, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>136</td><td>64</td><td></td><td>Last mount path, which contains a narrow character string without end-of-string character</td></tr>
+<tr><td>200</td><td>4</td><td></td><td>Algorithm usage bitmap</td></tr>
+<tr><td colspan="4"> <em>Performance hints, if EXT2_COMPAT_PREALLOC is set</em></tr>
+<tr><td>204</td><td>1</td><td></td><td>Number of pre-allocated blocks per file</td></tr>
+<tr><td>205</td><td>1</td><td></td><td>Number of pre-allocated blocks per directory</td></tr>
+<tr><td>206</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td colspan="4"> <em>Journalling support, if EXT3_FEATURE_COMPAT_HAS_JOURNAL is set</em></tr>
+<tr><td>208</td><td>16</td><td></td><td>Journal identifier, which contains a big-endian UUID</td></tr>
+<tr><td>224</td><td>4</td><td></td><td>Journal inode</td></tr>
+<tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
+<tr><td>252</td><td>1</td><td></td><td>Default hash version</td></tr>
+<tr><td>253</td><td>1</td><td></td><td>Journal backup type</td></tr>
+<tr><td>254</td><td>2</td><td></td><td>Group descriptor size</td></tr>
+<tr><td>256</td><td>4</td><td></td><td>Default mount options</td></tr>
+<tr><td>260</td><td>4</td><td></td><td>First meta block group (or metablock)</td></tr>
+<tr><td>264</td><td>4</td><td></td><td>File system creation time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>268</td><td>17 x 4</td><td></td><td>Backup journal inodes</td></tr>
+<tr><td colspan="4"> <em>If 64-bit support (EXT4_FEATURE_INCOMPAT_64BIT) is enabled</em></tr>
+<tr><td>336</td><td>4</td><td></td><td>Number of blocks, which contains the upper 32-bit of the value</td></tr>
+<tr><td>340</td><td>4</td><td></td><td>Number of reserved blocks, which contains the upper 32-bit of the value</td></tr>
+<tr><td>344</td><td>4</td><td></td><td>Number of unallocated blocks, which contains the upper 32-bit of the value</td></tr>
+<tr><td>348</td><td>2</td><td></td><td>Minimum inode size</td></tr>
+<tr><td>350</td><td>2</td><td></td><td>Reserved inode size</td></tr>
+<tr><td>352</td><td>4</td><td></td><td>Miscellaneous flags</td></tr>
+<tr><td>356</td><td>2</td><td></td><td>RAID stride</td></tr>
+<tr><td>358</td><td>2</td><td></td><td>Multiple mount protection (MMP) update interval in seconds</td></tr>
+<tr><td>360</td><td>8</td><td></td><td>Block for multi-mount protection</td></tr>
+<tr><td>368</td><td>4</td><td></td><td>Unknown (blocks on all data disks (N*stride))</td></tr>
+<tr><td>372</td><td>1</td><td></td><td>Number of block groups per flex block group, which is stored as: 2 ^ value</td></tr>
+<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_type">Checksum type</a></td></tr>
+<tr><td>374</td><td>1</td><td></td><td>Unknown (encryption level)</td></tr>
+<tr><td>375</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td>376</td><td>8</td><td></td><td>Unknown (s_kbytes_written)</td></tr>
+<tr><td>384</td><td>4</td><td></td><td>Inode number of active snapshot</td></tr>
+<tr><td>388</td><td>4</td><td></td><td>Identifier of active snapshot</td></tr>
+<tr><td>392</td><td>8</td><td></td><td>Unknown (reserved s_snapshot_r_blocks_count)</td></tr>
+<tr><td>400</td><td>4</td><td></td><td>Inode number of snapshot list head</td></tr>
+<tr><td>404</td><td>4</td><td></td><td>Unknown (s_error_count)</td></tr>
+<tr><td>408</td><td>4</td><td></td><td>Unknown (s_first_error_time)</td></tr>
+<tr><td>412</td><td>4</td><td></td><td>Unknown (s_first_error_ino)</td></tr>
+<tr><td>416</td><td>8</td><td></td><td>Unknown (s_first_error_block)</td></tr>
+<tr><td>424</td><td>32</td><td></td><td>Unknown (s_first_error_func)</td></tr>
+<tr><td>456</td><td>4</td><td></td><td>Unknown (s_first_error_line)</td></tr>
+<tr><td>460</td><td>4</td><td></td><td>Unknown (s_last_error_time)</td></tr>
+<tr><td>464</td><td>4</td><td></td><td>Unknown (s_last_error_ino)</td></tr>
+<tr><td>468</td><td>4</td><td></td><td>Unknown (s_last_error_line)</td></tr>
+<tr><td>472</td><td>8</td><td></td><td>Unknown (s_last_error_block)</td></tr>
+<tr><td>480</td><td>32</td><td></td><td>Unknown (s_last_error_func)</td></tr>
+<tr><td>512</td><td>64</td><td></td><td>Unknown (s_mount_opts)</td></tr>
+<tr><td>576</td><td>4</td><td></td><td>Unknown (s_usr_quota_inum)</td></tr>
+<tr><td>580</td><td>4</td><td></td><td>Unknown (s_grp_quota_inum)</td></tr>
+<tr><td>584</td><td>4</td><td></td><td>Unknown (s_overhead_clusters)</td></tr>
+<tr><td>588</td><td>2 x 4</td><td></td><td>Unknown (s_backup_bgs)</td></tr>
+<tr><td>596</td><td>4</td><td></td><td>Unknown (s_encrypt_algos)</td></tr>
+<tr><td>600</td><td>16</td><td></td><td>Unknown (s_encrypt_pw_salt)</td></tr>
+<tr><td>616</td><td>4</td><td></td><td>Unknown (s_lpf_ino)</td></tr>
+<tr><td>620</td><td>4</td><td></td><td>Unknown (s_prj_quota_inum)</td></tr>
+<tr><td>624</td><td>4</td><td></td><td>Metadata checksum seed</td></tr>
+<tr><td>628</td><td>1</td><td></td><td>Unknown (s_wtime_hi)</td></tr>
+<tr><td>629</td><td>1</td><td></td><td>Unknown (s_mtime_hi)</td></tr>
+<tr><td>630</td><td>1</td><td></td><td>Unknown (s_mkfs_time_hi)</td></tr>
+<tr><td>631</td><td>1</td><td></td><td>Unknown (s_lastcheck_hi)</td></tr>
+<tr><td>632</td><td>1</td><td></td><td>Unknown (s_first_error_time_hi)</td></tr>
+<tr><td>633</td><td>1</td><td></td><td>Unknown (s_last_error_time_hi)</td></tr>
+<tr><td>634</td><td>1</td><td></td><td>Unknown (s_first_error_errcode)</td></tr>
+<tr><td>635</td><td>1</td><td></td><td>Unknown (s_last_error_errcode)</td></tr>
+<tr><td>636</td><td>2</td><td></td><td>Unknown (s_encoding)</td></tr>
+<tr><td>638</td><td>2</td><td></td><td>Unknown (s_encoding_flags)</td></tr>
+<tr><td>640</td><td>4</td><td></td><td>Unknown (s_orphan_file_inum)</td></tr>
+<tr><td>644</td><td>94 x 4 = 376</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td>1020</td><td>4</td><td></td><td>Checksum</td></tr>
+</table></div>
+<p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
+<blockquote>
+<p>Note that some versions of mkfs.ext set the file system creation time even for
+ext2 and when EXT3_FEATURE_COMPAT_HAS_JOURNAL is not set.</p>
+</blockquote>
+<p>TODO: Is the only way to determine the file system version the compatibility and equivalent flags?</p>
+<h3 id="checksum-calculation"><a class="header" href="#checksum-calculation">Checksum calculation</a></h3>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
+polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
+checksum.</p>
+<p>The checksum is calculated over the 1020 bytes of data of the suberblock.</p>
+<h3 id="metadata-checksum-seed-calculation"><a class="header" href="#metadata-checksum-seed-calculation">Metadata checksum seed calculation</a></h3>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
+polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
+checksum.</p>
+<p>The checksum is calculated over:</p>
+<ul>
+<li>the 16 byte file system identifier in the superblock</li>
+</ul>
+<p>If EXT4_FEATURE_INCOMPAT_CSUM_SEED is set the metadata checksum seed value
+stored in the superblock should be used instead of calculating it based on the
+file system identifier.</p>
+<p>If checksum type is CRC-32C, the metadata checksum seed is stored as
+0xffffffff - CRC-32C.</p>
+<h3 id="file-system-state-flags"><a class="header" href="#file-system-state-flags"><a name="file_system_state_flags"></a>File system state flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td></td><td>Is clean</td></tr>
+<tr><td>0x0002</td><td></td><td>Has errors</td></tr>
+<tr><td>0x0004</td><td></td><td>Recovering orphan inodes</td></tr>
+</table></div>
+<h3 id="error-handling-status"><a class="header" href="#error-handling-status"><a name="error_handling_status"></a>Error-handling status</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>1</td><td></td><td>Continue</td></tr>
+<tr><td>2</td><td></td><td>Remount as read-only</td></tr>
+<tr><td>3</td><td></td><td>Panic</td></tr>
+</table></div>
+<h3 id="creator-operating-system"><a class="header" href="#creator-operating-system"><a name="creator_operating_system"></a>Creator operating system</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td></td><td>Linux</td></tr>
+<tr><td>1</td><td></td><td>GNU Hurd</td></tr>
+<tr><td>2</td><td></td><td>Masix</td></tr>
+<tr><td>3</td><td></td><td>FreeBSD</td></tr>
+<tr><td>4</td><td></td><td>Lites</td></tr>
+</table></div>
+<h3 id="format-revision"><a class="header" href="#format-revision"><a name="format_revisision"></a>Format revision</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td>EXT2_GOOD_OLD_REV</td><td>Original version with a fixed inode size of 128 bytes</td></tr>
+<tr><td>1</td><td>EXT2_DYNAMIC_REV</td><td>Version with dynamic inode size support</td></tr>
+</table></div>
+<h3 id="compatible-feature-flags"><a class="header" href="#compatible-feature-flags"><a name="compatible_feature_flags"></a>Compatible feature flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>EXT2_COMPAT_PREALLOC</td><td>Pre-allocate directory blocks, which is intended to reduce fragmentation.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_COMPAT_IMAGIC_INODES</td><td>Has AFS server inodes.</td></tr>
+<tr><td>0x00000004</td><td>EXT3_FEATURE_COMPAT_HAS_JOURNAL</td><td>Has a journal.</td></tr>
+<tr><td>0x00000008</td><td>EXT2_FEATURE_COMPAT_EXT_ATTR</td><td>Has extended attributes.</td></tr>
+<tr><td>0x00000010</td><td>EXT2_FEATURE_COMPAT_RESIZE_INO, EXT2_FEATURE_COMPAT_RESIZE_INODE</td><td>Is resizeable, the file system has reserved GDT blocks for expansion, which also requires RO_COMPAT_SPARSE_SUPER</td></tr>
+<tr><td>0x00000020</td><td>EXT2_FEATURE_COMPAT_DIR_INDEX</td><td>Has indexed directories</td></tr>
+<tr><td>0x00000040</td><td>COMPAT_LAZY_BG</td><td>Unknown (Lazy block group)</td></tr>
+<tr><td>0x00000080</td><td>COMPAT_EXCLUDE_INODE</td><td>Unknown (Exclude inode), which is not yet implemented and intended for a future file system snapshot feature</td></tr>
+<tr><td>0x00000100</td><td>COMPAT_EXCLUDE_BITMAP</td><td>Unknown (Exclude bitmap), which is not yet implemented and intended for a future file system snapshot feature</td></tr>
+<tr><td>0x00000200</td><td>EXT4_FEATURE_COMPAT_SPARSE_SUPER2</td><td>Has sparse superblock version 2</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_COMPAT_FAST_COMMIT</td><td>Unknown (fast commit)</td></tr>
+<tr><td>0x00000800</td><td>EXT4_FEATURE_COMPAT_STABLE_INODES</td><td>Unknown (stable inodes)</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_COMPAT_ORPHAN_FILE</td><td>Has orphan file.</td></tr>
+</table></div>
+<blockquote>
+<p>Note that EXT2_FEATURE_COMPAT_, EXT3_FEATURE_COMPAT_, EXT4_FEATURE_COMPAT_ and
+COMPAT_ can be used interchangeably.</p>
+</blockquote>
+<h3 id="incompatible-feature-flags"><a class="header" href="#incompatible-feature-flags"><a name="incompatible_feature_flags"></a>Incompatible feature flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>EXT2_FEATURE_INCOMPAT_COMPRESSION</td><td>Has compression, which is not yet implemented</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_INCOMPAT_FILETYPE</td><td>Directory entry has file type</td></tr>
+<tr><td>0x00000004</td><td>EXT3_FEATURE_INCOMPAT_RECOVER</td><td>Needs recovery</td></tr>
+<tr><td>0x00000008</td><td>EXT3_FEATURE_INCOMPAT_JOURNAL_DEV</td><td>Journal device</td></tr>
+<tr><td>0x00000010</td><td>EXT2_FEATURE_INCOMPAT_META_BG</td><td>Has meta (or metadata) block groups</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00000040</td><td>EXT4_FEATURE_INCOMPAT_EXTENTS</td><td>Has extents</td></tr>
+<tr><td>0x00000080</td><td>EXT4_FEATURE_INCOMPAT_64BIT</td><td>Has 64-bit support, which supports more than 2^32 blocks</td></tr>
+<tr><td>0x00000100</td><td>EXT4_FEATURE_INCOMPAT_MMP</td><td>Multiple mount protection</td></tr>
+<tr><td>0x00000200</td><td>EXT4_FEATURE_INCOMPAT_FLEX_BG</td><td>Has flex (or flexible) block groups</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_INCOMPAT_EA_INODE</td><td>Has large inodes, which are larger than 128 bytes.</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_INCOMPAT_DIRDATA</td><td>Data in directory entry, which is not yet implemented</td></tr>
+<tr><td>0x00002000</td><td>EXT4_FEATURE_INCOMPAT_CSUM_SEED, EXT4_FEATURE_INCOMPAT_BG_USE_META_CSUM</td><td>Initial metadata checksum value (or seed) is stored in the superblock</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_INCOMPAT_LARGEDIR</td><td>Large directory &gt;2GB or 3-level hash tree (HTree).</td></tr>
+<tr><td>0x00008000</td><td>EXT4_FEATURE_INCOMPAT_INLINE_DATA</td><td>Has data stored in inode.</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_INCOMPAT_ENCRYPT</td><td>Has encrypted inodes.</td></tr>
+<tr><td>0x00020000</td><td>EXT4_FEATURE_INCOMPAT_CASEFOLD</td><td>Hash case folding</td></tr>
+</table></div>
+<blockquote>
+<p>Note that EXT2_FEATURE_INCOMPAT_, EXT3_FEATURE_INCOMPAT_,
+EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
+</blockquote>
+<h3 id="read-only-compatible-feature-flags"><a class="header" href="#read-only-compatible-feature-flags"><a name="read_only_compatible_feature_flags"></a>Read-only compatible feature flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER</td><td>Has sparse superblocks and group descriptor tables. If set a superblock is stored in block groups 0, 1 and those that are powers of 3, 5 and 7. If not set a superblock is stored in every block group.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_RO_COMPAT_LARGE_FILE</td><td>Contains large files.</td></tr>
+<tr><td>0x00000004</td><td>EXT2_FEATURE_RO_COMPAT_BTREE_DIR</td><td>Intended for hash-tree directory (or directory B-tree), which is not yet implemented</td></tr>
+<tr><td>0x00000008</td><td>EXT4_FEATURE_RO_COMPAT_HUGE_FILE</td><td>Has huge file support.</td></tr>
+<tr><td>0x00000010</td><td>EXT4_FEATURE_RO_COMPAT_GDT_CSUM</td><td>Has group descriptors with checksums.</td></tr>
+<tr><td>0x00000020</td><td>EXT4_FEATURE_RO_COMPAT_DIR_NLINK</td><td>The ext3 32000 subdirectory limit does not apply. A directory's number of links will be set to 1 if it is incremented past 64999.</td></tr>
+<tr><td>0x00000040</td><td>EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE</td><td>Has large inodes. The size of an inode can be larger than 128 bytes.</td></tr>
+<tr><td>0x00000080</td><td>EXT4_FEATURE_RO_COMPAT_HAS_SNAPSHOT</td><td>Has snapshots, which is not yet implemented and intended for a future file system snapshot feature</td></tr>
+<tr><td>0x00000100</td><td>EXT4_FEATURE_RO_COMPAT_QUOTA</td><td>Quota is handled transactionally with the journal.</td></tr>
+<tr><td>0x00000200</td><td>EXT4_FEATURE_RO_COMPAT_BIGALLOC</td><td>Has big block allocation bitmaps. Block allocation bitmaps are tracked in units of clusters (of blocks) instead of blocks.</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_RO_COMPAT_METADATA_CSUM</td><td>File system metadata has checksums.</td></tr>
+<tr><td>0x00000800</td><td>EXT4_FEATURE_RO_COMPAT_REPLICA</td><td>Supports replicas.</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_RO_COMPAT_READONLY</td><td>Read-only file system image.</td></tr>
+<tr><td>0x00002000</td><td>EXT4_FEATURE_RO_COMPAT_PROJECT</td><td>File system tracks project quotas.</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_RO_COMPAT_SHARED_BLOCKS</td><td>File system has (read-only) shared blocks.</td></tr>
+<tr><td>0x00008000</td><td>EXT4_FEATURE_RO_COMPAT_VERITY</td><td>Unknown (Verity inodes may be present on the filesystem)</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_RO_COMPAT_ORPHAN_PRESENT</td><td>Orphan file may be non-empty.</td></tr>
+</table></div>
+<blockquote>
+<p>Note that EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_,
+EXT4_FEATURE_RO_COMPAT_ and RO_COMPAT_ can be used interchangeably.</p>
+</blockquote>
+<blockquote>
+<p>Note that in some ext file systems used by ChromeOS it has been observed that
+the upper 8-bits of the read-only compatible feature flags are set as in
+0xff000003. debugfs identifies these as FEATURE_R24 - FEATURE_R31.</p>
+</blockquote>
+<h3 id="checksum-types"><a class="header" href="#checksum-types"><a name="checksum_types"></a>Checksum types</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>1</td><td>EXT4_CRC32C_CHKSUM</td><td>CRC-32C (or CRC32-C), which uses the Castagnoli polynomial (0x1edc6f41)</td></tr>
+</table></div>
+<h2 id="the-group-descriptor-table"><a class="header" href="#the-group-descriptor-table">The group descriptor table</a></h2>
+<p>The group descriptor table is stored in the block following the superblock.</p>
+<p>The group descriptor table consist of:</p>
+<ul>
+<li>one or more group descriptors</li>
+</ul>
+<h3 id="the-ext2-and-ext3-group-descriptor"><a class="header" href="#the-ext2-and-ext3-group-descriptor">The ext2 and ext3 group descriptor</a></h3>
+<p>The ext2 and ext3 group descriptor is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Block bitmap block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Inode bitmap block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Inode table block number. The block number is relative from the start of the volume</td></tr>
+<tr><td>12</td><td>2</td><td></td><td>Number of unallocated blocks</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of unallocated inodes</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Number of directories</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td>20</td><td>3 x 4</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that it has been observed that implementations that support ext4 can set
+a value in the padding. It is currently assumed that this value contains
+<a href="#block_group_flags">block group flags</a>.</p>
+</blockquote>
+<h3 id="the-ext4-group-descriptor"><a class="header" href="#the-ext4-group-descriptor">The ext4 group descriptor</a></h3>
+<p>The ext4 group descriptor is 68 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Block bitmap block number, which contains the lower 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Inode bitmap block number, which contains the lower 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Inode table block number, which contains the lower 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>12</td><td>2</td><td></td><td>Number of unallocated blocks, which contains the lower 16-bit of the value</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of unallocated inodes, which contains the lower 16-bit of the value</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Number of directories, which contains the lower 16-bit of the value</td></tr>
+<tr><td>18</td><td>2</td><td></td><td><a href="#block_group_flags">Block group flags</a></td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Exclude bitmap block number, which contains the lower 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Block bitmap checksum, which contains the lower 16-bit of the value</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Inode bitmap checksum, which contains the lower 16-bit of the value</td></tr>
+<tr><td>28</td><td>2</td><td></td><td>Number of unused inodes, which contains the lower 16-bit of the value</td></tr>
+<tr><td>30</td><td>2</td><td></td><td>Checksum</td></tr>
+<tr><td colspan="4"> <em>If 64-bit support (EXT4_FEATURE_INCOMPAT_64BIT) is enabled and group descriptor size &gt; 32</em></tr>
+<tr><td>32</td><td>4</td><td></td><td>Block bitmap block number, which contains the upper 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Inode bitmap block number, which contains the upper 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>Inode table block number, which contains the upper 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>44</td><td>2</td><td></td><td>Number of unallocated blocks, which contains the upper 16-bit of the value</td></tr>
+<tr><td>46</td><td>2</td><td></td><td>Number of unallocated inodes, which contains the upper 16-bit of the value</td></tr>
+<tr><td>48</td><td>2</td><td></td><td>Number of directories, which contains the upper 16-bit of the value</td></tr>
+<tr><td>50</td><td>2</td><td></td><td>Number of unused inodes, which contains the upper 16-bit of the value</td></tr>
+<tr><td>52</td><td>4</td><td></td><td>Exclude bitmap block number, which contains the upper 32-bit of the value. The block number is relative from the start of the volume</td></tr>
+<tr><td>56</td><td>2</td><td></td><td>Block bitmap checksum, which contains the upper 16-bit of the value</td></tr>
+<tr><td>60</td><td>2</td><td></td><td>Inode bitmap checksum, which contains the upper 16-bit of the value</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+</table></div>
+<p>If checksum type is CRC-32C, the checksum is stored as the lower 16-bits of
+0xffffffff - CRC-32C, otherwise the checksum is stored as a CRC-16.</p>
+<h3 id="checksum-calculation-1"><a class="header" href="#checksum-calculation-1">Checksum calculation</a></h3>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
+polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
+checksum.</p>
+<p>The checksum is calculated over:</p>
+<ul>
+<li>the 16 byte file system identifier in the superblock</li>
+<li>the group number as a 32-bit little-endian integer</li>
+<li>the data of the group descriptor with the checksum set to 0-byte values</li>
+</ul>
+<p>TODO: describe the block bitmap checksum calculation: crc32c(s_uuid+grp_num+bbitmap)</p>
+<p>TODO: describe the inode bitmap checksum calculation: crc32c(s_uuid+grp_num+ibitmap)</p>
+<h3 id="block-group-flags"><a class="header" href="#block-group-flags"><a name="block_group_flags"></a>Block group flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td>EXT4_BG_INODE_UNINIT</td><td>The inode table and bitmap are not initialized</td></tr>
+<tr><td>0x0002</td><td>EXT4_BG_BLOCK_UNINIT</td><td>The block bitmap is not initialized</td></tr>
+<tr><td>0x0004</td><td>EXT4_BG_INODE_ZEROED</td><td>The inode table is filled with 0</td></tr>
+</table></div>
+<h2 id="direct-and-indirect-blocks"><a class="header" href="#direct-and-indirect-blocks">Direct and indirect blocks</a></h2>
+<p>Direct blocks are blocks that part of the data stream of a file entry.</p>
+<p>A direct block number is 0 that is part of the data stream represents a sparse
+data block.</p>
+<p>Indirect blocks are blocks that refer to blocks containing direct or indirect
+block numbers. There are multiple levels of indirect block:</p>
+<ul>
+<li>indirect blocks (level 1), that refer to direct blocks</li>
+<li>double indirect blocks (level 2), that refer to indirect blocks</li>
+<li>triple indirect blocks (level 3), that refer to double indirect blocks</li>
+</ul>
+<p>An indirect block number is 0 that is part of the data stream represents sparse
+data blocks.</p>
+<h2 id="extents"><a class="header" href="#extents">Extents</a></h2>
+<p>Extents were introduced in ext4 and are controlled by
+EXT4_FEATURE_INCOMPAT_EXTENTS.</p>
+<p>Extents form an extent B-Tree, where:</p>
+<ul>
+<li><a href="#ext4_extent_index">extent indexes</a> are stored in the branch nodes and</li>
+<li><a href="#ext4_extent_descriptor">extent descriptors</a> are stored in the leaf nodes.</li>
+</ul>
+<p>An extents B-tree node consists of:</p>
+<ul>
+<li>extents header</li>
+<li>extents entries</li>
+<li>extents footer</li>
+</ul>
+<blockquote>
+<p>Note that inodes can have an implicit last sparse extent if the the inode
+data size is greater than the total data size defined by the extent
+descriptors.</p>
+</blockquote>
+<h3 id="the-ext4-extents-header"><a class="header" href="#the-ext4-extents-header"><a name="ext4_extents_header"></a>The ext4 extents header</a></h3>
+<p>The ext4 extents header (ext4_extent_header) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td>"\x0a\xf3"</td><td>Signature</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Number of entries</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Maximum number of entries</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4.</td></tr>
+</table></div>
+<h3 id="the-ext4-extent-descriptor"><a class="header" href="#the-ext4-extent-descriptor"><a name="ext4_extent_descriptor"></a>The ext4 extent descriptor</a></h3>
+<p>The ext4 extent descriptor (ext4_extent) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Logical block number</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Number of blocks</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Upper 16-bits of physical block number</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Lower 32-bits of physical block number</td></tr>
+</table></div>
+<p>If number of blocks &gt; 32768 the extent is considered "uninitialized" which is
+(as far as currently known) comparable to extent being sparse. The number of
+blocks of the sparse extent can be determined as following:</p>
+<pre><code>sparse_number_of_blocks = number_of_blocks - 32768
+</code></pre>
+<blockquote>
+<p>Note that sparse extents can exist between the extent descriptors. In such a
+case the logical block number will not align with the information from the
+previous extent descriptors.</p>
+</blockquote>
+<blockquote>
+<p>Note that the native Linux ext implementation expects the extents to be stored
+in order of logical block number.</p>
+</blockquote>
+<h3 id="the-ext4-extents-index"><a class="header" href="#the-ext4-extents-index"><a name="ext4_extent_index"></a>The ext4 extents index</a></h3>
+<p>The ext4 extent index (ext4_extent_idx) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Logical block number, which contains the first logical block number of next depth extents block</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Lower 32-bits of physical block number, which contains the block number of the next depth extents block</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Upper 16-bits of physical block number, which contains the block number of the next depth extents block</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Unknown (unused)</td></tr>
+</table></div>
+<h3 id="the-ext4-extents-footer"><a class="header" href="#the-ext4-extents-footer">The ext4 extents footer</a></h3>
+<p>The ext4 extents footer (ext4_extent_tail) is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Checksum of an extents block, which contains a CRC32</td></tr>
+</table></div>
+<h2 id="the-inode"><a class="header" href="#the-inode">The inode</a></h2>
+<blockquote>
+<p>Note that the size of the inode is defined in the superblock when dynamic
+inode information is present.</p>
+</blockquote>
+<blockquote>
+<p>Note that an ext4 inode can be used on ext2 formatted file system. Seen in
+combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.</p>
+</blockquote>
+<h3 id="the-ext2-inode"><a class="header" href="#the-ext2-inode">The ext2 inode</a></h3>
+<p>The ext2 inode is 128 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Lower 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Data size</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Deletion time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Lower 16-bits of group identifier (GID)</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td>40</td><td>12 x 4</td><td></td><td>Array of direct block numbers. A block number is relative from the start of the volume</td></tr>
+<tr><td>88</td><td>4</td><td></td><td>Indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>92</td><td>4</td><td></td><td>Double indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>96</td><td>4</td><td></td><td>Triple indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>100</td><td>4</td><td></td><td>NFS generation number</td></tr>
+<tr><td>104</td><td>4</td><td></td><td>File ACL (or extended attributes) block number</td></tr>
+<tr><td>108</td><td>4</td><td></td><td>Unknown (Directory ACL)</td></tr>
+<tr><td>112</td><td>4</td><td></td><td>Fragment block address</td></tr>
+<tr><td>116</td><td>1</td><td></td><td>Fragment block index</td></tr>
+<tr><td>117</td><td>1</td><td></td><td>Fragment size</td></tr>
+<tr><td>118</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td>120</td><td>2</td><td></td><td>Upper 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>122</td><td>2</td><td></td><td>Upper 16-bits of group identifier (GID)</td></tr>
+<tr><td>124</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that for a character and block device the first 2 bytes of the array of
+direct block numbers contain the minor and major device number respectively.</p>
+</blockquote>
+<blockquote>
+<p>Note that if the inode size is larger than 128 bytes, the additional data can
+be stored using an ext4 inode extension.</p>
+</blockquote>
+<h3 id="the-ext3-inode"><a class="header" href="#the-ext3-inode">The ext3 inode</a></h3>
+<p>The ext3 inode is 132 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Lower 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Data size</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Deletion time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Lower 16-bits of group identifier (GID)</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td>40</td><td>12 x 4</td><td></td><td>Array of direct block numbers. A block number is relative from the start of the volume</td></tr>
+<tr><td>88</td><td>4</td><td></td><td>Indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>92</td><td>4</td><td></td><td>Double indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>96</td><td>4</td><td></td><td>Triple indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>100</td><td>4</td><td></td><td>NFS generation number</td></tr>
+<tr><td>104</td><td>4</td><td></td><td>File ACL (or extended attributes) block number</td></tr>
+<tr><td>108</td><td>4</td><td></td><td>Unknown (Directory ACL)</td></tr>
+<tr><td>112</td><td>4</td><td></td><td>Fragment block address</td></tr>
+<tr><td>116</td><td>1</td><td></td><td>Fragment block index</td></tr>
+<tr><td>117</td><td>1</td><td></td><td>Fragment size</td></tr>
+<tr><td>118</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td>120</td><td>2</td><td></td><td>Upper 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>122</td><td>2</td><td></td><td>Upper 16-bits of group identifier (GID)</td></tr>
+<tr><td>124</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td colspan="4"> <em>Extension (if inode size &gt; 128)</em></tr>
+<tr><td>128</td><td>2</td><td></td><td>Extended inode size</td></tr>
+<tr><td>130</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that for a character and block device the first 2 bytes of the array of
+direct block numbers contain the minor and major device number respectively.</p>
+</blockquote>
+<blockquote>
+<p>Note that if the inode size is larger than 128 bytes, the additional data can
+be stored using an ext4 inode extension.</p>
+</blockquote>
+<h3 id="the-ext4-inode"><a class="header" href="#the-ext4-inode">The ext4 inode</a></h3>
+<p>The ext4 inode is 160 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Lower 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Lower 32-bits of data size</td></tr>
+<tr><td colspan="4"> <em>If EXT4_EA_INODE_FL is not set</em></tr>
+<tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td colspan="4"> <em>If EXT4_EA_INODE_FL is set</em></tr>
+<tr><td>8</td><td>4</td><td></td><td>Unknown (extended attribute value data checksum)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Unknown (lower 32-bits of extended attribute reference count)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (inode number that owns the extended attribute)</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>20</td><td>4</td><td></td><td>Deletion time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Lower 16-bits of group identifier (GID)</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Lower 32-bits of number of blocks</td></tr>
+<tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
+<tr><td colspan="4"> <em>If EXT4_EA_INODE_FL is not set</em></tr>
+<tr><td>36</td><td>4</td><td></td><td>Lower 32-bits of version</td></tr>
+<tr><td colspan="4"> <em>If EXT4_EA_INODE_FL is set</em></tr>
+<tr><td>36</td><td>4</td><td></td><td>Unknown (upper 32-bits of extended attribute reference count)</td></tr>
+<tr><td colspan="4"> <em>If EXT4_EXTENTS_FL and EXT4_INLINE_DATA_FL are not set</em></tr>
+<tr><td>40</td><td>12 x 4</td><td></td><td>Array of direct block numbers. A block number is relative from the start of the volume</td></tr>
+<tr><td>88</td><td>4</td><td></td><td>Indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>92</td><td>4</td><td></td><td>Double indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td>96</td><td>4</td><td></td><td>Triple indirect block number. A block number is relative from the start of the volume</td></tr>
+<tr><td colspan="4"> <em>If EXT4_EXTENTS_FL is set</em></tr>
+<tr><td>40</td><td>12</td><td></td><td><a href="#xt4_extents_header">Extents header</a></td></tr>
+<tr><td>52</td><td>4 x 12</td><td></td><td><a href="#ext4_extent_descriptor">extent descriptors</a> or <a href="#ext4_extent_index">extents indexes</a></td></tr>
+<tr><td colspan="4"> <em>If EXT4_INLINE_DATA_FL is set</em></tr>
+<tr><td>40</td><td>60</td><td></td><td>File content data</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>100</td><td>4</td><td></td><td>NFS generation number</td></tr>
+<tr><td>104</td><td>4</td><td></td><td>Lower 32-bits of file ACL (or extended attributes) block number</td></tr>
+<tr><td>108</td><td>4</td><td></td><td>Upper 32-bits of data size</td></tr>
+<tr><td>112</td><td>4</td><td></td><td>Fragment block address</td></tr>
+<tr><td>116</td><td>2</td><td></td><td>Upper 16-bits of number of blocks</td></tr>
+<tr><td>118</td><td>2</td><td></td><td>Upper 16-bits of file ACL (or extended attributes) block number</td></tr>
+<tr><td>120</td><td>2</td><td></td><td>Upper 16-bits of owner (or user) identifier (UID)</td></tr>
+<tr><td>122</td><td>2</td><td></td><td>Upper 16-bits of group identifier (GID)</td></tr>
+<tr><td>124</td><td>2</td><td></td><td>Lower 16-bits of checksum</td></tr>
+<tr><td>126</td><td>2</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td colspan="4"> <em>Extension (if inode size &gt; 128)</em></tr>
+<tr><td>128</td><td>2</td><td></td><td>Extended inode size</td></tr>
+<tr><td>130</td><td>2</td><td></td><td>Upper 16-bits of checksum</td></tr>
+<tr><td>132</td><td>4</td><td></td><td>(last) inode change time extra precision</td></tr>
+<tr><td>136</td><td>4</td><td></td><td>(last) modification time extra precision</td></tr>
+<tr><td>140</td><td>4</td><td></td><td>(last) access time extra precision</td></tr>
+<tr><td>144</td><td>4</td><td></td><td>Creation time</td></tr>
+<tr><td>148</td><td>4</td><td></td><td>Creation time extra precision</td></tr>
+<tr><td>152</td><td>4</td><td></td><td>Upper 32-bits of version</td></tr>
+<tr><td>156</td><td>4</td><td></td><td>Unknown (i_projid)</td></tr>
+</table></div>
+<p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
+<blockquote>
+<p>Note that for a character and block device the first 2 bytes of the array of
+direct block numbers contain the minor and major device number respectively.</p>
+</blockquote>
+<blockquote>
+<p>Note that extended inode size can vary, seen 4, 28 and 32.</p>
+</blockquote>
+<h4 id="checksum-calculation-2"><a class="header" href="#checksum-calculation-2">Checksum calculation</a></h4>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
+polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
+checksum.</p>
+<p>The checksum is calculated from:</p>
+<ul>
+<li>the 16 byte file system identifier in the superblock</li>
+<li>the inode number as a 32-bit little-endian integer</li>
+<li>the NFS generation number in the inode as a 32-bit little-endian integer</li>
+<li>the data of the inode with the lower and upper part of the checksum set to 0-byte values.</li>
+</ul>
+<h4 id="extra-precision"><a class="header" href="#extra-precision">Extra precision</a></h4>
+<p>The ext4 extra precision is 4 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0</td><td>2 bits</td><td></td><td>Extra epoch value</td></tr>
+<tr><td>0.2</td><td>30 bits</td><td></td><td>Fraction of second in nanoseconds</td></tr>
+</table></div>
+<p>The 34 bits extra precision timestamp (in number of seconds) can be calculated as
+following:</p>
+<pre><code>extra_precision_timestamp = ( extra_epoch_value x 0x100000000 ) + timestamp
+</code></pre>
+<h4 id="notes"><a class="header" href="#notes">Notes</a></h4>
+<p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification
+time can contain a valid timestamp.</p>
+<p>According to <a href="https://docs.kernel.org/filesystems/ext4/overview.html#large-extended-attribute-values">The Linux Kernel documentation</a></p>
+<blockquote>
+<p>For backward compatibility with older versions of this feature, the
+i_mtime/i_generation may store a back-reference to the inode number and
+i_generation of the one owning inode (in cases where the EA inode is not
+referenced by multiple inodes) to verify that the EA inode is the correct
+one being accessed.</p>
+</blockquote>
+<h3 id="file-mode"><a class="header" href="#file-mode"><a name="file_mode"></a>File mode</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td colspan="3"> <em>Access other, Bitmask: 0x0007 (S_IRWXO)</em></tr>
+<tr><td>0x0001</td><td>S_IXOTH</td><td>X-access for other</td></tr>
+<tr><td>0x0002</td><td>S_IWOTH</td><td>W-access for other</td></tr>
+<tr><td>0x0004</td><td>S_IROTH</td><td>R-access for other</td></tr>
+<tr><td colspan="3"> <em>Access group, Bitmask: 0x0038 (S_IRWXG)</em></tr>
+<tr><td>0x0008</td><td>S_IXGRP</td><td>X-access for group</td></tr>
+<tr><td>0x0010</td><td>S_IWGRP</td><td>W-access for group</td></tr>
+<tr><td>0x0020</td><td>S_IRGRP</td><td>R-access for group</td></tr>
+<tr><td colspan="3"> <em>Access owner (or user), Bitmask: 0x01c0 (S_IRWXU)</em></tr>
+<tr><td>0x0040</td><td>S_IXUSR</td><td>X-access for owner (or user)</td></tr>
+<tr><td>0x0080</td><td>S_IWUSR</td><td>W-access for owner (or user)</td></tr>
+<tr><td>0x0100</td><td>S_IRUSR</td><td>R-access for owner (or user)</td></tr>
+<tr><td colspan="3"> <em>Other</em></tr>
+<tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+<tr><td colspan="3"> <em>Type of file, Bitmask: 0xf000 (S_IFMT)</em></tr>
+<tr><td>0x1000</td><td>S_IFIFO</td><td>Named pipe (FIFO)</td></tr>
+<tr><td>0x2000</td><td>S_IFCHR</td><td>Character device</td></tr>
+<tr><td>0x4000</td><td>S_IFDIR</td><td>Directory</td></tr>
+<tr><td>0x6000</td><td>S_IFBLK</td><td>Block device</td></tr>
+<tr><td>0x8000</td><td>S_IFREG</td><td>Regular file</td></tr>
+<tr><td>0xa000</td><td>S_IFLNK</td><td>Symbolic link</td></tr>
+<tr><td>0xc000</td><td>S_IFSOCK</td><td>Socket</td></tr>
+</table></div>
+<h3 id="inode-flags"><a class="header" href="#inode-flags"><a name="inode_flags"></a>Inode flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>EXT2_SECRM_FL, EXT3_SECRM_FL, EXT4_SECRM_FL, EXT4_INODE_SECRM</td><td>Secure deletion</td></tr>
+<tr><td>0x00000002</td><td>EXT2_UNRM_FL, EXT3_UNRM_FL, EXT4_UNRM_FL, EXT4_INODE_UNRM</td><td>Undelete</td></tr>
+<tr><td>0x00000004</td><td>EXT2_COMPR_FL, EXT3_COMPR_FL, EXT4_COMPR_FL, EXT4_INODE_COMPR</td><td>Compressed file, which is not yet implemented</td></tr>
+<tr><td>0x00000008</td><td>EXT2_SYNC_FL, EXT3_SYNC_FL, EXT4_SYNC_FL, EXT4_INODE_SYNC</td><td>Synchronous updates</td></tr>
+<tr><td>0x00000010</td><td>EXT2_IMMUTABLE_FL, EXT3_IMMUTABLE_FL, EXT4_IMMUTABLE_FL, EXT4_INODE_IMMUTABLE</td><td>Immutable file</td></tr>
+<tr><td>0x00000020</td><td>EXT2_APPEND_FL, EXT3_APPEND_FL, EXT4_APPEND_FL, EXT4_INODE_APPEND</td><td>Writes to file may only append</td></tr>
+<tr><td>0x00000040</td><td>EXT2_NODUMP_FL, EXT3_NODUMP_FL, EXT4_NODUMP_FL, EXT4_INODE_NODUMP</td><td>Do not remove (or dump) file</td></tr>
+<tr><td>0x00000080</td><td>EXT2_NOATIME_FL, EXT3_NOATIME_FL, EXT4_NOATIME_FL, EXT4_INODE_NOATIME</td><td>Do not update access time (atime)</td></tr>
+<tr><td>0x00000100</td><td>EXT2_DIRTY_FL, EXT3_DIRTY_FL, EXT4_DIRTY_FL, EXT4_INODE_DIRTY</td><td>Dirty compressed file, which is not yet implemented</td></tr>
+<tr><td>0x00000200</td><td>EXT2_COMPRBLK_FL, EXT3_COMPRBLK_FL, EXT4_COMPRBLK_FL, EXT4_INODE_COMPRBLK</td><td>One or more compressed clusters, which is not yet implemented</td></tr>
+<tr><td>0x00000400</td><td>EXT2_NOCOMP_FL, EXT3_NOCOMP_FL, EXT4_NOCOMPR_FL, EXT4_INODE_NOCOMPR</td><td>Do not compress, which is not yet implemented</td></tr>
+<tr><td colspan="3"> <em>ext2 and ext3</em></tr>
+<tr><td>0x00000800</td><td>EXT2_ECOMPR_FL, EXT3_ECOMPR_FL</td><td>Encrypted Compression error</td></tr>
+<tr><td colspan="3"> <em>ext4</em></tr>
+<tr><td>0x00000800</td><td>EXT4_ENCRYPT_FL, EXT4_INODE_ENCRYPT</td><td>Encrypted file</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td>0x00001000</td><td>EXT2_BTREE_FL, EXT2_INDEX_FL, EXT3_INDEX_FL, EXT4_INDEX_FL, EXT4_INODE_INDEX</td><td>Hash-indexed directory (previously referred to as B-tree format).</td></tr>
+<tr><td>0x00002000</td><td>EXT2_IMAGIC_FL, EXT3_IMAGIC_FL, EXT4_IMAGIC_FL, EXT4_INODE_IMAGIC</td><td>AFS directory</td></tr>
+<tr><td>0x00004000</td><td>EXT2_JOURNAL_DATA_FL, EXT3_JOURNAL_DATA_FL, EXT4_JOURNAL_DATA_FL, EXT4_INODE_JOURNAL_DATA</td><td>File data must be written using the journal.</td></tr>
+<tr><td>0x00008000</td><td>EXT2_NOTAIL_FL, EXT3_NOTAIL_FL, EXT4_NOTAIL_FL, EXT4_INODE_NOTAIL</td><td>File tail should not be merged, which is not used by ext4</td></tr>
+<tr><td>0x00010000</td><td>EXT2_DIRSYNC_FL, EXT3_DIRSYNC_FL, EXT4_DIRSYNC_FL, EXT4_INODE_DIRSYNC</td><td>Directory entries should be written synchronously (dirsync)</td></tr>
+<tr><td>0x00020000</td><td>EXT2_TOPDIR_FL, EXT3_TOPDIR_FL, EXT4_TOPDIR_FL, EXT4_INODE_TOPDIR</td><td>Top of directory hierarchy</td></tr>
+<tr><td colspan="3"> <em>ext4</em></tr>
+<tr><td>0x00040000</td><td>EXT4_HUGE_FILE_FL, EXT4_INODE_HUGE_FILE</td><td>Is a <a href="#huge_files">huge file</a></td></tr>
+<tr><td>0x00080000</td><td>EXT4_EXTENTS_FL, EXT4_INODE_EXTENTS</td><td>Inode uses extents</td></tr>
+<tr><td>0x00100000</td><td>EXT4_INODE_VERITY</td><td>Verity protected inode</td></tr>
+<tr><td>0x00200000</td><td>EXT4_EA_INODE_FL, EXT4_INODE_EA_INODE</td><td>Inode used for large extended attribute</td></tr>
+<tr><td>0x00400000</td><td>EXT4_EOFBLOCKS_FL, EXT4_INODE_EOFBLOCKS</td><td>Blocks allocated beyond EOF</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x01000000</td><td>EXT4_SNAPFILE_FL</td><td>Inode is a snapshot</td></tr>
+<tr><td>0x02000000</td><td>EXT4_INODE_DAX</td><td>Inode is direct-access (DAX)</td></tr>
+<tr><td>0x04000000</td><td>EXT4_SNAPFILE_DELETED_FL</td><td>Snapshot is being deleted</td></tr>
+<tr><td>0x08000000</td><td>EXT4_SNAPFILE_SHRUNK_FL</td><td>Snapshot shrink has completed</td></tr>
+<tr><td>0x10000000</td><td>EXT4_INLINE_DATA_FL, EXT4_INODE_INLINE_DATA</td><td>Inode has inline data</td></tr>
+<tr><td>0x20000000</td><td>EXT4_PROJINHERIT_FL, EXT4_INODE_PROJINHERIT</td><td>Create sub file entries with the same project identifier</td></tr>
+<tr><td>0x40000000</td><td>EXT4_INODE_CASEFOLD</td><td>Casefolded directory</td></tr>
+<tr><td>0x80000000</td><td>EXT4_INODE_RESERVED</td><td>Unknown (reserved)</td></tr>
+</table></div>
+<h3 id="reserved-inode-numbers"><a class="header" href="#reserved-inode-numbers">Reserved inode numbers</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>1</td><td>EXT2_BAD_INO, EXT3_BAD_INO, EXT4_BAD_INO</td><td>Bad blocks inode</td></tr>
+<tr><td>2</td><td>EXT2_ROOT_INO, EXT3_ROOT_INO, EXT4_ROOT_INO</td><td>Root inode</td></tr>
+<tr><td>3</td><td>EXT4_USR_QUOTA_INO</td><td>Owner (or user) quota inode</td></tr>
+<tr><td>4</td><td>EXT4_GRP_QUOTA_INO</td><td>Group quota inode</td></tr>
+<tr><td>5</td><td>EXT2_BOOT_LOADER_INO, EXT3_BOOT_LOADER_INO, EXT4_BOOT_LOADER_INO</td><td>Boot loader inode</td></tr>
+<tr><td>6</td><td>EXT2_UNDEL_DIR_INO, EXT3_UNDEL_DIR_INO, EXT4_UNDEL_DIR_INO</td><td>Undelete directory inode</td></tr>
+<tr><td>7</td><td>EXT3_RESIZE_INO, EXT4_RESIZE_INO</td><td>Reserved group descriptors inode</td></tr>
+<tr><td>8</td><td>EXT3_JOURNAL_INO, EXT4_JOURNAL_INO</td><td>Journal inode</td></tr>
+</table></div>
+<h2 id="inline-data"><a class="header" href="#inline-data">Inline data</a></h2>
+<p>ext4 supports storing file entry data inline when the inode flag
+EXT4_INLINE_DATA_FL is set.</p>
+<blockquote>
+<p>Note that inodes can have an implicit last sparse extent if the the inode
+data size is greater than 60 bytes.</p>
+</blockquote>
+<h2 id="huge-files"><a class="header" href="#huge-files"><a name="huge_files"></a>Huge files</a></h2>
+<p>TODO: complete section</p>
+<h2 id="directory-entries"><a class="header" href="#directory-entries">Directory entries</a></h2>
+<p>Directories entries are stored in the data blocks of a directory inode. The
+directory entries can be stored in multiple ways:</p>
+<ul>
+<li>as linear directory entries</li>
+<li>as inline data directory entries</li>
+<li>as hash-tree directory entries</li>
+</ul>
+<h3 id="linear-directory-entries"><a class="header" href="#linear-directory-entries">Linear directory entries</a></h3>
+<p>Linear directories entries are stored in a series of allocation blocks.</p>
+<p>Linear directory entries contain:</p>
+<ul>
+<li>directory entry for "." (self)</li>
+<li>directory entry for ".." (parent)</li>
+<li>directory entry for other file system entries</li>
+</ul>
+<h4 id="the-directory-entry"><a class="header" href="#the-directory-entry"><a name="directory_entry"></a>The directory entry</a></h4>
+<p>The directory entry is of variable size, at most 263 bytes, and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Inode number</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Directory entry size, which must be a multitude of 4.</td></tr>
+<tr><td>6</td><td>1</td><td></td><td>Name size, which contains the size of the name without the end-of-string character and has a maximum of 255</td></tr>
+<tr><td>7</td><td>1</td><td></td><td><a href="#file_types">File type</a></td></tr>
+<tr><td>8</td><td>...</td><td></td><td>Name, which contains a narrow character string without end-of-string character</td></tr>
+</table></div>
+<p>Older directory entry structures considered the name size a 16-bit value, but
+the upper byte was never used.</p>
+<p>The name can contain any character value except the path segment separator ('/')
+and the NUL-character ('\0').</p>
+<h4 id="file-types"><a class="header" href="#file-types"><a name="file_types"></a>File types</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td>EXT2_FT_UNKNOWN</td><td>Unknown</td></tr>
+<tr><td>1</td><td>EXT2_FT_REG_FILE</td><td>Regular file</td></tr>
+<tr><td>2</td><td>EXT2_FT_DIR</td><td>Directory</td></tr>
+<tr><td>3</td><td>EXT2_FT_CHRDEV</td><td>Character device</td></tr>
+<tr><td>4</td><td>EXT2_FT_BLKDEV</td><td>Block device</td></tr>
+<tr><td>5</td><td>EXT2_FT_FIFO</td><td>FIFO queue</td></tr>
+<tr><td>6</td><td>EXT2_FT_SOCK</td><td>Socket</td></tr>
+<tr><td>7</td><td>EXT2_FT_SYMLINK</td><td>Symbolic link</td></tr>
+</table></div>
+<h3 id="inline-data-directory-entries"><a class="header" href="#inline-data-directory-entries">Inline data directory entries</a></h3>
+<p>ext4 supports storing the directory entries as inline data when the inode flag
+EXT4_INLINE_DATA_FL is set.</p>
+<p>The inline data directory entries is of variable size, at most 60 bytes, and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Parent inode number</td></tr>
+<tr><td>4</td><td>...</td><td></td><td>Array of <a href="#directory_entry">directory entries</a></td></tr>
+</table></div>
+<h3 id="hash-tree-directory-entries"><a class="header" href="#hash-tree-directory-entries">Hash tree directory entries</a></h3>
+<p>The data of the hash tree (HTree) is stored in the data blocs or extent defined
+by the directory inode. The hash-indexed directory entries are read-compatible
+with the <a href="#directory_entry">linear directory entry</a>.</p>
+<h4 id="hash-tree-root"><a class="header" href="#hash-tree-root">Hash tree root</a></h4>
+<p>The hash tree root consists of:</p>
+<ul>
+<li>dx_root
+<ul>
+<li>directory entry for "." (self)</li>
+<li>directory entry for ".." (parent)</li>
+<li>dx_root_info</li>
+<li>Array of dx_entry</li>
+</ul>
+</li>
+<li>directory entry for other file system entries</li>
+</ul>
+<h4 id="dx_root_info"><a class="header" href="#dx_root_info">dx_root_info</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>4</td><td>1</td><td></td><td>Hash method (or version)</td></tr>
+<tr><td>5</td><td>1</td><td>8</td><td>Root information size</td></tr>
+<tr><td>6</td><td>1</td><td></td><td>Number of indirect levels in the hash tree</td></tr>
+<tr><td>7</td><td>1</td><td></td><td>Unknown (unused flags)</td></tr>
+</table></div>
+<h4 id="dx_entry"><a class="header" href="#dx_entry">dx_entry</a></h4>
+<p>TODO: complete section</p>
+<pre><code>struct dx_entry
+{
+        __le32 hash;
+        __le32 block;
+};
+</code></pre>
+<h2 id="symbolic-links"><a class="header" href="#symbolic-links">Symbolic links</a></h2>
+<p>If the target path of a symbolic link is less than 60 characters long, it is
+stored in the 60 bytes in the inode that are normally used for the 12 direct
+and 3 indirect block numbers. If the target path is longer than 60 characters,
+a block is allocated, and the block contains the target path. The inode data
+size contains the length of the target path.</p>
+<h2 id="extended-attributes"><a class="header" href="#extended-attributes"><a name="extended_attributes"></a>Extended attributes</a></h2>
+<p>Extended attributes can be stored:</p>
+<ul>
+<li>in the inode block after the inode data</li>
+<li>in the block referenced by the file ACL (or extended attributes) block number, if not 0</li>
+</ul>
+<blockquote>
+<p>Note that both should be read to get the all the extended attributes.</p>
+</blockquote>
+<p>Extended attributes consists of:</p>
+<ul>
+<li>An extended attributes header</li>
+<li>Extended attributes entries with a terminator</li>
+</ul>
+<h3 id="the-extended-attributes-inode-header"><a class="header" href="#the-extended-attributes-inode-header">The extended attributes inode header</a></h3>
+<p>The extended attributes inode header (ext2_xattr_ibody_header,
+ext3_xattr_ibody_header, ext4_xattr_ibody_header) is 4 bytes in size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"\x00\x00\x02\xea"</td><td>Signature</td></tr>
+</table></div>
+<h3 id="the-extended-attributes-block-header"><a class="header" href="#the-extended-attributes-block-header">The extended attributes block header</a></h3>
+<h4 id="the-ext2-and-ext3-extended-attributes-block-header"><a class="header" href="#the-ext2-and-ext3-extended-attributes-block-header">The ext2 and ext3 extended attributes block header</a></h4>
+<p>The ext2 and ext3 extended attributes block header (ext2_xattr_header,
+ext3_xattr_header) is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"\x00\x00\x02\xea"</td><td>Signature</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (reference count)</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Attributes hash</td></tr>
+<tr><td>16</td><td>4 x 4</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<h4 id="the-ext4-extended-attributes-block-header"><a class="header" href="#the-ext4-extended-attributes-block-header">The ext4 extended attributes block header</a></h4>
+<p>The ext4 extended attributes block header (ext4_xattr_header) is 32 bytes of
+size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"\x00\x00\x02\xea"</td><td>Signature</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (Reference count)</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Attributes hash</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>20</td><td>3 x 4</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<h3 id="the-extended-attributes-entry"><a class="header" href="#the-extended-attributes-entry">The extended attributes entry</a></h3>
+<p>The extended attributes entry (ext2_xattr_entry, ext3_xattr_entry,
+ext4_xattr_entry) is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td></td><td>Name size, which contains the size of the name without the end-of-string character</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Name index</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Value data offset, which contains the offset of the value data relative from the start of the extended attributes block or after the extended attributes signature in the inode block data</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Value data inode number, which contains the inode number that contains the value data or 0 to indicate the current block</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Value data size</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Unknown (Attribute hash)</td></tr>
+<tr><td>16</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>32-bit alignment padding</td></tr>
+</table></div>
+<p>The last extended attributes entry has the first 4 values set to 0 (8 bytes)
+and is used as a terminator.</p>
+<blockquote>
+<p>Note that some implementations of older Android versions of ext appear to
+only set the first 4 bytess to 0.</p>
+</blockquote>
+<blockquote>
+<p>Note that the name can be empty, for example in combination with a prefix or
+with an encrypted file.</p>
+</blockquote>
+<h3 id="the-extended-attribute-name-index"><a class="header" href="#the-extended-attribute-name-index">The extended attribute name index</a></h3>
+<p>The name index indicates the prefix of the extended attribute name.</p>
+<div class="table-wrapper"><table><thead><th>Name index</th><th>Name prefix</th><th>Description</th></thead><tr><td>0</td><td>""</td><td>No prefix</td></tr>
+<tr><td>1</td><td>"user."</td><td></td></tr>
+<tr><td>2</td><td>"system.posix_acl_access"</td><td></td></tr>
+<tr><td>3</td><td>"system.posix_acl_default"</td><td></td></tr>
+<tr><td>4</td><td>"trusted."</td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>6</td><td>"security."</td><td></td></tr>
+<tr><td>7</td><td>"system."</td><td></td></tr>
+<tr><td>8</td><td>"system.richacl"</td><td></td></tr>
+</table></div>
+<h2 id="journal"><a class="header" href="#journal">Journal</a></h2>
+<p>The journal was introduced in ext3.</p>
+<p>TODO: complete section</p>
+<h2 id="exclude-bitmap"><a class="header" href="#exclude-bitmap">Exclude bitmap</a></h2>
+<p>TODO: complete section</p>
+<blockquote>
+<p>Note that the excluded bitmap is used for snapshots.</p>
+</blockquote>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux kernel documentation</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="file_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ntfs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="file_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ntfs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1927 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>New Technologies File System (NTFS) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
+<p>The New Technologies File System (NTFS) format is the primary file system for
+Microsoft Windows versions that are based on Windows NT.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>An New Technologies File System (NTFS) consists of:</p>
+<ul>
+<li>boot record</li>
+<li>boot loader</li>
+<li>Master File Table (MFT)</li>
+<li>Mirror Master File Table (MFT)</li>
+</ul>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<tr><td>Date and time values</td><td>FILETIME in UTC</td></tr>
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+</table></div>
+<h3 id="versions"><a class="header" href="#versions">Versions</a></h3>
+<div class="table-wrapper"><table><thead><th>Format version</th><th>Remarks</th></thead><tr><td>1.0</td><td>Introduced in Windows NT 3.1</td></tr>
+<tr><td>1.1</td><td>Introduced in Windows NT 3.5, also seen to be used by Windows NT 3.1</td></tr>
+<tr><td>1.2</td><td>Introduced in Windows NT 3.51</td></tr>
+<tr><td>3.0</td><td>Introduced in Windows 2000</td></tr>
+<tr><td>3.1</td><td>Introduced in Windows XP</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the format versions mentioned above are the version as used by NTFS.
+Another common versioning schema uses the Windows version, e.g. NTFS 5.0 is the
+version of NTFS used on Windows XP which is version 3.1 in schema mentioned
+above.</p>
+</blockquote>
+<blockquote>
+<p>Note Windows does not necessarily uses the latest version, e.g. Windows 10
+(1809) has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
+</blockquote>
+<h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
+<h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
+<p>NTFS refers to it file system blocks as clusters. Note that these are not the
+same as the physical clusters of a harddisk. For clarity this document will
+refer to these as cluster blocks. In other sources they are also referred to as
+logical clusters.</p>
+<p>Typically a cluster block is 8 sectors (or 8 x 512 = 4096 bytes) in size. A
+cluster block number is relative to the start of the boot record.</p>
+<h4 id="virtual-cluster"><a class="header" href="#virtual-cluster">Virtual cluster</a></h4>
+<p>The term virtual cluster refers to cluster blocks which are relative to the
+start of a data stream.</p>
+<h4 id="long-and-short-file-name"><a class="header" href="#long-and-short-file-name">Long and short (file) name</a></h4>
+<p>In Windows terminology the name of a file (or directory) can either be short or
+long. The short name is an equivalent of the filename in the (DOS) 8.3 format.
+The long name is actual the (full) name of the file. The term long refers to
+the aspect that the name is longer than the short variant. Because most
+documentation refer to the (full) name as the long name, for clarity sake so
+will this document.</p>
+<h4 id="metadata-files"><a class="header" href="#metadata-files">Metadata files</a></h4>
+<p>NTFS uses the Master File Table (MFT) to store information about files and
+directories. The MFT entries reference the different volume and file system
+metadata. There are several predefined metadata files.</p>
+<p>The following metadata files are predefined and use a fixed MFT entry number.</p>
+<div class="table-wrapper"><table><thead><th>MFT entry number</th><th>Filename</th><th>Description</th></thead><tr><td>0</td><td>"$MFT"</td><td>Master File Table</td></tr>
+<tr><td>1</td><td>"$MFTMirr"</td><td>Back up of the first 4 entries of the Master File Table</td></tr>
+<tr><td>2</td><td>"$LogFile"</td><td>Metadata transaction journal</td></tr>
+<tr><td>3</td><td>"$Volume"</td><td>Volume information</td></tr>
+<tr><td>4</td><td>"$AttrDef"</td><td>MFT entry attribute definitions</td></tr>
+<tr><td>5</td><td>"."</td><td>Root directory</td></tr>
+<tr><td>6</td><td>"$Bitmap"</td><td>Cluster block allocation bitmap</td></tr>
+<tr><td>7</td><td>"$Boot"</td><td>Boot record (or boot code)</td></tr>
+<tr><td>8</td><td>"$BadClus"</td><td>Bad clusters</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 1.2 and earlier</em></tr>
+<tr><td>9</td><td>"$Quota"</td><td>Quota information</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 3.0 and later</em></tr>
+<tr><td>9</td><td>"$Secure"</td><td>Security and access control information</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td>10</td><td>"$UpCase"</td><td>Case folding mappings</td></tr>
+<tr><td>11</td><td>"$Extend"</td><td>A directory containing extended metadata files</td></tr>
+<tr><td>12-15</td><td></td><td>Unknown (Reserved), which are marked as in-use but are empty</td></tr>
+<tr><td>16-23</td><td></td><td>Unused, which are marked as unused</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 3.0 and later</em></tr>
+<tr><td>24</td><td>"$Extend$Quota"</td><td>Quota information</td></tr>
+<tr><td>25</td><td>"$Extend$ObjId"</td><td>Unique file identifiers for distributed link tracking</td></tr>
+<tr><td>26</td><td>"$Extend$Reparse"</td><td>Backreferences to reparse points</td></tr>
+<tr><td colspan="3"> <em><a href="#transactional_ntfs">Transactional NTFS metadata files</a>, which have been observed in Windows Vista and later</em></tr>
+<tr><td>27</td><td>"$Extend$RmMetadata"</td><td>Resource manager metadata directory</td></tr>
+<tr><td>28</td><td>"$Extend$RmMetadata$Repair"</td><td>Repair information</td></tr>
+<tr><td>29 or 30</td><td>"$Extend$RmMetadata$TxfLog"</td><td>Transactional NTFS (TxF) log metadata directory</td></tr>
+<tr><td>30 or 31</td><td>"$Extend$RmMetadata$Txf"</td><td>Transactional NTFS (TxF) metadata directory</td></tr>
+<tr><td>31 or 32</td><td>"$Extend$RmMetadata$TxfLog$Tops"</td><td>TxF Old Page Stream (TOPS) file, which is used to store data that has been overwritten inside a currently active transaction</td></tr>
+<tr><td>32 or 33</td><td>"$Extend$RmMetadata$TxfLog$TxfLog.blf"</td><td>Transactional NTFS (TxF) base log metadata file</td></tr>
+<tr><td colspan="3"> <em>Observed in Windows 10 and later</em></tr>
+<tr><td>29</td><td>"$Extend$Deleted"</td><td>Temporary location for files that have an open handle but a request has been made to delete them</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td></td><td>...</td><td>A file or directory</td></tr>
+</table></div>
+<p>The following metadata files are predefined, however the MFT entry number is
+commonly used but not fixed.</p>
+<div class="table-wrapper"><table><thead><th>MFT entry number</th><th>Filename</th><th>Description</th></thead><tr><td></td><td>"$Extend$UsnJrnl"</td><td><a href="#usn_change_journal">USN change journal</a></td></tr>
+</table></div>
+<h2 id="the-boot-record"><a class="header" href="#the-boot-record">The boot record</a></h2>
+<p>The boot record is stored at the start of the volume (in the $Boot metadata
+file) and contains:</p>
+<ul>
+<li>the file system signature</li>
+<li>the BIOS parameter block</li>
+<li>the boot loader</li>
+</ul>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td></td><td>Boot entry point</td></tr>
+<tr><td>3</td><td>8</td><td>"NTFS\x20\x20\x20\x20"</td><td>File system signature (Also known as OEM identifier or dummy identifier)</td></tr>
+<tr><td colspan="4"> <em>DOS version 2.0 BIOS parameter block (BPB)</em></tr>
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector. Note that the following values are supported by mkntfs: 256, 512, 1024, 2048 and 4096</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Number of sectors per cluster block</td></tr>
+<tr><td>14</td><td>2</td><td>0</td><td>Unknown (Reserved Sectors), which is not used by NTFS and must be 0</td></tr>
+<tr><td>16</td><td>1</td><td>0</td><td>Number of File Allocation Tables (FATs), which is not used by NTFS and must be 0</td></tr>
+<tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which is not not used by NTFS and must be 0</td></tr>
+<tr><td>19</td><td>2</td><td>0</td><td>Number of sectors (16-bit), which is not used by NTFS must be 0</td></tr>
+<tr><td>21</td><td>1</td><td></td><td><a href="#media_descriptor">Media descriptor</a></td></tr>
+<tr><td>22</td><td>2</td><td>0</td><td>Sectors Per File Allocation Table (FAT), which is not used by NTFS and must be 0</td></tr>
+<tr><td colspan="4"> <em>DOS version 3.4 BIOS parameter block (BPB)</em></tr>
+<tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track, which is not used by NTFS</td></tr>
+<tr><td>26</td><td>2</td><td>0xff</td><td>Number of heads, which is not used by NTFS</td></tr>
+<tr><td>28</td><td>4</td><td>0x3f</td><td>Number of hidden sectors, which is not used by NTFS</td></tr>
+<tr><td>32</td><td>4</td><td>0x00</td><td>Number of sectors (32-bit), which is not used by NTFS must be 0</td></tr>
+<tr><td colspan="4"> <em>NTFS version 8.0 BIOS parameter block (BPB) or extended BPB, which was introduced in Windows NT 3.1</em></tr>
+<tr><td>36</td><td>1</td><td>0x80</td><td>Unknown (Disc unit number), which is not used by NTFS</td></tr>
+<tr><td>37</td><td>1</td><td>0x00</td><td>Unknown (Flags), which is not used by NTFS</td></tr>
+<tr><td>38</td><td>1</td><td>0x80</td><td>Unknown (BPB version signature byte), which is not used by NTFS</td></tr>
+<tr><td>39</td><td>1</td><td>0x00</td><td>Unknown (Reserved), which is not used by NTFS</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Number of sectors (64-bit)</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Master File Table (MFT) cluster block number</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Mirror MFT cluster block number</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>MFT entry size</td></tr>
+<tr><td>68</td><td>4</td><td></td><td>Index entry size</td></tr>
+<tr><td>72</td><td>8</td><td></td><td>Volume serial number</td></tr>
+<tr><td>80</td><td>4</td><td>0</td><td>Checksum, which is not used by NTFS</td></tr>
+<tr><td colspan="4">  </tr>
+<tr><td>84</td><td>426</td><td></td><td>Boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>The (boot) signature</td></tr>
+</table></div>
+<h3 id="boot-entry-point"><a class="header" href="#boot-entry-point">Boot entry point</a></h3>
+<p>The boot entry point often contains a jump instruction to the boot code at
+offset 84 followed by a no-operation, e.g.</p>
+<pre><code>eb52   jmp 0x52
+90     nop
+</code></pre>
+<h3 id="number-of-sectors-per-cluster-block"><a class="header" href="#number-of-sectors-per-cluster-block">Number of sectors per cluster block</a></h3>
+<p>The number of sectors per cluster block value as used by mkntfs is defined as
+following:</p>
+<ul>
+<li>Values 0 to 128 represent sizes of 0 to 128 sectors.</li>
+<li>Values 244 to 255 represent sizes of <code>2^(256-n)</code> sectors.</li>
+<li>Other values are unknown.</li>
+</ul>
+<h3 id="cluster-block-size"><a class="header" href="#cluster-block-size">Cluster block size</a></h3>
+<p>The cluster block size can be determined as following:</p>
+<pre><code>cluster block size = bytes per sector x sectors per cluster block
+</code></pre>
+<p>Different NTFS implementations support different cluster block sizes. Known
+supported cluster block size:</p>
+<div class="table-wrapper"><table><thead><th>Cluster block size</th><th>Bytes per sector</th><th>Supported by</th></thead><tr><td>256</td><td>256</td><td>mkntfs</td></tr>
+<tr><td>512</td><td>256 - 512</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>1024</td><td>256 - 1024</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>2048</td><td>256 - 2048</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>4096</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>8192</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>16K (16384)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>32K (32768)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>64K (65536)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows</td></tr>
+<tr><td>128K (131072)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows 10 (1903)</td></tr>
+<tr><td>256K (262144)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows 10 (1903)</td></tr>
+<tr><td>512K (524288)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows 10 (1903)</td></tr>
+<tr><td>1M (1048576)</td><td>256 - 4096</td><td>mkntfs, ntfs3g, Windows 10 (1903)</td></tr>
+<tr><td>2M (2097152)</td><td>512 - 4096</td><td>mkntfs, ntfs3g, Windows 10 (1903)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that Windows 10 (1903) requires the partition containing the NTFS file
+system to be aligned with the cluster block size. For example for a cluster
+block size of 128k the partition must 128 KiB aligned. The default partition
+partition alignment appears to be 64 KiB.</p>
+</blockquote>
+<p>mkntfs restricts the cluster size to:</p>
+<pre><code>bytes per sector &gt;= cluster size &gt; 4096 x bytes per sector
+</code></pre>
+<h3 id="master-file-table-mft-offset"><a class="header" href="#master-file-table-mft-offset">Master File Table (MFT) offset</a></h3>
+<p>The Master File Table (MFT) offset can be determined as following:</p>
+<pre><code>MFT offset = boot record offset + ( MFT cluster block number x Cluster block size )
+</code></pre>
+<p>The lower 32-bit part of the NTFS volume serial number is the Windows API
+(WINAPI) volume serial number. This can be determined by comparing the output
+of:</p>
+<pre><code>fsutil fsinfo volumeinfo C:
+fsutil fsinfo ntfsinfo C:
+</code></pre>
+<p>Often the total number of sectors in the boot record will be smaller than the
+underlying partition. A (nearly identical) backup of the boot record is stored
+in last sector of cluster block, that follows the last cluster block of the
+volume. Often this is the 512 bytes after the last sector of the volume, but
+not necessarily. The backup boot record is not included in the total number of
+sectors.</p>
+<h3 id="master-file-table-mft-and-index-entry-size"><a class="header" href="#master-file-table-mft-and-index-entry-size">Master File Table (MFT) and index entry size</a></h3>
+<p>The Master File Table (MFT) entry size and index entry size are defined as
+following:</p>
+<ul>
+<li>Values 0 to 127 represent sizes of 0 to 127 cluster blocks.</li>
+<li>Values 128 to 255 represent sizes of <code>2^(256-n)</code> bytes; or <code>2^(-n)</code> if considered as a signed byte.</li>
+<li>Other values are not considered valid.</li>
+</ul>
+<h3 id="bitlocker-drive-encryption-bde"><a class="header" href="#bitlocker-drive-encryption-bde">BitLocker Drive Encryption (BDE)</a></h3>
+<p>BitLocker Drive Encryption (BDE) uses the file system signature: "-FVE-FS-".
+Where FVE is an abbreviation of Full Volume Encryption.</p>
+<p>The data structures of BDE on Windows Vista and 7 differ.</p>
+<p>A Windows Vista BDE volume starts with:</p>
+<pre><code>eb 52 90 2d 46 56 45 26 46 53 2d
+</code></pre>
+<p>A Windows 7 BDE volume starts with:</p>
+<pre><code>eb 58 90 2d 46 56 45 26 46 53 2d
+</code></pre>
+<p>BDE is largely a stand-alone but has some integration with NTFS.</p>
+<p>TODO: link to BDE format documentation</p>
+<h3 id="volume-shadow-snapshots-vss"><a class="header" href="#volume-shadow-snapshots-vss">Volume Shadow Snapshots (VSS)</a></h3>
+<p>Volume Shadow Snapshots (VSS) uses the GUID
+3808876b-c176-4e48-b7ae-04046e6cc752 (stored in little-endian) to identify its
+data.</p>
+<p>VSS is largely a stand-alone but has some integration with NTFS.</p>
+<p>TODO: link to VSS format documentation</p>
+<h3 id="media-descriptor"><a class="header" href="#media-descriptor"><a name="media_descriptor"></a>Media descriptor</a></h3>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0</td><td>1 bit</td><td></td><td>Sides, where single-sided (0) and double-sided (1)</td></tr>
+<tr><td>0.1</td><td>1 bit</td><td></td><td>Track size, where 9 sectors per track (0) and 8 sectors per track (1)</td></tr>
+<tr><td>0.2</td><td>1 bit</td><td></td><td>Density, where 80 tracks (0) and 40 tracks (1)</td></tr>
+<tr><td>0.3</td><td>1 bit</td><td></td><td>Type, where Fixed disc (0) and Removable disc (1)</td></tr>
+<tr><td>0.4</td><td>4 bits</td><td></td><td>Always set to 1</td></tr>
+</table></div>
+<h2 id="the-boot-loader"><a class="header" href="#the-boot-loader">The boot loader</a></h2>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>512</td><td></td><td></td><td>Windows NT (boot) loader (NTLDR/BOOTMGR)</td></tr>
+</table></div>
+<h2 id="the-master-file-table-mft"><a class="header" href="#the-master-file-table-mft">The Master File Table (MFT)</a></h2>
+<p>The MFT consist of an array of MFT entries. The offset of the MFT table can be
+found in the volume header and the size of the MFT is defined by the MFT entry
+of the $MFT metadata file.</p>
+<blockquote>
+<p>Note that the MFT can consists of multiple data ranges, defined by the data
+runs in the $MFT metadata file.</p>
+</blockquote>
+<h3 id="mft-entry"><a class="header" href="#mft-entry">MFT entry</a></h3>
+<p>Although the size of a MFT entry is defined in the volume header is commonly
+1024 bytes in size and consists of:</p>
+<ul>
+<li>The MFT entry header</li>
+<li><a href="#fix_up_values">The fix-up values</a></li>
+<li>An array of MFT attribute values</li>
+<li>Padding, which should contain 0-byte values</li>
+</ul>
+<blockquote>
+<p>Note that the MFT entry can be filled entirely with 0-byte values. Seen in
+Windows XP for MFT entry numbers 16 - 23.</p>
+</blockquote>
+<h4 id="mft-entry-header"><a class="header" href="#mft-entry-header">MFT entry header</a></h4>
+<p>The MFT entry header (FILE_RECORD_SEGMENT_HEADER) is 42 or 48 bytes in size
+and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>MULTI_SECTOR_HEADER</em></tr>
+<tr><td>0</td><td>4</td><td>"BAAD", "FILE"</td><td>Signature</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the MFT entry.</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
+<tr><td colspan="4">  </tr>
+<tr><td>8</td><td>8</td><td></td><td>Metadata transaction journal sequence number, which contains a $LogFile Sequence Number (LSN)</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Sequence (number)</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Reference (link) count</td></tr>
+<tr><td>20</td><td>2</td><td></td><td>Attributes offset (or first attribute offset), which contains an offset relative from the start of the MFT entry</td></tr>
+<tr><td>22</td><td>2</td><td></td><td><a href="#mft_entry_flags">MFT entry flags</a></td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Used size in bytes</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>MFT entry size in bytes</td></tr>
+<tr><td>32</td><td>8</td><td></td><td><a href="#file_reference">Base record file reference</a></td></tr>
+<tr><td>40</td><td>2</td><td></td><td>First available attribute identifier</td></tr>
+<tr><td colspan="4"> <em>If NTFS version is 3.0</em></tr>
+<tr><td>42</td><td>2</td><td></td><td>Unknown (wfixupPattern)</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"> <em>If NTFS version is 3.1</em></tr>
+<tr><td>42</td><td>2</td><td></td><td>Unknown (wfixupPattern)</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>MFT entry number</td></tr>
+</table></div>
+<h5 id="baad-signature"><a class="header" href="#baad-signature">"BAAD" signature</a></h5>
+<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if
+during chkdsk, when a multi-sector item is found where the multi-sector header
+does not match the values at the end of the sector, it marks the item as "BAAD"
+and fill it with 0-byte values except for a fix-up value at the end of the first
+sector of the item. The "BAAD" signature has been seen to be used on Windows NT4
+and XP.</p>
+<h5 id="sequence-number"><a class="header" href="#sequence-number">Sequence number</a></h5>
+<p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>
+the sequence number is incremented each time that a file record segment is
+freed; it is 0 if the segment is not used.</p>
+<h5 id="base-record-file-reference"><a class="header" href="#base-record-file-reference">Base record file reference</a></h5>
+<p>The base record file reference is used to store additional attributes for
+another MFT entry, e.g. for attribute lists.</p>
+<h4 id="mft-entry-flags"><a class="header" href="#mft-entry-flags"><a name="mft_entry_flags"></a>MFT entry flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td>FILE_RECORD_SEGMENT_IN_USE, MFT_RECORD_IN_USE</td><td>In use</td></tr>
+<tr><td>0x0002</td><td>FILE_FILE_NAME_INDEX_PRESENT, FILE_NAME_INDEX_PRESENT, MFT_RECORD_IS_DIRECTORY</td><td>Has file name (or $I30) index. When this flag is set the file entry represents a directory</td></tr>
+<tr><td>0x0004</td><td>MFT_RECORD_IN_EXTEND</td><td>Unknown. According to <a href="https://ultradefrag.net/doc/man/ntfs/ntfs_layout.h.html">ntfs_layout.h</a> this is set for all system files present in the $Extend directory</td></tr>
+<tr><td>0x0008</td><td>MFT_RECORD_IS_VIEW_INDEX</td><td>Is index. When this flag is set the file entry represents an index. According to <a href="https://ultradefrag.net/doc/man/ntfs/ntfs_layout.h.html">ntfs_layout.h</a> this is set for all indices other than $I30</td></tr>
+</table></div>
+<h4 id="the-fix-up-values"><a class="header" href="#the-fix-up-values"><a name="fix_up_values"></a>The fix-up values</a></h4>
+<p>The fix-up values are of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Fix-up placeholder value</td></tr>
+<tr><td>2</td><td>2 x number of fix-up values</td><td></td><td>Fix-up (original) value array</td></tr>
+</table></div>
+<p>On disk the last 2 bytes for each 512 byte block is replaced by the fix-up
+placeholder value. The original value is stored in the corresponding fix-up
+(original) value array entry.</p>
+<blockquote>
+<p>Note that there can be more fix-up values than the number of 512 byte blocks
+in the data.</p>
+</blockquote>
+<p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>
+the update sequence array must end before the last USHORT value in the first
+sector. It also states that the update sequence array size value contains the
+number of bytes, but based on analysis of data samples it seems to be more
+likely to the number of words.</p>
+<p>In NT4 (version 1.2) the MFT entry is 42 bytes in size and the fix-up values
+are stored at offset 42. This is likely where the name wfixupPattern originates
+from.</p>
+<p>TODO: provide examples on applying the fix-up values.</p>
+<h3 id="the-file-reference"><a class="header" href="#the-file-reference"><a name="file_reference"></a>The file reference</a></h3>
+<p>The file reference (FILE_REFERENCE or MFT_SEGMENT_REFERENCE) is 8 bytes in size
+and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>6</td><td></td><td>MFT entry number</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Sequence number</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the index value in the MFT entry is 32-bit in size.</p>
+</blockquote>
+<h3 id="mft-attribute"><a class="header" href="#mft-attribute">MFT attribute</a></h3>
+<p>The MFT attribute consist of:</p>
+<ul>
+<li>the attribute header</li>
+<li>the attribute resident or non-resident data</li>
+<li>the <a href="#attribute_name">attribute name</a></li>
+<li>Unknown data, likely alignment padding (4-byte alignment)</li>
+<li>resident attribute data or non-resident attribute data runs</li>
+<li>alignment padding (8-byte alignment), can contain remnant data</li>
+</ul>
+<h4 id="mft-attribute-header"><a class="header" href="#mft-attribute-header">MFT attribute header</a></h4>
+<p>The MFT attribute header (ATTRIBUTE_RECORD_HEADER) is 16 bytes in size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td><a href="#attribute_types">Attribute type</a> (or type code)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Attribute size (or record length), which includes the 8 bytes of the attribute type and size</td></tr>
+<tr><td>8</td><td>1</td><td></td><td>Non-resident flag (or form code), where RESIDENT_FORM (0) and NONRESIDENT_FORM (1)</td></tr>
+<tr><td>9</td><td>1</td><td></td><td>Name size (or name length), which contains the number of characters without the end-of-string character</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Name offset, which contains an offset relative from the start of the MFT entry</td></tr>
+<tr><td>12</td><td>2</td><td></td><td><a href="#mft_attribute_data_flags">Attribute data flags</a></td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+</table></div>
+<h4 id="mft-attribute-data-flags"><a class="header" href="#mft-attribute-data-flags"><a name="mft_attribute_data_flags"></a>MFT attribute data flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td></td><td>Is LZNT1 compressed</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00ff</td><td>ATTRIBUTE_FLAG_COMPRESSION_MASK</td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x4000</td><td>ATTRIBUTE_FLAG_ENCRYPTED</td><td>Is encrypted</td></tr>
+<tr><td>0x8000</td><td>ATTRIBUTE_FLAG_SPARSE</td><td>Is sparse</td></tr>
+</table></div>
+<p>TODO: determine the meaning of compression flag in the context of resident
+$INDEX_ROOT. Do the data flags have a different meaning for different
+attributes?</p>
+<h4 id="resident-mft-attribute"><a class="header" href="#resident-mft-attribute">Resident MFT attribute</a></h4>
+<p>The resident MFT attribute data is present when the non-resident flag is not
+set (0). The resident data is 8 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Data size (or value length)</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Data offset (or value size), which contains an offset relative from the start of the MFT attribute</td></tr>
+<tr><td>6</td><td>1</td><td></td><td>Indexed flag</td></tr>
+<tr><td>7</td><td>1</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+</table></div>
+<p>TODO: determine the meaning of indexed flag bits, other than the LSB</p>
+<h4 id="non-resident-mft-attribute"><a class="header" href="#non-resident-mft-attribute">Non-resident MFT attribute</a></h4>
+<p>The non-resident MFT attribute data is present when the non-resident flag is
+set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>First (or lowest) Virtual Cluster Number (VCN) of the data</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Last (or highest) Virtual Cluster Number (VCN) of the data</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Data runs offset (or mappings pairs offset), which contains an offset relative from the start of the MFT attribute</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Compression unit size, which contains the compression unit size as <code>2^(n)</code> number of cluster blocks.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Unknown (Padding)</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Allocated data size (or allocated length), which contains the allocated data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Data size (or file size), which contains the data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Valid data size (or valid data length), which contains the valid data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td colspan="4"> <em>If compression unit size &gt; 0</em></tr>
+<tr><td>48</td><td>8</td><td></td><td>Compressed data size.</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the total size of the data runs should be larger or equal to the
+data size.</p>
+</blockquote>
+<blockquote>
+<p>Note that Windows will fill data ranges beyond the valid data size with 0-byte
+values. The data size remains unchanged. This applies to compressed and
+uncompressed data. If the first VCN is zero a valid data size of 0 represents
+a file entirely filled with 0-byte values.</p>
+</blockquote>
+<p>TODO: determine the meaning of a VCN of -1</p>
+<p>For more information about compressed MFT attributes see <a href="#compression">compression</a>.</p>
+<h4 id="attribute-name"><a class="header" href="#attribute-name"><a name="attribute_name"></a>Attribute name</a></h4>
+<p>The attribute name is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<h4 id="data-runs"><a class="header" href="#data-runs">Data runs</a></h4>
+<p>The data runs are stored in a variable size (data) runlist. This runlist
+consists of runlist elements.</p>
+<p>A runlist element is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0 </td><td>4 bits</td><td></td><td>Number of cluster blocks value size, which contains the number of bytes used to store the data run size</td></tr>
+<tr><td>0.4</td><td>4 bits</td><td></td><td>Cluster block number value size, which contains the number of bytes used to store the data run size</td></tr>
+<tr><td>1</td><td>Size value size</td><td></td><td>Data run number of cluster blocks, which contains the number of cluster blocks</td></tr>
+<tr><td>...</td><td>Cluster block number value size</td><td></td><td>Data run cluster block number</td></tr>
+</table></div>
+<p>The data run cluster block number is a singed value, where the MSB is the
+singed bit, e.g. if the data run cluster block contains "dbc8" it corresponds
+to the 64-bit value 0xffffffffffffdbc8.</p>
+<p>The first data run offset contains the absolute cluster block number where
+successive data run offsets are relative to the last data run offset.</p>
+<blockquote>
+<p>Note that the cluster block number byte size is the first nibble when reading
+the byte stream, but here it is represented as the upper nibble of the first
+byte.</p>
+</blockquote>
+<p>The last runlist element is (0, 0), which is stored as a 0-byte value.</p>
+<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a>
+the size of the runlist is rounded up to the next multitude of 4 bytes, but
+based on analysis of data samples it seems that the size of the trailing data
+can be even larger than 3 and are not always 0-byte values.</p>
+<p>TODO: provide examples of data runs</p>
+<h5 id="sparse-data-runs"><a class="header" href="#sparse-data-runs">Sparse data runs</a></h5>
+<p>The MFT attribute data flag (ATTRIBUTE_FLAG_SPARSE) indicates if the data
+stream is sparse or not, where the runlist can contain both sparse and
+non-sparse data runs.</p>
+<p>A sparse data run has a cluster block number value size of 0, representing
+there is no offset (cluster block number). A sparse data run is filled with
+0-byte values.</p>
+<p>Compressed data streams also define sparse data runs without setting the
+ATTRIBUTE_FLAG_SPARSE flag.</p>
+<blockquote>
+<p>Note that $BadClus:$Bad also defines a data run with a cluster block number
+value size of 0, without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
+</blockquote>
+<h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
+<p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed
+or not.</p>
+<blockquote>
+<p>Note that Windows supports compressed data runs for NTFS file systems with a
+cluster block size of 4096 bytes or less.</p>
+</blockquote>
+<blockquote>
+<p>Note that Windows 10 supports Windows Overlay Filter (WOF) compressed data,
+which stores the LZXPRESS Huffman or LZX compressed data in alternate data
+stream named WofCompressedData and links it to the default data stream using
+a reparse point.</p>
+</blockquote>
+<p>The data is stored in compression unit blocks. A compression unit typically
+consists of 16 cluster blocks. However the actual value is stored in the
+non-resident MFT attribute.</p>
+<p>Also see <a href="#compression">compression</a>.</p>
+<h2 id="the-attributes"><a class="header" href="#the-attributes">The attributes</a></h2>
+<h3 id="known-attribute-types"><a class="header" href="#known-attribute-types"><a name="attribute_types"></a>Known attribute types</a></h3>
+<p>The attribute types are stored in the <a href="#attribute_definitions">$AttrDef metadata file</a>.</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000000</td><td></td><td>Unused</td></tr>
+<tr><td>0x00000010</td><td>$STANDARD_INFORMATION</td><td>Standard information</td></tr>
+<tr><td>0x00000020</td><td>$ATTRIBUTE_LIST</td><td>Attributes list</td></tr>
+<tr><td>0x00000030</td><td>$FILE_NAME</td><td>The file or directory name</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 1.2 and earlier</em></tr>
+<tr><td>0x00000040</td><td>$VOLUME_VERSION</td><td>Volume version</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 3.0 and later</em></tr>
+<tr><td>0x00000040</td><td>$OBJECT_ID</td><td>Object identifier</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td>0x00000050</td><td>$SECURITY_DESCRIPTOR</td><td>Security descriptor</td></tr>
+<tr><td>0x00000060</td><td>$VOLUME_NAME</td><td>Volume label</td></tr>
+<tr><td>0x00000070</td><td>$VOLUME_INFORMATION</td><td>Volume information</td></tr>
+<tr><td>0x00000080</td><td>$DATA</td><td>Data stream</td></tr>
+<tr><td>0x00000090</td><td>$INDEX_ROOT</td><td>Index root</td></tr>
+<tr><td>0x000000a0</td><td>$INDEX_ALLOCATION</td><td>Index allocation</td></tr>
+<tr><td>0x000000b0</td><td>$BITMAP</td><td>Bitmap</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 1.2 and earlier</em></tr>
+<tr><td>0x000000c0</td><td>$SYMBOLIC_LINK</td><td>Symbolic link</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 3.0 and later</em></tr>
+<tr><td>0x000000c0</td><td>$REPARSE_POINT</td><td>Reparse point</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td>0x000000d0</td><td>$EA_INFORMATION</td><td>(HPFS) extended attribute information</td></tr>
+<tr><td>0x000000e0</td><td>$EA</td><td>(HPFS) extended attribute</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 1.2 and earlier</em></tr>
+<tr><td>0x000000f0</td><td>$PROPERTY_SET</td><td>Property set</td></tr>
+<tr><td colspan="3"> <em>Used in NTFS version 3.0 and later</em></tr>
+<tr><td>0x00000100</td><td>$LOGGED_UTILITY_STREAM</td><td>Logged utility stream</td></tr>
+<tr><td colspan="3"> <em>Common</em></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00001000</td><td></td><td>First user defined attribute</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xffffffff</td><td></td><td>End of attributes marker</td></tr>
+</table></div>
+<h3 id="attribute-chains"><a class="header" href="#attribute-chains"><a name="attribute_chains"></a>Attribute chains</a></h3>
+<p>Multiple attributes can be chained to make up a single attribute data stream,
+e.g. the attributes:</p>
+<ol>
+<li>$INDEX_ALLOCATION ($I30) VCN: 0</li>
+<li>$INDEX_ALLOCATION ($I30) VCN: 596</li>
+</ol>
+<p>The first attribute will contain the size of the data defined by all the
+attributes and successive attributes should have a size of 0.</p>
+<p>It is assumed that the attributes in a chain must be continuous and defined
+in-order.</p>
+<h3 id="the-standard-information-attribute"><a class="header" href="#the-standard-information-attribute">The standard information attribute</a></h3>
+<p>The standard information attribute ($STANDARD_INFORMATION) contains the basic
+file entry metadata. It is stored as a resident MFT attribute.</p>
+<p>The standard information data (STANDARD_INFORMATION) is either 48 or 72 bytes
+in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Creation date and time, which contains a FILETIME</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Last modification (or last written) dat and time, which contains a FILETIME</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>MFT entry last modification date and time, which contains a FILETIME</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Last access date and time, which contains a FILETIME</td></tr>
+<tr><td>32</td><td>4</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Unknown (Maximum number of versions)</td></tr>
+<tr><td>40</td><td>4</td><td></td><td>Unknown (Version number)</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Unknown (Class identifier)</td></tr>
+<tr><td colspan="4"> <em>If NTFS version 3.0 or later</em></tr>
+<tr><td>48</td><td>4</td><td></td><td>Owner identifier</td></tr>
+<tr><td>52</td><td>4</td><td></td><td>Security descriptor identifier, which contains the entry number in the security ID index ($Secure:$SII). Also see <a href="#access_control">Access Control</a></td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Quota charged</td></tr>
+<tr><td>64</td><td>8</td><td></td><td>Update Sequence Number (USN)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that MFT entries have been observed without a $STANDARD_INFORMATION
+attribute, but with other attributes such as $FILE_NAME and an $I30 index.</p>
+</blockquote>
+<h3 id="the-attribute-list-attribute"><a class="header" href="#the-attribute-list-attribute">The attribute list attribute</a></h3>
+<p>The attribute list attribute ($ATTRIBUTE_LIST) is used to store MFT attributes
+outside the MFT entry, e.g. when the MFT entry is too small to store all the
+attributes.</p>
+<p>The entries in the list reference the location of MFT attributes. The attribute
+list attribute can be stored as either a resident (for a small amount of data)
+or non-resident MFT attribute.</p>
+<blockquote>
+<p>Note that MFT entry 0 also can contain an attribute list and allows to store
+listed attributes beyond the first data run.</p>
+</blockquote>
+<h4 id="the-attribute-list"><a class="header" href="#the-attribute-list">The attribute list</a></h4>
+<p>An attribute list consists of:</p>
+<ul>
+<li>one or more attribute list entries</li>
+</ul>
+<h4 id="the-attribute-list-entry"><a class="header" href="#the-attribute-list-entry">The attribute list entry</a></h4>
+<p>An attribute list entry (ATTRIBUTE_LIST_ENTRY) is of variable size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td><a href="#attribute_types">Attribute type</a> (or type code)</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Size (or record length), which includes the 6 bytes of the attribute type and size</td></tr>
+<tr><td>6</td><td>1</td><td></td><td>Name size (or name length), which contains the number of characters without the end-of-string character</td></tr>
+<tr><td>7</td><td>1</td><td></td><td>Name offset, which contains an offset relative from the start of the attribute list entry</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Data first (or lowest) VCN</td></tr>
+<tr><td>16</td><td>8</td><td></td><td><a href="#file_reference">File reference</a> (or segment reference), which contains a reference to the MFT entry that contains (part of) the attribute data</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+<tr><td>26</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>alignment padding (8-byte alignment), can contain remnant data</td></tr>
+</table></div>
+<h3 id="the-file-name-attribute"><a class="header" href="#the-file-name-attribute"><a name="file_name_attribute"></a>The file name attribute</a></h3>
+<p>The file name attribute ($FILE_NAME) contains the basic file system information,
+like the parent file entry, various date and time values and name. It is stored
+as a resident MFT attribute.</p>
+<p>The file name data (FILE_NAME) is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td><a href="#file_reference">Parent file reference</a></td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Creation date and time, which contains a FILETIME</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Last modification (or last written) date and time, which contains a FILETIME</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>MFT entry last modification date and time, which contains a FILETIME</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Last access date and time, which contains a FILETIME</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Allocated (or reserved) file size</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Data size</td></tr>
+<tr><td>56</td><td>4</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td colspan="4"> <em>If FILE_ATTRIBUTE_REPARSE_POINT is set</em></tr>
+<tr><td>60</td><td>4</td><td></td><td><a href="#reparse_point_tag">Reparse point tag</a></td></tr>
+<tr><td colspan="4"> <em>If FILE_ATTRIBUTE_REPARSE_POINT is not set</em></tr>
+<tr><td>60</td><td>4</td><td></td><td>Unknown (extended attribute data size)</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>64</td><td>1</td><td></td><td>Name string size, which contains the number of characters without the end-of-string character</td></tr>
+<tr><td>65</td><td>1</td><td></td><td>Namespace of the name string</td></tr>
+<tr><td>66</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<p>TODO: determine if the allocated file size and file size values contain accurate values when the file name data is stored in a MFT attribute.</p>
+<p>An MFT attribute can contain multiple file name attributes, e.g. for a separate
+(long) name and short name.</p>
+<p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp;
+Windows and POSIX name space $FILE_NAME attribute. However the directory entry
+index ($I30) of the parent directory only contained the DOS &amp; Windows name.</p>
+<p>In case of a hard link the MFT entry will contain additional file name
+attributes with the parent file reference of each hard link.</p>
+<h4 id="namespace"><a class="header" href="#namespace">Namespace</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows.</td></tr>
+<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space).</td></tr>
+<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format.</td></tr>
+<tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well.</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the Windows API function CreateFile allows to create case sensitive
+file names when the flag FILE_FLAG_POSIX_SEMANTICS is set.</p>
+</blockquote>
+<h4 id="long-to-short-name-conversion"><a class="header" href="#long-to-short-name-conversion">Long to short name conversion</a></h4>
+<p>A short name can be determined from a long name with the following approach. In
+the long name:</p>
+<ul>
+<li>ignore Unicode characters beyond the first 8-bit (extended ASCII)</li>
+<li>ignore control characters and spaces (character &lt; 0x20)</li>
+<li>ignore non-allowed characters <code>" * + , / : ; &lt; = &gt; ? \</code></li>
+<li>ignore dots except the last one, which is used for the extension</li>
+<li>make all letters upper case</li>
+</ul>
+<p>Additional observations:</p>
+<ul>
+<li><code>[</code> or <code>]</code> are replaced by an underscore (<code>_</code>)</li>
+</ul>
+<p>Make the name unique:</p>
+<ol>
+<li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its first 3 letters, e.g. "Program Files" becomes "PROGRA~1" or " ~PLAYMOVIE.REG" becomes "~PLAYM~1.REG"</li>
+<li>if the name already exists try ~2 up to ~9, e.g. "Program Data", in the same directory as "Program Files", becomes "PROGRA~2"</li>
+<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g. "x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4" in a directory with a lot of filenames starting with "x86_microsoft", becomes "X8FCA6~1.163"</li>
+</ol>
+<p>TODO: determine if the behavior is dependent on a setting that can be changed with fsutil</p>
+<h3 id="the-volume-version-attribute"><a class="header" href="#the-volume-version-attribute">The volume version attribute</a></h3>
+<p>The volume version attribute ($VOLUME_VERSION) contains volume version.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
+$AttrDef indicates the attribute to be 8 bytes in size.</p>
+<h3 id="the-object-identifier-attribute"><a class="header" href="#the-object-identifier-attribute">The object identifier attribute</a></h3>
+<p>The object identifier attribute ($OBJECT_ID) contains distributed link tracker
+properties. It is stored as a resident MFT attribute.</p>
+<p>The object identifier attribute data is either 16 or 64 bytes in size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td>Droid file identifier, which contains a GUID</td></tr>
+<tr><td>16</td><td>16</td><td></td><td>Birth droid volume identifier, which contains a GUID</td></tr>
+<tr><td>32</td><td>16</td><td></td><td>Birth droid file identifier, which contains a GUID</td></tr>
+<tr><td>48</td><td>16</td><td></td><td>Birth droid domain identifier, which contains a GUID</td></tr>
+</table></div>
+<p>Droid in this context refers to CDomainRelativeObjId.</p>
+<h3 id="the-security-descriptor-attribute"><a class="header" href="#the-security-descriptor-attribute">The security descriptor attribute</a></h3>
+<p>TODO: determine if this override any value in $Secure:$SDS?</p>
+<p>The security descriptor attribute ($SECURITY_DESCRIPTOR) contains a Windows NT
+security descriptor. It can be stored as either a resident (for a small amount
+of data) and non-resident MFT attribute.</p>
+<p>TODO: link to security descriptor format documentation</p>
+<h3 id="the-volume-name-attribute"><a class="header" href="#the-volume-name-attribute">The volume name attribute</a></h3>
+<p>The volume name attribute ($VOLUME_NAME) contains the volume label. It is
+stored as a resident MFT attribute.</p>
+<p>The volume name attribute data is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>...</td><td></td><td>Volume label, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<p>The volume name attribute is used in the $Volume metadata file MFT entry.</p>
+<h3 id="the-volume-information-attribute"><a class="header" href="#the-volume-information-attribute">The volume information attribute</a></h3>
+<p>The volume information attribute ($VOLUME_INFORMATION) contains information
+about the volume. It is stored as a resident MFT attribute.</p>
+<p>The volume information attribute data is 12 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Unknown</td></tr>
+<tr><td>8</td><td>1</td><td></td><td>Major format version</td></tr>
+<tr><td>9</td><td>1</td><td></td><td>Minor format version</td></tr>
+<tr><td>10</td><td>2</td><td></td><td><a href="#volume_flags">Volume flags</a></td></tr>
+</table></div>
+<p>The volume information attribute is used in the $Volume metadata file MFT entry.</p>
+<h4 id="volume-flags"><a class="header" href="#volume-flags"><a name="volume_flags"></a>Volume flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td>VOLUME_IS_DIRTY</td><td>Is dirty</td></tr>
+<tr><td>0x0002</td><td>VOLUME_RESIZE_LOG_FILE</td><td>Re-size journal ($LogFile)</td></tr>
+<tr><td>0x0004</td><td>VOLUME_UPGRADE_ON_MOUNT</td><td>Upgrade on next mount</td></tr>
+<tr><td>0x0008</td><td>VOLUME_MOUNTED_ON_NT4</td><td>Mounted on Windows NT 4</td></tr>
+<tr><td>0x0010</td><td>VOLUME_DELETE_USN_UNDERWAY</td><td>Delete USN in progress</td></tr>
+<tr><td>0x0020</td><td>VOLUME_REPAIR_OBJECT_ID</td><td>Repair object identifiers</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x0080</td><td></td><td>Unknown</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x4000</td><td>VOLUME_CHKDSK_UNDERWAY</td><td>chkdsk in progress</td></tr>
+<tr><td>0x8000</td><td>VOLUME_MODIFIED_BY_CHKDSK</td><td>Modified by chkdsk</td></tr>
+</table></div>
+<h3 id="the-data-stream-attribute"><a class="header" href="#the-data-stream-attribute">The data stream attribute</a></h3>
+<p>The data stream attribute ($DATA) contains the file data. It can be stored as
+either a resident (for a small amount of data) and non-resident MFT attribute.</p>
+<p>Multiple data attributes for the same data stream can be used in the attribute
+list to define different parts of the data stream data. The first data stream
+attribute will contain the size of the entire data stream data. Other data
+stream attributes should have a size of 0. Also see <a href="#attribute_chains">attribute chains</a>.</p>
+<h3 id="the-index-root-attribute"><a class="header" href="#the-index-root-attribute">The index root attribute</a></h3>
+<p>The index root attribute ($INDEX_ROOT) contains the root of the index tree. It
+is stored as a resident MFT attribute.</p>
+<p>Also see <a href="#index">the index</a> and <a href="#index_root">the index root</a>.</p>
+<h3 id="the-index-allocation-attribute"><a class="header" href="#the-index-allocation-attribute">The index allocation attribute</a></h3>
+<p>The index allocation attribute ($INDEX_ALLOCATION) contains an array of index
+entries. It is stored as a non-resident MFT attribute.</p>
+<p>The index allocation attribute itself does not define which attribute type it
+contains in the index value data. For this information it needs the
+corresponding index root attribute.</p>
+<p>Multiple index allocation attributes for the same index can be used in the
+attribute list to define different parts of the index allocation data. The
+first index allocation attribute will contain the size of the entire index
+allocation data. Other index allocation attributes should have a size of 0.
+Also see <a href="#attribute_chains">attribute chains</a>.</p>
+<p>Also see <a href="#index">the index</a>.</p>
+<h3 id="the-bitmap-attribute"><a class="header" href="#the-bitmap-attribute">The bitmap attribute</a></h3>
+<p>The bitmap attribute ($BITMAP) contains the allocation bitmap. It can be stored
+as either a resident (for a small amount of data) and non-resident MFT
+attribute.</p>
+<p>It is used to maintain information about which entry is used and which is not.
+Every bit in the bitmap represents an entry. The index is stored byte-wise with
+the LSB of the byte corresponds to the first allocation element. The allocation
+element can represent different things:</p>
+<ul>
+<li>an MFT entry in the MFT (nameless) bitmap;</li>
+<li>an index entry in an index ($I30).</li>
+</ul>
+<p>The allocation element is allocated if the corresponding bit contains 1 or
+unallocated if 0.</p>
+<h3 id="the-symbolic-link-attribute"><a class="header" href="#the-symbolic-link-attribute">The symbolic link attribute</a></h3>
+<p>The symbolic link attribute ($SYMBOLIC_LINK) contains a symbolic link.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
+$AttrDef indicates the attribute is of variable size.</p>
+<h3 id="the-reparse-point-attribute"><a class="header" href="#the-reparse-point-attribute">The reparse point attribute</a></h3>
+<p>The reparse point attribute ($REPARSE_POINT) contains information about a file
+system-level link. It is stored as a resident MFT attribute.</p>
+<p>Als see <a href="#reparse_point">the reparse point</a>.</p>
+<h3 id="the-hpfs-extended-attribute-information"><a class="header" href="#the-hpfs-extended-attribute-information">The (HPFS) extended attribute information</a></h3>
+<p>The (HPFS) extended attribute information ($EA_INFORMATION) contains
+information about the extended attribute ($EA).</p>
+<p>The extended attribute information data is 8 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Size of an extended attribute entry</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Number of extended attributes which have the NEED_EA flag set</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Size of the extended attribute ($EA) data</td></tr>
+</table></div>
+<h3 id="the-hpfs-extended-attribute"><a class="header" href="#the-hpfs-extended-attribute">The (HPFS) extended attribute</a></h3>
+<p>The (HPFS) extended attribute ($EA) contains the extended attribute data.</p>
+<p>The extended attribute data is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Offset to next extended attribute entry, where the offset is relative from the start of the extended attribute data</td></tr>
+<tr><td>4</td><td>1</td><td></td><td><a href="#extended_attribute_flags">Extended attribute flags</a></td></tr>
+<tr><td>5</td><td>1</td><td></td><td>Number of characters of the extended attribute name</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Value data size</td></tr>
+<tr><td>8</td><td>...</td><td></td><td>The extended attribute name, which contains an ASCII string</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Value data</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Unknown</td></tr>
+</table></div>
+<p>TODO: determine if the name is 2-byte aligned</p>
+<h4 id="extended-attribute-flags"><a class="header" href="#extended-attribute-flags"><a name="extended_attribute_flags"></a>Extended attribute flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x80</td><td>NEED_EA</td><td>Unknown (Need EA) flag</td></tr>
+</table></div>
+<p>TODO: determine what the NEED_EA flag is used for</p>
+<h4 id="unitattr-extended-attribute-value-data"><a class="header" href="#unitattr-extended-attribute-value-data">UNITATTR extended attribute value data</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Unknown (equivalent of st_mode?)</td></tr>
+</table></div>
+<h3 id="the-property-set-attribute"><a class="header" href="#the-property-set-attribute">The property set attribute</a></h3>
+<p>The property set attribute ($PROPERTY_SET) contains a property set.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
+$AttrDef does not seem to always define this attribute.</p>
+<h3 id="the-logged-utility-stream-attribute"><a class="header" href="#the-logged-utility-stream-attribute">The logged utility stream attribute</a></h3>
+<p>TODO: complete section</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>$EFS</td><td></td><td>Encrypted NTFS (EFS)</td></tr>
+<tr><td>$TXF_DATA</td><td></td><td>Transactional NTFS (TxF)</td></tr>
+</table></div>
+<h2 id="the-attribute-types"><a class="header" href="#the-attribute-types"><a name="attribute_types"></a>The attribute types</a></h2>
+<p>The attribute types are stored in the <code>$AttrDef</code> metadata file.</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>128</td><td></td><td>Attribute which contains an UCS-2 little-endian string with end-of-string character. Unused bytes are filled with 0-byte values.</td></tr>
+<tr><td>128</td><td>4</td><td></td><td><a href="#attribute_types">Attribute type</a> (or type code)</td></tr>
+<tr><td>132</td><td>8</td><td></td><td>Unknown</td></tr>
+<tr><td>140</td><td>4</td><td></td><td>Unknown (flags?)</td></tr>
+<tr><td>144</td><td>8</td><td></td><td>Unknown (minimum attribute size?)</td></tr>
+<tr><td>152</td><td>8</td><td></td><td>Unknown (maximum attribute size?)</td></tr>
+</table></div>
+<h2 id="the-index"><a class="header" href="#the-index"><a name="index"></a>The index</a></h2>
+<p>The index structures are used for various purposes one of which are the
+directory entries.</p>
+<p>The root of the index is stored in index root. The index root attribute defines
+which type of attribute is stored in the index and the root index node.</p>
+<p>If the index is too large part of the index is stored in an index allocation
+attribute with the same attribute name. The index allocation attribute defines
+a data stream which contains index entries. Each index entry contains an index
+node.</p>
+<p>An index consists of a tree, where both the branch and index leaf nodes contain
+the actual data. E.g. in case of a directory entries index, any node that
+contains index value data make up for the directory entries.</p>
+<p>The index value data in a branch node signifies the upper bound of the values
+in the that specific branch. E.g. if directory entries index branch node
+contains the name "textfile.txt" all names in that index branch are smaller
+than "textfile.txt".</p>
+<blockquote>
+<p>Note the actual sorting order is dependent on the collation type defined in
+the index root attribute.</p>
+</blockquote>
+<p>The index allocation attribute is accompanied by a bitmap attribute with the
+corresponding attribute name. The bitmap attribute defines the allocation of
+virtual cluster blocks within the index allocation attribute data stream.</p>
+<blockquote>
+<p>Note that the index allocation attribute can be present even though it is not
+used.</p>
+</blockquote>
+<h3 id="common-used-indexes"><a class="header" href="#common-used-indexes">Common used indexes</a></h3>
+<p>Indexes commonly used by NTFS are:</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>$I30</td><td></td><td>Directory entries (used by directories)</td></tr>
+<tr><td>$SDH</td><td></td><td>Security descriptor hashes (used by $Secure)</td></tr>
+<tr><td>$SII</td><td></td><td>Security descriptor identifiers (used by $Secure)</td></tr>
+<tr><td>$O</td><td></td><td>Object identifiers (used by $ObjId)</td></tr>
+<tr><td>$O</td><td></td><td>Owner identifiers (used by $Quota)</td></tr>
+<tr><td>$Q</td><td></td><td>Quotas (used by $Quota)</td></tr>
+<tr><td>$R</td><td></td><td>Reparse points (used by $Reparse)</td></tr>
+</table></div>
+<h3 id="the-index-root"><a class="header" href="#the-index-root"><a name="index_root"></a>The index root</a></h3>
+<p>The index root consists of:</p>
+<ul>
+<li>index root header</li>
+<li>index node header</li>
+<li>an array of index values</li>
+</ul>
+<h4 id="the-index-root-header"><a class="header" href="#the-index-root-header">The index root header</a></h4>
+<p>The index root header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Attribute type, which contains the type of the indexed attribute or 0 if none</td></tr>
+<tr><td>4</td><td>4</td><td></td><td><a href="#collation_type">Collation type</a>, which contains a value to indicate the ordering of the index entries</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Index entry size</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Number of cluster blocks per index entry</td></tr>
+</table></div>
+<blockquote>
+<p>Note that for NTFS version 1.2 the index entry size does not have to match
+the index entry size in the volume header. The correct size seems to be the
+value in the index root header.</p>
+</blockquote>
+<h4 id="collation-type"><a class="header" href="#collation-type"><a name="collation_type"></a>Collation type</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000000</td><td>COLLATION_BINARY</td><td>Binary, where the first byte is most significant</td></tr>
+<tr><td>0x00000001</td><td>COLLATION_FILENAME</td><td>UCS-2 strings case-insensitive, where the case folding is stored in $UpCase</td></tr>
+<tr><td>0x00000002</td><td>COLLATION_UNICODE_STRING</td><td>UCS-2 strings case-sensitive, where upper case letters should come first</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00000010</td><td>COLLATION_NTOFS_ULONG</td><td>Unsigned 32-bit little-endian integer</td></tr>
+<tr><td>0x00000011</td><td>COLLATION_NTOFS_SID</td><td>NT security identifier (SID)</td></tr>
+<tr><td>0x00000012</td><td>COLLATION_NTOFS_SECURITY_HASH</td><td>Security hash first, then NT security identifier</td></tr>
+<tr><td>0x00000013</td><td>COLLATION_NTOFS_ULONGS</td><td>An array of unsigned 32-bit little-endian integer values</td></tr>
+</table></div>
+<h3 id="the-index-entry"><a class="header" href="#the-index-entry">The index entry</a></h3>
+<p>The index entry consists of:</p>
+<ul>
+<li>the index entry header</li>
+<li>the index node header</li>
+<li><a href="#fix_up_values">The fix-up values</a></li>
+<li>alignment padding (8-byte alignment), contains zero-bytes</li>
+<li>an array of index values</li>
+</ul>
+<h4 id="the-index-entry-header"><a class="header" href="#the-index-entry-header">The index entry header</a></h4>
+<p>The index entry header is 24 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>"INDX"</td><td>Signature</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values offset, which contains an offset relative from the start of the index entry header.</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>The number of fix-up values</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Metadata transaction journal sequence number, which contains a $LogFile Sequence Number (LSN)</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Virtual Cluster Number (VCN) of the index entry</td></tr>
+</table></div>
+<blockquote>
+<p>Note that there can be more fix-up value than supported by the index entry
+data size.</p>
+</blockquote>
+<h3 id="the-index-node-header"><a class="header" href="#the-index-node-header">The index node header</a></h3>
+<p>The index node header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Index values offset, where the offset is relative from the start of the index node header</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Index node size, where the value includes the size of the index node header</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Allocated index node size, where the value includes the size of the index node header</td></tr>
+<tr><td>12</td><td>4</td><td></td><td><a href="#index_node_flags">Index node flags</a></td></tr>
+</table></div>
+<p>In an index entry (index allocation attribute) the index node size includes the
+size of the fix-up values and the alignment padding following it.</p>
+<p>The remainder of the index node contains remnant data and/or zero-byte values.</p>
+<h4 id="the-index-node-flags"><a class="header" href="#the-index-node-flags"><a name="index_node_flags"></a>The index node flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td></td><td>Is branch node, which is used to indicate if the node is a branch node that has sub nodes</td></tr>
+</table></div>
+<h3 id="the-index-value"><a class="header" href="#the-index-value">The index value</a></h3>
+<p>The index value is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td><a href="#file_reference">File reference</a></td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Size, which includes the 10 bytes of the file reference and size</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Key data size</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Index value flags</td></tr>
+<tr><td colspan="4"> <em>If index key data size &gt; 0</em></tr>
+<tr><td>16</td><td>...</td><td></td><td>Key data</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Data</td></tr>
+<tr><td colspan="4"> <em>If index value flag 0x00000001 (is branch node) is set</em></tr>
+<tr><td>...</td><td>8</td><td></td><td>Sub node Virtual Cluster Number (VCN)</td></tr>
+</table></div>
+<p>The index values are stored 8 byte aligned.</p>
+<blockquote>
+<p>Note that some other sources define the index value flags as a 16-bit value
+followed by 2 bytes of padding.</p>
+</blockquote>
+<h4 id="the-index-value-flags"><a class="header" href="#the-index-value-flags">The index value flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td></td><td>Has sub node, when set the index value contains a sub node Virtual Cluster Number (VCN)</td></tr>
+<tr><td>0x00000002</td><td></td><td>Is last, when set the index value is the last in the index values array</td></tr>
+</table></div>
+<h3 id="index-key-and-value-data"><a class="header" href="#index-key-and-value-data">Index key and value data</a></h3>
+<h4 id="directory-entry-index-value"><a class="header" href="#directory-entry-index-value">Directory entry index value</a></h4>
+<p>The MFT attribute name of the directory entry index is: $I30.</p>
+<p>The directory entry index value contains a <a href="#file_name_attribute">file name attribute</a>
+in the index key data.</p>
+<blockquote>
+<p>Note that the index value data can contain remnant data.</p>
+</blockquote>
+<p>The short and long names of the same file have a separate index values. The
+short name uses the DOS name space and the long name the WINDOWS name space.
+Index values with a single name use either the POSIX or DOS_WINDOWS name space.</p>
+<p>A hard link to a file in the same directory has separate index values.</p>
+<h4 id="security-descriptor-hash-index-value"><a class="header" href="#security-descriptor-hash-index-value">Security descriptor hash index value</a></h4>
+<p>The MFT attribute name of the security descriptor hash index is: $SDH.
+It appears to only to be used by the $Secure metadata file.</p>
+<p>Also see <a href="#security_descriptor_hash_index_value">the security descriptor hash index value</a>.</p>
+<h4 id="security-descriptor-identifier-index-value"><a class="header" href="#security-descriptor-identifier-index-value">Security descriptor identifier index value</a></h4>
+<p>The MFT attribute name of the security descriptor identifier index is: $SII.
+It appears to only to be used by the $Secure metadata file.</p>
+<p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
+<h2 id="compression"><a class="header" href="#compression"><a name="compression"></a>Compression</a></h2>
+<h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
+<p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster
+blocks also named a compression unit, which is either "compressed" or
+uncompressed.</p>
+<p>The term compressed is quoted here because the group of cluster blocks can also
+contain uncompressed data. A group of cluster blocks is "compressed" when it is
+compressed size is smaller than its uncompressed data size. Within a group of
+cluster blocks each of the 16 blocks is "compressed" individually.</p>
+<p>The compression unit size is stored in the non-resident MFT attribute. The
+maximum uncompressed data size is always the cluster size (in most case
+4096).</p>
+<blockquote>
+<p>Note that a resident $DATA attribute with the compression type in the
+data flags is stored uncompressed.</p>
+</blockquote>
+<p>The data runs in the $DATA attribute define cluster block ranges, e.g.</p>
+<pre><code>21 02 35 52
+</code></pre>
+<p>This data run defines 2 data blocks starting at block number 21045 followed by
+14 sparse blocks. The total number of blocks in the compression unit is 16.
+Compressed data is stored in the first 2 blocks and the 14 sparse blocks are
+only there to make sure the data runs add up to the compression unit size. They
+do not define actual sparse data.</p>
+<p>Another example:</p>
+<pre><code>21 40 37 52
+</code></pre>
+<p>This data run defines 64 data blocks starting at block number 21047. Since
+this data run is larger than the compression unit size the data is stored
+uncompressed.</p>
+<p>If the data run was e.g. 60 data blocks followed by 4 sparse blocks the first 3
+compression units (blocks 1 to 48) would be uncompressed and the last
+compression unit (blocks 49 to 64) would be compressed.</p>
+<p>Also "sparse data" and "sparse compression unit" data runs can be mixed. If in
+the previous example the 60 data blocks would be followed by 20 sparse blocks
+the last compression unit (blocks 65 to 80) would be sparse.</p>
+<p>A compression unit can consists of multiple compressed data runs, e.g. 1 data
+block followed by 4 data blocks followed by 11 sparse blocks. Data runs have
+been observed where the last data run size does not align with the compression
+unit size.</p>
+<p>The sparse blocks data run can be stored in a subsequent attribute in an
+attribute chain and can be stored in multiple data runs.</p>
+<p>NTFS compression stores the "compressed" data in blocks. Each block has a 2
+byte block header.</p>
+<p>The block is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Block size</td></tr>
+<tr><td>2</td><td>compressed data size</td><td></td><td>Uncompressed or LZNT1 compressed data</td></tr>
+</table></div>
+<p>The upper 4 bits of the block size are used as flags:</p>
+<div class="table-wrapper"><table><thead><th>Bit(s)</th><th>Description</th></thead><tr><td>0 - 11</td><td>Compressed data size</td></tr>
+<tr><td>12 - 14</td><td>Unknown</td></tr>
+<tr><td>15</td><td>Data is compressed</td></tr>
+</table></div>
+<p>TODO: link to LZNT1 documentation</p>
+<h3 id="windows-overlay-filter-wof-compressed-data"><a class="header" href="#windows-overlay-filter-wof-compressed-data">Windows Overlay Filter (WOF) compressed data</a></h3>
+<p>A MFT entry that contains Windows Overlay Filter (WOF) compressed data has the
+following attributes:</p>
+<ul>
+<li>reparse point attribute with tag 0x80000017, which defines the compression method</li>
+<li>a nameless data attribute that is sparse and contains the uncompressed data size</li>
+<li>a data attribute named WofCompressedData that contains LZXPRESS Huffman or LZX compressed data</li>
+</ul>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>Chunk offset table</em></tr>
+<tr><td>0</td><td>...</td><td></td><td>Array of 32-bit of 64-bit compressed data chunk offsets, where the offset is relative from the start of the data chunks</td></tr>
+<tr><td colspan="4"> <em>Data chunks</em></tr>
+<tr><td>...</td><td>...</td><td></td><td>One or more compressed or uncompressed data chunks</td></tr>
+</table></div>
+<blockquote>
+<p>Note that if the chunk size equals the size of the uncompressed data the chunk
+is stored (as-is) uncompressed.</p>
+</blockquote>
+<p>The size of the chunk offset table is:</p>
+<pre><code>number of chunk offsets = uncompressed size / compression unit size
+</code></pre>
+<p>The offset of the first compressed data chunk is at the end of the chunk offset
+table and is not stored in the chunk offset table.</p>
+<p>If the uncompressed size of a chunk is smaller than the compression unit size
+the chunk is stored uncompressed.</p>
+<p>Also see <a href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a>.</p>
+<h2 id="the-reparse-point"><a class="header" href="#the-reparse-point"><a name="reparse_point"></a>The reparse point</a></h2>
+<p>The reparse point is used to create file system-level links. Reparse data is
+stored in the reparse point attribute. The reparse point data
+(REPARSE_DATA_BUFFER) is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Reparse point tag</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Reparse data size</td></tr>
+<tr><td>6</td><td>2</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>8</td><td>...</td><td></td><td>Reparse data</td></tr>
+</table></div>
+<p>TODO: determine if non-native (Microsoft) reparse points are stored with their GUID</p>
+<h3 id="the-reparse-point-tag"><a class="header" href="#the-reparse-point-tag"><a name="reparse_point_tag"></a>The reparse point tag</a></h3>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0 </td><td>16 bits</td><td></td><td>Type</td></tr>
+<tr><td>2.0 </td><td>12 bits</td><td></td><td>Unknown (Reserved)</td></tr>
+<tr><td>3.4</td><td>4 bits</td><td></td><td>Flags</td></tr>
+</table></div>
+<h4 id="reparse-point-tag-flags"><a class="header" href="#reparse-point-tag-flags">Reparse point tag flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x1</td><td></td><td>Unknown (Reserved)</td></tr>
+<tr><td>0x2</td><td></td><td>Is alias (Name surrogate bit), when this bit is set, the file or directory represents another named entity in the system.</td></tr>
+<tr><td>0x4</td><td></td><td>Is high-latency media (Reserved)</td></tr>
+<tr><td>0x8</td><td></td><td>Is native (Microsoft-bit)</td></tr>
+</table></div>
+<h4 id="known-reparse-point-tags"><a class="header" href="#known-reparse-point-tags">Known reparse point tags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000000</td><td>IO_REPARSE_TAG_RESERVED_ZERO</td><td>Unknown (Reserved)</td></tr>
+<tr><td>0x00000001</td><td>IO_REPARSE_TAG_RESERVED_ONE</td><td>Unknown (Reserved)</td></tr>
+<tr><td>0x00000002</td><td>IO_REPARSE_TAG_RESERVED_TWO</td><td>Unknown (Reserved)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x80000005</td><td>IO_REPARSE_TAG_DRIVE_EXTENDER</td><td>Used by Home server drive extender</td></tr>
+<tr><td>0x80000006</td><td>IO_REPARSE_TAG_HSM2</td><td>Used by Hierarchical Storage Manager Product</td></tr>
+<tr><td>0x80000007</td><td>IO_REPARSE_TAG_SIS</td><td>Used by single-instance storage (SIS) filter driver</td></tr>
+<tr><td>0x80000008</td><td>IO_REPARSE_TAG_WIM</td><td>Used by the WIM Mount filter</td></tr>
+<tr><td>0x80000009</td><td>IO_REPARSE_TAG_CSV</td><td>Used by Clustered Shared Volumes (CSV) version 1</td></tr>
+<tr><td>0x8000000a</td><td>IO_REPARSE_TAG_DFS</td><td>Used by the Distributed File System (DFS)</td></tr>
+<tr><td>0x8000000b</td><td>IO_REPARSE_TAG_FILTER_MANAGER</td><td>Used by filter manager test harness</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x80000012</td><td>IO_REPARSE_TAG_DFSR</td><td>Used by the Distributed File System (DFS)</td></tr>
+<tr><td>0x80000013</td><td>IO_REPARSE_TAG_DEDUP</td><td>Used by the Data Deduplication (Dedup)</td></tr>
+<tr><td>0x80000014</td><td>IO_REPARSE_TAG_NFS</td><td>Used by the Network File System (NFS)</td></tr>
+<tr><td>0x80000015</td><td>IO_REPARSE_TAG_FILE_PLACEHOLDER</td><td>Used by Windows Shell for placeholder files</td></tr>
+<tr><td>0x80000016</td><td>IO_REPARSE_TAG_DFM</td><td>Used by Dynamic File filter</td></tr>
+<tr><td>0x80000017</td><td>IO_REPARSE_TAG_WOF</td><td>Used by <a href="#wof_reparse_data">Windows Overlay Filter (WOF)</a>, for either WIMBoot or compression</td></tr>
+<tr><td>0x80000018</td><td>IO_REPARSE_TAG_WCI</td><td>Used by <a href="#wci_reparse_data">Windows Container Isolation (WCI)</a></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x8000001b</td><td>IO_REPARSE_TAG_APPEXECLINK</td><td>Used by Universal Windows Platform (UWP) packages to encode information that allows the application to be launched by CreateProcess</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x8000001e</td><td>IO_REPARSE_TAG_STORAGE_SYNC</td><td>Used by the Azure File Sync (AFS) filter</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x80000020</td><td>IO_REPARSE_TAG_UNHANDLED</td><td>Used by Windows Container Isolation (WCI)</td></tr>
+<tr><td>0x80000021</td><td>IO_REPARSE_TAG_ONEDRIVE</td><td>Unknown (Not used)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x80000023</td><td>IO_REPARSE_TAG_AF_UNIX</td><td>Used by the Windows Subsystem for Linux (WSL) to represent a UNIX domain socket</td></tr>
+<tr><td>0x80000024</td><td>IO_REPARSE_TAG_LX_FIFO</td><td>Used by the Windows Subsystem for Linux (WSL) to represent a UNIX FIFO (named pipe)</td></tr>
+<tr><td>0x80000025</td><td>IO_REPARSE_TAG_LX_CHR</td><td>Used by the Windows Subsystem for Linux (WSL) to represent a UNIX character special file</td></tr>
+<tr><td>0x80000036</td><td>IO_REPARSE_TAG_LX_BLK</td><td>Used by the Windows Subsystem for Linux (WSL) to represent a UNIX block special file</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000001c</td><td>IO_REPARSE_TAG_PROJFS</td><td>Used by the Windows Projected File System filter, for files managed by a user mode provider such as VFS for Git</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x90001018</td><td>IO_REPARSE_TAG_WCI_1</td><td>Used by Windows Container Isolation (WCI)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000101a</td><td>IO_REPARSE_TAG_CLOUD_1</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000201a</td><td>IO_REPARSE_TAG_CLOUD_2</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000301a</td><td>IO_REPARSE_TAG_CLOUD_3</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000401a</td><td>IO_REPARSE_TAG_CLOUD_4</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000501a</td><td>IO_REPARSE_TAG_CLOUD_5</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000601a</td><td>IO_REPARSE_TAG_CLOUD_6</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000701a</td><td>IO_REPARSE_TAG_CLOUD_7</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000801a</td><td>IO_REPARSE_TAG_CLOUD_8</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000901a</td><td>IO_REPARSE_TAG_CLOUD_9</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000a01a</td><td>IO_REPARSE_TAG_CLOUD_A</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000b01a</td><td>IO_REPARSE_TAG_CLOUD_B</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000c01a</td><td>IO_REPARSE_TAG_CLOUD_C</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000d01a</td><td>IO_REPARSE_TAG_CLOUD_D</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000e01a</td><td>IO_REPARSE_TAG_CLOUD_E</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x9000f01a</td><td>IO_REPARSE_TAG_CLOUD_F</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0000003</td><td>IO_REPARSE_TAG_MOUNT_POINT</td><td><a href="#junction_reparse_data">Junction</a> (or mount point)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa000000c</td><td>IO_REPARSE_TAG_SYMLINK</td><td><a href="#symbolic_link_reparse_data">Symbolic link</a></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0000010</td><td>IO_REPARSE_TAG_IIS_CACHE</td><td>Used by Microsoft Internet Information Services (IIS) caching</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0000019</td><td>IO_REPARSE_TAG_GLOBAL_REPARSE</td><td>Used by NPFS to indicate a named pipe symbolic link from a server silo into the host silo</td></tr>
+<tr><td>0xa000001a</td><td>IO_REPARSE_TAG_CLOUD</td><td>Used by the Cloud Files filter, for files managed by a sync engine such as Microsoft OneDrive</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa000001d</td><td>IO_REPARSE_TAG_LX_SYMLINK</td><td>Used by the Windows Subsystem for Linux (WSL) to represent a UNIX symbolic link</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa000001f</td><td>IO_REPARSE_TAG_WCI_TOMBSTONE</td><td>Used by Windows Container Isolation (WCI)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0000022</td><td>IO_REPARSE_TAG_PROJFS_TOMBSTONE</td><td>Used by the Windows Projected File System filter, for files managed by a user mode provider such as VFS for Git</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0000027</td><td>IO_REPARSE_TAG_WCI_LINK</td><td>Used by Windows Container Isolation (WCI)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xa0001027</td><td>IO_REPARSE_TAG_WCI_LINK_1</td><td>Used by Windows Container Isolation (WCI)</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xc0000004</td><td>IO_REPARSE_TAG_HSM</td><td>Used by Hierarchical Storage Manager Product</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0xc0000014</td><td>IO_REPARSE_TAG_APPXSTRM</td><td>Unknown (Not used)</td></tr>
+</table></div>
+<h3 id="junction-or-mount-point-reparse-data"><a class="header" href="#junction-or-mount-point-reparse-data"><a name="junction_reparse_data"></a>Junction or mount point reparse data</a></h3>
+<p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains
+junction or mount point reparse data. The junction or mount point reparse data
+is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Substitute name offset, where the offset is relative from the start of the reparse name data</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Substitute name size in bytes, where the size of the end-of-string character is not included</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Display name offset, where the offset is relative from the start of the reparse name data</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Display name size in bytes, where the size of the end-of-string character is not included</td></tr>
+<tr><td colspan="4"> <em>Reparse name data</em></tr>
+<tr><td>8</td><td>...</td><td></td><td>Substitute name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Display name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<blockquote>
+<p>Note that it is currently unclear if the names contain an end-of-string
+character or if they are followed by alignment padding.</p>
+</blockquote>
+<p>TODO: determine what character values like 0x0002 represent in the substitute name</p>
+<pre><code>00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
+00000020: 73 00 65 00 72 00 73 00  5c 00 74 00 65 00 73 00   s.e.r.s. \.t.e.s.
+00000030: 74 00 5c 00 44 00 6f 00  63 00 75 00 6d 00 65 00   t.\.D.o. c.u.m.e.
+00000040: 6e 00 74 00 73 00 00 00                            n.t.s...
+</code></pre>
+<h3 id="symbolic-link-reparse-data"><a class="header" href="#symbolic-link-reparse-data"><a name="symbolic_link_reparse_data"></a>Symbolic link reparse data</a></h3>
+<p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic
+link reparse data. The symbolic link reparse data is of variable size and
+consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Substitute name offset, where the offset is relative from the start of the reparse name data</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Substitute name size in bytes</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Display name offset, where the offset is relative from the start of the reparse name data</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Display name size, in bytes</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Symbolic link flags</td></tr>
+<tr><td colspan="4"> <em>Reparse name data</em></tr>
+<tr><td>12</td><td>...</td><td></td><td>Substitute name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Display name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<h4 id="symbolic-link-flags"><a class="header" href="#symbolic-link-flags">Symbolic link flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>SYMLINK_FLAG_RELATIVE</td><td>The substitute name is a path name relative to the directory containing the symbolic link.</td></tr>
+</table></div>
+<h3 id="windows-overlay-filter-wof-reparse-data"><a class="header" href="#windows-overlay-filter-wof-reparse-data"><a name="wof_reparse_data"></a>Windows Overlay Filter (WOF) reparse data</a></h3>
+<p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows
+Overlay Filter (WOF) reparse data. The Windows Overlay Filter (WOF) reparse
+data is 16 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>External provider information</em></tr>
+<tr><td>0</td><td>4</td><td>1</td><td>Unknown (WOF version)</td></tr>
+<tr><td>4</td><td>4</td><td>2</td><td>Unknown (WOF provider)</td></tr>
+<tr><td colspan="4"> <em>Internal provider information</em></tr>
+<tr><td>8</td><td>4</td><td>1</td><td>Unknown (file information version)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td><a href="#wof_compression_method">Compression method</a></td></tr>
+</table></div>
+<h3 id="windows-overlay-filter-wof-compression-method"><a class="header" href="#windows-overlay-filter-wof-compression-method"><a name="wof_compression_method"></a>Windows Overlay Filter (WOF) compression method</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0</td><td></td><td>LZXPRESS Huffman with 4k window (compression unit)</td></tr>
+<tr><td>1</td><td></td><td>LZX with 32k window (compression unit)</td></tr>
+<tr><td>2</td><td></td><td>LZXPRESS Huffman with 8k window (compression unit)</td></tr>
+<tr><td>3</td><td></td><td>LZXPRESS Huffman with 16k window (compression unit)</td></tr>
+</table></div>
+<p>TODO: link to LZXPRESS Huffman and LZX documentation</p>
+<h3 id="windows-container-isolation-wci-reparse-data"><a class="header" href="#windows-container-isolation-wci-reparse-data"><a name="wci_reparse_data">Windows Container Isolation (WCI) reparse data</a></h3>
+<p>A reparse point with tag IO_REPARSE_TAG_WCI (0x80000018) contains Windows
+Container Isolation (WCI) reparse data. The Windows Container Isolation (WCI)
+reparse data is of variable size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td>1</td><td>Version</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>8</td><td>16</td><td></td><td>Look-up identifier, which contains a GUID</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Name size in bytes</td></tr>
+<tr><td>26</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+</table></div>
+<h2 id="the-allocation-bitmap"><a class="header" href="#the-allocation-bitmap">The allocation bitmap</a></h2>
+<p>The metadata file $Bitmap contains the allocation bitmap.</p>
+<p>Every bit in the allocation bitmap represents a block the size of the cluster
+block, where the LSB is the first bit in a byte.</p>
+<p>TODO: describe what the $SRAT data stream is used for.</p>
+<h2 id="access-control"><a class="header" href="#access-control"><a name="access_control"></a>Access control</a></h2>
+<p>The $Secure metadata file contains the security descriptors used for access control.</p>
+<div class="table-wrapper"><table><thead><th>Type</th><th>Name</th><th>Description</th></thead><tr><td>Data</td><td>$SDS</td><td>Security descriptor data stream, which contains all the Security descriptors on the volume</td></tr>
+<tr><td>Index</td><td>$SDH</td><td>Security descriptor hash index</td></tr>
+<tr><td>Index</td><td>$SII</td><td>Security descriptor identifier index, which contains the mapping of the security descriptor identifier (in $STANDARD_INFORMATION) to the offset of the security descriptor data (in $Secure:$SDS)</td></tr>
+</table></div>
+<h3 id="security-descriptor-hash-sdh-index"><a class="header" href="#security-descriptor-hash-sdh-index">Security descriptor hash ($SDH) index</a></h3>
+<h4 id="the-security-descriptor-hash-index-value"><a class="header" href="#the-security-descriptor-hash-index-value"><a name="security_descriptor_hash_index_value"></a>The security descriptor hash index value</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>Key data</em></tr>
+<tr><td>0</td><td>4</td><td></td><td>Security descriptor hash</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Security descriptor identifier</td></tr>
+<tr><td colspan="4"> <em>Value data</em></tr>
+<tr><td>8</td><td>4</td><td></td><td>Security descriptor hash</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Security descriptor identifier</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Security descriptor data offset (in $SDS)</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Security descriptor data size (in $SDS)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Unknown</td></tr>
+</table></div>
+<h3 id="security-descriptor-identifier-sii-index"><a class="header" href="#security-descriptor-identifier-sii-index">Security descriptor identifier ($SII) index</a></h3>
+<h4 id="the-security-descriptor-identifier-index-value"><a class="header" href="#the-security-descriptor-identifier-index-value"><a name="security_descriptor_identifier_index_value"></a>The security descriptor identifier index value</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>Key data</em></tr>
+<tr><td>0</td><td>4</td><td></td><td>Security descriptor identifier</td></tr>
+<tr><td colspan="4"> <em>Value data</em></tr>
+<tr><td>4</td><td>4</td><td></td><td>Security descriptor hash</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Security descriptor identifier</td></tr>
+<tr><td>12</td><td>8</td><td></td><td>Security descriptor data offset (in $SDS)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Security descriptor data size (in $SDS)</td></tr>
+</table></div>
+<p>TODO: describe the hash algorithm</p>
+<h3 id="security-descriptor-sds-data-stream"><a class="header" href="#security-descriptor-sds-data-stream">Security descriptor ($SDS) data stream</a></h3>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Security descriptor hash</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Security descriptor identifier</td></tr>
+<tr><td>12</td><td>8</td><td></td><td>Security descriptor data offset (in $SDS)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Security descriptor data size (in $SDS)</td></tr>
+<tr><td>24</td><td>...</td><td></td><td>Security descriptor data</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Alignment padding (2-byte alignment)</td></tr>
+</table></div>
+<p>TODO: link to security descriptor format documentation</p>
+<h2 id="the-object-identifiers"><a class="header" href="#the-object-identifiers">The object identifiers</a></h2>
+<h3 id="objido"><a class="header" href="#objido">$ObjID:$O</a></h3>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>Key data</em></tr>
+<tr><td>0</td><td>16</td><td></td><td>File (or object) identifier, which contains a GUID</td></tr>
+<tr><td colspan="4"> <em>Value data</em></tr>
+<tr><td>4</td><td>8</td><td></td><td><a href="#file_reference">File reference</a></td></tr>
+<tr><td>12</td><td>16</td><td></td><td>Birth droid volume identifier, which contains a GUID</td></tr>
+<tr><td>28</td><td>16</td><td></td><td>Birth droid file (or object) identifier, which contains a GUID</td></tr>
+<tr><td>44</td><td>16</td><td></td><td>Birth droid domain identifier, which contains a GUID</td></tr>
+</table></div>
+<h2 id="metadata-transaction-journal-log-file"><a class="header" href="#metadata-transaction-journal-log-file"><a name="log_file"></a>Metadata transaction journal (log file)</a></h2>
+<p>TODO: complete section</p>
+<p>The metadata file $LogFile contains the metadata transaction journal and
+consists of:</p>
+<ul>
+<li>Log File Service restart page header</li>
+<li><a href="#fix_up_values">The fix-up values</a></li>
+</ul>
+<h3 id="log-file-service-restart-page-header"><a class="header" href="#log-file-service-restart-page-header">Log File service restart page header</a></h3>
+<p>The Log File service restart page header (LFS_RESTART_PAGE_HEADER) is 30 bytes
+in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>MULTI_SECTOR_HEADER</em></tr>
+<tr><td>0</td><td>4</td><td>"CHKD", "RCRD", "RSTR"</td><td>Signature</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the restart page header.</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
+<tr><td colspan="4">  </tr>
+<tr><td>8</td><td>8</td><td></td><td>Checkdisk last LSN</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>System page size</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Log page size</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Restart offset</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Minor format version</td></tr>
+<tr><td>28</td><td>2</td><td></td><td>Major format version</td></tr>
+</table></div>
+<h4 id="log-file-service-restart-page-versions"><a class="header" href="#log-file-service-restart-page-versions">Log File service restart page versions</a></h4>
+<div class="table-wrapper"><table><thead><th>Major format version</th><th>Remarks</th></thead><tr><td>-1</td><td>Beta Version</td></tr>
+<tr><td>0</td><td>Transition</td></tr>
+<tr><td>1</td><td>Update sequence support</td></tr>
+</table></div>
+<h2 id="usn-change-journal"><a class="header" href="#usn-change-journal"><a name="usn_change_journal"></a>USN change journal</a></h2>
+<p>The metadata file $Extend$UsnJrnl contains the USN change journal. It is a
+sparse file in which NTFS stores records of changes to files and directories.
+Applications make use of the journal to respond to file and directory changes
+as they occur, like e.g. the Windows File Replication Service (FRS) and the
+Windows (Desktop) Search service.</p>
+<p>The USN change journal consists of:</p>
+<ul>
+<li>the $UsnJrnl:$Max data stream, containing metadata like the maximum size of the journal</li>
+<li>the $UsnJrnl:$J data stream, containing the update (or change) entries. The $UsnJrnl:$J data stream is sparse.</li>
+</ul>
+<h3 id="usn-change-journal-metadata"><a class="header" href="#usn-change-journal-metadata">USN change journal metadata</a></h3>
+<p>The USN change journal metadata is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Maximum size in bytes</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Allocation (size) delta in bytes</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Update (USN) journal identifier, which contains a FILETIME</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Unknown (empty)</td></tr>
+</table></div>
+<h2 id="usn-change-journal-entries"><a class="header" href="#usn-change-journal-entries">USN change journal entries</a></h2>
+<p>The $UsnJrnl:$J data stream consists of an array of USN change journal entries.
+The USN change journal entries are stored on a per block-basis and 8-byte
+aligned. Therefore the remainder of the block can contain 0-byte values.</p>
+<p>TODO: describe journal block size</p>
+<p>Once the stream reaches maximum size the earliest USN change journal entries
+are removed from the stream and replaced with a sparse data run.</p>
+<h3 id="usn-change-journal-entry"><a class="header" href="#usn-change-journal-entry">USN change journal entry</a></h3>
+<p>The USN change journal entry (USN_RECORD_V2) is of variable size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Entry (or record) size</td></tr>
+<tr><td>4</td><td>2</td><td>2</td><td>Major format version</td></tr>
+<tr><td>6</td><td>2</td><td>0</td><td>Minor format version</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>File reference</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Parent file reference</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Update sequence number (USN), which contains the file offset of the USN change journal entry which is used as a unique identifier</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Update date and time, which contains a FILETIME</td></tr>
+<tr><td>40</td><td>4</td><td></td><td><a href="#update_reason_flags">Update reason flags</a></td></tr>
+<tr><td>44</td><td>4</td><td></td><td><a href="#update_source_flags">Update source flags</a></td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Security descriptor identifier, which contains the entry number in the security ID index ($Secure:$SII). Also see <a href="#access_control">Access Control</a></td></tr>
+<tr><td>52</td><td>4</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td>56</td><td>2</td><td></td><td>Name size in bytes</td></tr>
+<tr><td>58</td><td>2</td><td></td><td>Name offset, which is relative from the start of the USN change journal entry</td></tr>
+<tr><td>60</td><td>(name size)</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+<tr><td>...</td><td>...</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+</table></div>
+<h4 id="update-reason-flags"><a class="header" href="#update-reason-flags"><a name="update_reason_flags"></a>Update reason flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>USN_REASON_DATA_OVERWRITE</td><td>The data in the file or directory is overwritten.</td></tr>
+<tr><td>0x00000002</td><td>USN_REASON_DATA_EXTEND</td><td>The file or directory is extended.</td></tr>
+<tr><td>0x00000004</td><td>USN_REASON_DATA_TRUNCATION</td><td>The file or directory is truncated.</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00000010</td><td>USN_REASON_NAMED_DATA_OVERWRITE</td><td>One or more named data streams ($DATA attributes) of file were overwritten</td></tr>
+<tr><td>0x00000020</td><td>USN_REASON_NAMED_DATA_EXTEND</td><td>One or more named data streams ($DATA attributes) of file were extended</td></tr>
+<tr><td>0x00000040</td><td>USN_REASON_NAMED_DATA_TRUNCATION</td><td>One or more named data streams ($DATA attributes) of a file were truncated</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x00000100</td><td>USN_REASON_FILE_CREATE</td><td>The file or directory was created</td></tr>
+<tr><td>0x00000200</td><td>USN_REASON_FILE_DELETE</td><td>The file or directory was deleted</td></tr>
+<tr><td>0x00000400</td><td>USN_REASON_EA_CHANGE</td><td>The extended attributes of the file were changed</td></tr>
+<tr><td>0x00000800</td><td>USN_REASON_SECURITY_CHANGE</td><td>The access rights (security descriptor) of a file or directory were changed</td></tr>
+<tr><td>0x00001000</td><td>USN_REASON_RENAME_OLD_NAME</td><td>The name changed, where the USN change journal entry contains the old name</td></tr>
+<tr><td>0x00002000</td><td>USN_REASON_RENAME_NEW_NAME</td><td>The name changed, where the USN change journal entry contains the new name</td></tr>
+<tr><td>0x00004000</td><td>USN_REASON_INDEXABLE_CHANGE</td><td>Content indexed status changed. The file attribute FILE_ATTRIBUTE_NOT_CONTENT_INDEXED was changed</td></tr>
+<tr><td>0x00008000</td><td>USN_REASON_BASIC_INFO_CHANGE</td><td>Basic file or directory attributes changed. One or more file or directory attributes were changed e.g. read-only, hidden, system, archive, or sparse attribute, or one or more time stamps.</td></tr>
+<tr><td>0x00010000</td><td>USN_REASON_HARD_LINK_CHANGE</td><td>A hard link was created or deleted</td></tr>
+<tr><td>0x00020000</td><td>USN_REASON_COMPRESSION_CHANGE</td><td>The file or directory was compressed or decompressed</td></tr>
+<tr><td>0x00040000</td><td>USN_REASON_ENCRYPTION_CHANGE</td><td>The file or directory was encrypted or decrypted</td></tr>
+<tr><td>0x00080000</td><td>USN_REASON_OBJECT_ID_CHANGE</td><td>The object identifier of a file or directory was changed</td></tr>
+<tr><td>0x00100000</td><td>USN_REASON_REPARSE_POINT_CHANGE</td><td>The reparse point that in a file or directory was changed, or a reparse point was added to or deleted from a file or directory.</td></tr>
+<tr><td>0x00200000</td><td>USN_REASON_STREAM_CHANGE</td><td>A named data stream ($DATA attribute) is added to or removed from a file, or a named stream is renamed</td></tr>
+<tr><td>0x00400000</td><td>USN_REASON_TRANSACTED_CHANGE</td><td>Unknown</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td>0x80000000</td><td>USN_REASON_CLOSE</td><td>The file or directory was closed</td></tr>
+</table></div>
+<h4 id="update-source-flags"><a class="header" href="#update-source-flags"><a name="update_source_flags"></a>Update source flags</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>USN_SOURCE_DATA_MANAGEMENT</td><td>The operation added a private data stream to a file or directory. The modifications did not change the application data.</td></tr>
+<tr><td>0x00000002</td><td>USN_SOURCE_AUXILIARY_DATA</td><td>The operation was caused by the operating system. Although a write operation is performed on the item, the data was not changed.</td></tr>
+<tr><td>0x00000004</td><td>USN_SOURCE_REPLICATION_MANAGEMENT</td><td>The operation was caused by file replication</td></tr>
+</table></div>
+<h2 id="alternate-data-streams-ads"><a class="header" href="#alternate-data-streams-ads">Alternate data streams (ADS)</a></h2>
+<div class="table-wrapper"><table><thead><th>Data stream name</th><th>Description</th></thead><tr><td>"♣BnhqlkugBim0elg1M1pt2tjdZe", "♣SummaryInformation", "{4c8cc155-6c1e-11d1-8e41-00c04fb9386d}"</td><td>Used to store properties, where ♣ (black club) is Unicode character U+2663</td></tr>
+<tr><td>"{59828bbb-3f72-4c1b-a420-b51ad66eb5d3}.XPRESS"</td><td>Used during remote differential compression</td></tr>
+<tr><td>"AFP_AfpInfo", "AFP_Resource"</td><td>Used to store Macintosh operating system property lists</td></tr>
+<tr><td>"encryptable"</td><td>Used to store attributes relating to thumbnails in the thumbnails database</td></tr>
+<tr><td>"favicon"</td><td>Used to store favorite icons for web pages</td></tr>
+<tr><td>"ms-properties"</td><td>Used to store properties</td></tr>
+<tr><td>"OECustomProperty"</td><td>Used to store custom properties related to email files</td></tr>
+<tr><td>"Zone.Identifier"</td><td>Used to store the Internet Explorere URL security zone of the origin</td></tr>
+</table></div>
+<h3 id="ms-properties"><a class="header" href="#ms-properties">ms-properties</a></h3>
+<p>The ms-properties alternate data stream contains a Windows Serialized Property
+Store (SPS).</p>
+<p>TODO: link to Windows Serialized Property Store (SPS) format documentation</p>
+<h3 id="zoneidentifier"><a class="header" href="#zoneidentifier">Zone.Identifier</a></h3>
+<p>The Zone.Identifier alternate data stream contains ASCII text in the form:</p>
+<pre><code>[ZoneTransfer]
+ZoneId=3
+</code></pre>
+<p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
+of the origin.</p>
+<h2 id="transactional-ntfs-txf"><a class="header" href="#transactional-ntfs-txf"><a name="transactional_ntfs"></a>Transactional NTFS (TxF)</a></h2>
+<p>As of Vista Transactional NTFS (TxF) was added.</p>
+<p>In TxF the resource manager (RM) keeps track of transactional metadata and log
+files. The TxF related metadata files are stored in the metadata directory:</p>
+<pre><code>$Extend\$RmMetadata
+</code></pre>
+<h3 id="resource-manager-repair-information"><a class="header" href="#resource-manager-repair-information">Resource manager repair information</a></h3>
+<p>The resource manager repair information metadata file:
+$Extend$RmMetadata$Repair consists of the following data streams:</p>
+<ul>
+<li>the default (unnamed) data stream</li>
+<li>the $Config data stream, contains the resource manager repair configuration information</li>
+</ul>
+<p>TODO: determine the purpose of the default (unnamed) data stream</p>
+<h4 id="resource-manager-repair-configuration-information"><a class="header" href="#resource-manager-repair-configuration-information">Resource manager repair configuration information</a></h4>
+<p>TODO: complete section</p>
+<p>The $Repair:$Config data streams contains:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
+</table></div>
+<h3 id="transactional-ntfs-txf-metadata-directory"><a class="header" href="#transactional-ntfs-txf-metadata-directory">Transactional NTFS (TxF) metadata directory</a></h3>
+<p>TODO: complete section</p>
+<p>The transactional NTFS (TxF) metadata directory: $Extend$RmMetadata$Txf is
+used to isolate files for delete or overwrite operations.</p>
+<h3 id="txf-old-page-stream-tops-file"><a class="header" href="#txf-old-page-stream-tops-file">TxF Old Page Stream (TOPS) file</a></h3>
+<p>The TxF Old Page Stream (TOPS) file: $Extend$RmMetadata$TxfLog$Tops consists
+of the following data streams:</p>
+<ul>
+<li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID, its CLFS log policy, and the LSN at which recovery should start</li>
+<li>the $T data stream, contains the file data that is partially overwritten by a transaction as opposed to a full overwrite, which would move the file into the Transactional NTFS (TxF) metadata directory</li>
+</ul>
+<h4 id="txf-old-page-stream-tops-metadata"><a class="header" href="#txf-old-page-stream-tops-metadata">TxF Old Page Stream (TOPS) metadata</a></h4>
+<p>TODO: complete section</p>
+<p>The $Tops default (unnamed) data streams contains:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>2</td><td></td><td>Unknown</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Size of TOPS metadata</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (Number of resource managers/streams?)</td></tr>
+<tr><td>8</td><td>16</td><td></td><td>Resource Manager (RM) identifier, which contains a GUID</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Unknown (empty)</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Base (or log start) LSN of TxFLog stream</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Unknown</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Last flushed LSN of TxFLog stream</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Unknown</td></tr>
+<tr><td>64</td><td>8</td><td></td><td>Unknown (empty)</td></tr>
+<tr><td>72</td><td>8</td><td></td><td>Unknown (Restart LSN?)</td></tr>
+<tr><td>80</td><td>20</td><td></td><td>Unknown</td></tr>
+</table></div>
+<h4 id="txf-old-page-stream-tops-file-data"><a class="header" href="#txf-old-page-stream-tops-file-data">TxF Old Page Stream (TOPS) file data</a></h4>
+<p>The $Tops:$T data streams contains the file data that is partially overwritten
+by a transaction. It consists of multiple pending transaction XML-documents.</p>
+<p>TODO: describe start of each sector containing 0x0001</p>
+<p>A pending transaction XML-document starts with an UTF-8 byte-order-mark. Is
+roughly contains the following data:</p>
+<pre><code>&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;PendingTransaction Version="2.0" Identifier="..."&gt;
+   &lt;Transactions&gt;
+      &lt;Transaction TransactionId="..."&gt;
+      &lt;Install Application="..., Culture=..., Version=..., PublicKeyToken=...,
+                           ProcessorArchitecture=..., versionScope=..."
+               RefGuid="..."
+               RefIdentifier="..."
+               RefExtra="..."/&gt;
+      ...
+      &lt;/Transaction&gt;
+   &lt;/Transactions&gt;
+   &lt;ChangeList&gt;
+      &lt;Change Family="..., Culture=..., PublicKeyToken=...,
+                     ProcessorArchitecture=..., versionScope=..."
+              New="..."/&gt;
+      ...
+   &lt;/ChangeList&gt;
+   &lt;POQ&gt;
+      &lt;BeginTransaction id="..."/&gt;
+
+      &lt;CreateFile path="..."
+                  fileAttribute="..."/&gt;
+      &lt;DeleteFile path="..."/&gt;
+      &lt;MoveFile source="..." destination="..."/&gt;
+      &lt;HardlinkFile source="..." destination="..."/&gt;
+      &lt;SetFileInformation path="..."
+                          securityDescriptor="binary base64:..."
+                          flags="..."/&gt;
+
+       &lt;CreateKey path="..."/&gt;
+       &lt;SetKeyValue path="..."
+                    name="..."
+                    type="..."
+                    encoding="base64"
+                    value="..."/&gt;
+      &lt;DeleteKeyValue path="..."
+                      name="..."/&gt;
+
+      ...
+   &lt;/POQ&gt;
+   &lt;InstallerQueue Length="..."&gt;
+      &lt;Action Installer="..."
+              Mode="..."
+              Phase="..."
+              Family="..., Culture=..., PublicKeyToken=...,
+                     ProcessorArchitecture=..., versionScope=..."
+              Old="..."
+              New="..."/&gt;
+
+      ...
+   &lt;/InstallerQueue &gt;
+&lt;/PendingTransaction&gt;
+</code></pre>
+<h3 id="transactional-ntfs-txf-common-log-file-system-clfs-files"><a class="header" href="#transactional-ntfs-txf-common-log-file-system-clfs-files">Transactional NTFS (TxF) Common Log File System (CLFS) files</a></h3>
+<p>TxF uses a Common Log File System (CLFS) log store and the logged utility
+stream attribute named $TXF_DATA.</p>
+<p>TODO: link to CLFS format documentation</p>
+<p>The base log file (BLF) of the TxF log store is:</p>
+<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLog.blf
+</code></pre>
+<p>Commonly the corresponding container files are:</p>
+<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000001
+$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000002
+</code></pre>
+<p>TxF uses a multiplexed log store which contains the following streams:</p>
+<ul>
+<li>the KtmLog stream used for Kernel Transaction Manager (KTM) metadata records</li>
+<li>TxfLog stream, which contains the TxF log records.</li>
+</ul>
+<h3 id="transactional-data-logged-utility-stream-attribute"><a class="header" href="#transactional-data-logged-utility-stream-attribute">Transactional data logged utility stream attribute</a></h3>
+<p>The transactional data ($TXF_DATA) logged utility stream attribute is 56 bytes
+in size and consist of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>6</td><td></td><td>Unknown (remnant data)</td></tr>
+<tr><td>6</td><td>8</td><td></td><td>Resource manager root file reference, which contains an NTFS file reference that refers to the MFT</td></tr>
+<tr><td>14</td><td>8</td><td></td><td>Unknown (USN index?)</td></tr>
+<tr><td>22</td><td>8</td><td></td><td>File identifier (TxID), which contains a TxF file identifier</td></tr>
+<tr><td>30</td><td>8</td><td></td><td>Data LSN, which contains a CLFS LSN of file data transaction records</td></tr>
+<tr><td>38</td><td>8</td><td></td><td>Metadata LSN, which contains a CLFS LSN of file system metadata transaction records</td></tr>
+<tr><td>46</td><td>8</td><td></td><td>Directory index LSN, which contains a CLFS LSN of directory index transaction records</td></tr>
+<tr><td>54</td><td>2</td><td></td><td>Unknown (Flags?)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that a single MFT entry can contain multiple Transactional data logged
+utility stream attributes.</p>
+</blockquote>
+<h2 id="windows-definitions"><a class="header" href="#windows-definitions">Windows definitions</a></h2>
+<h3 id="file-attribute-flags"><a class="header" href="#file-attribute-flags"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<p>The file attribute flags consist of the following values:</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>FILE_ATTRIBUTE_READONLY</td><td>Is read-only</td></tr>
+<tr><td>0x00000002</td><td>FILE_ATTRIBUTE_HIDDEN</td><td>Is hidden</td></tr>
+<tr><td>0x00000004</td><td>FILE_ATTRIBUTE_SYSTEM</td><td>Is a system file or directory</td></tr>
+<tr><td>0x00000008</td><td></td><td>Is a volume label, which is not used by NTFS</td></tr>
+<tr><td>0x00000010</td><td>FILE_ATTRIBUTE_DIRECTORY</td><td>Is a directory, which is not used by NTFS</td></tr>
+<tr><td>0x00000020</td><td>FILE_ATTRIBUTE_ARCHIVE</td><td>Should be archived</td></tr>
+<tr><td>0x00000040</td><td>FILE_ATTRIBUTE_DEVICE</td><td>Is a device, which is not used by NTFS</td></tr>
+<tr><td>0x00000080</td><td>FILE_ATTRIBUTE_NORMAL</td><td>Is normal file. Note that none of the other flags should be set</td></tr>
+<tr><td>0x00000100</td><td>FILE_ATTRIBUTE_TEMPORARY</td><td>Is temporary</td></tr>
+<tr><td>0x00000200</td><td>FILE_ATTRIBUTE_SPARSE_FILE</td><td>Is a sparse file</td></tr>
+<tr><td>0x00000400</td><td>FILE_ATTRIBUTE_REPARSE_POINT</td><td>Is a reparse point or symbolic link</td></tr>
+<tr><td>0x00000800</td><td>FILE_ATTRIBUTE_COMPRESSED</td><td>Is compressed</td></tr>
+<tr><td>0x00001000</td><td>FILE_ATTRIBUTE_OFFLINE</td><td>Is offline. The data of the file is stored on an offline storage.</td></tr>
+<tr><td>0x00002000</td><td>FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</td><td>Do not index content. The content of the file or directory should not be indexed by the indexing service.</td></tr>
+<tr><td>0x00004000</td><td>FILE_ATTRIBUTE_ENCRYPTED</td><td>Is encrypted</td></tr>
+<tr><td>0x00008000</td><td></td><td>Unknown (seen on Windows 95 FAT)</td></tr>
+<tr><td>0x00010000</td><td>FILE_ATTRIBUTE_VIRTUAL</td><td>Is virtual</td></tr>
+</table></div>
+<p>The following flags are mainly used in the file name attribute and sparsely in
+the standard information attribute. It could be that they have a different
+meaning in both types of attributes or that the standard information flags are
+not updated. For now the latter is assumed.</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x10000000</td><td></td><td>Unknown (Is directory or has $I30 index? Note that an $Extend directory without this flag has been observed)</td></tr>
+<tr><td>0x20000000</td><td></td><td>Is index view</td></tr>
+</table></div>
+<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios"><a name="corruption_scenarios"></a>Corruption scenarios</a></h2>
+<h3 id="data-steam-with-inconsistent-data-flags"><a class="header" href="#data-steam-with-inconsistent-data-flags">Data steam with inconsistent data flags</a></h3>
+<p>An MFT entry contains an $ATTRIBUTE_LIST attribute that contains multiple $DATA
+attributes. The $DATA attributes define a LZNT1 compressed data stream though
+only the first $DATA attribute has the compressed data flag set.</p>
+<blockquote>
+<p>Note that it is unclear if this is a corruption scenario or not.</p>
+</blockquote>
+<pre><code>MFT entry: 220 information:
+    Is allocated                   : true
+    File reference                 : 220-59
+    Base record file reference     : Not set (0)
+    Journal sequence number        : 51876429013
+    Number of attributes           : 5
+
+Attribute: 1
+    Type                           : $STANDARD_INFORMATION (0x00000010)
+    Creation time                  : Jun 05, 2019 06:56:26.032730300 UTC
+    Modification time              : Oct 05, 2019 06:56:04.150940700 UTC
+    Access time                    : Oct 05, 2019 06:56:04.150940700 UTC
+    Entry modification time        : Oct 05, 2019 06:56:04.150940700 UTC
+    Owner identifier               : 0
+    Security descriptor identifier : 5862
+    Update sequence number         : 11553149976
+    File attribute flags           : 0x00000820
+       Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+       Is compressed (FILE_ATTRIBUTE_COMPRESSED)
+
+Attribute: 2
+    Type                           : $ATTRIBUTE_LIST (0x00000020)
+
+Attribute: 3
+    Type                           : $FILE_NAME (0x00000030)
+    Parent file reference          : 33996-57
+    Creation time                  : Jun 05, 2019 06:56:26.032730300 UTC
+    Modification time              : Oct 05, 2019 06:56:03.510061800 UTC
+    Access time                    : Oct 05, 2019 06:56:03.510061800 UTC
+    Entry modification time        : Oct 05, 2019 06:56:03.510061800 UTC
+    File attribute flags           : 0x00000020
+       Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+    Namespace                      : POSIX (0)
+    Name                           : setupapi.dev.20191005_085603.log
+
+Attribute: 4
+    Type                           : $DATA (0x00000080)
+    Data VCN range                 : 513 - 1103
+    Data flags                     : 0x0000
+
+Attribute: 5
+    Type                           : $DATA (0x00000080)
+    Data VCN range                 : 0 - 512
+    Data size                      : 4487594 bytes
+    Data flags                     : 0x0001
+</code></pre>
+<h3 id="directory-entry-with-outdated-file-reference"><a class="header" href="#directory-entry-with-outdated-file-reference">Directory entry with outdated file reference</a></h3>
+<p>The directory entry: \ProgramData\McAfee\Common Framework\Task\5.ini</p>
+<pre><code>File entry:
+    Path                           : \ProgramData\McAfee\Common Framework\Task\5.ini
+    File reference                 : 51106-400
+    Name                           : 5.ini
+    Parent file reference          : 65804-10
+    Size                           : 723
+    Creation time                  : Sep 16, 2011 20:47:54.561041200 UTC
+    Modification time              : Apr 07, 2012 21:07:02.684060000 UTC
+    Access time                    : Apr 07, 2012 21:07:02.652810200 UTC
+    Entry modification time        : Apr 07, 2012 21:07:02.684060000 UTC
+    File attribute flags           : 0x00002020
+       Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+       Content should not be indexed (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
+</code></pre>
+<p>The corresponding MFT entry:</p>
+<pre><code>MFT entry: 51106 information:
+    Is allocated                   : true
+    File reference                 : 51106-496
+    Base record file reference     : Not set (0)
+    Journal sequence number        : 0
+    Number of attributes           : 3
+
+Attribute: 1
+    Type                           : $STANDARD_INFORMATION (0x00000010)
+    Creation time                  : Sep 16, 2011 20:47:54.561041200 UTC
+    Modification time              : Apr 07, 2012 21:07:02.684060000 UTC
+    Access time                    : Apr 07, 2012 21:07:02.652810200 UTC
+    Entry modification time        : Apr 07, 2012 21:07:02.684060000 UTC
+    Owner identifier               : 0
+    Security descriptor identifier : 1368
+    Update sequence number         : 1947271600
+    File attribute flags           : 0x00002020
+       Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+       Content should not be indexed (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
+
+Attribute: 2
+    Type                           : $FILE_NAME (0x00000030)
+    Parent file reference          : 65804-10
+    Creation time                  : Sep 16, 2011 20:47:54.561041200 UTC
+    Modification time              : Apr 07, 2012 21:07:02.652810200 UTC
+    Access time                    : Apr 07, 2012 21:07:02.652810200 UTC
+    Entry modification time        : Apr 07, 2012 21:07:02.652810200 UTC
+    File attribute flags           : 0x00002020
+       Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+       Content should not be indexed (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
+    Namespace                      : DOS and Windows (3)
+    Name                           : 1.ini
+
+Attribute: 3
+    Type                           : $DATA (0x00000080)
+    Data size                      : 723 bytes
+    Data flags                     : 0x0000
+</code></pre>
+<p>TODO: determine if $LogFile could be used to recover from this corruption scenario</p>
+<h3 id="lznt1-compressed-block-with-data-size-of-0"><a class="header" href="#lznt1-compressed-block-with-data-size-of-0">LZNT1 compressed block with data size of 0</a></h3>
+<p>Not sure if this is a corruption scenario or a data format edge case.</p>
+<p>A compression unit (index 30) consisting of the following data runs:</p>
+<pre><code>reading data run: 60.
+data run:
+00000000: 11 01 01                                           ...
+
+value sizes                               : 1, 1
+number of cluster blocks                  : 1 (size: 4096)
+cluster block number                      : 687143 (1) (offset: 0xa7c27000)
+
+reading data run: 61.
+data run:
+00000000: 01 0f                                              ..
+
+value sizes                               : 1, 0
+number of cluster blocks                  : 15 (size: 61440)
+cluster block number                      : 0 (0) (offset: 0x00000000)
+        Is sparse
+</code></pre>
+<p>Contains the following data:</p>
+<pre><code>a7c27000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+...
+a7c27ff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+</code></pre>
+<p>This relates to an empty LZNT1 compressed block.</p>
+<pre><code>compressed data offset                    : 0 (0x00000000)
+compression chunk header                  : 0x0000
+compressed chunk size                     : 1
+signature value                           : 0
+is compressed flag                        : 0
+</code></pre>
+<p>It was observed in 2 differnt NTFS implementations that the entire block is
+filled with 0-byte values.</p>
+<p>TODO: verify behavior of Windows NTFS implementation.</p>
+<h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
+<p>Not sure if this is a corruption scenario or a data format edge case.</p>
+<p>A compression unit (index 0) consisting of the following data runs:</p>
+<pre><code>reading data run: 0.
+data run:
+00000000: 31 08 48 d8 01                                     1.H..
+
+value sizes                               : 1, 3
+number of cluster blocks                  : 8 (size: 32768)
+cluster block number                      : 120904 (120904) (offset: 0x1d848000)
+
+reading data run: 1.
+data run:
+00000000: 01 08                                              ..
+
+value sizes                               : 1, 0
+number of cluster blocks                  : 8 (size: 32768)
+cluster block number                      : 0 (0) (offset: 0x00000000)
+        Is sparse
+</code></pre>
+<p>Contains the following data:</p>
+<pre><code>1d848000  bd b7 50 44 46 50 00 01  00 01 00 40 e0 00 07 0b  |..PDFP.....@....|
+...
+1d84c000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+1d84fff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+</code></pre>
+<p>This relates to a LZNT1 compressed block that appears to be truncated at offset
+16384 (0x00004000).</p>
+<pre><code>compressed data offset                    : 16384 (0x00004000)
+compression flag byte                     : 0x00
+</code></pre>
+<p>Different behavior was observed in 2 differnt NTFS implementations:</p>
+<ul>
+<li>one implementation fills the compressed block with the uncompressed data it could read and the rest with with 0-byte values</li>
+<li>another implementation seems to provide the data that was already in its buffer</li>
+</ul>
+<p>TODO: verify behavior of Windows NTFS implementation.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/a82e9105-2405-4e37-b2c3-28c773902d85">NTFS Attribute Types</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants">File Attribute Constants</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c8e77b37-3909-4fe6-a4ea-2b9d423b1ee4">Reparse Tags</a>, by Microsoft</li>
+<li><a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a>, by Richard Russon</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-list-entry">ATTRIBUTE_LIST_ENTRY structure</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-record-header">ATTRIBUTE_RECORD_HEADER structure</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer">REPARSE_DATA_BUFFER structure (ntifs.h)</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer_ex">REPARSE_DATA_BUFFER_EX structure (ntifs.h)</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-usn_record_v2">USN_RECORD_V2</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8">Zone.Identifier Stream Name</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">the Internet Explorer URL security zone</a>, by Microsoft</li>
+<li><a href="https://ultradefrag.net/doc/man/ntfs/ntfs_layout.h.html">ntfs_layout.h</a>, by Anton Altaparmakov</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ext.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="assorted.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ext.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="assorted.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
