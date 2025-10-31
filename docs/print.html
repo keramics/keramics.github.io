@@ -4866,10 +4866,533 @@ with an encrypted file.</p>
 <ul>
 <li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux kernel documentation</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
+<p>The Extensible File Allocation Table (exFAT) file system format is a successor
+of the <a href="fat.html">File Allocation Table (FAT)</a> file system format.</p>
+<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
+<p>An exFAT file system consists of:</p>
+<ul>
+<li>One or more reserved sectors
+<ul>
+<li>a boot record (or boot sector)</li>
+</ul>
+</li>
+<li>One or more cluster block allocation tables</li>
+<li>File and directory data</li>
+</ul>
+<h3 id="characteristics-10"><a class="header" href="#characteristics-10">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<tr><td>Date and time values</td><td>FAT date and time</td></tr>
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+</table></div>
+<h3 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h3>
+<p>The boot record is stored in the first sector of the volume.</p>
+<p>The boot record is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td>"\xeb\x76\x90"</td><td>Boot entry point (JMP +120, NOP)</td></tr>
+<tr><td>3</td><td>8</td><td>"EXFAT\x20\x20\x20"</td><td>File system signature (or OEM name)</td></tr>
+<tr><td>11</td><td>53</td><td>0</td><td>Unknown (reserved), which must be 0.</td></tr>
+<tr><td>64</td><td>8</td><td></td><td>Partition offset</td></tr>
+<tr><td>72</td><td>8</td><td></td><td>Total number of sectors</td></tr>
+<tr><td>80</td><td>4</td><td></td><td>Cluster block allocation table start sector</td></tr>
+<tr><td>84</td><td>4</td><td></td><td>Cluster block allocation table size in number of sectors, which must be non 0</td></tr>
+<tr><td>88</td><td>4</td><td></td><td>Data cluster start sector</td></tr>
+<tr><td>92</td><td>4</td><td></td><td>Total number of data clusters</td></tr>
+<tr><td>96</td><td>4</td><td></td><td>Root directory start cluster</td></tr>
+<tr><td>100</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>104</td><td>1</td><td></td><td>Format revision minor number</td></tr>
+<tr><td>105</td><td>1</td><td>1</td><td>Format revision major number</td></tr>
+<tr><td>106</td><td>2</td><td></td><td>Volume flags</td></tr>
+<tr><td>108</td><td>1</td><td></td><td>Bytes per sector, which is stored as <code>2^n</code>, for example 9 is <code>2^9 = 512</code>. The bytes per sector value must be 512, 1024, 2048 or 4096.</td></tr>
+<tr><td>109</td><td>1</td><td></td><td>Sectors per cluster block, which is stored as <code>2^n</code>, for example 3 is <code>2^3 = 8</code>. The sectors per cluster block must be 1 upto 32M (<code>2^25</code>).</td></tr>
+<tr><td>110</td><td>1</td><td></td><td>Number of cluster block allocation tables</td></tr>
+<tr><td>111</td><td>1</td><td></td><td>Drive number</td></tr>
+<tr><td>112</td><td>1</td><td></td><td>Unknown (percent in use), which contains the percentage of allocated cluster blocks in the cluster heap of 0xff if not available</td></tr>
+<tr><td>113</td><td>7</td><td></td><td>Unknown (reserved)</td></tr>
+<tr><td>120</td><td>390</td><td></td><td>Used for boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>Sector signature</td></tr>
+</table></div>
+<h3 id="volume-flags"><a class="header" href="#volume-flags">Volume flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td>ActiveFat</td><td>Active FAT, 0 for the first FAT, 1 for the second FAT</td></tr>
+<tr><td>0x0002</td><td>VolumeDirty</td><td>Is dirty</td></tr>
+<tr><td>0x0004</td><td>MediaFailure</td><td>Has media failures</td></tr>
+<tr><td>0x0008</td><td>ClearToZero</td><td>Must be cleared</td></tr>
+<tr><td>0xfff0</td><td></td><td>Unknown (reserved)</td></tr>
+</table></div>
+<h2 id="cluster-block-allocation-table"><a class="header" href="#cluster-block-allocation-table">Cluster block allocation table</a></h2>
+<p>A cluster block allocation table consists of:</p>
+<ul>
+<li>One ore more cluster block allocation table entries</li>
+</ul>
+<h3 id="cluster-block-allocation-table-entry"><a class="header" href="#cluster-block-allocation-table-entry">Cluster block allocation table entry</a></h3>
+<p>A cluster block allocation table entry is 32 bits in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>32 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x00000000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x00000001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x00000002 - 0xffffffef</td><td>Used cluster</td></tr>
+<tr><td>0xfffffff0 - 0xfffffff6</td><td>Reserved</td></tr>
+<tr><td>0xfffffff7</td><td>Bad cluster</td></tr>
+<tr><td>0xfffffff8 - 0xffffffff</td><td>End of cluster chain</td></tr>
+</table></div>
+<h2 id="directory"><a class="header" href="#directory">Directory</a></h2>
+<p>A directory consists of:</p>
+<ul>
+<li>Zero or more directory entries</li>
+<li>Terminator directory entry</li>
+</ul>
+<h3 id="directory-entry"><a class="header" href="#directory-entry">Directory entry</a></h3>
+<p>A directory entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td></td><td>Entry type</td></tr>
+<tr><td>1</td><td>19</td><td></td><td>Entry data</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data stream size</td></tr>
+</table></div>
+<h4 id="directory-entry-type"><a class="header" href="#directory-entry-type">Directory entry type</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>5 bits</td><td></td><td>Type type code</td></tr>
+<tr><td>0.5</td><td>1 bit</td><td></td><td>Is non-critical (also referred to as type importance)</td></tr>
+<tr><td>0.6</td><td>1 bit</td><td></td><td>Is secondary entry (also referred to as type category)</td></tr>
+<tr><td>0.7</td><td>1 bit</td><td></td><td>In use</td></tr>
+</table></div>  
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x00</td><td>Terminator directory entry</td></tr>
+<tr><td>0x01 - 0x7f</td><td>Unused</td></tr>
+<tr><td>0x80</td><td>Invalid</td></tr>
+<tr><td>0x81 - 0xff</td><td>Used</td></tr>
+</table></div>
+<h5 id="directory-entry-type-codes"><a class="header" href="#directory-entry-type-codes">Directory entry type codes</a></h5>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td colspan="4"> <em>Critical and primary</em></tr>
+<tr><td>0x81</td><td>Allocation bitmap</td></tr>
+<tr><td>0x82</td><td>Case folding mappings</td></tr>
+<tr><td>0x83</td><td>Volume label</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td>0x85</td><td>File entry</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td colspan="4"> <em>Non-critical and primary</em></tr>
+<tr><td>0xa0</td><td>Volume identifier</td></tr>
+<tr><td>0xa1</td><td>TexFAT padding</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td colspan="4"> <em>Critical and secondary</em></tr>
+<tr><td>0xc0</td><td>Data stream</td></tr>
+<tr><td>0xc1</td><td>File entry name</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td colspan="4"> <em>Non-critical and secondary</em></tr>
+<tr><td>0xe0</td><td>Vendor extension</td></tr>
+<tr><td>0xe1</td><td>Vendor allocation</td></tr>
+</table></div>
+<h5 id="allocation-bitmap-directory-entry"><a class="header" href="#allocation-bitmap-directory-entry">Allocation bitmap directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0x81</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Bitmap flags</td></tr>
+<tr><td>2</td><td>18</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data stream size</td></tr>
+</table></div>
+<h5 id="case-folding-mappings-directory-entry"><a class="header" href="#case-folding-mappings-directory-entry">Case folding mappings directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0x82</td><td>Entry type</td></tr>
+<tr><td>1</td><td>3</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>8</td><td>12</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data stream size</td></tr>
+</table></div>
+<h5 id="volume-label-directory-entry"><a class="header" href="#volume-label-directory-entry">Volume label directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0x83</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Name number of characters</td></tr>
+<tr><td>2</td><td>22</td><td></td><td>Name string, which contains an UCS-2 little-endian string without an end-of-string character</td></tr>
+<tr><td>24</td><td>8</td><td>0</td><td>Unknown (Reserved)</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the volume label directory entry should only be stored in the first
+and/or second directory entry of the root directory.</p>
+</blockquote>
+<h5 id="file-entry-directory-entry"><a class="header" href="#file-entry-directory-entry">File entry directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0x85</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Unknown (Secondary count)</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Unknown (Set checksum)</td></tr>
+<tr><td>4</td><td>2</td><td></td><td><a href="exfat.html#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td>6</td><td>2</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Creation time</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Creation date</td></tr>
+<tr><td>12</td><td>2</td><td></td><td>Last modification time</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Last modification date</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Last access time</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
+<tr><td>20</td><td>1</td><td></td><td>Creation time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+<tr><td>21</td><td>1</td><td></td><td>Last modification time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+<tr><td>22</td><td>1</td><td></td><td>Creation time UTC offset, which contains number of 15 minute intervals of the time relative to UTC, where the MSB indicates the offset is valid</td></tr>
+<tr><td>23</td><td>1</td><td></td><td>Last modification time UTC offset, which contains number of 15 minute intervals of the time relative to UTC, where the MSB indicates the offset is valid</td></tr>
+<tr><td>24</td><td>1</td><td></td><td>Last access time UTC offset, which contains number of 15 minute intervals of the time relative to UTC, where the MSB indicates the offset is valid</td></tr>
+<tr><td>25</td><td>7</td><td>0</td><td>Unknown (Reserved)</td></tr>
+</table></div>
+<h5 id="volume-identifier-directory-entry"><a class="header" href="#volume-identifier-directory-entry">Volume identifier directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0xa0</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Unknown (Secondary count)</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Unknown (Set checksum)</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Unknown (Flags)</td></tr>
+<tr><td>6</td><td>16</td><td></td><td>Volume identifier, which contains a GUID</td></tr>
+<tr><td>22</td><td>10</td><td>0</td><td>Unknown (Reserved)</td></tr>
+</table></div>
+<h5 id="data-stream-directory-entry"><a class="header" href="#data-stream-directory-entry">Data stream directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0xc0</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Unknown (Flags)</td></tr>
+<tr><td>2</td><td>1</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>3</td><td>1</td><td></td><td>Name number of characters</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Name hash</td></tr>
+<tr><td>6</td><td>2</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Data stream valid data size</td></tr>
+<tr><td>16</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data stream size</td></tr>
+</table></div>
+<h5 id="file-entry-name-directory-entry"><a class="header" href="#file-entry-name-directory-entry">File entry name directory entry</a></h5>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td>0xc1</td><td>Entry type</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Unknown (Flags)</td></tr>
+<tr><td>2</td><td>30</td><td></td><td>Name string, which contains an UCS-2 little-endian string without an end-of-string character</td></tr>
+</table></div>
+<h3 id="file-attribute-flags"><a class="header" href="#file-attribute-flags"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x0001</td><td>Read-only</td></tr>
+<tr><td>0x0002</td><td>Hidden</td></tr>
+<tr><td>0x0004</td><td>System</td></tr>
+<tr><td>0x0008</td><td>Is volume label</td></tr>
+<tr><td>0x0010</td><td>Is directory</td></tr>
+<tr><td>0x0020</td><td>Archive</td></tr>
+<tr><td>0x0040</td><td>Is device</td></tr>
+<tr><td>0x0080</td><td>Unused (reserved)</td></tr>
+</table></div>
+<h2 id="references-5"><a class="header" href="#references-5">References</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-gb/windows/win32/fileio/exfat-specification">exFAT file system specification</a>, by Microsoft</li>
+<li><a href="https://en.wikipedia.org/wiki/ExFAT">exFAT</a>, by Wikipedia</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="file-allocation-table-fat-file-system-format"><a class="header" href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT) file system format</a></h1>
+<p>The File Allocation Table (FAT) is widely used a file sytem.</p>
+<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<p>The File Allocation Table (FAT) is widely used a file sytem. There are multiple
+known variants or derivatives of FAT, such as:</p>
+<ul>
+<li>(original) 8-bit FAT</li>
+<li>FAT-12</li>
+<li>FAT-16</li>
+<li>FAT-32</li>
+<li><a href="exfat.html">exFAT</a></li>
+</ul>
+<p>A FAT file system consists of:</p>
+<ul>
+<li>One or more reserved sectors
+<ul>
+<li>a boot record (or boot sector)</li>
+<li>file system informartion for FAT-32</li>
+</ul>
+</li>
+<li>One or more cluster block allocation tables</li>
+<li>Root directory data for FAT-12 and FAT-16</li>
+<li>File and directory data</li>
+</ul>
+<blockquote>
+<p>Note that FAT-32 stores the root directory as part of the file and directory
+data.</p>
+</blockquote>
+<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<tr><td>Date and time values</td><td>FAT date and time</td></tr>
+<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string.</td></tr>
+</table></div>
+<h3 id="terminology-4"><a class="header" href="#terminology-4">Terminology</a></h3>
+<div class="table-wrapper"><table><thead><th>Term</th><th>Description</th></thead><tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table.</td></tr>
+</table></div>
+<h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
+<p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters
+in the data area:</p>
+<pre><code>data area size = total number of sectors - ( number of reserved sectors s tables + size of root directory )
+</code></pre>
+<pre><code>number of clusters = round down ( data area size / sectors per cluster )
+</code></pre>
+<ul>
+<li>FAT-12 is used if the number of clusters is less than 4085</li>
+<li>FAT-16 is used if the number of clusters is less than 65525</li>
+<li>FAT-32 is used otherwise</li>
+</ul>
+<h2 id="boot-record-1"><a class="header" href="#boot-record-1">Boot record</a></h2>
+<p>The boot record is stored in the first sector of the volume.</p>
+<h3 id="fat-12-and-fat-16-boot-record"><a class="header" href="#fat-12-and-fat-16-boot-record">FAT-12 and FAT-16 boot record</a></h3>
+<p>The FAT-12 and FAT-16 boot record is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td>"\xeb\x3c\x90"</td><td>Boot entry point (JMP +62, NOP)</td></tr>
+<tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>17</td><td>2</td><td></td><td>Number of root directory entries</td></tr>
+<tr><td>19</td><td>2</td><td></td><td>Total number of sectors (16-bit)</td></tr>
+<tr><td>21</td><td>1</td><td></td><td><a href="fat.html#media_descriptors">Media descriptor</a></td></tr>
+<tr><td>22</td><td>2</td><td></td><td>Cluster block allocation table size (16-bit) in number of sectors</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+<tr><td>36</td><td>1</td><td></td><td>Drive number</td></tr>
+<tr><td>37</td><td>1</td><td>0</td><td>Unknown (reserved for Windows NT)</td></tr>
+<tr><td>38</td><td>1</td><td></td><td>Extended boot signature</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature == 0x29</em></tr>
+<tr><td>39</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>43</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
+<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature != 0x29</em></tr>
+<tr><td>39</td><td>23</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>62</td><td>448</td><td></td><td>Used for boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>Sector signature</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the sector signature must be set at offset 512 but can, in
+addition, it can be set in the last 2 bytes of the sector.</p>
+</blockquote>
+<blockquote>
+<p>Note that the volume serial number can be derived from the system current
+date and time.</p>
+</blockquote>
+<blockquote>
+<p>Note that the file system hint value is purely informational and not enforced
+by the format.</p>
+</blockquote>
+<h3 id="fat-32-boot-record"><a class="header" href="#fat-32-boot-record">FAT-32 boot record</a></h3>
+<p>The FAT-32 boot record is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td>"\xeb\x58\x90"</td><td>Boot entry point (JMP +90, NOP)</td></tr>
+<tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which must be 0 for FAT-32</td></tr>
+<tr><td>19</td><td>2</td><td>0</td><td>Total number of sectors (16-bit), which must be 0 for FAT-32</td></tr>
+<tr><td>21</td><td>1</td><td></td><td><a href="fat.html#media_descriptors">Media descriptor</a></td></tr>
+<tr><td>22</td><td>2</td><td>0</td><td>Cluster block allocation table size (16-bit) in number of sectors, which must be 0 for FAT-32</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Cluster block allocation table size (32-bit) in number of sectors, which must be non 0 for FAT-32</td></tr>
+<tr><td>40</td><td>2</td><td></td><td>Extended flags</td></tr>
+<tr><td>42</td><td>1</td><td>0</td><td>Format revision minor number</td></tr>
+<tr><td>43</td><td>1</td><td>0</td><td>Format revision major number</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Root directory start cluster</td></tr>
+<tr><td>48</td><td>2</td><td></td><td>File system information (FSINFO) sector number</td></tr>
+<tr><td>50</td><td>2</td><td></td><td>Boot record sector number</td></tr>
+<tr><td>52</td><td>12</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>64</td><td>1</td><td></td><td>Drive number</td></tr>
+<tr><td>65</td><td>1</td><td>0</td><td>Unknown (reserved for Windows NT)</td></tr>
+<tr><td>66</td><td>1</td><td></td><td>Extended boot signature</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature == 0x29</em></tr>
+<tr><td>67</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>71</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
+<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature != 0x29</em></tr>
+<tr><td>67</td><td>23</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>90</td><td>420</td><td></td><td>Used for boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>Sector signature</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the sector signature must be set at offset 512 but can, in
+addition, it can be set in the last 2 bytes of the sector.</p>
+</blockquote>
+<blockquote>
+<p>Note that the volume serial number can be derived from the system current
+date and time.</p>
+</blockquote>
+<blockquote>
+<p>Note that the file system hint value is purely informational and not enforced
+by the format.</p>
+</blockquote>
+<h3 id="oem-names"><a class="header" href="#oem-names">OEM names</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>"MSWIN4.1"</td><td></td></tr>
+<tr><td>"MSDOS 5.0"</td><td></td></tr>
+</table></div>
+<h3 id="media-descriptors"><a class="header" href="#media-descriptors"><a name="media_descriptors"></a>Media descriptors</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0xf0</td><td></td><td>removable media</td></tr>
+<tr><td>0xf8</td><td></td><td>fixed (non-removable) media</td></tr>
+<tr><td>0xf9</td><td></td><td></td></tr>
+<tr><td>0xfa</td><td></td><td></td></tr>
+<tr><td>0xfb</td><td></td><td></td></tr>
+<tr><td>0xfc</td><td></td><td></td></tr>
+<tr><td>0xfd</td><td></td><td></td></tr>
+<tr><td>0xfe</td><td></td><td></td></tr>
+<tr><td>0xff</td><td></td><td></td></tr>
+</table></div>
+<h2 id="cluster-block-allocation-table-1"><a class="header" href="#cluster-block-allocation-table-1">Cluster block allocation table</a></h2>
+<p>A cluster block allocation table consists of:</p>
+<ul>
+<li>One ore more cluster block allocation table entries</li>
+</ul>
+<h3 id="fat-12-cluster-block-allocation-table-entry"><a class="header" href="#fat-12-cluster-block-allocation-table-entry">FAT 12 cluster block allocation table entry</a></h3>
+<p>A FAT 12 cluster block allocation table entry is 12 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>12 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x002 - 0xfef</td><td>Used cluster</td></tr>
+<tr><td>0xff0 - 0xff6</td><td>Reserved</td></tr>
+<tr><td>0xff7</td><td>Bad cluster</td></tr>
+<tr><td>0xff8 - 0xfff</td><td>End of cluster chain</td></tr>
+</table></div>
+<h3 id="fat-16-cluster-block-allocation-table-entry"><a class="header" href="#fat-16-cluster-block-allocation-table-entry">FAT 16 cluster block allocation table entry</a></h3>
+<p>A FAT 16 cluster block allocation table entry is 16 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x0000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x0001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x0002 - 0xffef</td><td>Used cluster</td></tr>
+<tr><td>0xfff0 - 0xfff6</td><td>Reserved</td></tr>
+<tr><td>0xfff7</td><td>Bad cluster</td></tr>
+<tr><td>0xfff8 - 0xffff</td><td>End of cluster chain</td></tr>
+</table></div>
+<h3 id="fat-32-cluster-block-allocation-table-entry"><a class="header" href="#fat-32-cluster-block-allocation-table-entry">FAT 32 cluster block allocation table entry</a></h3>
+<p>A FAT 32 cluster block allocation table entry is 32 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>32 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<blockquote>
+<p>Note that only the lower 28-bits are used</p>
+</blockquote>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x00000000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x00000001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x00000002 - 0x0fffffef</td><td>Used cluster</td></tr>
+<tr><td>0x0ffffff0 - 0x0ffffff6</td><td>Reserved</td></tr>
+<tr><td>0x0ffffff7</td><td>Bad cluster</td></tr>
+<tr><td>0x0ffffff8 - 0x0fffffff</td><td>End of cluster chain</td></tr>
+<tr><td>0x10000000 - 0xffffffff</td><td>Unknown</td></tr>
+</table></div>
+<h2 id="directory-1"><a class="header" href="#directory-1">Directory</a></h2>
+<p>A directory consists of:</p>
+<ul>
+<li>self (".") directory entry (not used in root directory)</li>
+<li>parent ("..") directory entry (not used in root directory)</li>
+<li>Zero or more directory entries</li>
+<li>Terminator directory entry</li>
+</ul>
+<h3 id="directory-entry-1"><a class="header" href="#directory-entry-1">Directory entry</a></h3>
+<h3 id="determining-the-root-directory-location"><a class="header" href="#determining-the-root-directory-location">Determining the root directory location</a></h3>
+<pre><code>first allocation table offset = number of reserved sectors * bytes per sector
+</code></pre>
+<h4 id="fat-12-and-fat-16-root-directory"><a class="header" href="#fat-12-and-fat-16-root-directory">FAT-12 and FAT-16 root directory</a></h4>
+<pre><code>root directory start offset = first allocation table offset + ( number of allocation tables * allocation table size * bytes per sector )
+</code></pre>
+<pre><code>first cluster offset = directory start sector + ( number of root directory entries * 32 )
+</code></pre>
+<h4 id="fat-32-root-directory"><a class="header" href="#fat-32-root-directory">FAT-32 root directory</a></h4>
+<pre><code>first cluster offset = first allocation table sector + ( number of allocation tables * allocation table size * bytes per sector )
+</code></pre>
+<pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
+</code></pre>
+<h4 id="fat-12-fat-16-and-fat-32-directory-entry"><a class="header" href="#fat-12-fat-16-and-fat-32-directory-entry">FAT-12, FAT-16 and FAT-32 directory entry</a></h4>
+<p>A FAT-12, FAT-16 and FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Name, which is padded with spaces and the first character can have a special meaning</td></tr>
+<tr><td>8</td><td>3</td><td></td><td>Extension, which is padded with spaces</td></tr>
+<tr><td>11</td><td>1</td><td></td><td><a href="fat.html#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td>12</td><td>1</td><td></td><td><a href="fat.html#short_file_name_flags">Flags</a></td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Creation time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Creation time</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Creation date</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
+<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute), which is not used by FAT-12</td></tr>
+<tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
+</table></div>
+<h3 id="short-or-83-file-name"><a class="header" href="#short-or-83-file-name">Short (or 8.3) file name</a></h3>
+<p>A FAT short (or 8.3) file name is stored in an OEM character set (codepage). The
+<a href="fat.html#short_name_first_character">first character</a> can have a special meaning.</p>
+<p>Valid FAT short file name characters are:</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>'A-Z'</td><td>Upper case character</td></tr>
+<tr><td>'0-9'</td><td>Numeric character</td></tr>
+<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored.</td></tr>
+<tr><td>'.'</td><td>Dot, with the exception of "." and  "..". Trailing dot characters are ignored.</td></tr>
+<tr><td>'!'</td><td></td></tr>
+<tr><td>'#'</td><td></td></tr>
+<tr><td>'$'</td><td></td></tr>
+<tr><td>'%'</td><td></td></tr>
+<tr><td>'&amp;'</td><td></td></tr>
+<tr><td>'''</td><td></td></tr>
+<tr><td>'('</td><td></td></tr>
+<tr><td>')'</td><td></td></tr>
+<tr><td>'-'</td><td></td></tr>
+<tr><td>'@'</td><td></td></tr>
+<tr><td>'^'</td><td></td></tr>
+<tr><td>'_'</td><td></td></tr>
+<tr><td>'`'</td><td></td></tr>
+<tr><td>'{'</td><td></td></tr>
+<tr><td>'}'</td><td></td></tr>
+<tr><td>'~'</td><td></td></tr>
+<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent.</td></tr>
+</table></div>
+<h4 id="first-character"><a class="header" href="#first-character"><a name="short_name_first_character"></a>First character</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x00</td><td>Last (or terminator) directory entry</td></tr>
+<tr><td>0x01 - 0x13</td><td>VFAT long file name directory entry</td></tr>
+<tr><td>0x05</td><td>Directory entry pending deallocation (deprecated since DOS 3.0) or substitution of a 0xe5 extended ASCII character value</td></tr>
+<tr><td>0x41 - 0x54</td><td>Last VFAT long file name directory entry</td></tr>
+<tr><td>0xe5</td><td>Unallocated directory entry</td></tr>
+</table></div>
+<h3 id="file-attribute-flags-1"><a class="header" href="#file-attribute-flags-1"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x01</td><td>Read-only</td></tr>
+<tr><td>0x02</td><td>Hidden</td></tr>
+<tr><td>0x04</td><td>System</td></tr>
+<tr><td>0x08</td><td>Is volume label</td></tr>
+<tr><td>0x10</td><td>Is directory</td></tr>
+<tr><td>0x20</td><td>Archive</td></tr>
+<tr><td>0x40</td><td>Is device</td></tr>
+<tr><td>0x80</td><td>Unused (reserved)</td></tr>
+</table></div>
+<h3 id="flags"><a class="header" href="#flags"><a name="short_file_name_flags"></a>Flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x01</td><td>Data is EFS encrypted</td></tr>
+<tr><td>0x02</td><td>Data contains large EFS header</td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>0x08</td><td>Name should be represented in lower case</td></tr>
+<tr><td>0x10</td><td>Extension should be represented in lower case</td></tr>
+</table></div>
+<h3 id="vfat-long-file-name-entry"><a class="header" href="#vfat-long-file-name-entry">VFAT long file name entry</a></h3>
+<p>VFAT long file names entries are stored in directory entries. Multiple VFAT
+long file name entries can be used to store a single long file name, where
+the highest (last) sequence number is stored first. A maximum of 20 VFAT long
+file name entries can be used to store a long file name of 255 UCS-2 characters.</p>
+<p>VFAT long file names are stored using UCS-2 little-endian, which allows for
+unpaired Unicode surrogates such as "U+d800" and "U+dc00"</p>
+<p>VFAT long file name entries are stored before the directory entry containing
+the short file name and additional file entry information.</p>
+<p>A VFAT long file name entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td></td><td>Sequence number</td></tr>
+<tr><td>1</td><td>10</td><td></td><td>First name segment string, which contains 5 UCS-2 string characters</td></tr>
+<tr><td>11</td><td>1</td><td>0x0f</td><td>Unknown (attributes)</td></tr>
+<tr><td>12</td><td>1</td><td>0x00</td><td>Unknown (type)</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Checksum of the short (8.3) file name</td></tr>
+<tr><td>14</td><td>12</td><td></td><td>Second name segment string, which contains 6 UCS-2 string characters</td></tr>
+<tr><td>26</td><td>2</td><td>0</td><td>Unknown (first cluster)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Third name segment string, which contains 2 UCS-2 string characters</td></tr>
+</table></div>
+<blockquote>
+<p>Note that unused characters in the VFAT long file segment strings after the
+end-of-string character (0x0000) are padded with 0xffff.</p>
+</blockquote>
+<h4 id="vfat-long-file-name-sequence-number"><a class="header" href="#vfat-long-file-name-sequence-number">VFAT long file name sequence number</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>5 bits</td><td></td><td>Number</td></tr>
+<tr><td>0.5</td><td>1 bit</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>0.6</td><td>1 bit</td><td>0</td><td>Unknown (last logical, first physical LFN entry)</td></tr>
+<tr><td>0.7</td><td>1 bit</td><td>0</td><td>Unknown</td></tr>
+</table></div>
+<h2 id="references-6"><a class="header" href="#references-6">References</a></h2>
+<ul>
+<li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>, by Microsoft</li>
+<li><a href="https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system">Design of the FAT file system</a>, by Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/File_Allocation_Table">File Allocation Table</a>, by Wikipedia</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for
 Microsoft Windows versions that are based on Windows NT.</p>
-<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
+<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -4877,7 +5400,7 @@ Microsoft Windows versions that are based on Windows NT.</p>
 <li>Master File Table (MFT)</li>
 <li>Mirror Master File Table (MFT)</li>
 </ul>
-<h3 id="characteristics-10"><a class="header" href="#characteristics-10">Characteristics</a></h3>
+<h3 id="characteristics-12"><a class="header" href="#characteristics-12">Characteristics</a></h3>
 <div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
 <tr><td>Date and time values</td><td>FILETIME in UTC</td></tr>
 <tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
@@ -4899,7 +5422,7 @@ above.</p>
 <p>Note Windows does not necessarily uses the latest version, e.g. Windows 10
 (1809) has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
 </blockquote>
-<h3 id="terminology-4"><a class="header" href="#terminology-4">Terminology</a></h3>
+<h3 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h3>
 <h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
 <p>NTFS refers to it file system blocks as clusters. Note that these are not the
 same as the physical clusters of a harddisk. For clarity this document will
@@ -4974,11 +5497,11 @@ file) and contains:</p>
 <tr><td>11</td><td>2</td><td></td><td>Bytes per sector. Note that the following values are supported by mkntfs: 256, 512, 1024, 2048 and 4096</td></tr>
 <tr><td>13</td><td>1</td><td></td><td>Number of sectors per cluster block</td></tr>
 <tr><td>14</td><td>2</td><td>0</td><td>Unknown (Reserved Sectors), which is not used by NTFS and must be 0</td></tr>
-<tr><td>16</td><td>1</td><td>0</td><td>Number of File Allocation Tables (FATs), which is not used by NTFS and must be 0</td></tr>
+<tr><td>16</td><td>1</td><td>0</td><td>Number of cluster block allocation tables, which is not used by NTFS and must be 0</td></tr>
 <tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which is not not used by NTFS and must be 0</td></tr>
 <tr><td>19</td><td>2</td><td>0</td><td>Number of sectors (16-bit), which is not used by NTFS must be 0</td></tr>
 <tr><td>21</td><td>1</td><td></td><td><a href="ntfs.html#media_descriptor">Media descriptor</a></td></tr>
-<tr><td>22</td><td>2</td><td>0</td><td>Sectors Per File Allocation Table (FAT), which is not used by NTFS and must be 0</td></tr>
+<tr><td>22</td><td>2</td><td>0</td><td>Cluster block allocation table size (16-bit) in number of sectors, which is not used by NTFS and must be 0</td></tr>
 <tr><td colspan="4"> <em>DOS version 3.4 BIOS parameter block (BPB)</em></tr>
 <tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track, which is not used by NTFS</td></tr>
 <tr><td>26</td><td>2</td><td>0xff</td><td>Number of heads, which is not used by NTFS</td></tr>
@@ -5208,7 +5731,7 @@ consists of:</p>
 <tr><td>4</td><td>4</td><td></td><td>Attribute size (or record length), which includes the 8 bytes of the attribute type and size</td></tr>
 <tr><td>8</td><td>1</td><td></td><td>Non-resident flag (or form code), where RESIDENT_FORM (0) and NONRESIDENT_FORM (1)</td></tr>
 <tr><td>9</td><td>1</td><td></td><td>Name size (or name length), which contains the number of characters without the end-of-string character</td></tr>
-<tr><td>10</td><td>2</td><td></td><td>Name offset, which contains an offset relative from the start of the MFT entry</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Name offset, which contains an offset relative from the start of the MFT attribute</td></tr>
 <tr><td>12</td><td>2</td><td></td><td><a href="ntfs.html#mft_attribute_data_flags">Attribute data flags</a></td></tr>
 <tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
 </table></div>
@@ -5515,7 +6038,7 @@ about the volume. It is stored as a resident MFT attribute.</p>
 <tr><td>10</td><td>2</td><td></td><td><a href="ntfs.html#volume_flags">Volume flags</a></td></tr>
 </table></div>
 <p>The volume information attribute is used in the $Volume metadata file MFT entry.</p>
-<h4 id="volume-flags"><a class="header" href="#volume-flags"><a name="volume_flags"></a>Volume flags</a></h4>
+<h4 id="volume-flags-1"><a class="header" href="#volume-flags-1"><a name="volume_flags"></a>Volume flags</a></h4>
 <div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x0001</td><td>VOLUME_IS_DIRTY</td><td>Is dirty</td></tr>
 <tr><td>0x0002</td><td>VOLUME_RESIZE_LOG_FILE</td><td>Re-size journal ($LogFile)</td></tr>
 <tr><td>0x0004</td><td>VOLUME_UPGRADE_ON_MOUNT</td><td>Upgrade on next mount</td></tr>
@@ -6333,7 +6856,7 @@ in size and consist of:</p>
 utility stream attributes.</p>
 </blockquote>
 <h2 id="windows-definitions"><a class="header" href="#windows-definitions">Windows definitions</a></h2>
-<h3 id="file-attribute-flags"><a class="header" href="#file-attribute-flags"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<h3 id="file-attribute-flags-2"><a class="header" href="#file-attribute-flags-2"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
 <p>The file attribute flags consist of the following values:</p>
 <div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0x00000001</td><td>FILE_ATTRIBUTE_READONLY</td><td>Is read-only</td></tr>
 <tr><td>0x00000002</td><td>FILE_ATTRIBUTE_HIDDEN</td><td>Is hidden</td></tr>
@@ -6543,7 +7066,7 @@ compression flag byte                     : 0x00
 <li>another implementation seems to provide the data that was already in its buffer</li>
 </ul>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
-<h2 id="references-5"><a class="header" href="#references-5">References</a></h2>
+<h2 id="references-7"><a class="header" href="#references-7">References</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>, by Microsoft</li>
 <li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>, by Microsoft</li>
@@ -6567,7 +7090,7 @@ compression flag byte                     : 0x00
 <p>The property list (plist) formats are used to store various kinds of data, for
 example configuration data. The format is know to be used stand-alone as well
 as embedded in other data formats.</p>
-<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -6712,14 +7235,14 @@ consists of:</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data
 format, as defined in RFC1950, allows for multiple techniques but only the
 Deflate compression method, a variation of LZ77, is used.</p>
-<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
+<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
+<h3 id="characteristics-13"><a class="header" href="#characteristics-13">Characteristics</a></h3>
 <div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>big-endian</td></tr>
 </table></div>
 <h2 id="data-header"><a class="header" href="#data-header">Data header</a></h2>
@@ -6793,7 +7316,7 @@ block.</p>
 <tr><td>3</td><td></td><td>Reserved (not used)</td></tr>
 </table></div>
 <h4 id="uncompressed-block-data"><a class="header" href="#uncompressed-block-data">Uncompressed block data</a></h4>
-<p>The uncompressed block data is variable of size and consists of:</p>
+<p>The uncompressed block data is of variable size and consists of:</p>
 <div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.3</td><td>5 bits</td><td></td><td>Empty values (not used)</td></tr>
 <tr><td>1</td><td>2</td><td></td><td>Uncompressed data size</td></tr>
 <tr><td>3</td><td>2</td><td></td><td>Copy of uncompressed data size, which contains a 1s complement of the uncompressed data size</td></tr>
@@ -6801,7 +7324,7 @@ block.</p>
 </table></div>
 <p>The uncompressed data size can range between 0 and 65535 bytes.</p>
 <h4 id="huffman-compressed-block-data"><a class="header" href="#huffman-compressed-block-data">Huffman compressed block data</a></h4>
-<p>The uncompressed block data is variable of size and consists of:</p>
+<p>The uncompressed block data is of variable size and consists of:</p>
 <ul>
 <li>Optional dynamic Huffman table</li>
 <li>Encoded bit-stream</li>
@@ -7034,7 +7557,7 @@ while( block_header.last_block_flag == 0 );
     return( ( upper_word &lt;&lt; 16 ) | lower_word );
 }
 </code></pre>
-<h2 id="references-6"><a class="header" href="#references-6">References</a></h2>
+<h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
 <ul>
 <li><a href="http://www.ietf.org/rfc/rfc1950.txt">RFC1950 - ZLIB Compressed Data Format Specification</a></li>
 <li><a href="http://www.ietf.org/rfc/rfc1951.txt">RFC1951 - DEFLATE Compressed Data Format Specification</a></li>

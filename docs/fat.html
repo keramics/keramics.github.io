@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>File Allocation Table (FAT) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="file-allocation-table-fat-file-system-format"><a class="header" href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT) file system format</a></h1>
+<p>The File Allocation Table (FAT) is widely used a file sytem.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The File Allocation Table (FAT) is widely used a file sytem. There are multiple
+known variants or derivatives of FAT, such as:</p>
+<ul>
+<li>(original) 8-bit FAT</li>
+<li>FAT-12</li>
+<li>FAT-16</li>
+<li>FAT-32</li>
+<li><a href="exfat.html">exFAT</a></li>
+</ul>
+<p>A FAT file system consists of:</p>
+<ul>
+<li>One or more reserved sectors
+<ul>
+<li>a boot record (or boot sector)</li>
+<li>file system informartion for FAT-32</li>
+</ul>
+</li>
+<li>One or more cluster block allocation tables</li>
+<li>Root directory data for FAT-12 and FAT-16</li>
+<li>File and directory data</li>
+</ul>
+<blockquote>
+<p>Note that FAT-32 stores the root directory as part of the file and directory
+data.</p>
+</blockquote>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<tr><td>Date and time values</td><td>FAT date and time</td></tr>
+<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string.</td></tr>
+</table></div>
+<h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
+<div class="table-wrapper"><table><thead><th>Term</th><th>Description</th></thead><tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table.</td></tr>
+</table></div>
+<h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
+<p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters
+in the data area:</p>
+<pre><code>data area size = total number of sectors - ( number of reserved sectors s tables + size of root directory )
+</code></pre>
+<pre><code>number of clusters = round down ( data area size / sectors per cluster )
+</code></pre>
+<ul>
+<li>FAT-12 is used if the number of clusters is less than 4085</li>
+<li>FAT-16 is used if the number of clusters is less than 65525</li>
+<li>FAT-32 is used otherwise</li>
+</ul>
+<h2 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h2>
+<p>The boot record is stored in the first sector of the volume.</p>
+<h3 id="fat-12-and-fat-16-boot-record"><a class="header" href="#fat-12-and-fat-16-boot-record">FAT-12 and FAT-16 boot record</a></h3>
+<p>The FAT-12 and FAT-16 boot record is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td>"\xeb\x3c\x90"</td><td>Boot entry point (JMP +62, NOP)</td></tr>
+<tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>17</td><td>2</td><td></td><td>Number of root directory entries</td></tr>
+<tr><td>19</td><td>2</td><td></td><td>Total number of sectors (16-bit)</td></tr>
+<tr><td>21</td><td>1</td><td></td><td><a href="#media_descriptors">Media descriptor</a></td></tr>
+<tr><td>22</td><td>2</td><td></td><td>Cluster block allocation table size (16-bit) in number of sectors</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+<tr><td>36</td><td>1</td><td></td><td>Drive number</td></tr>
+<tr><td>37</td><td>1</td><td>0</td><td>Unknown (reserved for Windows NT)</td></tr>
+<tr><td>38</td><td>1</td><td></td><td>Extended boot signature</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature == 0x29</em></tr>
+<tr><td>39</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>43</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
+<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature != 0x29</em></tr>
+<tr><td>39</td><td>23</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>62</td><td>448</td><td></td><td>Used for boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>Sector signature</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the sector signature must be set at offset 512 but can, in
+addition, it can be set in the last 2 bytes of the sector.</p>
+</blockquote>
+<blockquote>
+<p>Note that the volume serial number can be derived from the system current
+date and time.</p>
+</blockquote>
+<blockquote>
+<p>Note that the file system hint value is purely informational and not enforced
+by the format.</p>
+</blockquote>
+<h3 id="fat-32-boot-record"><a class="header" href="#fat-32-boot-record">FAT-32 boot record</a></h3>
+<p>The FAT-32 boot record is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>3</td><td>"\xeb\x58\x90"</td><td>Boot entry point (JMP +90, NOP)</td></tr>
+<tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which must be 0 for FAT-32</td></tr>
+<tr><td>19</td><td>2</td><td>0</td><td>Total number of sectors (16-bit), which must be 0 for FAT-32</td></tr>
+<tr><td>21</td><td>1</td><td></td><td><a href="#media_descriptors">Media descriptor</a></td></tr>
+<tr><td>22</td><td>2</td><td>0</td><td>Cluster block allocation table size (16-bit) in number of sectors, which must be 0 for FAT-32</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Cluster block allocation table size (32-bit) in number of sectors, which must be non 0 for FAT-32</td></tr>
+<tr><td>40</td><td>2</td><td></td><td>Extended flags</td></tr>
+<tr><td>42</td><td>1</td><td>0</td><td>Format revision minor number</td></tr>
+<tr><td>43</td><td>1</td><td>0</td><td>Format revision major number</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Root directory start cluster</td></tr>
+<tr><td>48</td><td>2</td><td></td><td>File system information (FSINFO) sector number</td></tr>
+<tr><td>50</td><td>2</td><td></td><td>Boot record sector number</td></tr>
+<tr><td>52</td><td>12</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>64</td><td>1</td><td></td><td>Drive number</td></tr>
+<tr><td>65</td><td>1</td><td>0</td><td>Unknown (reserved for Windows NT)</td></tr>
+<tr><td>66</td><td>1</td><td></td><td>Extended boot signature</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature == 0x29</em></tr>
+<tr><td>67</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>71</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
+<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td colspan="4"> <em>If extended boot signature != 0x29</em></tr>
+<tr><td>67</td><td>23</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"> <em>Common</em></tr>
+<tr><td>90</td><td>420</td><td></td><td>Used for boot code</td></tr>
+<tr><td>510</td><td>2</td><td>"\x55\xaa"</td><td>Sector signature</td></tr>
+</table></div>
+<blockquote>
+<p>Note that the sector signature must be set at offset 512 but can, in
+addition, it can be set in the last 2 bytes of the sector.</p>
+</blockquote>
+<blockquote>
+<p>Note that the volume serial number can be derived from the system current
+date and time.</p>
+</blockquote>
+<blockquote>
+<p>Note that the file system hint value is purely informational and not enforced
+by the format.</p>
+</blockquote>
+<h3 id="oem-names"><a class="header" href="#oem-names">OEM names</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>"MSWIN4.1"</td><td></td></tr>
+<tr><td>"MSDOS 5.0"</td><td></td></tr>
+</table></div>
+<h3 id="media-descriptors"><a class="header" href="#media-descriptors"><a name="media_descriptors"></a>Media descriptors</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>0xf0</td><td></td><td>removable media</td></tr>
+<tr><td>0xf8</td><td></td><td>fixed (non-removable) media</td></tr>
+<tr><td>0xf9</td><td></td><td></td></tr>
+<tr><td>0xfa</td><td></td><td></td></tr>
+<tr><td>0xfb</td><td></td><td></td></tr>
+<tr><td>0xfc</td><td></td><td></td></tr>
+<tr><td>0xfd</td><td></td><td></td></tr>
+<tr><td>0xfe</td><td></td><td></td></tr>
+<tr><td>0xff</td><td></td><td></td></tr>
+</table></div>
+<h2 id="cluster-block-allocation-table"><a class="header" href="#cluster-block-allocation-table">Cluster block allocation table</a></h2>
+<p>A cluster block allocation table consists of:</p>
+<ul>
+<li>One ore more cluster block allocation table entries</li>
+</ul>
+<h3 id="fat-12-cluster-block-allocation-table-entry"><a class="header" href="#fat-12-cluster-block-allocation-table-entry">FAT 12 cluster block allocation table entry</a></h3>
+<p>A FAT 12 cluster block allocation table entry is 12 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>12 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x002 - 0xfef</td><td>Used cluster</td></tr>
+<tr><td>0xff0 - 0xff6</td><td>Reserved</td></tr>
+<tr><td>0xff7</td><td>Bad cluster</td></tr>
+<tr><td>0xff8 - 0xfff</td><td>End of cluster chain</td></tr>
+</table></div>
+<h3 id="fat-16-cluster-block-allocation-table-entry"><a class="header" href="#fat-16-cluster-block-allocation-table-entry">FAT 16 cluster block allocation table entry</a></h3>
+<p>A FAT 16 cluster block allocation table entry is 16 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x0000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x0001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x0002 - 0xffef</td><td>Used cluster</td></tr>
+<tr><td>0xfff0 - 0xfff6</td><td>Reserved</td></tr>
+<tr><td>0xfff7</td><td>Bad cluster</td></tr>
+<tr><td>0xfff8 - 0xffff</td><td>End of cluster chain</td></tr>
+</table></div>
+<h3 id="fat-32-cluster-block-allocation-table-entry"><a class="header" href="#fat-32-cluster-block-allocation-table-entry">FAT 32 cluster block allocation table entry</a></h3>
+<p>A FAT 32 cluster block allocation table entry is 32 bits in size and consists
+of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>32 bits</td><td></td><td>Data cluster number</td></tr>
+</table></div>
+<blockquote>
+<p>Note that only the lower 28-bits are used</p>
+</blockquote>
+<p>Where the data cluster number has the following meanings:</p>
+<div class="table-wrapper"><table><thead><th>Value(s)</th><th>Description</th></thead><tr><td>0x00000000</td><td>Unused (free) cluster</td></tr>
+<tr><td>0x00000001</td><td>Unknown (invalid)</td></tr>
+<tr><td>0x00000002 - 0x0fffffef</td><td>Used cluster</td></tr>
+<tr><td>0x0ffffff0 - 0x0ffffff6</td><td>Reserved</td></tr>
+<tr><td>0x0ffffff7</td><td>Bad cluster</td></tr>
+<tr><td>0x0ffffff8 - 0x0fffffff</td><td>End of cluster chain</td></tr>
+<tr><td>0x10000000 - 0xffffffff</td><td>Unknown</td></tr>
+</table></div>
+<h2 id="directory"><a class="header" href="#directory">Directory</a></h2>
+<p>A directory consists of:</p>
+<ul>
+<li>self (".") directory entry (not used in root directory)</li>
+<li>parent ("..") directory entry (not used in root directory)</li>
+<li>Zero or more directory entries</li>
+<li>Terminator directory entry</li>
+</ul>
+<h3 id="directory-entry"><a class="header" href="#directory-entry">Directory entry</a></h3>
+<h3 id="determining-the-root-directory-location"><a class="header" href="#determining-the-root-directory-location">Determining the root directory location</a></h3>
+<pre><code>first allocation table offset = number of reserved sectors * bytes per sector
+</code></pre>
+<h4 id="fat-12-and-fat-16-root-directory"><a class="header" href="#fat-12-and-fat-16-root-directory">FAT-12 and FAT-16 root directory</a></h4>
+<pre><code>root directory start offset = first allocation table offset + ( number of allocation tables * allocation table size * bytes per sector )
+</code></pre>
+<pre><code>first cluster offset = directory start sector + ( number of root directory entries * 32 )
+</code></pre>
+<h4 id="fat-32-root-directory"><a class="header" href="#fat-32-root-directory">FAT-32 root directory</a></h4>
+<pre><code>first cluster offset = first allocation table sector + ( number of allocation tables * allocation table size * bytes per sector )
+</code></pre>
+<pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
+</code></pre>
+<h4 id="fat-12-fat-16-and-fat-32-directory-entry"><a class="header" href="#fat-12-fat-16-and-fat-32-directory-entry">FAT-12, FAT-16 and FAT-32 directory entry</a></h4>
+<p>A FAT-12, FAT-16 and FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td></td><td>Name, which is padded with spaces and the first character can have a special meaning</td></tr>
+<tr><td>8</td><td>3</td><td></td><td>Extension, which is padded with spaces</td></tr>
+<tr><td>11</td><td>1</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+<tr><td>12</td><td>1</td><td></td><td><a href="#short_file_name_flags">Flags</a></td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Creation time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Creation time</td></tr>
+<tr><td>16</td><td>2</td><td></td><td>Creation date</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
+<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute), which is not used by FAT-12</td></tr>
+<tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
+<tr><td>26</td><td>2</td><td></td><td>Data stream start cluster</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
+</table></div>
+<h3 id="short-or-83-file-name"><a class="header" href="#short-or-83-file-name">Short (or 8.3) file name</a></h3>
+<p>A FAT short (or 8.3) file name is stored in an OEM character set (codepage). The
+<a href="#short_name_first_character">first character</a> can have a special meaning.</p>
+<p>Valid FAT short file name characters are:</p>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>'A-Z'</td><td>Upper case character</td></tr>
+<tr><td>'0-9'</td><td>Numeric character</td></tr>
+<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored.</td></tr>
+<tr><td>'.'</td><td>Dot, with the exception of "." and  "..". Trailing dot characters are ignored.</td></tr>
+<tr><td>'!'</td><td></td></tr>
+<tr><td>'#'</td><td></td></tr>
+<tr><td>'$'</td><td></td></tr>
+<tr><td>'%'</td><td></td></tr>
+<tr><td>'&amp;'</td><td></td></tr>
+<tr><td>'''</td><td></td></tr>
+<tr><td>'('</td><td></td></tr>
+<tr><td>')'</td><td></td></tr>
+<tr><td>'-'</td><td></td></tr>
+<tr><td>'@'</td><td></td></tr>
+<tr><td>'^'</td><td></td></tr>
+<tr><td>'_'</td><td></td></tr>
+<tr><td>'`'</td><td></td></tr>
+<tr><td>'{'</td><td></td></tr>
+<tr><td>'}'</td><td></td></tr>
+<tr><td>'~'</td><td></td></tr>
+<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent.</td></tr>
+</table></div>
+<h4 id="first-character"><a class="header" href="#first-character"><a name="short_name_first_character"></a>First character</a></h4>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x00</td><td>Last (or terminator) directory entry</td></tr>
+<tr><td>0x01 - 0x13</td><td>VFAT long file name directory entry</td></tr>
+<tr><td>0x05</td><td>Directory entry pending deallocation (deprecated since DOS 3.0) or substitution of a 0xe5 extended ASCII character value</td></tr>
+<tr><td>0x41 - 0x54</td><td>Last VFAT long file name directory entry</td></tr>
+<tr><td>0xe5</td><td>Unallocated directory entry</td></tr>
+</table></div>
+<h3 id="file-attribute-flags"><a class="header" href="#file-attribute-flags"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x01</td><td>Read-only</td></tr>
+<tr><td>0x02</td><td>Hidden</td></tr>
+<tr><td>0x04</td><td>System</td></tr>
+<tr><td>0x08</td><td>Is volume label</td></tr>
+<tr><td>0x10</td><td>Is directory</td></tr>
+<tr><td>0x20</td><td>Archive</td></tr>
+<tr><td>0x40</td><td>Is device</td></tr>
+<tr><td>0x80</td><td>Unused (reserved)</td></tr>
+</table></div>
+<h3 id="flags"><a class="header" href="#flags"><a name="short_file_name_flags"></a>Flags</a></h3>
+<div class="table-wrapper"><table><thead><th>Value</th><th>Description</th></thead><tr><td>0x01</td><td>Data is EFS encrypted</td></tr>
+<tr><td>0x02</td><td>Data contains large EFS header</td></tr>
+<tr><td colspan="3">  </tr>
+<tr><td>0x08</td><td>Name should be represented in lower case</td></tr>
+<tr><td>0x10</td><td>Extension should be represented in lower case</td></tr>
+</table></div>
+<h3 id="vfat-long-file-name-entry"><a class="header" href="#vfat-long-file-name-entry">VFAT long file name entry</a></h3>
+<p>VFAT long file names entries are stored in directory entries. Multiple VFAT
+long file name entries can be used to store a single long file name, where
+the highest (last) sequence number is stored first. A maximum of 20 VFAT long
+file name entries can be used to store a long file name of 255 UCS-2 characters.</p>
+<p>VFAT long file names are stored using UCS-2 little-endian, which allows for
+unpaired Unicode surrogates such as "U+d800" and "U+dc00"</p>
+<p>VFAT long file name entries are stored before the directory entry containing
+the short file name and additional file entry information.</p>
+<p>A VFAT long file name entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>1</td><td></td><td>Sequence number</td></tr>
+<tr><td>1</td><td>10</td><td></td><td>First name segment string, which contains 5 UCS-2 string characters</td></tr>
+<tr><td>11</td><td>1</td><td>0x0f</td><td>Unknown (attributes)</td></tr>
+<tr><td>12</td><td>1</td><td>0x00</td><td>Unknown (type)</td></tr>
+<tr><td>13</td><td>1</td><td></td><td>Checksum of the short (8.3) file name</td></tr>
+<tr><td>14</td><td>12</td><td></td><td>Second name segment string, which contains 6 UCS-2 string characters</td></tr>
+<tr><td>26</td><td>2</td><td>0</td><td>Unknown (first cluster)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Third name segment string, which contains 2 UCS-2 string characters</td></tr>
+</table></div>
+<blockquote>
+<p>Note that unused characters in the VFAT long file segment strings after the
+end-of-string character (0x0000) are padded with 0xffff.</p>
+</blockquote>
+<h4 id="vfat-long-file-name-sequence-number"><a class="header" href="#vfat-long-file-name-sequence-number">VFAT long file name sequence number</a></h4>
+<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>5 bits</td><td></td><td>Number</td></tr>
+<tr><td>0.5</td><td>1 bit</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>0.6</td><td>1 bit</td><td>0</td><td>Unknown (last logical, first physical LFN entry)</td></tr>
+<tr><td>0.7</td><td>1 bit</td><td>0</td><td>Unknown</td></tr>
+</table></div>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>, by Microsoft</li>
+<li><a href="https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system">Design of the FAT file system</a>, by Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/File_Allocation_Table">File Allocation Table</a>, by Wikipedia</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="exfat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ntfs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="exfat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ntfs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

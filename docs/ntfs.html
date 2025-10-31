@@ -284,11 +284,11 @@ file) and contains:</p>
 <tr><td>11</td><td>2</td><td></td><td>Bytes per sector. Note that the following values are supported by mkntfs: 256, 512, 1024, 2048 and 4096</td></tr>
 <tr><td>13</td><td>1</td><td></td><td>Number of sectors per cluster block</td></tr>
 <tr><td>14</td><td>2</td><td>0</td><td>Unknown (Reserved Sectors), which is not used by NTFS and must be 0</td></tr>
-<tr><td>16</td><td>1</td><td>0</td><td>Number of File Allocation Tables (FATs), which is not used by NTFS and must be 0</td></tr>
+<tr><td>16</td><td>1</td><td>0</td><td>Number of cluster block allocation tables, which is not used by NTFS and must be 0</td></tr>
 <tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which is not not used by NTFS and must be 0</td></tr>
 <tr><td>19</td><td>2</td><td>0</td><td>Number of sectors (16-bit), which is not used by NTFS must be 0</td></tr>
 <tr><td>21</td><td>1</td><td></td><td><a href="#media_descriptor">Media descriptor</a></td></tr>
-<tr><td>22</td><td>2</td><td>0</td><td>Sectors Per File Allocation Table (FAT), which is not used by NTFS and must be 0</td></tr>
+<tr><td>22</td><td>2</td><td>0</td><td>Cluster block allocation table size (16-bit) in number of sectors, which is not used by NTFS and must be 0</td></tr>
 <tr><td colspan="4"> <em>DOS version 3.4 BIOS parameter block (BPB)</em></tr>
 <tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track, which is not used by NTFS</td></tr>
 <tr><td>26</td><td>2</td><td>0xff</td><td>Number of heads, which is not used by NTFS</td></tr>
@@ -518,7 +518,7 @@ consists of:</p>
 <tr><td>4</td><td>4</td><td></td><td>Attribute size (or record length), which includes the 8 bytes of the attribute type and size</td></tr>
 <tr><td>8</td><td>1</td><td></td><td>Non-resident flag (or form code), where RESIDENT_FORM (0) and NONRESIDENT_FORM (1)</td></tr>
 <tr><td>9</td><td>1</td><td></td><td>Name size (or name length), which contains the number of characters without the end-of-string character</td></tr>
-<tr><td>10</td><td>2</td><td></td><td>Name offset, which contains an offset relative from the start of the MFT entry</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Name offset, which contains an offset relative from the start of the MFT attribute</td></tr>
 <tr><td>12</td><td>2</td><td></td><td><a href="#mft_attribute_data_flags">Attribute data flags</a></td></tr>
 <tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
 </table></div>
@@ -1877,7 +1877,7 @@ compression flag byte                     : 0x00
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="ext.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="fat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -1891,7 +1891,7 @@ compression flag byte                     : 0x00
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="ext.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="fat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 

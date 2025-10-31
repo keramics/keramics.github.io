@@ -261,7 +261,7 @@ block.</p>
 <tr><td>3</td><td></td><td>Reserved (not used)</td></tr>
 </table></div>
 <h4 id="uncompressed-block-data"><a class="header" href="#uncompressed-block-data">Uncompressed block data</a></h4>
-<p>The uncompressed block data is variable of size and consists of:</p>
+<p>The uncompressed block data is of variable size and consists of:</p>
 <div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.3</td><td>5 bits</td><td></td><td>Empty values (not used)</td></tr>
 <tr><td>1</td><td>2</td><td></td><td>Uncompressed data size</td></tr>
 <tr><td>3</td><td>2</td><td></td><td>Copy of uncompressed data size, which contains a 1s complement of the uncompressed data size</td></tr>
@@ -269,7 +269,7 @@ block.</p>
 </table></div>
 <p>The uncompressed data size can range between 0 and 65535 bytes.</p>
 <h4 id="huffman-compressed-block-data"><a class="header" href="#huffman-compressed-block-data">Huffman compressed block data</a></h4>
-<p>The uncompressed block data is variable of size and consists of:</p>
+<p>The uncompressed block data is of variable size and consists of:</p>
 <ul>
 <li>Optional dynamic Huffman table</li>
 <li>Encoded bit-stream</li>
