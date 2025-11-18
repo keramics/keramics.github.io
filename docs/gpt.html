@@ -12,24 +12,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-9dfbd86b.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="custom.css">
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -37,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "searchindex-f98f5b17.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-847933a1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -54,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -83,12 +82,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -103,39 +102,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -143,38 +142,38 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="guid-partition-table-gpt-format"><a class="header" href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a></h1>
 <p>The GUID Partition Table (GPT) is a partitioning schema that is the successor
@@ -198,37 +197,66 @@ computers.</p>
 <p>The GPT partition table header signature can be used to determine the block
 (LBA) (or sector) size.</p>
 <h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
-<div class="table-wrapper"><table><thead><th>Characteristics</th><th>Description</th></thead><tr><td>Byte order</td><td>little-endian</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
 <tr><td>Date and time values</td><td>N/A</td></tr>
+
 <tr><td>Character strings</td><td>UTF-16 little-endian without byte order mark (BOM)</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <h2 id="master-boot-record-mbr"><a class="header" href="#master-boot-record-mbr">Master Boot Record (MBR)</a></h2>
 <h3 id="hybrid-master-boot-record-mbr"><a class="header" href="#hybrid-master-boot-record-mbr">Hybrid Master Boot Record (MBR)</a></h3>
 <p>In hybrid configuration both GPT and MBR are used concurrently. Depending on
 the operating system one might have precedence over the other.</p>
 <h3 id="protective-master-boot-record-mbr"><a class="header" href="#protective-master-boot-record-mbr">Protective Master Boot Record (MBR)</a></h3>
 <p>The Protective Master Boot Record (MBR) is an MBR with a single partition of
-type "EFI GPT protective partition" (0xee) that allocated as much of the drive
+type “EFI GPT protective partition” (0xee) that allocated as much of the drive
 as possible.</p>
 <h2 id="gpt-partition-table-header"><a class="header" href="#gpt-partition-table-header">GPT partition table header</a></h2>
 <p>The GPT partition table header is 92 bytes in size and consists of:</p>
-<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>8</td><td>"EFI PART"</td><td>Signature</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"EFI PART"</td><td>Signature</td></tr>
+
 <tr><td>8</td><td>2</td><td>0</td><td>Minor format version</td></tr>
+
 <tr><td>10</td><td>2</td><td>1</td><td>Major format version</td></tr>
+
 <tr><td>12</td><td>4</td><td>92</td><td>Header data size, which contains the size of the GPT partition table header data</td></tr>
+
 <tr><td>16</td><td>4</td><td></td><td>Header data checksum</td></tr>
+
 <tr><td>20</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+
 <tr><td>24</td><td>8</td><td></td><td>Partition header block number (LBA)</td></tr>
+
 <tr><td>32</td><td>8</td><td></td><td>Backup partition header block number (LBA)</td></tr>
+
 <tr><td>40</td><td>8</td><td></td><td>Partitions area start block number (LBA)</td></tr>
+
 <tr><td>48</td><td>8</td><td></td><td>Partitions area end block number (LBA), where the block number is included in the partitions area block range</td></tr>
+
 <tr><td>56</td><td>16</td><td></td><td>Disk identifier (GUID)</td></tr>
+
 <tr><td>72</td><td>8</td><td></td><td>Partition entries start block number (LBA)</td></tr>
+
 <tr><td>80</td><td>4</td><td></td><td>Number of partition entries</td></tr>
+
 <tr><td>84</td><td>4</td><td>128</td><td>Partition entry data size</td></tr>
+
 <tr><td>88</td><td>4</td><td></td><td>Partition entries data checksum</td></tr>
+
 <tr><td>92</td><td>...</td><td>0</td><td>Unknown (Reserved)</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <blockquote>
 <p>Note that the partition entries start block number (LBA) of the backup
 partition table header will point to the backup partition entries.</p>
@@ -246,200 +274,400 @@ header data checkum value is considered to be 0 during calculation.</p>
 <h2 id="gpt-partition-entries"><a class="header" href="#gpt-partition-entries">GPT partition entries</a></h2>
 <h3 id="gpt-partition-entry"><a class="header" href="#gpt-partition-entry">GPT Partition entry</a></h3>
 <p>The GPT partition entry is 128 bytes in size and consists of:</p>
-<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0</td><td>16</td><td></td><td><a href="#partition_types">Partition type</a> identifier (GUID)</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td><a href="#partition_types">Partition type</a> identifier (GUID)</td></tr>
+
 <tr><td>16</td><td>16</td><td></td><td>Partition identifier (GUID)</td></tr>
+
 <tr><td>32</td><td>8</td><td></td><td>Partition start block number (LBA)</td></tr>
+
 <tr><td>40</td><td>8</td><td></td><td>Partition end block number (LBA), where the block number is included in the partition block range</td></tr>
+
 <tr><td>48</td><td>8</td><td></td><td><a href="#partition_attribute_flags">Attribute flags</a></td></tr>
+
 <tr><td>56</td><td>72</td><td></td><td>Partition name, which contains a UTF-16 little-endian string</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <h3 id="partition-types"><a class="header" href="#partition-types"><a name="partition_types"></a>Partition types</a></h3>
-<div class="table-wrapper"><table><thead><th>Value</th><th>Identifier</th><th>Description</th></thead><tr><td>00000000-0000-0000-0000-000000000000</td><td></td><td>Unused entry</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>00000000-0000-0000-0000-000000000000</td><td></td><td>Unused entry</td></tr>
+
 <tr><td>024dee41-33e7-11d3-9d69-0008c781f39f</td><td></td><td>MBR partition scheme</td></tr>
+
 <tr><td>c12a7328-f81f-11d2-ba4b-00a0c93ec93b</td><td></td><td>EFI System partition</td></tr>
+
 <tr><td>21686148-6449-6e6f-744e-656564454649</td><td></td><td>BIOS boot partition</td></tr>
+
 <tr><td>d3bfe2de-3daf-11df-ba40-e3a556d89593</td><td></td><td>Intel Fast Flash (iFFS) partition (for Intel Rapid Start technology)</td></tr>
+
 <tr><td>f4019732-066e-4e12-8273-346c5641494f</td><td></td><td>Sony boot partition</td></tr>
+
 <tr><td>bfbfafe7-a34f-448a-9a5b-6213eb736c22</td><td></td><td>Lenovo boot partition</td></tr>
-<tr><td colspan="3"> <em>Windows</em></tr>
+
+<tr><td colspan="3"><em>Windows</em></td></tr>
+
 <tr><td>e3c9e316-0b5c-4db8-817d-f92df00215ae</td><td></td><td>Microsoft Reserved Partition (MSR)</td></tr>
+
 <tr><td>ebd0a0a2-b9e5-4433-87c0-68b6b72699c7</td><td></td><td>Basic data partition</td></tr>
+
 <tr><td>5808c8aa-7e8f-42e0-85d2-e1e90434cfb3</td><td></td><td>Logical Disk Manager (LDM) metadata partition</td></tr>
+
 <tr><td>af9b60a0-1431-4f62-bc68-3311714a69ad</td><td></td><td>Logical Disk Manager data partition</td></tr>
+
 <tr><td>de94bba4-06d1-4d40-a16a-bfd50179d6ac</td><td></td><td>Windows Recovery Environment</td></tr>
+
 <tr><td>37affc90-ef7d-4e96-91c3-2d7ae055b174</td><td></td><td>IBM General Parallel File System (GPFS) partition</td></tr>
+
 <tr><td>e75caf8f-f680-4cee-afa3-b001e56efc2d</td><td></td><td>Storage Spaces partition</td></tr>
-<tr><td colspan="3"> <em>HP-UX</em></tr>
+
+<tr><td colspan="3"><em>HP-UX</em></td></tr>
+
 <tr><td>75894c1e-3aeb-11d3-b7c1-7b03a0000000</td><td></td><td>Data partition</td></tr>
+
 <tr><td>e2a1e728-32e3-11d6-a682-7b03a0000000</td><td></td><td>Service Partition</td></tr>
-<tr><td colspan="3"> <em>Linux</em></tr>
+
+<tr><td colspan="3"><em>Linux</em></td></tr>
+
 <tr><td>0fc63daf-8483-4772-8e79-3d69d8477de4</td><td></td><td>Linux filesystem data</td></tr>
+
 <tr><td>a19d880f-05fc-4d3b-a006-743f0f84911e</td><td></td><td>RAID partition</td></tr>
+
 <tr><td>44479540-f297-41b2-9af7-d131d5f0458a</td><td></td><td>Root partition (x86)</td></tr>
+
 <tr><td>4f68bce3-e8cd-4db1-96e7-fbcaf984b709</td><td></td><td>Root partition (x86-64)</td></tr>
+
 <tr><td>69dad710-2ce4-4e3c-b16c-21a1d49abed3</td><td></td><td>Root partition (32-bit ARM)</td></tr>
+
 <tr><td>b921b045-1df0-41c3-af44-4c6f280d3fae</td><td></td><td>Root partition (64-bit ARM/AArch64)</td></tr>
+
 <tr><td>0657fd6d-a4ab-43c4-84e5-0933c84b4f4f</td><td></td><td>Swap partition</td></tr>
+
 <tr><td>e6d6d379-f507-44c2-a23c-238f2a3df928</td><td></td><td>Logical Volume Manager (LVM) partition</td></tr>
+
 <tr><td>933ac7e1-2eb4-4f13-b844-0e14e2aef915</td><td></td><td>/home partition</td></tr>
+
 <tr><td>3b8f8425-20e0-4f3b-907f-1a25a76f98e8</td><td></td><td>/srv (server data) partition</td></tr>
+
 <tr><td>7ffec5c9-2d00-49b7-8941-3ea10a5586b7</td><td></td><td>Plain dm-crypt partition</td></tr>
+
 <tr><td>ca7d7ccb-63ed-4c53-861c-1742536059cc</td><td></td><td>LUKS partition</td></tr>
+
 <tr><td>8da63339-0007-60c0-c436-083ac8230908</td><td></td><td>Reserved</td></tr>
-<tr><td colspan="3"> <em>FreeBSD</em></tr>
+
+<tr><td colspan="3"><em>FreeBSD</em></td></tr>
+
 <tr><td>83bd6b9d-7f41-11dc-be0b-001560b84f0f</td><td></td><td>Boot partition</td></tr>
+
 <tr><td>516e7cb4-6ecf-11d6-8ff8-00022d09712b</td><td></td><td>Data partition</td></tr>
+
 <tr><td>516e7cb5-6ecf-11d6-8ff8-00022d09712b</td><td></td><td>Swap partition</td></tr>
+
 <tr><td>516e7cb6-6ecf-11d6-8ff8-00022d09712b</td><td></td><td>Unix File System (UFS) partition</td></tr>
+
 <tr><td>516e7cb8-6ecf-11d6-8ff8-00022d09712b</td><td></td><td>Vinum volume manager partition</td></tr>
+
 <tr><td>516e7cba-6ecf-11d6-8ff8-00022d09712b</td><td></td><td>ZFS partition</td></tr>
-<tr><td colspan="3"> <em>Darwin / Mac OS</em></tr>
+
+<tr><td colspan="3"><em>Darwin / Mac OS</em></td></tr>
+
 <tr><td>48465300-0000-11aa-aa11-00306543ecac</td><td></td><td>Hierarchical File System Plus (HFS+) partition</td></tr>
+
 <tr><td>7c3457ef-0000-11aa-aa11-00306543ecac</td><td></td><td>Apple APFS</td></tr>
+
 <tr><td>55465300-0000-11aa-aa11-00306543ecac</td><td></td><td>Apple UFS container</td></tr>
+
 <tr><td>6a898cc3-1dd2-11b2-99a6-080020736631</td><td></td><td>ZFS</td></tr>
+
 <tr><td>52414944-0000-11aa-aa11-00306543ecac</td><td></td><td>Apple RAID partition</td></tr>
+
 <tr><td>52414944-5f4f-11aa-aa11-00306543ecac</td><td></td><td>Apple RAID partition, offline</td></tr>
+
 <tr><td>426f6f74-0000-11aa-aa11-00306543ecac</td><td></td><td>Apple Boot partition (Recovery HD)</td></tr>
+
 <tr><td>4c616265-6c00-11aa-aa11-00306543ecac</td><td></td><td>Apple Label</td></tr>
+
 <tr><td>5265636f-7665-11aa-aa11-00306543ecac</td><td></td><td>Apple TV Recovery partition</td></tr>
+
 <tr><td>53746f72-6167-11aa-aa11-00306543ecac</td><td></td><td>Apple Core Storage (i.e. Lion FileVault) partition</td></tr>
+
 <tr><td>b6fa30da-92d2-4a9a-96f1-871ec6486200</td><td></td><td>SoftRAID_Status</td></tr>
+
 <tr><td>2e313465-19b9-463f-8126-8a7993773801</td><td></td><td>SoftRAID_Scratch</td></tr>
+
 <tr><td>fa709c7e-65b1-4593-bfd5-e71d61de9b02</td><td></td><td>SoftRAID_Volume</td></tr>
+
 <tr><td>bbba6df5-f46f-4a89-8f59-8765b2727503</td><td></td><td>SoftRAID_Cache</td></tr>
-<tr><td colspan="3"> <em>Solaris / illumos</em></tr>
+
+<tr><td colspan="3"><em>Solaris / illumos</em></td></tr>
+
 <tr><td>6a82cb45-1dd2-11b2-99a6-080020736631</td><td></td><td>Boot partition</td></tr>
+
 <tr><td>6a85cf4d-1dd2-11b2-99a6-080020736631</td><td></td><td>Root partition</td></tr>
+
 <tr><td>6a87c46f-1dd2-11b2-99a6-080020736631</td><td></td><td>Swap partition</td></tr>
+
 <tr><td>6a8b642b-1dd2-11b2-99a6-080020736631</td><td></td><td>Backup partition</td></tr>
+
 <tr><td>6a898cc3-1dd2-11b2-99a6-080020736631</td><td></td><td>/usr partition</td></tr>
+
 <tr><td>6a8ef2e9-1dd2-11b2-99a6-080020736631</td><td></td><td>/var partition</td></tr>
+
 <tr><td>6a90ba39-1dd2-11b2-99a6-080020736631</td><td></td><td>/home partition</td></tr>
+
 <tr><td>6a9283a5-1dd2-11b2-99a6-080020736631</td><td></td><td>Alternate sector</td></tr>
+
 <tr><td>6a8d2ac7-1dd2-11b2-99a6-080020736631</td><td></td><td>Reserved partition</td></tr>
+
 <tr><td>6a945a3b-1dd2-11b2-99a6-080020736631</td><td></td><td>Reserved partition</td></tr>
+
 <tr><td>6a96237f-1dd2-11b2-99a6-080020736631</td><td></td><td>Reserved partition</td></tr>
+
 <tr><td>6a9630d1-1dd2-11b2-99a6-080020736631</td><td></td><td>Reserved partition</td></tr>
+
 <tr><td>6a980767-1dd2-11b2-99a6-080020736631</td><td></td><td>Reserved partition</td></tr>
-<tr><td colspan="3"> <em>NetBSD</em></tr>
+
+<tr><td colspan="3"><em>NetBSD</em></td></tr>
+
 <tr><td>49f48d32-b10e-11dc-b99b-0019d1879648</td><td></td><td>Swap partition</td></tr>
+
 <tr><td>49f48d5a-b10e-11dc-b99b-0019d1879648</td><td></td><td>FFS partition</td></tr>
+
 <tr><td>49f48d82-b10e-11dc-b99b-0019d1879648</td><td></td><td>LFS partition</td></tr>
+
 <tr><td>49f48daa-b10e-11dc-b99b-0019d1879648</td><td></td><td>RAID partition</td></tr>
+
 <tr><td>2db519c4-b10f-11dc-b99b-0019d1879648</td><td></td><td>Concatenated partition</td></tr>
+
 <tr><td>2db519ec-b10f-11dc-b99b-0019d1879648</td><td></td><td>Encrypted partition</td></tr>
-<tr><td colspan="3"> <em>Chrome OS</em></tr>
+
+<tr><td colspan="3"><em>Chrome OS</em></td></tr>
+
 <tr><td>fe3a2a5d-4f32-41a7-b725-accc3285a309</td><td></td><td>Chrome OS kernel</td></tr>
+
 <tr><td>3cb8e202-3b7e-47dd-8a3c-7ff2a13cfcec</td><td></td><td>Chrome OS rootfs</td></tr>
+
 <tr><td>2e0a753d-9e48-43b0-8337-b15192cb1b5e</td><td></td><td>Chrome OS future use</td></tr>
-<tr><td colspan="3"> <em>Container Linux by CoreOS</em></tr>
+
+<tr><td colspan="3"><em>Container Linux by CoreOS</em></td></tr>
+
 <tr><td>5dfbf5f4-2848-4bac-aa5e-0d9a20b745a6</td><td></td><td>/usr partition (coreos-usr)</td></tr>
+
 <tr><td>3884dd41-8582-4404-b9a8-e9b84f2df50e</td><td></td><td>Resizable rootfs (coreos-resize)</td></tr>
+
 <tr><td>c95dc21a-df0e-4340-8d7b-26cbfa9a03e0</td><td></td><td>OEM customizations (coreos-reserved)</td></tr>
+
 <tr><td>be9067b9-ea49-4f15-b4f6-f36f8c9e1818</td><td></td><td>Root filesystem on RAID (coreos-root-raid)</td></tr>
-<tr><td colspan="3"> <em>Haiku</em></tr>
+
+<tr><td colspan="3"><em>Haiku</em></td></tr>
+
 <tr><td>42465331-3ba3-10f1-802a-4861696b7521</td><td></td><td>Haiku BFS</td></tr>
-<tr><td colspan="3"> <em>MidnightBSD</em></tr>
+
+<tr><td colspan="3"><em>MidnightBSD</em></td></tr>
+
 <tr><td>85d5e45e-237c-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>Boot partition</td></tr>
+
 <tr><td>85d5e45a-237c-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>Data partition</td></tr>
+
 <tr><td>85d5e45b-237c-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>Swap partition</td></tr>
+
 <tr><td>0394ef8b-237e-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>Unix File System (UFS) partition</td></tr>
+
 <tr><td>85d5e45c-237c-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>Vinum volume manager partition</td></tr>
+
 <tr><td>85d5e45d-237c-11e1-b4b3-e89a8f7fc3a7</td><td></td><td>ZFS partition</td></tr>
-<tr><td colspan="3"> <em>Ceph</em></tr>
+
+<tr><td colspan="3"><em>Ceph</em></td></tr>
+
 <tr><td>45b0969e-9b03-4f30-b4c6-b4b80ceff106</td><td></td><td>Journal</td></tr>
+
 <tr><td>45b0969e-9b03-4f30-b4c6-5ec00ceff106</td><td></td><td>dm-crypt journal</td></tr>
+
 <tr><td>4fbd7e29-9d25-41b8-afd0-062c0ceff05d</td><td></td><td>OSD</td></tr>
+
 <tr><td>4fbd7e29-9d25-41b8-afd0-5ec00ceff05d</td><td></td><td>dm-crypt OSD</td></tr>
+
 <tr><td>89c57f98-2fe5-4dc0-89c1-f3ad0ceff2be</td><td></td><td>Disk in creation</td></tr>
+
 <tr><td>89c57f98-2fe5-4dc0-89c1-5ec00ceff2be</td><td></td><td>dm-crypt disk in creation</td></tr>
+
 <tr><td>cafecafe-9b03-4f30-b4c6-b4b80ceff106</td><td></td><td>Block</td></tr>
+
 <tr><td>30cd0809-c2b2-499c-8879-2d6b78529876</td><td></td><td>Block DB</td></tr>
+
 <tr><td>5ce17fce-4087-4169-b7ff-056cc58473f9</td><td></td><td>Block write-ahead log</td></tr>
+
 <tr><td>fb3aabf9-d25f-47cc-bf5e-721d1816496b</td><td></td><td>Lockbox for dm-crypt keys</td></tr>
+
 <tr><td>4fbd7e29-8ae0-4982-bf9d-5a8d867af560</td><td></td><td>Multipath OSD</td></tr>
+
 <tr><td>45b0969e-8ae0-4982-bf9d-5a8d867af560</td><td></td><td>Multipath journal</td></tr>
+
 <tr><td>cafecafe-8ae0-4982-bf9d-5a8d867af560</td><td></td><td>Multipath block</td></tr>
+
 <tr><td>7f4a666a-16f3-47a2-8445-152ef4d03f6c</td><td></td><td>Multipath block</td></tr>
+
 <tr><td>ec6d6385-e346-45dc-be91-da2a7c8b3261</td><td></td><td>Multipath block DB</td></tr>
+
 <tr><td>01b41e1b-002a-453c-9f17-88793989ff8f</td><td></td><td>Multipath block write-ahead log</td></tr>
+
 <tr><td>cafecafe-9b03-4f30-b4c6-5ec00ceff106</td><td></td><td>dm-crypt block</td></tr>
+
 <tr><td>93b0052d-02d9-4d8a-a43b-33a3ee4dfbc3</td><td></td><td>dm-crypt block DB</td></tr>
+
 <tr><td>306e8683-4fe2-4330-b7c0-00a917c16966</td><td></td><td>dm-crypt block write-ahead log</td></tr>
+
 <tr><td>45b0969e-9b03-4f30-b4c6-35865ceff106</td><td></td><td>dm-crypt LUKS journal</td></tr>
+
 <tr><td>cafecafe-9b03-4f30-b4c6-35865ceff106</td><td></td><td>dm-crypt LUKS block</td></tr>
+
 <tr><td>166418da-c469-4022-adf4-b30afd37f176</td><td></td><td>dm-crypt LUKS block DB</td></tr>
+
 <tr><td>86a32090-3647-40b9-bbbd-38d8c573aa86</td><td></td><td>dm-crypt LUKS block write-ahead log</td></tr>
+
 <tr><td>4fbd7e29-9d25-41b8-afd0-35865ceff05d</td><td></td><td>dm-crypt LUKS OSD</td></tr>
-<tr><td colspan="3"> <em>OpenBSD</em></tr>
+
+<tr><td colspan="3"><em>OpenBSD</em></td></tr>
+
 <tr><td>824cc7a0-36a8-11e3-890a-952519ad3f61</td><td></td><td>Data partition</td></tr>
-<tr><td colspan="3"> <em>QNX</em></tr>
+
+<tr><td colspan="3"><em>QNX</em></td></tr>
+
 <tr><td>cef5a9ad-73bc-4601-89f3-cdeeeee321a1</td><td></td><td>Power-safe (QNX6) file system</td></tr>
-<tr><td colspan="3"> <em>Plan 9</em></tr>
+
+<tr><td colspan="3"><em>Plan 9</em></td></tr>
+
 <tr><td>c91818f9-8025-47af-89d2-f030d7000c2c</td><td></td><td>Plan 9 partition</td></tr>
-<tr><td colspan="3"> <em>VMware ESX</em></tr>
+
+<tr><td colspan="3"><em>VMware ESX</em></td></tr>
+
 <tr><td>9d275380-40ad-11db-bf97-000c2911d1b8</td><td></td><td>vmkcore (coredump partition)</td></tr>
+
 <tr><td>aa31e02a-400f-11db-9590-000c2911d1b8</td><td></td><td>VMFS filesystem partition</td></tr>
+
 <tr><td>9198effc-31c0-11db-8f78-000c2911d1b8</td><td></td><td>VMware Reserved</td></tr>
-<tr><td colspan="3"> <em>Android-IA</em></tr>
+
+<tr><td colspan="3"><em>Android-IA</em></td></tr>
+
 <tr><td>2568845d-2332-4675-bc39-8fa5a4748d15</td><td></td><td>Bootloader</td></tr>
+
 <tr><td>114eaffe-1552-4022-b26e-9b053604cf84</td><td></td><td>Bootloader2</td></tr>
+
 <tr><td>49a4d17f-93a3-45c1-a0de-f50b2ebe2599</td><td></td><td>Boot</td></tr>
+
 <tr><td>4177c722-9e92-4aab-8644-43502bfd5506</td><td></td><td>Recovery</td></tr>
+
 <tr><td>ef32a33b-a409-486c-9141-9ffb711f6266</td><td></td><td>Misc</td></tr>
+
 <tr><td>20ac26be-20b7-11e3-84c5-6cfdb94711e9</td><td></td><td>Metadata</td></tr>
+
 <tr><td>38f428e6-d326-425d-9140-6e0ea133647c</td><td></td><td>System</td></tr>
+
 <tr><td>a893ef21-e428-470a-9e55-0668fd91a2d9</td><td></td><td>Cache</td></tr>
+
 <tr><td>dc76dda9-5ac1-491c-af42-a82591580c0d</td><td></td><td>Data</td></tr>
+
 <tr><td>ebc597d0-2053-4b15-8b64-e0aac75f4db1</td><td></td><td>Persistent</td></tr>
+
 <tr><td>c5a0aeec-13ea-11e5-a1b1-001e67ca0c3c</td><td></td><td>Vendor</td></tr>
+
 <tr><td>bd59408b-4514-490d-bf12-9878d963f378</td><td></td><td>Config</td></tr>
+
 <tr><td>8f68cc74-c5e5-48da-be91-a0c8c15e9c80</td><td></td><td>Factory</td></tr>
+
 <tr><td>9fdaa6ef-4b3f-40d2-ba8d-bff16bfb887b</td><td></td><td>Factory (alt)</td></tr>
+
 <tr><td>767941d0-2085-11e3-ad3b-6cfdb94711e9</td><td></td><td>Fastboot / Tertiary</td></tr>
+
 <tr><td>ac6d7924-eb71-4df8-b48d-e267b27148ff</td><td></td><td>OEM</td></tr>
-<tr><td colspan="3"> <em>Android 6.0+ ARM</em></tr>
+
+<tr><td colspan="3"><em>Android 6.0+ ARM</em></td></tr>
+
 <tr><td>19a710a2-b3ca-11e4-b026-10604b889dcf</td><td></td><td>Android Meta</td></tr>
+
 <tr><td>193d1ea4-b3ca-11e4-b075-10604b889dcf</td><td></td><td>Android EXT</td></tr>
-<tr><td colspan="3"> <em>Open Network Install Environment (ONIE)</em></tr>
+
+<tr><td colspan="3"><em>Open Network Install Environment (ONIE)</em></td></tr>
+
 <tr><td>7412f7d5-a156-4b13-81dc-867174929325</td><td></td><td>Boot</td></tr>
+
 <tr><td>d4e6e2cd-4469-46f3-b5cb-1bff57afc149</td><td></td><td>Config</td></tr>
-<tr><td colspan="3"> <em>PowerPC</em></tr>
+
+<tr><td colspan="3"><em>PowerPC</em></td></tr>
+
 <tr><td>9e1a2d38-c612-4316-aa26-8b49521e5a8b</td><td></td><td>PReP boot</td></tr>
-<tr><td colspan="3"> <em>freedesktop.org OSes (Linux, etc.)</em></tr>
+
+<tr><td colspan="3"><em>freedesktop.org OSes (Linux, etc.)</em></td></tr>
+
 <tr><td>bc13c2ff-59e6-4262-a352-b275fd6f7172</td><td></td><td>Shared boot loader configuration</td></tr>
-<tr><td colspan="3"> <em>Atari TOS</em></tr>
+
+<tr><td colspan="3"><em>Atari TOS</em></td></tr>
+
 <tr><td>734e5afe-f61a-11e6-bc64-92361f002671</td><td></td><td>Basic data partition (GEM, BGM, F32)</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <h3 id="partition-attribute-flags"><a class="header" href="#partition-attribute-flags"><a name="partition_attribute_flags"></a>Partition attribute flags</a></h3>
-<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>0.0</td><td>1 bit</td><td></td><td>Partition is required by the platform, e.g. an OEM partition</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>1 bit</td><td></td><td>Partition is required by the platform, e.g. an OEM partition</td></tr>
+
 <tr><td>0.1</td><td>1 bit</td><td></td><td>EFI firmware should ignore the content of the partition</td></tr>
+
 <tr><td>0.2</td><td>1 bit</td><td></td><td>Partition contains bootable legacy BIOS, equivalent to MBR active flag</td></tr>
+
 <tr><td>0.3</td><td>45 bits</td><td></td><td>Unknown (Reserved)</td></tr>
+
 <tr><td>6.0</td><td>16 bits</td><td></td><td>Flags specific to the partition type</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <h4 id="microsoft-basic-partition-type-attribute-flags"><a class="header" href="#microsoft-basic-partition-type-attribute-flags">Microsoft basic partition type attribute flags</a></h4>
-<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>7.4</td><td>1 bit</td><td></td><td>Partition is read-only</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>7.4</td><td>1 bit</td><td></td><td>Partition is read-only</td></tr>
+
 <tr><td>7.5</td><td>1 bit</td><td></td><td>Partition is a shadow copy (of another partition)</td></tr>
+
 <tr><td>7.6</td><td>1 bit</td><td></td><td>Partition is hidden</td></tr>
+
 <tr><td>7.7</td><td>1 bit</td><td></td><td>Partition should not have a drive letter assigned (no auto-mount)</td></tr>
-</table></div>
+
+</table>
+</div>
+
 <h4 id="chromeos-partition-type-attribute-flags"><a class="header" href="#chromeos-partition-type-attribute-flags">ChromeOS partition type attribute flags</a></h4>
-<div class="table-wrapper"><table><thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead><tr><td>6.0</td><td>4 bits</td><td></td><td>Priority, where 15 is thehighest priority, 1 is the lowest and 0 indicates the partition is not bootable</td></tr>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>6.0</td><td>4 bits</td><td></td><td>Priority, where 15 is thehighest priority, 1 is the lowest and 0 indicates the partition is not bootable</td></tr>
+
 <tr><td>6.4</td><td>4 bits</td><td></td><td>Number of tries to attempt to boot from the partition</td></tr>
+
 <tr><td>7.0</td><td>1 bit</td><td></td><td>Partition was previously successfully booted from</td></tr>
-</table></div>
+
+</table>
+</div>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="apm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
                             <a rel="next prefetch" href="mbr.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
                         <div style="clear: both"></div>
@@ -449,16 +677,21 @@ header data checkum value is considered to be 0 during calculation.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="apm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
                     <a rel="next prefetch" href="mbr.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -467,13 +700,13 @@ header data checkum value is considered to be 0 during calculation.</p>
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 
