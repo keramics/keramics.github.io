@@ -16,7 +16,7 @@
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-9dfbd86b.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f98f5b17.js";
+            window.path_to_searchindex_js = "searchindex-68426b91.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-847933a1.js"></script>
+        <script src="toc-3911eb30.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -260,6 +260,9 @@ block groups of the meta block group.</p>
 <pre><code>block offset = block number x block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
+<blockquote>
+<p>Note that mke2fs indicates the maximum block size is 65536.</p>
+</blockquote>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
 <h3 id="the-ext2-superblock"><a class="header" href="#the-ext2-superblock">The ext2 superblock</a></h3>
 <p>The ext2 superblock is 208 bytes in size and consists of:</p>
@@ -1827,7 +1830,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 and is used as a terminator.</p>
 <blockquote>
 <p>Note that some implementations of older Android versions of ext appear to
-only set the first 4 bytess to 0.</p>
+only set the first 4 bytes to 0.</p>
 </blockquote>
 <blockquote>
 <p>Note that the name can be empty, for example in combination with a prefix or

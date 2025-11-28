@@ -17,7 +17,7 @@
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-9dfbd86b.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f98f5b17.js";
+            window.path_to_searchindex_js = "searchindex-68426b91.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-847933a1.js"></script>
+        <script src="toc-3911eb30.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -609,6 +609,11 @@ created by winen.</p>
 header2 section) are set to: Thu Jan  1 00:00:00 1970. Where the time is
 dependent on the time zone and daylight savings.</p>
 </blockquote>
+<blockquote>
+<p>Note that in a Logicube Dossier generated header2 section an additional emtpy
+value in the 4th line was observed. The number of values in the 3rd and 4th
+can differ.</p>
+</blockquote>
 <h5 id="sources-category"><a class="header" href="#sources-category"><a name="sources_category1"></a>Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources.</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
@@ -740,7 +745,7 @@ Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
-<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Not found in subsequent segment files.</li>
+<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Typically not found in subsequent segment files with the exception of Logicube Dossier generated EWF-E01 files.</li>
 </ul>
 <p>The additional data this section contains is the following:</p>
 <div class="table-wrapper">
@@ -6256,6 +6261,9 @@ block groups of the meta block group.</p>
 <pre><code>block offset = block number x block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
+<blockquote>
+<p>Note that mke2fs indicates the maximum block size is 65536.</p>
+</blockquote>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
 <h3 id="the-ext2-superblock"><a class="header" href="#the-ext2-superblock">The ext2 superblock</a></h3>
 <p>The ext2 superblock is 208 bytes in size and consists of:</p>
@@ -7823,7 +7831,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 and is used as a terminator.</p>
 <blockquote>
 <p>Note that some implementations of older Android versions of ext appear to
-only set the first 4 bytess to 0.</p>
+only set the first 4 bytes to 0.</p>
 </blockquote>
 <blockquote>
 <p>Note that the name can be empty, for example in combination with a prefix or
@@ -8659,8 +8667,8 @@ of:</p>
 </code></pre>
 <pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
 </code></pre>
-<h4 id="fat-12-fat-16-and-fat-32-directory-entry"><a class="header" href="#fat-12-fat-16-and-fat-32-directory-entry">FAT-12, FAT-16 and FAT-32 directory entry</a></h4>
-<p>A FAT-12, FAT-16 and FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<h4 id="fat-12-and-fat-16-directory-entry"><a class="header" href="#fat-12-and-fat-16-directory-entry">FAT-12 and FAT-16 directory entry</a></h4>
+<p>A FAT-12 and FAT-16 directory entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8680,13 +8688,47 @@ of:</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
 
-<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute), which is not used by FAT-12</td></tr>
+<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute)</td></tr>
 
 <tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
 
 <tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
 
 <tr><td>26</td><td>2</td><td></td><td>Data stream start cluster</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
+
+</table>
+</div>
+
+<h4 id="fat-32-directory-entry"><a class="header" href="#fat-32-directory-entry">FAT-32 directory entry</a></h4>
+<p>A FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Name, which is padded with spaces and the first character can have a special meaning</td></tr>
+
+<tr><td>8</td><td>3</td><td></td><td>Extension, which is padded with spaces</td></tr>
+
+<tr><td>11</td><td>1</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+
+<tr><td>12</td><td>1</td><td></td><td><a href="#short_file_name_flags">Flags</a></td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>Creation time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Creation time</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Creation date</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Data stream data size, which contains the upper 16-bit of the value</td></tr>
+
+<tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Data stream start cluster, which contains the lower 16-bit of the value</td></tr>
 
 <tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
 

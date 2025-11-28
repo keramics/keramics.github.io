@@ -16,7 +16,7 @@
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-9dfbd86b.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f98f5b17.js";
+            window.path_to_searchindex_js = "searchindex-68426b91.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-847933a1.js"></script>
+        <script src="toc-3911eb30.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -594,6 +594,11 @@ created by winen.</p>
 header2 section) are set to: Thu Jan  1 00:00:00 1970. Where the time is
 dependent on the time zone and daylight savings.</p>
 </blockquote>
+<blockquote>
+<p>Note that in a Logicube Dossier generated header2 section an additional emtpy
+value in the 4th line was observed. The number of values in the 3rd and 4th
+can differ.</p>
+</blockquote>
 <h5 id="sources-category"><a class="header" href="#sources-category"><a name="sources_category1"></a>Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources.</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
@@ -725,7 +730,7 @@ Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
-<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Not found in subsequent segment files.</li>
+<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Typically not found in subsequent segment files with the exception of Logicube Dossier generated EWF-E01 files.</li>
 </ul>
 <p>The additional data this section contains is the following:</p>
 <div class="table-wrapper">

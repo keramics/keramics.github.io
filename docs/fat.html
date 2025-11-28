@@ -16,7 +16,7 @@
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-9dfbd86b.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f98f5b17.js";
+            window.path_to_searchindex_js = "searchindex-68426b91.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-847933a1.js"></script>
+        <script src="toc-3911eb30.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -557,8 +557,8 @@ of:</p>
 </code></pre>
 <pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
 </code></pre>
-<h4 id="fat-12-fat-16-and-fat-32-directory-entry"><a class="header" href="#fat-12-fat-16-and-fat-32-directory-entry">FAT-12, FAT-16 and FAT-32 directory entry</a></h4>
-<p>A FAT-12, FAT-16 and FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<h4 id="fat-12-and-fat-16-directory-entry"><a class="header" href="#fat-12-and-fat-16-directory-entry">FAT-12 and FAT-16 directory entry</a></h4>
+<p>A FAT-12 and FAT-16 directory entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -578,13 +578,47 @@ of:</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
 
-<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute), which is not used by FAT-12</td></tr>
+<tr><td>20</td><td>2</td><td></td><td>Unknown (OS/2 extended attribute)</td></tr>
 
 <tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
 
 <tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
 
 <tr><td>26</td><td>2</td><td></td><td>Data stream start cluster</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
+
+</table>
+</div>
+
+<h4 id="fat-32-directory-entry"><a class="header" href="#fat-32-directory-entry">FAT-32 directory entry</a></h4>
+<p>A FAT-32 directory entry is 32 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Name, which is padded with spaces and the first character can have a special meaning</td></tr>
+
+<tr><td>8</td><td>3</td><td></td><td>Extension, which is padded with spaces</td></tr>
+
+<tr><td>11</td><td>1</td><td></td><td><a href="#file_attribute_flags">File attribute flags</a></td></tr>
+
+<tr><td>12</td><td>1</td><td></td><td><a href="#short_file_name_flags">Flags</a></td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>Creation time fraction of seconds, which contains fraction of 2-seconds in 10 ms intervals</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Creation time</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Creation date</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Last access date</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Data stream data size, which contains the upper 16-bit of the value</td></tr>
+
+<tr><td>22</td><td>2</td><td></td><td>Last modification time</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Last modification date</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Data stream start cluster, which contains the lower 16-bit of the value</td></tr>
 
 <tr><td>28</td><td>4</td><td></td><td>Data stream data size</td></tr>
 
