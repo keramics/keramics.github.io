@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-68426b91.js";
+            window.path_to_searchindex_js = "searchindex-b70156aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3911eb30.js"></script>
@@ -232,7 +232,7 @@ as a 16-bit unsigned integer in big-endian byte order the value is a multiple
 of 31, such that:</p>
 <pre><code>( ( first x 256 ) + second ) mod 31 = 0
 </code></pre>
-<h3 id="compression-method"><a class="header" href="#compression-method"><a name="compression_method"></a>Compression method</a></h3>
+<h3 id="compression_method"><a class="header" href="#compression_method">Compression method</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -248,7 +248,7 @@ of 31, such that:</p>
 <blockquote>
 <p>Note that RFC1950 only defines 8 as a valid compression method.</p>
 </blockquote>
-<h3 id="compression-information"><a class="header" href="#compression-information"><a name="compression_information"></a>Compression information</a></h3>
+<h3 id="compression_information"><a class="header" href="#compression_information">Compression information</a></h3>
 <p>The value of the compression information is dependent on the compression method.</p>
 <h4 id="compression-information---compression-method-8-deflate"><a class="header" href="#compression-information---compression-method-8-deflate">Compression information - compression method 8 (Deflate)</a></h4>
 <p>For compression method 8 (Deflate) the compression information contains the
@@ -267,7 +267,7 @@ base-2 logarithm of the LZ77 window size minus 8.</p>
 <p>E.g. a compression information value of 7 indicates a 32768 bytes window size.
 Values larger than 7 are not allowed according to RFC1950 and thus the maximum
 window size is 32768 bytes.</p>
-<h3 id="compression-level"><a class="header" href="#compression-level"><a name="compression_level"></a>Compression level</a></h3>
+<h3 id="compression_level"><a class="header" href="#compression_level">Compression level</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -283,7 +283,7 @@ window size is 32768 bytes.</p>
 </div>
 
 <h2 id="compressed-data"><a class="header" href="#compressed-data">Compressed data</a></h2>
-<h3 id="deflate-compressed-data"><a class="header" href="#deflate-compressed-data">Deflate compressed data</a></h3>
+<h3 id="deflate_compressed_data"><a class="header" href="#deflate_compressed_data">Deflate compressed data</a></h3>
 <p>The deflate compressed data consists of one or more deflate compressed blocks.
 Each block consists of:</p>
 <ul>
@@ -306,7 +306,7 @@ block.</p>
 </table>
 </div>
 
-<h4 id="block-types"><a class="header" href="#block-types"><a name="deflate_block_types"></a>Block types</a></h4>
+<h4 id="deflate_block_types"><a class="header" href="#deflate_block_types">Block types</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -498,7 +498,7 @@ additional (or extra) bits to store the distance.</p>
 </table>
 </div>
 
-<h5 id="distance-codes"><a class="header" href="#distance-codes"><a name="deflate_distance_codes"></a>Distance codes</a></h5>
+<h5 id="deflate_distance_codes"><a class="header" href="#deflate_distance_codes">Distance codes</a></h5>
 <p>The distance codes consist of:</p>
 <div class="table-wrapper">
 <table>

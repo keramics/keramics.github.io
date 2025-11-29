@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-68426b91.js";
+            window.path_to_searchindex_js = "searchindex-b70156aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3911eb30.js"></script>
@@ -599,7 +599,7 @@ dependent on the time zone and daylight savings.</p>
 value in the 4th line was observed. The number of values in the 3rd and 4th
 can differ.</p>
 </blockquote>
-<h5 id="sources-category"><a class="header" href="#sources-category"><a name="sources_category1"></a>Sources category</a></h5>
+<h5 id="sources_category1"><a class="header" href="#sources_category1">Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources.</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
 <p>Line 7 consists of 2 values, namely the values are “0 1”.</p>
@@ -644,7 +644,7 @@ the actual values in this category are dependent on the version of EnCase.</p>
 <p>If the “ha” value contains “00000000000000000000000000000000” this means the
 MD5 hash is not set. The same applies for the “sha” value when it contains
 “0000000000000000000000000000000000000000” the SHA1 has is not set.</p>
-<h5 id="subjects-category"><a class="header" href="#subjects-category"><a name="subjects_category1"></a>Subjects category</a></h5>
+<h5 id="subjects_category1"><a class="header" href="#subjects_category1">Subjects category</a></h5>
 <p>Line 12 the sub category contains information about subjects.</p>
 <p>TODO: describe what a subject is in the context of EnCase.</p>
 <p>Line 13 consists of 2 values, namely the values are “0 1”.</p>
@@ -676,7 +676,7 @@ EnCase 5 to 7 (EWF-L01) format. However:</p>
 <ul>
 <li>both the acquired and system date and time are not set</li>
 </ul>
-<h4 id="header2-values"><a class="header" href="#header2-values"><a name="header2_values"></a>Header2 values</a></h4>
+<h4 id="header2_values"><a class="header" href="#header2_values">Header2 values</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th><th>Notes</th></thead>
@@ -724,7 +724,7 @@ have a restriction of 40 characters instead of 3000 characters.</p>
 <pre><code>number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
-<h4 id="header-section"><a class="header" href="#header-section"><a name="header_section"></a>Header section</a></h4>
+<h3 id="header_section"><a class="header" href="#header_section">Header section</a></h3>
 <p>The header section is identified in the section data type field as “header”.
 Some aspects of this section are:</p>
 <ul>
@@ -1052,7 +1052,7 @@ Note that this could be something FTK Imager specific.</p>
 and time is in local time. Where as before both values were in local time.</p>
 </blockquote>
 <p>Also see <a href="#header_values">header values</a></p>
-<h5 id="sources-category-1"><a class="header" href="#sources-category-1"><a name="sources_category2"></a>Sources category</a></h5>
+<h5 id="sources_category2"><a class="header" href="#sources_category2">Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
 <p>Line 7 consists of 2 values, namely the values are “0 1”.</p>
@@ -1091,7 +1091,7 @@ and time is in local time. Where as before both values were in local time.</p>
 <p>Note the default values of some of these values has changed around linen 6.19
 or earlier.</p>
 </blockquote>
-<h5 id="subjects-category-1"><a class="header" href="#subjects-category-1"><a name="subjects_category2"></a>Subjects category</a></h5>
+<h5 id="subjects_category2"><a class="header" href="#subjects_category2">Subjects category</a></h5>
 <p>Line 12 the sub category contains information about subjects.</p>
 <p>TODO: describe what a subject is in the context of EnCase.</p>
 <p>Line 13 consists of 2 values, namely the values are “0 1”.</p>
@@ -1165,7 +1165,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 <li>In EnCase 5 both the acquired and system date and time are set to 0.</li>
 <li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the time is dependent on the local timezone and daylight savings)</li>
 </ul>
-<h4 id="header-values"><a class="header" href="#header-values"><a name="header_values"></a>Header values</a></h4>
+<h4 id="header_values"><a class="header" href="#header_values">Header values</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th><th>Notes</th></thead>
@@ -1210,17 +1210,17 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 <p>Note the restrictions were tested with EnCase 7.02.01, older versions could
 have a restriction of 40 characters instead of 3000 characters.</p>
 </blockquote>
-<h5 id="date-and-time-header-value"><a class="header" href="#date-and-time-header-value"><a name="date_time_header_value"></a>Date and time header value</a></h5>
+<h5 id="date_time_header_value"><a class="header" href="#date_time_header_value">Date and time header value</a></h5>
 <p>In EnCase a date and time contains a string of individual values separated by a
 space, e.g. “2002 3 4 10 19 59”, which represents March 4, 2002 10:19:59.</p>
 <p>In linen a date and time contains a string with a POSIX 32-bit epoch timestamp,
 e.g. “1142163845” which represents the date: March 12 2006, 11:44:05</p>
-<h5 id="extents-header-value-1"><a class="header" href="#extents-header-value-1"><a name="extents_header_value"></a>Extents header value</a></h5>
+<h5 id="extents_header_value"><a class="header" href="#extents_header_value">Extents header value</a></h5>
 <p>An extents header value consist of:</p>
 <pre><code>number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
-<h5 id="compression-header-value"><a class="header" href="#compression-header-value"><a name="compression_header_value"></a>Compression header value</a></h5>
+<h5 id="compression_header_value"><a class="header" href="#compression_header_value">Compression header value</a></h5>
 <p>A compression header value consist of a single character that represent the
 compression level.</p>
 <div class="table-wrapper">
@@ -1246,7 +1246,7 @@ check it. The data itself is not protected using the password. The password
 hashing algorithm is unknown. Need to find out. And does the algorithm differ
 per EnCase version? probably not. The algorithm does not differ in EnCase
 1 to 7. FTK Imager does not bother with a password.</p>
-<h3 id="volume-section"><a class="header" href="#volume-section"><a name="volume_section"></a>Volume section</a></h3>
+<h3 id="volume_section"><a class="header" href="#volume_section">Volume section</a></h3>
 <p>The volume section is identified in the section data type field as “volume”.
 Some aspects of this section are:</p>
 <ul>
@@ -1359,7 +1359,7 @@ the actual storage media data.</p>
 <li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file system block size</li>
 <li>the sectors count, represents some other value because ( sector_size x sector_amount != total_size ). The total size is in the ltree section.</li>
 </ul>
-<h4 id="media-type"><a class="header" href="#media-type"><a name="media_type"></a>Media type</a></h4>
+<h4 id="media_type"><a class="header" href="#media_type">Media type</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1387,7 +1387,7 @@ the actual storage media data.</p>
 fixed (0x01). The exact version of FTK imager where this behavior changed is
 unknown.</p>
 </blockquote>
-<h4 id="media-flags"><a class="header" href="#media-flags"><a name="media_flags"></a>Media flags</a></h4>
+<h4 id="media_flags"><a class="header" href="#media_flags">Media flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1406,7 +1406,7 @@ unknown.</p>
 <p>Note that if both the the Fastbloc and Tableau write blocker media flags are
 set EnCase only shows the Fastbloc.</p>
 </blockquote>
-<h4 id="compression-level"><a class="header" href="#compression-level"><a name="compression_level"></a>Compression level</a></h4>
+<h4 id="compression_level"><a class="header" href="#compression_level">Compression level</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1907,7 +1907,7 @@ specific for EWF-L01.</p>
 </div>
 
 <p>The end of line character(s) is a newline (0x0a).</p>
-<h4 id="records-category"><a class="header" href="#records-category"><a name="records_category3"></a>Records category</a></h4>
+<h4 id="records_category3"><a class="header" href="#records_category3">Records category</a></h4>
 <p>The rec category contains information about records.</p>
 <p>The 1st line of the category contains the string “rec”.</p>
 <p>The 2nd line of the category contains tab (0x09) separated type indicators.</p>
@@ -1932,7 +1932,7 @@ specific for EWF-L01.</p>
 </div>
 
 <p>The 3rd line of the category consist of the tab (0x09) separated values.</p>
-<h4 id="permissions-category"><a class="header" href="#permissions-category"><a name="permissions_category3"></a>Permissions category</a></h4>
+<h4 id="permissions_category3"><a class="header" href="#permissions_category3">Permissions category</a></h4>
 <p>The perm category contains information about file permissions.</p>
 <p>The 1st line of the category contains the string “perm”.</p>
 <p>The 2nd line consists of the following 2 values:</p>
@@ -2025,7 +2025,7 @@ more information see the sections below.</p>
 </table>
 </div>
 
-<h5 id="permission-types"><a class="header" href="#permission-types"><a name="permission_types"></a>Permission types</a></h5>
+<h5 id="permission_types"><a class="header" href="#permission_types">Permission types</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2107,7 +2107,7 @@ more information see the sections below.</p>
 </table>
 </div>
 
-<h4 id="sources-category-2"><a class="header" href="#sources-category-2"><a name="sources_category3"></a>Sources category</a></h4>
+<h4 id="sources_category3"><a class="header" href="#sources_category3">Sources category</a></h4>
 <p>The srce category contains information about acquisition sources of the file entries.</p>
 <p>TODO: describe what an acquisition source is in the context of EnCase.</p>
 <p>The 1st line of the category contains the string “srce”.</p>
@@ -2230,7 +2230,7 @@ set.</p>
 </table>
 </div>
 
-<h4 id="subjects-category-2"><a class="header" href="#subjects-category-2"><a name="subjects_category3"></a>Subjects category</a></h4>
+<h4 id="subjects_category3"><a class="header" href="#subjects_category3">Subjects category</a></h4>
 <p>The sub category contains information about TODO</p>
 <p>TODO: describe what a subject is in the context of EnCase.</p>
 <p>The 1st line of the category contains the string “sub”.</p>
@@ -2307,7 +2307,7 @@ more information see the sections below.</p>
 </table>
 </div>
 
-<h4 id="file-entries-category"><a class="header" href="#file-entries-category"><a name="file_entries_category3"></a>File entries category</a></h4>
+<h4 id="file_entries_category3"><a class="header" href="#file_entries_category3">File entries category</a></h4>
 <p>The entry category contains information about the file entries.</p>
 <p>The 1st line of the category contains the string “entry”.</p>
 <p>The 2nd line consists of 2 values.</p>
@@ -2525,7 +2525,7 @@ followed by the number of sub file entries.</p>
 <p>If the “ha” value contains “00000000000000000000000000000000” this means the
 MD5 hash is not set. The same applies for the “sha” value when it contains
 “0000000000000000000000000000000000000000” the SHA1 has is not set.</p>
-<h6 id="file-entry-name"><a class="header" href="#file-entry-name"><a name="file_entry_name"></a>File entry name</a></h6>
+<h6 id="file_entry_name"><a class="header" href="#file_entry_name">File entry name</a></h6>
 <p>A file entry name (“n” value):</p>
 <ul>
 <li>can contain path segment separator characters like “\” and “/”</li>
@@ -2536,7 +2536,7 @@ MD5 hash is not set. The same applies for the “sha” value when it contains
 same way so no real way to reliably tell the difference.</p>
 </blockquote>
 <p>An empty name has been observed to be represented as “NoName”.</p>
-<h6 id="short-name"><a class="header" href="#short-name"><a name="short_name"></a>Short name</a></h6>
+<h6 id="short_name"><a class="header" href="#short_name">Short name</a></h6>
 <p>The short name (“snh”) value contains 2 values:</p>
 <div class="table-wrapper">
 <table>
@@ -2569,7 +2569,7 @@ followed by the number of sub file entries.</p>
 </table>
 </div>
 
-<h5 id="file-entry-flags"><a class="header" href="#file-entry-flags"><a name="file_entry_flags"></a>File entry flags</a></h5>
+<h5 id="file_entry_flags"><a class="header" href="#file_entry_flags">File entry flags</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2627,7 +2627,7 @@ the data contains the byte value 0x00 the resulting file should consists of
 <p>If the duplicate data offset value is set the single byte in the data is
 ignored and the duplicate data offset refers to the location where the data
 stored.</p>
-<h5 id="binary-extents-value"><a class="header" href="#binary-extents-value"><a name="binary_extents"></a>Binary extents value</a></h5>
+<h5 id="binary_extents"><a class="header" href="#binary_extents">Binary extents value</a></h5>
 <p>The binary extents value contains 3 values separated by a space:</p>
 <pre><code>Unknown Offset Size
 </code></pre>
@@ -2641,7 +2641,7 @@ stored.</p>
 <blockquote>
 <p>Note that the binary extents value contains only 1 value for the first single file entry.</p>
 </blockquote>
-<h5 id="extended-attributes-value"><a class="header" href="#extended-attributes-value"><a name="extended_attributes"></a>Extended attributes value</a></h5>
+<h5 id="extended_attributes"><a class="header" href="#extended_attributes">Extended attributes value</a></h5>
 <p>The extended attributes value contains base-16 encoded data, which consists of:</p>
 <ul>
 <li>Extended attributes header (stored as an extended attribute)</li>

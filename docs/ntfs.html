@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-68426b91.js";
+            window.path_to_searchindex_js = "searchindex-b70156aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3911eb30.js"></script>
@@ -512,7 +512,7 @@ Where FVE is an abbreviation of Full Volume Encryption.</p>
 data.</p>
 <p>VSS is largely a stand-alone but has some integration with NTFS.</p>
 <p>TODO: link to VSS format documentation</p>
-<h3 id="media-descriptor"><a class="header" href="#media-descriptor"><a name="media_descriptor"></a>Media descriptor</a></h3>
+<h3 id="media_descriptor"><a class="header" href="#media_descriptor">Media descriptor</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -622,7 +622,7 @@ freed; it is 0 if the segment is not used.</p>
 <h5 id="base-record-file-reference"><a class="header" href="#base-record-file-reference">Base record file reference</a></h5>
 <p>The base record file reference is used to store additional attributes for
 another MFT entry, e.g. for attribute lists.</p>
-<h4 id="mft-entry-flags"><a class="header" href="#mft-entry-flags"><a name="mft_entry_flags"></a>MFT entry flags</a></h4>
+<h4 id="mft_entry_flags"><a class="header" href="#mft_entry_flags">MFT entry flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -637,7 +637,7 @@ another MFT entry, e.g. for attribute lists.</p>
 </table>
 </div>
 
-<h4 id="the-fix-up-values"><a class="header" href="#the-fix-up-values"><a name="fix_up_values"></a>The fix-up values</a></h4>
+<h4 id="fix_up_values"><a class="header" href="#fix_up_values">The fix-up values</a></h4>
 <p>The fix-up values are of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -665,7 +665,7 @@ likely to the number of words.</p>
 are stored at offset 42. This is likely where the name wfixupPattern originates
 from.</p>
 <p>TODO: provide examples on applying the fix-up values.</p>
-<h3 id="the-file-reference"><a class="header" href="#the-file-reference"><a name="file_reference"></a>The file reference</a></h3>
+<h3 id="file_reference"><a class="header" href="#file_reference">The file reference</a></h3>
 <p>The file reference (FILE_REFERENCE or MFT_SEGMENT_REFERENCE) is 8 bytes in size
 and consists of:</p>
 <div class="table-wrapper">
@@ -714,7 +714,7 @@ consists of:</p>
 </table>
 </div>
 
-<h4 id="mft-attribute-data-flags"><a class="header" href="#mft-attribute-data-flags"><a name="mft_attribute_data_flags"></a>MFT attribute data flags</a></h4>
+<h4 id="mft_attribute_data_flags"><a class="header" href="#mft_attribute_data_flags">MFT attribute data flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -795,7 +795,7 @@ a file entirely filled with 0-byte values.</p>
 </blockquote>
 <p>TODO: determine the meaning of a VCN of -1</p>
 <p>For more information about compressed MFT attributes see <a href="#compression">compression</a>.</p>
-<h4 id="attribute-name"><a class="header" href="#attribute-name"><a name="attribute_name"></a>Attribute name</a></h4>
+<h4 id="attribute_name"><a class="header" href="#attribute_name">Attribute name</a></h4>
 <p>The attribute name is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -870,7 +870,7 @@ consists of 16 cluster blocks. However the actual value is stored in the
 non-resident MFT attribute.</p>
 <p>Also see <a href="#compression">compression</a>.</p>
 <h2 id="the-attributes"><a class="header" href="#the-attributes">The attributes</a></h2>
-<h3 id="known-attribute-types"><a class="header" href="#known-attribute-types"><a name="attribute_types"></a>Known attribute types</a></h3>
+<h3 id="attribute_types"><a class="header" href="#attribute_types">Known attribute types</a></h3>
 <p>The attribute types are stored in the <a href="#attribute_definitions">$AttrDef metadata file</a>.</p>
 <div class="table-wrapper">
 <table>
@@ -942,7 +942,7 @@ non-resident MFT attribute.</p>
 </table>
 </div>
 
-<h3 id="attribute-chains"><a class="header" href="#attribute-chains"><a name="attribute_chains"></a>Attribute chains</a></h3>
+<h3 id="attribute_chains"><a class="header" href="#attribute_chains">Attribute chains</a></h3>
 <p>Multiple attributes can be chained to make up a single attribute data stream,
 e.g. the attributes:</p>
 <ol>
@@ -1037,7 +1037,7 @@ consists of:</p>
 </table>
 </div>
 
-<h3 id="the-file-name-attribute"><a class="header" href="#the-file-name-attribute"><a name="file_name_attribute"></a>The file name attribute</a></h3>
+<h3 id="file_name_attribute"><a class="header" href="#file_name_attribute">The file name attribute</a></h3>
 <p>The file name attribute ($FILE_NAME) contains the basic file system information,
 like the parent file entry, various date and time values and name. It is stored
 as a resident MFT attribute.</p>
@@ -1190,7 +1190,7 @@ about the volume. It is stored as a resident MFT attribute.</p>
 </div>
 
 <p>The volume information attribute is used in the $Volume metadata file MFT entry.</p>
-<h4 id="volume-flags"><a class="header" href="#volume-flags"><a name="volume_flags"></a>Volume flags</a></h4>
+<h4 id="volume_flags"><a class="header" href="#volume_flags">Volume flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1304,7 +1304,7 @@ information about the extended attribute ($EA).</p>
 </div>
 
 <p>TODO: determine if the name is 2-byte aligned</p>
-<h4 id="extended-attribute-flags"><a class="header" href="#extended-attribute-flags"><a name="extended_attribute_flags"></a>Extended attribute flags</a></h4>
+<h4 id="extended_attribute_flags"><a class="header" href="#extended_attribute_flags">Extended attribute flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1339,7 +1339,7 @@ $AttrDef does not seem to always define this attribute.</p>
 </table>
 </div>
 
-<h2 id="the-attribute-types"><a class="header" href="#the-attribute-types"><a name="attribute_types"></a>The attribute types</a></h2>
+<h2 id="attribute_types"><a class="header" href="#attribute_types">The attribute types</a></h2>
 <p>The attribute types are stored in the <code>$AttrDef</code> metadata file.</p>
 <div class="table-wrapper">
 <table>
@@ -1359,7 +1359,7 @@ $AttrDef does not seem to always define this attribute.</p>
 </table>
 </div>
 
-<h2 id="the-index"><a class="header" href="#the-index"><a name="index"></a>The index</a></h2>
+<h2 id="index"><a class="header" href="#index">The index</a></h2>
 <p>The index structures are used for various purposes one of which are the
 directory entries.</p>
 <p>The root of the index is stored in index root. The index root attribute defines
@@ -1408,7 +1408,7 @@ used.</p>
 </table>
 </div>
 
-<h3 id="the-index-root"><a class="header" href="#the-index-root"><a name="index_root"></a>The index root</a></h3>
+<h3 id="index_root"><a class="header" href="#index_root">The index root</a></h3>
 <p>The index root consists of:</p>
 <ul>
 <li>index root header</li>
@@ -1436,7 +1436,7 @@ used.</p>
 the index entry size in the volume header. The correct size seems to be the
 value in the index root header.</p>
 </blockquote>
-<h4 id="collation-type"><a class="header" href="#collation-type"><a name="collation_type"></a>Collation type</a></h4>
+<h4 id="collation_type"><a class="header" href="#collation_type">Collation type</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1509,7 +1509,7 @@ data size.</p>
 <p>In an index entry (index allocation attribute) the index node size includes the
 size of the fix-up values and the alignment padding following it.</p>
 <p>The remainder of the index node contains remnant data and/or zero-byte values.</p>
-<h4 id="the-index-node-flags"><a class="header" href="#the-index-node-flags"><a name="index_node_flags"></a>The index node flags</a></h4>
+<h4 id="index_node_flags"><a class="header" href="#index_node_flags">The index node flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1580,7 +1580,7 @@ It appears to only to be used by the $Secure metadata file.</p>
 <p>The MFT attribute name of the security descriptor identifier index is: $SII.
 It appears to only to be used by the $Secure metadata file.</p>
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
-<h2 id="compression"><a class="header" href="#compression"><a name="compression"></a>Compression</a></h2>
+<h2 id="compression"><a class="header" href="#compression">Compression</a></h2>
 <h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
 <p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster
 blocks also named a compression unit, which is either “compressed” or
@@ -1683,7 +1683,7 @@ table and is not stored in the chunk offset table.</p>
 <p>If the uncompressed size of a chunk is smaller than the compression unit size
 the chunk is stored uncompressed.</p>
 <p>Also see <a href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a>.</p>
-<h2 id="the-reparse-point"><a class="header" href="#the-reparse-point"><a name="reparse_point"></a>The reparse point</a></h2>
+<h2 id="reparse_point"><a class="header" href="#reparse_point">The reparse point</a></h2>
 <p>The reparse point is used to create file system-level links. Reparse data is
 stored in the reparse point attribute. The reparse point data
 (REPARSE_DATA_BUFFER) is of variable size and consists of:</p>
@@ -1702,7 +1702,7 @@ stored in the reparse point attribute. The reparse point data
 </div>
 
 <p>TODO: determine if non-native (Microsoft) reparse points are stored with their GUID</p>
-<h3 id="the-reparse-point-tag"><a class="header" href="#the-reparse-point-tag"><a name="reparse_point_tag"></a>The reparse point tag</a></h3>
+<h3 id="reparse_point_tag"><a class="header" href="#reparse_point_tag">The reparse point tag</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1913,7 +1913,7 @@ stored in the reparse point attribute. The reparse point data
 </table>
 </div>
 
-<h3 id="junction-or-mount-point-reparse-data"><a class="header" href="#junction-or-mount-point-reparse-data"><a name="junction_reparse_data"></a>Junction or mount point reparse data</a></h3>
+<h3 id="junction_reparse_data"><a class="header" href="#junction_reparse_data">Junction or mount point reparse data</a></h3>
 <p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains
 junction or mount point reparse data. The junction or mount point reparse data
 is of variable size and consists of:</p>
@@ -1947,7 +1947,7 @@ character or if they are followed by alignment padding.</p>
 00000030: 74 00 5c 00 44 00 6f 00  63 00 75 00 6d 00 65 00   t.\.D.o. c.u.m.e.
 00000040: 6e 00 74 00 73 00 00 00                            n.t.s...
 </code></pre>
-<h3 id="symbolic-link-reparse-data"><a class="header" href="#symbolic-link-reparse-data"><a name="symbolic_link_reparse_data"></a>Symbolic link reparse data</a></h3>
+<h3 id="symbolic_link_reparse_data"><a class="header" href="#symbolic_link_reparse_data">Symbolic link reparse data</a></h3>
 <p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic
 link reparse data. The symbolic link reparse data is of variable size and
 consists of:</p>
@@ -1982,7 +1982,7 @@ consists of:</p>
 </table>
 </div>
 
-<h3 id="windows-overlay-filter-wof-reparse-data"><a class="header" href="#windows-overlay-filter-wof-reparse-data"><a name="wof_reparse_data"></a>Windows Overlay Filter (WOF) reparse data</a></h3>
+<h3 id="wof_reparse_data"><a class="header" href="#wof_reparse_data">Windows Overlay Filter (WOF) reparse data</a></h3>
 <p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows
 Overlay Filter (WOF) reparse data. The Windows Overlay Filter (WOF) reparse
 data is 16 bytes in size and consists of:</p>
@@ -2004,7 +2004,7 @@ data is 16 bytes in size and consists of:</p>
 </table>
 </div>
 
-<h3 id="windows-overlay-filter-wof-compression-method"><a class="header" href="#windows-overlay-filter-wof-compression-method"><a name="wof_compression_method"></a>Windows Overlay Filter (WOF) compression method</a></h3>
+<h3 id="wof_compression_method"><a class="header" href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2020,7 +2020,7 @@ data is 16 bytes in size and consists of:</p>
 </div>
 
 <p>TODO: link to LZXPRESS Huffman and LZX documentation</p>
-<h3 id="windows-container-isolation-wci-reparse-data"><a class="header" href="#windows-container-isolation-wci-reparse-data"><a name="wci_reparse_data"></a>Windows Container Isolation (WCI) reparse data</a></h3>
+<h3 id="wci_reparse_data"><a class="header" href="#wci_reparse_data">Windows Container Isolation (WCI) reparse data</a></h3>
 <p>A reparse point with tag IO_REPARSE_TAG_WCI (0x80000018) contains Windows
 Container Isolation (WCI) reparse data. The Windows Container Isolation (WCI)
 reparse data is of variable size and consists of:</p>
@@ -2045,7 +2045,7 @@ reparse data is of variable size and consists of:</p>
 <p>Every bit in the allocation bitmap represents a block the size of the cluster
 block, where the LSB is the first bit in a byte.</p>
 <p>TODO: describe what the $SRAT data stream is used for.</p>
-<h2 id="access-control"><a class="header" href="#access-control"><a name="access_control"></a>Access control</a></h2>
+<h2 id="access_control"><a class="header" href="#access_control">Access control</a></h2>
 <p>The $Secure metadata file contains the security descriptors used for access control.</p>
 <div class="table-wrapper">
 <table>
@@ -2060,7 +2060,7 @@ block, where the LSB is the first bit in a byte.</p>
 </div>
 
 <h3 id="security-descriptor-hash-sdh-index"><a class="header" href="#security-descriptor-hash-sdh-index">Security descriptor hash ($SDH) index</a></h3>
-<h4 id="the-security-descriptor-hash-index-value"><a class="header" href="#the-security-descriptor-hash-index-value"><a name="security_descriptor_hash_index_value"></a>The security descriptor hash index value</a></h4>
+<h4 id="security_descriptor_hash_index_value"><a class="header" href="#security_descriptor_hash_index_value">The security descriptor hash index value</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2086,7 +2086,7 @@ block, where the LSB is the first bit in a byte.</p>
 </div>
 
 <h3 id="security-descriptor-identifier-sii-index"><a class="header" href="#security-descriptor-identifier-sii-index">Security descriptor identifier ($SII) index</a></h3>
-<h4 id="the-security-descriptor-identifier-index-value"><a class="header" href="#the-security-descriptor-identifier-index-value"><a name="security_descriptor_identifier_index_value"></a>The security descriptor identifier index value</a></h4>
+<h4 id="security_descriptor_identifier_index_value"><a class="header" href="#security_descriptor_identifier_index_value">The security descriptor identifier index value</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2150,7 +2150,7 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
-<h2 id="metadata-transaction-journal-log-file"><a class="header" href="#metadata-transaction-journal-log-file"><a name="log_file"></a>Metadata transaction journal (log file)</a></h2>
+<h2 id="log_file"><a class="header" href="#log_file">Metadata transaction journal (log file)</a></h2>
 <p>TODO: complete section</p>
 <p>The metadata file $LogFile contains the metadata transaction journal and
 consists of:</p>
@@ -2202,7 +2202,7 @@ in size and consists of:</p>
 </table>
 </div>
 
-<h2 id="usn-change-journal"><a class="header" href="#usn-change-journal"><a name="usn_change_journal"></a>USN change journal</a></h2>
+<h2 id="usn_change_journal"><a class="header" href="#usn_change_journal">USN change journal</a></h2>
 <p>The metadata file $Extend$UsnJrnl contains the USN change journal. It is a
 sparse file in which NTFS stores records of changes to files and directories.
 Applications make use of the journal to respond to file and directory changes
@@ -2275,7 +2275,7 @@ of:</p>
 </table>
 </div>
 
-<h4 id="update-reason-flags"><a class="header" href="#update-reason-flags"><a name="update_reason_flags"></a>Update reason flags</a></h4>
+<h4 id="update_reason_flags"><a class="header" href="#update_reason_flags">Update reason flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2332,7 +2332,7 @@ of:</p>
 </table>
 </div>
 
-<h4 id="update-source-flags"><a class="header" href="#update-source-flags"><a name="update_source_flags"></a>Update source flags</a></h4>
+<h4 id="update_source_flags"><a class="header" href="#update_source_flags">Update source flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2379,7 +2379,7 @@ ZoneId=3
 </code></pre>
 <p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
 of the origin.</p>
-<h2 id="transactional-ntfs-txf"><a class="header" href="#transactional-ntfs-txf"><a name="transactional_ntfs"></a>Transactional NTFS (TxF)</a></h2>
+<h2 id="transactional_ntfs"><a class="header" href="#transactional_ntfs">Transactional NTFS (TxF)</a></h2>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
 <p>In TxF the resource manager (RM) keeps track of transactional metadata and log
 files. The TxF related metadata files are stored in the metadata directory:</p>
@@ -2556,7 +2556,7 @@ in size and consist of:</p>
 utility stream attributes.</p>
 </blockquote>
 <h2 id="windows-definitions"><a class="header" href="#windows-definitions">Windows definitions</a></h2>
-<h3 id="file-attribute-flags"><a class="header" href="#file-attribute-flags"><a name="file_attribute_flags"></a>File attribute flags</a></h3>
+<h3 id="file_attribute_flags"><a class="header" href="#file_attribute_flags">File attribute flags</a></h3>
 <p>The file attribute flags consist of the following values:</p>
 <div class="table-wrapper">
 <table>
@@ -2612,7 +2612,7 @@ not updated. For now the latter is assumed.</p>
 </table>
 </div>
 
-<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios"><a name="corruption_scenarios"></a>Corruption scenarios</a></h2>
+<h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Corruption scenarios</a></h2>
 <h3 id="data-steam-with-inconsistent-data-flags"><a class="header" href="#data-steam-with-inconsistent-data-flags">Data steam with inconsistent data flags</a></h3>
 <p>An MFT entry contains an $ATTRIBUTE_LIST attribute that contains multiple $DATA
 attributes. The $DATA attributes define a LZNT1 compressed data stream though

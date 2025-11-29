@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-68426b91.js";
+            window.path_to_searchindex_js = "searchindex-b70156aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3911eb30.js"></script>
@@ -712,7 +712,7 @@ stored in the superblock should be used instead of calculating it based on the
 file system identifier.</p>
 <p>If checksum type is CRC-32C, the metadata checksum seed is stored as
 0xffffffff - CRC-32C.</p>
-<h3 id="file-system-state-flags"><a class="header" href="#file-system-state-flags"><a name="file_system_state_flags"></a>File system state flags</a></h3>
+<h3 id="file_system_state_flags"><a class="header" href="#file_system_state_flags">File system state flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -725,7 +725,7 @@ file system identifier.</p>
 </table>
 </div>
 
-<h3 id="error-handling-status"><a class="header" href="#error-handling-status"><a name="error_handling_status"></a>Error-handling status</a></h3>
+<h3 id="error_handling_status"><a class="header" href="#error_handling_status">Error-handling status</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -738,7 +738,7 @@ file system identifier.</p>
 </table>
 </div>
 
-<h3 id="creator-operating-system"><a class="header" href="#creator-operating-system"><a name="creator_operating_system"></a>Creator operating system</a></h3>
+<h3 id="creator_operating_system"><a class="header" href="#creator_operating_system">Creator operating system</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -755,7 +755,7 @@ file system identifier.</p>
 </table>
 </div>
 
-<h3 id="format-revision"><a class="header" href="#format-revision"><a name="format_revisision"></a>Format revision</a></h3>
+<h3 id="format_revisision"><a class="header" href="#format_revisision">Format revision</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -766,7 +766,7 @@ file system identifier.</p>
 </table>
 </div>
 
-<h3 id="compatible-feature-flags"><a class="header" href="#compatible-feature-flags"><a name="compatible_feature_flags"></a>Compatible feature flags</a></h3>
+<h3 id="compatible_feature_flags"><a class="header" href="#compatible_feature_flags">Compatible feature flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -803,7 +803,7 @@ file system identifier.</p>
 <p>Note that EXT2_FEATURE_COMPAT_, EXT3_FEATURE_COMPAT_, EXT4_FEATURE_COMPAT_ and
 COMPAT_ can be used interchangeably.</p>
 </blockquote>
-<h3 id="incompatible-feature-flags"><a class="header" href="#incompatible-feature-flags"><a name="incompatible_feature_flags"></a>Incompatible feature flags</a></h3>
+<h3 id="incompatible_feature_flags"><a class="header" href="#incompatible_feature_flags">Incompatible feature flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -850,7 +850,7 @@ COMPAT_ can be used interchangeably.</p>
 <p>Note that EXT2_FEATURE_INCOMPAT_, EXT3_FEATURE_INCOMPAT_,
 EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
 </blockquote>
-<h3 id="read-only-compatible-feature-flags"><a class="header" href="#read-only-compatible-feature-flags"><a name="read_only_compatible_feature_flags"></a>Read-only compatible feature flags</a></h3>
+<h3 id="read_only_compatible_feature_flags"><a class="header" href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -900,7 +900,7 @@ EXT4_FEATURE_RO_COMPAT_ and RO_COMPAT_ can be used interchangeably.</p>
 the upper 8-bits of the read-only compatible feature flags are set as in
 0xff000003. debugfs identifies these as FEATURE_R24 - FEATURE_R31.</p>
 </blockquote>
-<h3 id="checksum-types"><a class="header" href="#checksum-types"><a name="checksum_types"></a>Checksum types</a></h3>
+<h3 id="checksum_types"><a class="header" href="#checksum_types">Checksum types</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1014,7 +1014,7 @@ checksum.</p>
 </ul>
 <p>TODO: describe the block bitmap checksum calculation: crc32c(s_uuid+grp_num+bbitmap)</p>
 <p>TODO: describe the inode bitmap checksum calculation: crc32c(s_uuid+grp_num+ibitmap)</p>
-<h3 id="block-group-flags"><a class="header" href="#block-group-flags"><a name="block_group_flags"></a>Block group flags</a></h3>
+<h3 id="block_group_flags"><a class="header" href="#block_group_flags">Block group flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1059,7 +1059,7 @@ EXT4_FEATURE_INCOMPAT_EXTENTS.</p>
 data size is greater than the total data size defined by the extent
 descriptors.</p>
 </blockquote>
-<h3 id="the-ext4-extents-header"><a class="header" href="#the-ext4-extents-header"><a name="ext4_extents_header"></a>The ext4 extents header</a></h3>
+<h3 id="ext4_extents_header"><a class="header" href="#ext4_extents_header">The ext4 extents header</a></h3>
 <p>The ext4 extents header (ext4_extent_header) is 12 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1077,7 +1077,7 @@ descriptors.</p>
 </table>
 </div>
 
-<h3 id="the-ext4-extent-descriptor"><a class="header" href="#the-ext4-extent-descriptor"><a name="ext4_extent_descriptor"></a>The ext4 extent descriptor</a></h3>
+<h3 id="ext4_extent_descriptor"><a class="header" href="#ext4_extent_descriptor">The ext4 extent descriptor</a></h3>
 <p>The ext4 extent descriptor (ext4_extent) is 12 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1107,7 +1107,7 @@ previous extent descriptors.</p>
 <p>Note that the native Linux ext implementation expects the extents to be stored
 in order of logical block number.</p>
 </blockquote>
-<h3 id="the-ext4-extents-index"><a class="header" href="#the-ext4-extents-index"><a name="ext4_extent_index"></a>The ext4 extents index</a></h3>
+<h3 id="ext4_extent_index"><a class="header" href="#ext4_extent_index">The ext4 extents index</a></h3>
 <p>The ext4 extent index (ext4_extent_idx) is 12 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1442,7 +1442,7 @@ i_generation of the one owning inode (in cases where the EA inode is not
 referenced by multiple inodes) to verify that the EA inode is the correct
 one being accessed.</p>
 </blockquote>
-<h3 id="file-mode"><a class="header" href="#file-mode"><a name="file_mode"></a>File mode</a></h3>
+<h3 id="file_mode"><a class="header" href="#file_mode">File mode</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1497,7 +1497,7 @@ one being accessed.</p>
 </table>
 </div>
 
-<h3 id="inode-flags"><a class="header" href="#inode-flags"><a name="inode_flags"></a>Inode flags</a></h3>
+<h3 id="inode_flags"><a class="header" href="#inode_flags">Inode flags</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1608,7 +1608,7 @@ EXT4_INLINE_DATA_FL is set.</p>
 <p>Note that inodes can have an implicit last sparse extent if the the inode
 data size is greater than 60 bytes.</p>
 </blockquote>
-<h2 id="huge-files"><a class="header" href="#huge-files"><a name="huge_files"></a>Huge files</a></h2>
+<h2 id="huge_files"><a class="header" href="#huge_files">Huge files</a></h2>
 <p>TODO: complete section</p>
 <h2 id="directory-entries"><a class="header" href="#directory-entries">Directory entries</a></h2>
 <p>Directories entries are stored in the data blocks of a directory inode. The
@@ -1626,7 +1626,7 @@ directory entries can be stored in multiple ways:</p>
 <li>directory entry for “..” (parent)</li>
 <li>directory entry for other file system entries</li>
 </ul>
-<h4 id="the-directory-entry"><a class="header" href="#the-directory-entry"><a name="directory_entry"></a>The directory entry</a></h4>
+<h4 id="directory_entry"><a class="header" href="#directory_entry">The directory entry</a></h4>
 <p>The directory entry is of variable size, at most 263 bytes, and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1648,7 +1648,7 @@ directory entries can be stored in multiple ways:</p>
 the upper byte was never used.</p>
 <p>The name can contain any character value except the path segment separator (‘/’)
 and the NUL-character (‘\0’).</p>
-<h4 id="file-types"><a class="header" href="#file-types"><a name="file_types"></a>File types</a></h4>
+<h4 id="file_types"><a class="header" href="#file_types">File types</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1734,7 +1734,7 @@ stored in the 60 bytes in the inode that are normally used for the 12 direct
 and 3 indirect block numbers. If the target path is longer than 60 characters,
 a block is allocated, and the block contains the target path. The inode data
 size contains the length of the target path.</p>
-<h2 id="extended-attributes"><a class="header" href="#extended-attributes"><a name="extended_attributes"></a>Extended attributes</a></h2>
+<h2 id="extended_attributes"><a class="header" href="#extended_attributes">Extended attributes</a></h2>
 <p>Extended attributes can be stored:</p>
 <ul>
 <li>in the inode block after the inode data</li>
@@ -1870,6 +1870,10 @@ with an encrypted file.</p>
 <blockquote>
 <p>Note that the excluded bitmap is used for snapshots.</p>
 </blockquote>
+<h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Corruption scenarios</a></h2>
+<h3 id="file-entry-with-invalid-extents-header-signature"><a class="header" href="#file-entry-with-invalid-extents-header-signature">File entry with invalid extents header signature</a></h3>
+<p>File content inaccessible but file entry metadata and extended attributes
+accessible.</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <ul>
 <li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux kernel documentation</li>
