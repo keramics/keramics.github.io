@@ -1,0 +1,1125 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>VMWare Virtual Disk Format (VMDK) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-9b689eb2.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-d56c65c4.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="vmware-virtual-disk-vmdk-format"><a class="header" href="#vmware-virtual-disk-vmdk-format">VMware Virtual Disk (VMDK) format</a></h1>
+<p>The VMware Virtual Disk (VMDK) format is used by VMware virtualization products
+as one of its image format.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>A VMDK disk image can consist of multiple files, such as:</p>
+<ul>
+<li>descriptor file</li>
+<li>extent data files</li>
+<li>raw extent data file</li>
+<li>VMDK sparse extent data file</li>
+<li>COWD sparse extent data file</li>
+</ul>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+<tr><td>Date and time values</td><td></td></tr>
+
+<tr><td>Character strings</td><td>narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a codepage defined in the descriptor file.</td></tr>
+
+</table>
+</div>
+
+<p>The number of bytes per sector is 512.</p>
+<h3 id="disk-types"><a class="header" href="#disk-types">Disk types</a></h3>
+<p>There are multiple types of VMKD images, namely:</p>
+<p>The 2GbMaxExtentFlat (or twoGbMaxExtentFlat) disk image, which consists of:</p>
+<ul>
+<li>a descriptor file (&lt;name&gt;.vmdk)</li>
+<li>raw data extent files (&lt;name&gt;-f###.vmdk), where ### is contains a decimal value starting with 1.</li>
+</ul>
+<p>The 2GbMaxExtentSparse (or twoGbMaxExtentSparse) disk image, which consists of:</p>
+<ul>
+<li>a descriptor file (&lt;name&gt;.vmdk)</li>
+<li>VMDK sparse data extent files (&lt;name&gt;-s###.vmdk), where ### is contains a decimal value starting with 1.</li>
+</ul>
+<p>The monolithicFlat disk image, which consists of:</p>
+<ul>
+<li>a descriptor file (&lt;name&gt;.vmdk)</li>
+<li>raw data extent file (&lt;name&gt;-f001.vmdk)</li>
+</ul>
+<p>The monolithicSparse disk image, which consists of:</p>
+<ul>
+<li>VMDK sparse data extent file (&lt;name&gt;.vmdk) also contains the descriptor file data.</li>
+</ul>
+<p>The vmfs disk image, which consists of:</p>
+<ul>
+<li>a descriptor file (&lt;name&gt;.vmdk)</li>
+<li>raw data extent file (&lt;name&gt;-flat.vmdk)</li>
+</ul>
+<p>The vmfsSparse differential disk image, which consists of:</p>
+<ul>
+<li>a descriptor file (&lt;name&gt;.vmdk)</li>
+<li>COWD sparse data extent files (&lt;name&gt;-delta.vmdk)</li>
+</ul>
+<p>TODO: describe more disk types</p>
+<h3 id="delta-links"><a class="header" href="#delta-links">Delta links</a></h3>
+<p>A delta link is similar to a differential image where the image contains the
+changes (or delta) in comparison of a parent image. According to the Virtual
+Disk Format 5.0 specification one delta image can chain to another delta image.</p>
+<p>TODO: Name &lt;name&gt;-delta.vmdk</p>
+<h2 id="descriptor_file"><a class="header" href="#descriptor_file">Descriptor file</a></h2>
+<p>The descriptor file is a case-insensitive text based file that contains the
+following information:</p>
+<ul>
+<li>optional comment and empty lines</li>
+<li>header</li>
+<li>extent descriptions</li>
+<li>optional change tracking file</li>
+<li>disk data base (DDB)</li>
+</ul>
+<blockquote>
+<p>Note that the descriptor file can contains leading and trailing whitespace.
+Lines are separated by a line feed character (0x0a). And leading comment
+(starting with #) and empty lines.</p>
+</blockquote>
+<h3 id="header"><a class="header" href="#header">Header</a></h3>
+<p>The header of a descriptor file looks similar to the data below.</p>
+<pre><code># Disk DescriptorFile
+version=1
+CID=12345678
+parentCID=ffffffff
+createType="twoGbMaxExtentSparse"
+</code></pre>
+<p>The header consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"# Disk DescriptorFile"</td><td>Section header (or file signature)</td></tr>
+
+<tr><td>version</td><td><a href="#descriptor_file_format_versions">Format version</a></td></tr>
+
+<tr><td>encoding</td><td><a href="#descriptor_file_encodings">Encoding</a></td></tr>
+
+<tr><td>CID</td><td>Content identifier, which contains a random 32-bit value updated the first time the content of the virtual disk is modified after the virtual disk is opened.</td></tr>
+
+<tr><td>parentCID</td><td>The content identifier of the parent, which contains a 32-bit value identifying the parent content, where a value of 'ffffffff' (-1) represents no parent content.</td></tr>
+
+<tr><td>isNativeSnapshot</td><td>TODO: add description. A value of "no" has been observed in a VMWare Player 9 descriptor file.</td></tr>
+
+<tr><td>createType</td><td><a href="#descriptor_file_disk_types">Disk type</a></td></tr>
+
+<tr><td>parentFileNameHint</td><td>Contains the path to the parent image, which is only present if the image is a differential image (delta link).</td></tr>
+
+</table>
+</div>
+
+<p>TODO: confirm if a content identifier of ‘fffffffe’ (-2) represents that the long content identifier should be used</p>
+<h4 id="descriptor_file_format_versions"><a class="header" href="#descriptor_file_format_versions">Format versions</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td>TODO: add description</td></tr>
+
+<tr><td>2</td><td>TODO: add description</td></tr>
+
+<tr><td>3</td><td>TODO: add description</td></tr>
+
+</table>
+</div>
+
+<h4 id="descriptor_file_encodings"><a class="header" href="#descriptor_file_encodings">Encodings</a></h4>
+<blockquote>
+<p>Note that it is currently unknown which encodings are supported, currently it
+is assumed that at least the Windows codepages are supported and that the
+default is UTF-8.</p>
+</blockquote>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>Big5</td><td>Big5 assumed to be equivalent to Windows codepage 950</td></tr>
+
+<tr><td>GBK</td><td>GBK assumed to be equivalent to Windows codepage 936, which was observed in VMWare Workstation for Windows, Chinese edition</td></tr>
+
+<tr><td>Shift_JIS</td><td>Shift_JIS assumed to be equivalent to Windows codepage 932, which was observed in VMWare Workstation for Windows, Japanese edition</td></tr>
+
+<tr><td>UTF-8</td><td>UTF-8</td></tr>
+
+<tr><td></td><td></td></tr>
+
+<tr><td>windows-949-2000</td><td>Windows codepage 949, 2000 version</td></tr>
+
+<tr><td>windows-1252</td><td>Windows codepage 1252, which was observed in VMWare Player 9 descriptor file</td></tr>
+
+</table>
+</div>
+
+<h4 id="descriptor_file_disk_types"><a class="header" href="#descriptor_file_disk_types">Disk types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>2GbMaxExtentFlat, twoGbMaxExtentFlat</td><td>The disk is split into fixed-size extents of maximum 2 GB, which consists of raw extent data files.</td></tr>
+
+<tr><td>2GbMaxExtentSparse, twoGbMaxExtentSparse</td><td>The disk is split into sparse (dynamic-size) extents of maximum 2 GB, which consists of VMDK sparse extent data files.</td></tr>
+
+<tr><td>custom</td><td>TODO: add description. Descriptor file with arbitrary extents, used to mount v2i-format.</td></tr>
+
+<tr><td>fullDevice</td><td>The disk uses a full physical disk device.</td></tr>
+
+<tr><td>monolithicFlat</td><td>The disk is a single raw extent data file.</td></tr>
+
+<tr><td>monolithicSparse</td><td>The disk is a single VMDK sparse extent data file.</td></tr>
+
+<tr><td>partitionedDevice</td><td>The disk uses a full physical disk device, using access per partition.</td></tr>
+
+<tr><td>streamOptimized</td><td>The disk is a single compressed VMDK sparse extent data file.</td></tr>
+
+<tr><td>vmfs</td><td>The disk is a single raw extent data file, which is similar to the "monolithicFlat".</td></tr>
+
+<tr><td>vmfsEagerZeroedThick</td><td>The disk is a single raw extent data file.</td></tr>
+
+<tr><td>vmfsPreallocated</td><td>The disk is a single raw extent data file.</td></tr>
+
+<tr><td>vmfsRaw</td><td>The disk uses a full physical disk device.</td></tr>
+
+<tr><td>vmfsRDM, vmfsRawDeviceMap</td><td>The disk uses a full physical disk device, which is also referred to as Raw Device Map (RDM)</td></tr>
+
+<tr><td>vmfsRDMP, vmfsPassthroughRawDeviceMap</td><td>The disk uses a full physical disk device, which is similar to the Raw Device Map (RDM), but sends SCSI commands to underlying hardware.</td></tr>
+
+<tr><td>vmfsSparse</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+
+<tr><td>vmfsThin</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+
+</table>
+</div>
+
+<h3 id="extent-descriptions"><a class="header" href="#extent-descriptions">Extent descriptions</a></h3>
+<p>The extent descriptions of a descriptor file looks similar to the data below.</p>
+<pre><code># Extent description
+RW 4192256 SPARSE "test-s001.vmdk"
+</code></pre>
+<pre><code># Extent description
+RW 1048576 FLAT "test-f001.vmdk" 0
+</code></pre>
+<p>The extent descriptions consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"# Extent description"</td><td>Section header</td></tr>
+
+<tr><td></td><td>Extent descriptors</td></tr>
+
+</table>
+</div>
+
+<h4 id="extent-descriptor"><a class="header" href="#extent-descriptor">Extent descriptor</a></h4>
+<p>The extent descriptor consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>1st</td><td><a href="#extent_access_mode">Access mode</a></td></tr>
+
+<tr><td>2nd</td><td>The number of sectors</td></tr>
+
+<tr><td>3rd</td><td><a href="#extent_types">Extent type</a></td></tr>
+
+<tr><td colspan="2"><em>If extent type is not ZERO</em></td></tr>
+
+<tr><td>4th</td><td>Path of the VMDK extent data file, relative to the location of the VMDK descriptor file</td></tr>
+
+<tr><td colspan="2"><em>Optional</em></td></tr>
+
+<tr><td>5th</td><td>The extent start sector</td></tr>
+
+<tr><td colspan="2"><em>Seen in VMWare Player 9 in combination with a physical device extent on Windows</em></td></tr>
+
+<tr><td>6th and 7th</td><td>"partitionUUID" followed by a device identifier</td></tr>
+
+</table>
+</div>
+
+<p>The extent offset is specified only for flat extents and corresponds to the
+offset in the file or device where the extent data is located. For
+device-backed virtual disks (physical or raw disks) the extent offset can be
+non-zero. For raw extent data files the extent offset should be zero.</p>
+<h4 id="extent_access_mode"><a class="header" href="#extent_access_mode">Extent access mode</a></h4>
+<p>The extent access mode consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>NOACCESS</td><td>No access</td></tr>
+
+<tr><td>RDONLY</td><td>Read only</td></tr>
+
+<tr><td>RW</td><td>Read write</td></tr>
+
+</table>
+</div>
+
+<h4 id="extent_types"><a class="header" href="#extent_types">Extent types</a></h4>
+<p>The extent type consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>FLAT</td><td>raw extent data file</td></tr>
+
+<tr><td>SPARSE</td><td>VMDK sparse extent data file</td></tr>
+
+<tr><td>ZERO</td><td>Sparse extent that consists of 0-byte values</td></tr>
+
+<tr><td>VMFS</td><td>raw extent data file</td></tr>
+
+<tr><td>VMFSSPARSE</td><td>COWD sparse extent data file</td></tr>
+
+<tr><td>VMFSRDM</td><td>Unknown (Physical disk device that uses RDM?)</td></tr>
+
+<tr><td>VMFSRAW</td><td>Unknown (Physical disk device?)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that VMWare Player 9 has been observed to use “FLAT” for Windows devices</p>
+</blockquote>
+<h3 id="change-tracking-file-section"><a class="header" href="#change-tracking-file-section">Change tracking file section</a></h3>
+<p>The change tracking file section was introduced in version 3 and looks similar to:</p>
+<pre><code># Change Tracking File
+changeTrackPath="test-flat.vmdk"
+</code></pre>
+<p>The change tracking file section consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"# Change Tracking File"</td><td>Section header</td></tr>
+
+<tr><td>changeTrackPath</td><td>Unknown (The path to the change tracking file?)</td></tr>
+
+</table>
+</div>
+
+<h3 id="disk-database"><a class="header" href="#disk-database">Disk database</a></h3>
+<p>The disk data base of a descriptor file looks similar to the data below.</p>
+<pre><code># The Disk Data Base
+#DDB
+
+ddb.virtualHWVersion = "4"
+ddb.geometry.cylinders = "16383"
+ddb.geometry.heads = "16"
+ddb.geometry.sectors = "63"
+ddb.adapterType = "ide"
+ddb.toolsVersion = "0"
+</code></pre>
+<p>The disk data base consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"# The Disk Data Base"</td><td>Section header</td></tr>
+
+<tr><td>"#DDB"</td><td>Currently assumed to be part of the section header</td></tr>
+
+<tr><td>ddb.deletable</td><td>Unknown (seen: "true")</td></tr>
+
+<tr><td>ddb.virtualHWVersion</td><td>The virtual hardware version. For VMWare Player and Workstation this seems to correspond with the application version</td></tr>
+
+<tr><td>ddb.longContentID</td><td>The long content identifier, which contains a 128-bit base16 encoded value, without spaces</td></tr>
+
+<tr><td>ddb.uuid</td><td>UUIDm which contains a 128-bit base16 encoded value, with spaces between bytes</td></tr>
+
+<tr><td>ddb.geometry.cylinders</td><td>The number of cylinders</td></tr>
+
+<tr><td>ddb.geometry.heads</td><td>The number of heads</td></tr>
+
+<tr><td>ddb.geometry.sectors</td><td>The number of sectors</td></tr>
+
+<tr><td>ddb.geometry.biosCylinders</td><td>The number of cylinders as reported by the BIOS.</td></tr>
+
+<tr><td>ddb.geometry.biosHeads</td><td>The number of heads as reported by the BIOS.</td></tr>
+
+<tr><td>ddb.geometry.biosSectors</td><td>The number of sectors as reported by the BIOS.</td></tr>
+
+<tr><td>ddb.adapterType</td><td><a href="#disk_adapter_types">Disk adapter type</a></td></tr>
+
+<tr><td>ddb.toolsVersion</td><td>String containing the version of the installed VMWare tools version</td></tr>
+
+<tr><td>ddb.thinProvisioned</td><td>Unknown (seen: "1")</td></tr>
+
+</table>
+</div>
+
+<p>VirtualBox has been observed to use a different case for “disk” in the section header:</p>
+<pre><code># The disk Data Base
+</code></pre>
+<h4 id="virtual-hardware-version"><a class="header" href="#virtual-hardware-version">Virtual hardware version</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>4</td><td>TODO: add description</td></tr>
+
+<tr><td colspan="2"> </td></tr>
+
+<tr><td>6</td><td>TODO: add description</td></tr>
+
+<tr><td>7</td><td>TODO: add description</td></tr>
+
+<tr><td colspan="2"> </td></tr>
+
+<tr><td>9</td><td>VMWare Player/Workstation 9.0</td></tr>
+
+</table>
+</div>
+
+<h4 id="disk_adapter_types"><a class="header" href="#disk_adapter_types">Disk adapter types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>ide</td><td>TODO: add description</td></tr>
+
+<tr><td>buslogic</td><td>TODO: add description</td></tr>
+
+<tr><td>lsilogic</td><td>TODO: add description</td></tr>
+
+<tr><td>legacyESX</td><td>TODO: add description</td></tr>
+
+</table>
+</div>
+
+<p>The buslogic and lsilogic values are for SCSI disks and show which virtual SCSI
+adapter is configured for the virtual machine. The legacyESX value is for older
+ESX Server virtual machines when the adapter type used in creating the virtual
+machine is not known.</p>
+<h2 id="the-raw-extent-data-file"><a class="header" href="#the-raw-extent-data-file">The raw extent data file</a></h2>
+<p>The raw extent data file contains the actual disk data. The raw extent data
+file can be a file or a device.</p>
+<p>This type of extent data file is also known as “Simple” or “Flat Extent”.</p>
+<h2 id="the-vmdk-sparse-extent-data-file"><a class="header" href="#the-vmdk-sparse-extent-data-file">The VMDK sparse extent data file</a></h2>
+<p>The VMDK sparse extent data file contains the actual disk data. A VMDK sparse
+extent data file consists of:</p>
+<ul>
+<li>file header</li>
+<li>optional embedded descriptor file</li>
+<li>optional secondary grain directory
+<ul>
+<li>optional secondary grain tables</li>
+</ul>
+</li>
+<li>(primary) grain directory
+<ul>
+<li>(primary) grain tables</li>
+</ul>
+</li>
+<li>grains</li>
+<li>optional backup file header</li>
+</ul>
+<p>This type of extent data file is also known as “Hosted Sparse Extent” or
+“Stream-Optimized Compressed Sparse Extent” when markers are used.</p>
+<blockquote>
+<p>Note that the actual layout can vary per file, Stream-Optimized Compressed
+Sparse Extent have been observed to use secondary file headers.</p>
+</blockquote>
+<p>Changes in format version 2:</p>
+<ul>
+<li>added encrypted disk support (though this feature never seem to never have been implemented).</li>
+</ul>
+<p>Changes in format version 3:</p>
+<ul>
+<li>the size of extent files is no longer limited to 2 GiB;</li>
+<li>added support for persistent changed block tracking (CBT).</li>
+</ul>
+<blockquote>
+<p>Note that “CBT”, the changeTrackPath value in the descriptor file references
+a file that describes changed areas on the virtual disk.</p>
+</blockquote>
+<h3 id="file-header"><a class="header" href="#file-header">File header</a></h3>
+<p>The file header is 512 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"KDMV"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td>1, 2 or 3</td><td>Format version</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td><a href="#vmdk_extent_file_flags">Flags</a></td></tr>
+
+<tr><td>12</td><td>8</td><td></td><td>Maximum data number of sectors (capacity)</td></tr>
+
+<tr><td>20</td><td>8</td><td></td><td>Sectors per grain, which must be a power of 2 and &gt; 8</td></tr>
+
+<tr><td>28</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+
+<tr><td>36</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> size in sectors</td></tr>
+
+<tr><td>44</td><td>4</td><td>512</td><td>The number of grains table entries</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Secondary grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Primary grain directory start sector, which is relative from the start of the file, 0 if not set or 0xffffffffffffffff (GD_AT_END) if relative from the end of the file.</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Metadata size in sectors</td></tr>
+
+<tr><td>72</td><td>1</td><td></td><td>Value to determine if the extent data file was cleanly closed (or dirty flag)</td></tr>
+
+<tr><td>73</td><td>1</td><td>'\n'</td><td>Single end of line character</td></tr>
+
+<tr><td>74</td><td>1</td><td>' '</td><td>Non end of line character</td></tr>
+
+<tr><td>75</td><td>1</td><td>'\r'</td><td>First double end of line character</td></tr>
+
+<tr><td>76</td><td>1</td><td>'\n'</td><td>Second double end of line character</td></tr>
+
+<tr><td>77</td><td>2</td><td></td><td><a href="#vmdk_compression_method">Compression method</a></td></tr>
+
+<tr><td>79</td><td>433</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<p>The end of line characters are used to detect corruption due to file transfers
+that alter line end characters.</p>
+<blockquote>
+<p>According to Virtual Disk Format 5.0 specification the maximum data number of
+sectors (capacity) should be a multitude of the sectors per grain. Note that
+it has been observed that this is not always the case.</p>
+</blockquote>
+<p>If the primary grain directory start sector is 0xffffffffffffffff (GD_AT_END)
+in a Stream-Optimized Compressed Sparse Extent there should be a secondary
+file header stored at offset -1024 relative from the end of the file (stream)
+that contains the correct grain directory start sector.</p>
+<h4 id="vmdk_extent_file_flags"><a class="header" href="#vmdk_extent_file_flags">Flags</a></h4>
+<p>The flags consist of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td></td><td>Valid new line detection test</td></tr>
+
+<tr><td>0x00000002</td><td></td><td>Use secondary grain directory. The secondary (redundant) grain directory should be used instead of the primary grain directory.</td></tr>
+
+<tr><td colspan="3"><em>As of format version 2</em></td></tr>
+
+<tr><td>0x00000004</td><td></td><td>Use zeroed-grain table entry. The zeroed-grain table entry overloads grain data sector number 1 to indicate the grain is sparse.</td></tr>
+
+<tr><td colspan="3"><em>Common</em></td></tr>
+
+<tr><td>0x00010000</td><td></td><td>Has compressed grain data</td></tr>
+
+<tr><td>0x00020000</td><td></td><td>Contains metadata, where the file contains markers to identify metadata or data blocks.</td></tr>
+
+</table>
+</div>
+
+<h4 id="vmdk_compression_method"><a class="header" href="#vmdk_compression_method">Compression method</a></h4>
+<p>The compression method consist of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000000</td><td>COMPRESSION_NONE</td><td>No compression</td></tr>
+
+<tr><td>0x00000001</td><td>COMPRESSION_DEFLATE</td><td>Compression using Deflate (RFC1951)</td></tr>
+
+</table>
+</div>
+
+<h3 id="markers"><a class="header" href="#markers">Markers</a></h3>
+<p>The markers are used in Stream-Optimized Compressed Sparse Extents. The
+corresponding flag must be set for markers to be present. An example of the
+layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
+<ul>
+<li>file header</li>
+<li>embedded descriptor</li>
+<li>compressed grain markers</li>
+<li>grain table marker</li>
+<li>grain table</li>
+<li>grain directory marker</li>
+<li>grain directory</li>
+<li>footer marker</li>
+<li>secondary file header</li>
+<li>end-of-stream marker</li>
+</ul>
+<h3 id="the-marker"><a class="header" href="#the-marker">The marker</a></h3>
+<p>The marker is 512 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Value</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Marker data size</td></tr>
+
+<tr><td colspan="4"><em>If marker data size equals 0</em></td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td><a href="#vmdk_extent_file_marker_types">Marker type</a></td></tr>
+
+<tr><td>16</td><td>496</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td colspan="4"><em>If marker data size &gt; 0</em></td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td>Compressed grain data</td></tr>
+
+</table>
+</div>
+
+<p>If the marker data size &gt; 0 the marker is a compressed grain marker.</p>
+<h4 id="vmdk_extent_file_marker_types"><a class="header" href="#vmdk_extent_file_marker_types">Marker types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000000</td><td>MARKER_EOS</td><td>End-of-stream marker</td></tr>
+
+<tr><td>0x00000001</td><td>MARKER_GT</td><td>Grain table (metadata) marker</td></tr>
+
+<tr><td>0x00000002</td><td>MARKER_GD</td><td>Grain directory (metadata) marker</td></tr>
+
+<tr><td>0x00000003</td><td>MARKER_FOOTER</td><td>Footer (metadata) marker</td></tr>
+
+</table>
+</div>
+
+<h4 id="compressed-grain-marker"><a class="header" href="#compressed-grain-marker">Compressed grain marker</a></h4>
+<p>The compressed grain marker indicates that compressed data follows.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Compressed grain header</em></td></tr>
+
+<tr><td>0</td><td>8</td><td>0</td><td>Logical sector number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="zlib.html#deflate_compressed_data">Deflate compressed data</a></td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the compressed grain data can be larger than the grain data size.</p>
+</blockquote>
+<h4 id="end-of-stream-marker"><a class="header" href="#end-of-stream-marker">End of stream marker</a></h4>
+<p>The end-of-stream marker indicates the end of the virtual disk. Basically the
+end-of-stream marker is an empty sector block.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0</td><td>Value</td></tr>
+
+<tr><td>8</td><td>4</td><td>0</td><td>Marker data size</td></tr>
+
+<tr><td>12</td><td>4</td><td>MARKER_EOS</td><td><a href="#vmdk_extent_file_marker_types">Marker type</a></td></tr>
+
+<tr><td>16</td><td>496</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<h4 id="grain-table-marker"><a class="header" href="#grain-table-marker">Grain table marker</a></h4>
+<p>The grain table marker indicates that a grain table follows the marker sector block.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0</td><td>Value</td></tr>
+
+<tr><td>8</td><td>4</td><td>0</td><td>Marker data size</td></tr>
+
+<tr><td>12</td><td>4</td><td>MARKER_GT</td><td><a href="#vmdk_extent_file_marker_types">Marker type</a></td></tr>
+
+<tr><td>16</td><td>496</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>512</td><td>...</td><td></td><td><a href="#vmdk_extent_file_grain_table">Grain table</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="grain-directory-marker"><a class="header" href="#grain-directory-marker">Grain directory marker</a></h4>
+<p>The grain directory marker indicates that a grain directory follows the marker
+sector block.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0</td><td>Value</td></tr>
+
+<tr><td>8</td><td>4</td><td>0</td><td>Marker data size</td></tr>
+
+<tr><td>12</td><td>4</td><td>MARKER_GD</td><td><a href="#vmdk_extent_file_marker_types">Marker type</a></td></tr>
+
+<tr><td>16</td><td>496</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>512</td><td>...</td><td></td><td><a href="#vmdk_extent_file_grain_directory">Grain directory</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="footer-marker"><a class="header" href="#footer-marker">Footer marker</a></h4>
+<p>The footer marker indicates that a footer follows the marker sector block.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0</td><td>Value</td></tr>
+
+<tr><td>8</td><td>4</td><td>0</td><td>Marker data size</td></tr>
+
+<tr><td>12</td><td>4</td><td>MARKER_FOOTER</td><td><a href="#vmdk_extent_file_marker_types">Marker type</a></td></tr>
+
+<tr><td>16</td><td>496</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>512</td><td>...</td><td></td><td><a href="#vmdk_extent_file_footer">Footer</a></td></tr>
+
+</table>
+</div>
+
+<h3 id="vmdk_extent_file_grain_directory"><a class="header" href="#vmdk_extent_file_grain_directory">Grain directory</a></h3>
+<p>The grain directory is also referred to as level 0 metadata.</p>
+<p>The size of the grain directory is dependent on the number of grains in the
+extent data file. The number of entries in the grain directory can be
+determined as following:</p>
+<pre><code>grain table size = number of grain table entries x grain size
+number of grain directory entries = maximum data size / grain table size
+
+if( maximum data size % grain table size &gt; 0 )
+{
+	number of entries += 1
+}
+</code></pre>
+<p>The grain directory consists of 32-bit grain table offsets:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+
+</table>
+</div>
+
+<p>The grain directory is stored in a multitude of 512 byte sized blocks.</p>
+<blockquote>
+<p>Note that as of VMDK sparse extent data file version 2 if the “use
+zeroed-grain table entry” flag is set, a start sector of 1 indicates the
+grain table is sparse.</p>
+</blockquote>
+<h3 id="vmdk_extent_file_grain_table"><a class="header" href="#vmdk_extent_file_grain_table">Grain table</a></h3>
+<p>The grain table is also referred to as level 1 metadata.</p>
+<p>The size of the grain table is of variable size. The number of entries in the
+grain table is stored in the file header. Note that the number of entries in
+the last grain table is dependent on the maximum data size and not necessarily
+the same as the value stored in the file header.</p>
+<p>The grain directory consists of 32-bit grain table offsets:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Grain data sector number, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+
+</table>
+</div>
+
+<p>The number of entries in a grain table and should be 512, therefore the size of
+the grain table is 512 x 4 = 2048 bytes.</p>
+<p>The grain table is stored in a multitude of 512 byte sized blocks.</p>
+<blockquote>
+<p>Note that as of VMDK sparse extent data file version 2 if the “use
+zeroed-grain table entry” flag is set, a sector number of 1 indicates the
+grain table is sparse.</p>
+</blockquote>
+<h3 id="grain-data"><a class="header" href="#grain-data">Grain data</a></h3>
+<p>In an uncompressed sparse extent data file the data is stored at the grain data
+sector number.</p>
+<p>In a compressed sparse extent data file every non-sparse grain is assumed to be
+stored compressed.</p>
+<h4 id="compressed-grain-data"><a class="header" href="#compressed-grain-data">Compressed grain data</a></h4>
+<p>The compressed grain data is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Compressed grain header</em></td></tr>
+
+<tr><td>0</td><td>8</td><td>0</td><td>Logical sector number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="zlib.html">zlib compressed data</a></td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<p>The uncompressed data size should be the grain size or less for the last grain.</p>
+<h3 id="vmdk_extent_file_footer"><a class="header" href="#vmdk_extent_file_footer">Footer</a></h3>
+<p>The footer is only used in Stream-Optimized Compressed Sparse Extents. The
+footer is the same as the file header. The footer should be the last block of
+the disk and immediately followed by the end-of-stream marker so that they
+together make up the last two sectors of the disk.</p>
+<p>The header and footer differ in that the grain directory offset value in the
+header is set to 0xffffffffffffffff (GD_AT_END) and in the footer to the correct
+value.</p>
+<h3 id="changed-block-tracking-cbt"><a class="header" href="#changed-block-tracking-cbt">Changed block tracking (CBT)</a></h3>
+<p>TODO: complete section</p>
+<h2 id="the-cowd-sparse-extent-data-file"><a class="header" href="#the-cowd-sparse-extent-data-file">The COWD sparse extent data file</a></h2>
+<p>The copy-on-write disk (COWD) sparse extent data file contains the actual disk
+data. The COW sparse extent data file consists of:</p>
+<ul>
+<li>file header</li>
+<li>grain directory</li>
+<li>grain tables</li>
+<li>grains</li>
+</ul>
+<p>This type of extent data file is also known as ESX Server Sparse Extent.</p>
+<h3 id="file-header-1"><a class="header" href="#file-header-1">File header</a></h3>
+<p>The file header is 2048 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"COWD"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Format version</td></tr>
+
+<tr><td>8</td><td>4</td><td>0x00000003</td><td>Unknown (Flags)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Maximum data number of sectors (capacity)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Sectors per grain</td></tr>
+
+<tr><td>20</td><td>4</td><td>4</td><td>Grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Number of grain directory entries</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>The next free sector</td></tr>
+
+<tr><td colspan="4"><em>In root extent data file</em></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>The number of cylinders</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>The number of heads</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>The number of sectors</td></tr>
+
+<tr><td>44</td><td>1016</td><td></td><td>Unknown (Empty values)</td></tr>
+
+<tr><td colspan="4"><em>In child extent data files</em></td></tr>
+
+<tr><td>32</td><td>1024</td><td></td><td>Parent filename</td></tr>
+
+<tr><td>1056</td><td>4</td><td></td><td>Parent generation</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>1060</td><td>4</td><td></td><td>Generation</td></tr>
+
+<tr><td>1064</td><td>60</td><td></td><td>Name</td></tr>
+
+<tr><td>1124</td><td>512</td><td></td><td>Description</td></tr>
+
+<tr><td>1636</td><td>4</td><td></td><td>Saved generation</td></tr>
+
+<tr><td>1640</td><td>8</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>1648</td><td>4</td><td></td><td>Value to determine if the extent data file was cleanly closed (or dirty flag)</td></tr>
+
+<tr><td>1652</td><td>396</td><td></td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the parent filename seems not to be set in recent delta sparse
+extent files.</p>
+</blockquote>
+<h3 id="grain-directory"><a class="header" href="#grain-directory">Grain directory</a></h3>
+<p>The grain directory is also referred to as level 0 metadata.</p>
+<p>The size of the grain directory is dependent on the number of grains in the
+extent data file. The number of entries in the grain directory is stored in the
+file header.</p>
+<p>The grain directory consists of 32-bit grain table offsets:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+
+</table>
+</div>
+
+<p>The grain directory is stored in a multitude of 512 byte sized blocks. Unused
+bytes are set to 0.</p>
+<h3 id="grain-table"><a class="header" href="#grain-table">Grain table</a></h3>
+<p>The grain table is also referred to as level 1 metadata.</p>
+<p>The size of the grain table is of variable size. The number of entries in a
+grain table is the fixed value of 4096.</p>
+<p>The grain directory consists of 32-bit grain table offsets:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Grain sector number, which is relative from the start of the file or 0 if not set.</td></tr>
+
+</table>
+</div>
+
+<p>The grain table is stored in a multitude of 512 byte sized blocks. Unused bytes
+are set to 0.</p>
+<h2 id="change-tracking-file"><a class="header" href="#change-tracking-file">Change tracking file</a></h2>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"\xa2\x72\x19\xf6"</td><td>Unknown (signature?)</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Unknown (version?)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>12</td><td>4</td><td>0x200</td><td>Unknown</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Unknown</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Unknown</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>44</td><td>16</td><td></td><td>Unknown (UUID?)</td></tr>
+
+<tr><td>60</td><td>...</td><td></td><td>Unknown (empty values?)</td></tr>
+
+</table>
+</div>
+
+<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios">Corruption scenarios</a></h2>
+<p>The total size specified by the number of grain table entries is lager than
+size specified by the maximum number of sectors. Seen in VMDK images generated
+by qemu-img.</p>
+<h2 id="notes"><a class="header" href="#notes">Notes</a></h2>
+<p>The markers can be used to scan for the individual parts of the VMDK sparse
+extent data file if the stream has been truncated, but not that this can be
+very expensive process IO-wise.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://web.archive.org/web/20120302211605/http://www.vmware.com/support/developer/vddk/vmdk_50_technote.pdf">Virtual Disk Format 5.0</a>, by VMWare</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="vhdx.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="volume_system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="vhdx.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="volume_system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
