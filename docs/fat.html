@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9b689eb2.js";
+            window.path_to_searchindex_js = "searchindex-2e5a84c8.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d56c65c4.js"></script>
+        <script src="toc-415b6163.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -414,7 +414,25 @@ by the format.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0xe5</td><td></td><td></td></tr>
+
+<tr><td colspan="3"> </td></tr>
+
+<tr><td>0xed</td><td></td><td></td></tr>
+
+<tr><td>0xee</td><td></td><td></td></tr>
+
+<tr><td>0xef</td><td></td><td></td></tr>
+
 <tr><td>0xf0</td><td></td><td>removable media</td></tr>
+
+<tr><td colspan="3"> </td></tr>
+
+<tr><td>0xf4</td><td></td><td></td></tr>
+
+<tr><td>0xf5</td><td></td><td></td></tr>
+
+<tr><td colspan="3"> </td></tr>
 
 <tr><td>0xf8</td><td></td><td>fixed (non-removable) media</td></tr>
 
@@ -638,45 +656,49 @@ of:</p>
 
 <tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored.</td></tr>
 
-<tr><td>'.'</td><td>Dot, with the exception of "." and  "..". Trailing dot characters are ignored.</td></tr>
+<tr><td>'.'</td><td>Dot, with the exception of "." and  "..", where trailing dot characters are ignored.</td></tr>
 
-<tr><td>'!'</td><td></td></tr>
+<tr><td>'!'</td><td>Exclamation mark</td></tr>
 
-<tr><td>'#'</td><td></td></tr>
+<tr><td>'#'</td><td>Hash</td></tr>
 
-<tr><td>'$'</td><td></td></tr>
+<tr><td>'$'</td><td>Dollar sign</td></tr>
 
-<tr><td>'%'</td><td></td></tr>
+<tr><td>'%'</td><td>Percent sign</td></tr>
 
-<tr><td>'&amp;'</td><td></td></tr>
+<tr><td>'&amp;'</td><td>Ampersand</td></tr>
 
-<tr><td>'''</td><td></td></tr>
+<tr><td>'''</td><td>Single quote</td></tr>
 
-<tr><td>'('</td><td></td></tr>
+<tr><td>'('</td><td>Left parenthesis</td></tr>
 
-<tr><td>')'</td><td></td></tr>
+<tr><td>')'</td><td>Right parenthesis</td></tr>
 
-<tr><td>'-'</td><td></td></tr>
+<tr><td>'-'</td><td>Hyphen</td></tr>
 
-<tr><td>'@'</td><td></td></tr>
+<tr><td>'@'</td><td>At sign</td></tr>
 
-<tr><td>'^'</td><td></td></tr>
+<tr><td>'^'</td><td>Caret</td></tr>
 
-<tr><td>'_'</td><td></td></tr>
+<tr><td>'_'</td><td>Underscore</td></tr>
 
-<tr><td>'`'</td><td></td></tr>
+<tr><td>'`'</td><td>Grave accent</td></tr>
 
-<tr><td>'{'</td><td></td></tr>
+<tr><td>'{'</td><td>Left curly brace</td></tr>
 
-<tr><td>'}'</td><td></td></tr>
+<tr><td>'}'</td><td>Right curly brace</td></tr>
 
-<tr><td>'~'</td><td></td></tr>
+<tr><td>'~'</td><td>Tilde</td></tr>
 
 <tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent.</td></tr>
 
 </table>
 </div>
 
+<blockquote>
+<p>Note that other characters such as plus sign (‘+’) have been observed in FAT
+short file names.</p>
+</blockquote>
 <h4 id="short_name_first_character"><a class="header" href="#short_name_first_character">First character</a></h4>
 <div class="table-wrapper">
 <table>
@@ -685,7 +707,7 @@ of:</p>
 
 <tr><td>0x01 - 0x13</td><td>VFAT long file name directory entry</td></tr>
 
-<tr><td>0x05</td><td>Directory entry pending deallocation (deprecated since DOS 3.0) or substitution of a 0xe5 extended ASCII character value</td></tr>
+<tr><td>0x05</td><td>Directory entry pending deallocation (deprecated since DOS 3.0) or substitution of a 0xe5 value</td></tr>
 
 <tr><td>0x41 - 0x54</td><td>Last VFAT long file name directory entry</td></tr>
 

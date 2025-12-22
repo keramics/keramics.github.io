@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Apple Partition Map (APM) - Keramics data format specifications</title>
+        <title>Parallels Disk Image - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -175,258 +175,293 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="apple-partition-map-apm-format"><a class="header" href="#apple-partition-map-apm-format">Apple Partition Map (APM) format</a></h1>
-<p>The Apple Partition Map (APM) format is used on Motorola based Macintosh
-computers. On Intel based Macintosh computers the <a href="gpt.html">GUID Partition Table (GPT) format</a>
-is used.</p>
+                        <h1 id="parallels-disk-image-format"><a class="header" href="#parallels-disk-image-format">Parallels Disk Image format</a></h1>
+<p>The Parallels Disk Image format used in Parallels virtualization products as
+one of its image formats. It is both used the store hard disk images and
+snapshots.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>An Apple Partition Map (APM) consists of:</p>
+<p>A Parallels Disk Image consists of a directory, typically named “harddisk.hdd”
+containing:</p>
 <ul>
-<li>a drive descriptor</li>
-<li>partition map entry of type “Apple_partition_map”</li>
-<li>zero or more partition map entries</li>
+<li>Descriptor file (DiskDescriptor.xml) and backup (DiskDescriptor.xml.Backup)</li>
+<li>harddisk.hdd file</li>
+<li>Storage data image file (harddisk.hdd.0.{GUID}.hds)</li>
+<li>harddisk.hdd.drh</li>
 </ul>
+<h3 id="disk-types"><a class="header" href="#disk-types">Disk types</a></h3>
+<p>The Parallels Disk Image format support multiple disk types:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Expanding</td><td>Disk that consists of a single (dynamic size) sparse storage data image file</td></tr>
+
+<tr><td>Plain</td><td>Disk that consists of a single single (fixed size) raw storage data image file</td></tr>
+
+<tr><td>Split</td><td>Disk that consists of a one or more split storage data image files, either expanding or plain, holding upto 2G of data</td></tr>
+
+</table>
+</div>
+
 <h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
-<tr><td>Byte order</td><td>big-endian</td></tr>
+<tr><td>Byte order</td><td>little-endian</td></tr>
 
-<tr><td>Date and time values</td><td>N/A</td></tr>
+<tr><td>Date and time values</td><td>Number of seconds since January 1, 2000 00:00:00 UTC</td></tr>
 
-<tr><td>Character strings</td><td>ASCII</td></tr>
+<tr><td>Character strings</td><td>UTF-8 by default, the encoding is defined in the disk descriptor XML file.</td></tr>
 
 </table>
 </div>
 
-<h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
+<p>The number of bytes per sector is 512.</p>
+<h2 id="descriptor-file"><a class="header" href="#descriptor-file">Descriptor file</a></h2>
+<p>The DiskDescriptor.xml and its backup (DiskDescriptor.xml.Backup) contain
+the “Parallels_disk_image” XML element tha consists of the following values:</p>
 <div class="table-wrapper">
 <table>
-<thead><th>Term</th><th>Description</th></thead>
-<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media.</td></tr>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Disk_Parameters</td><td>The disk parameters</td></tr>
 
-<tr><td>Logical block</td><td>An abstract location on the storage media defined by software.</td></tr>
+<tr><td>StorageData</td><td>Information about the storage data image files</td></tr>
+
+<tr><td>Snapshots</td><td>Information about snapshots</td></tr>
 
 </table>
 </div>
 
-<h2 id="the-drive-descriptor"><a class="header" href="#the-drive-descriptor">The drive descriptor</a></h2>
-<p>The driver descriptor identifies the device drivers installed on a storage
-medium. The driver descriptor can contain refer to multiple device drivers.
-Every device driver is stored in a separate partition.</p>
-<p>The drive descriptor is situated in the first block of the storage medium. This
-block is referred to as the device driver block. The driver descriptor block is
-not considered part of any partition.</p>
-<p>The drive descriptor is 512 bytes in size and consists of:</p>
+<pre><code class="language-xml">&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;Parallels_disk_image Version="1.0"&gt;
+    &lt;Disk_Parameters&gt;
+        &lt;Disk_size&gt;134217728&lt;/Disk_size&gt;
+        &lt;Cylinders&gt;262144&lt;/Cylinders&gt;
+        &lt;PhysicalSectorSize&gt;4096&lt;/PhysicalSectorSize&gt;
+        &lt;LogicSectorSize&gt;512&lt;/LogicSectorSize&gt;
+        &lt;Heads&gt;16&lt;/Heads&gt;
+        &lt;Sectors&gt;32&lt;/Sectors&gt;
+        &lt;Padding&gt;0&lt;/Padding&gt;
+        &lt;Encryption&gt;
+            &lt;Engine&gt;{00000000-0000-0000-0000-000000000000}&lt;/Engine&gt;
+            &lt;Data&gt;&lt;/Data&gt;
+        &lt;/Encryption&gt;
+        &lt;UID&gt;{GUID}&lt;/UID&gt;
+        &lt;Name&gt;harddisk&lt;/Name&gt;
+        &lt;Miscellaneous&gt;
+            &lt;CompatLevel&gt;level2&lt;/CompatLevel&gt;
+            &lt;Bootable&gt;1&lt;/Bootable&gt;
+            &lt;ChangeState&gt;0&lt;/ChangeState&gt;
+            &lt;SuspendState&gt;0&lt;/SuspendState&gt;
+        &lt;/Miscellaneous&gt;
+    &lt;/Disk_Parameters&gt;
+    &lt;StorageData&gt;
+        &lt;Storage&gt;
+            &lt;Start&gt;0&lt;/Start&gt;
+            &lt;End&gt;134217728&lt;/End&gt;
+            &lt;Blocksize&gt;2048&lt;/Blocksize&gt;
+            &lt;Image&gt;
+                &lt;GUID&gt;{GUID}&lt;/GUID&gt;
+                &lt;Type&gt;Compressed&lt;/Type&gt;
+                &lt;File&gt;harddisk.hdd.0.{GUID}.hds&lt;/File&gt;
+            &lt;/Image&gt;
+            ...
+        &lt;/Storage&gt;
+        ...
+    &lt;/StorageData&gt;
+    &lt;Snapshots&gt;
+        &lt;Shot&gt;
+            &lt;GUID&gt;{GUID}&lt;/GUID&gt;
+            &lt;ParentGUID&gt;{GUID}&lt;/ParentGUID&gt;
+        &lt;/Shot&gt;
+        ...
+    &lt;/Snapshots&gt;
+&lt;/Parallels_disk_image&gt;
+</code></pre>
+<h3 id="disk-parameters"><a class="header" href="#disk-parameters">Disk parameters</a></h3>
+<p>The disk parameters are stored in the “Disk_Parameters” XML element and
+contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Cylinders</td><td>Number of cylinders</td></tr>
+
+<tr><td>Disk_size</td><td>Disk size, in number of sectors</td></tr>
+
+<tr><td>Encryption</td><td>"Encryption" XML sub element</td></tr>
+
+<tr><td>Heads</td><td>Number of heads</td></tr>
+
+<tr><td>Miscellaneous</td><td>"Miscellaneous" XML sub element</td></tr>
+
+<tr><td>Name</td><td>Name of the disk</td></tr>
+
+<tr><td>LogicSectorSize</td><td>Logical sector size</td></tr>
+
+<tr><td>Padding</td><td>Unknown (padding)</td></tr>
+
+<tr><td>PhysicalSectorSize</td><td>Physical sector size</td></tr>
+
+<tr><td>Sectors</td><td>Number of sectors</td></tr>
+
+<tr><td>UID</td><td>Unknown (identifier)</td></tr>
+
+</table>
+</div>
+
+<h4 id="encryption"><a class="header" href="#encryption">Encryption</a></h4>
+<pre><code class="language-xml">&lt;Encryption&gt;
+    &lt;Engine&gt;{00000000-0000-0000-0000-000000000000}&lt;/Engine&gt;
+    &lt;Data&gt;&lt;/Data&gt;
+&lt;/Encryption&gt;
+</code></pre>
+<h4 id="miscellaneous"><a class="header" href="#miscellaneous">Miscellaneous</a></h4>
+<pre><code class="language-xml">&lt;Miscellaneous&gt;
+    &lt;CompatLevel&gt;level2&lt;/CompatLevel&gt;
+    &lt;Bootable&gt;1&lt;/Bootable&gt;
+    &lt;ChangeState&gt;0&lt;/ChangeState&gt;
+    &lt;SuspendState&gt;0&lt;/SuspendState&gt;
+&lt;/Miscellaneous&gt;
+</code></pre>
+<h3 id="storage-data"><a class="header" href="#storage-data">Storage data</a></h3>
+<p>The “StorageData” XML element contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Storage</td><td>One or more "Storage" XML sub elements</td></tr>
+
+</table>
+</div>
+
+<h4 id="storage"><a class="header" href="#storage">Storage</a></h4>
+<p>The “Storage” XML element contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Start</td><td>Start sector number of the segment stored in the storage data image file</td></tr>
+
+<tr><td>End</td><td>End sector number of the segment stored in the storage data image file</td></tr>
+
+<tr><td>Blocksize</td><td>Block size, in number of sectors</td></tr>
+
+<tr><td>Image</td><td>One or more "Image" XML sub elements</td></tr>
+
+</table>
+</div>
+
+<h5 id="image"><a class="header" href="#image">Image</a></h5>
+<p>The “Image” XML element contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>GUID</td><td>Identifier of disk (used by snapshots)</td></tr>
+
+<tr><td>Type</td><td><a href="#storage_data_image_file_types">Storage data image file type</a></td></tr>
+
+<tr><td>File</td><td>Name of the storage data image file</td></tr>
+
+</table>
+</div>
+
+<h3 id="snapshots-data"><a class="header" href="#snapshots-data">Snapshots data</a></h3>
+<p>The “Snapshots” XML element contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>Shot</td><td>One or more "Shot" XML sub elements</td></tr>
+
+</table>
+</div>
+
+<h4 id="shot"><a class="header" href="#shot">Shot</a></h4>
+<p>The “Shot” XML element contains the following values.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Description</th></thead>
+<tr><td>GUID</td><td>Identifier of disk</td></tr>
+
+<tr><td>ParentGUID</td><td>Identifier of parent disk, which contains "{00000000-0000-0000-0000-000000000000}" if not set</td></tr>
+
+</table>
+</div>
+
+<h2 id="storage-data-image-file"><a class="header" href="#storage-data-image-file">Storage data image file</a></h2>
+<h3 id="storage_data_image_file_types"><a class="header" href="#storage_data_image_file_types">Storage data image file types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"Compressed"</td><td>Sparse storage data image file</td></tr>
+
+<tr><td>"Plain"</td><td>Raw storage data image file</td></tr>
+
+</table>
+</div>
+
+<h2 id="raw-storage-data-image-file"><a class="header" href="#raw-storage-data-image-file">Raw storage data image file</a></h2>
+<p>The raw (or plain) storage data image file contains the actual disk data.</p>
+<h3 id="sparse-storage-data-image-file"><a class="header" href="#sparse-storage-data-image-file">Sparse storage data image file</a></h3>
+<p>The sparse storage data image file contains the actual disk data without free
+space. A sparse storage data image consists of:</p>
+<ul>
+<li>file header</li>
+<li>block allocation table (BAT)</li>
+<li>blocks of images data</li>
+</ul>
+<h4 id="sparse-storage-data-image-file-header"><a class="header" href="#sparse-storage-data-image-file-header">Sparse storage data image file header</a></h4>
+<p>The sparse storage data image file header is 64 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>2</td><td>"\x45\x52" or "ER"</td><td>Signature</td></tr>
+<tr><td>0</td><td>16</td><td>"WithoutFreeSpace" or "WithouFreSpacExt"</td><td>Signature</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>The block size of the device in bytes</td></tr>
+<tr><td>16</td><td>4</td><td>2</td><td>Format version</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>The number of blocks on the device</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Number of heads</td></tr>
 
-<tr><td>8</td><td>2</td><td></td><td>Device type (Reserved)</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Number of cylinders</td></tr>
 
-<tr><td>10</td><td>2</td><td></td><td>Device identifier (Reserved)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Block size (or number of tracks) in number of sectors</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Device data (Reserved)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of entries in the block allocation table</td></tr>
 
-<tr><td>16</td><td>2</td><td></td><td>The number of driver descriptors</td></tr>
+<tr><td>36</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>18</td><td>8</td><td></td><td>The first device driver descriptor</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Unknown (Creator?), seen: "\x00\x00\x00\x00", "pd17", "pd22"</td></tr>
 
-<tr><td>26</td><td>484</td><td></td><td>Additional driver descriptors, where unused entries are 16-bit integer values filled with 0</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Image data start sector number, which is relative to the start of the sparse storage data image file</td></tr>
+
+<tr><td>52</td><td>12</td><td></td><td>Unknown (padding)</td></tr>
 
 </table>
 </div>
 
-<h3 id="the-device-driver-descriptor"><a class="header" href="#the-device-driver-descriptor">The device driver descriptor</a></h3>
-<p>The device driver descriptor is 8 bytes in size and consists of:</p>
+<p>TODO: determine if “WithouFreSpacExt” is used for 2T extended storage data image files</p>
+<h4 id="block-allocation-table"><a class="header" href="#block-allocation-table">Block allocation table</a></h4>
+<p>The block allocation table is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Start block of the device driver</td></tr>
-
-<tr><td>4</td><td>2</td><td></td><td>Device driver number of blocks</td></tr>
-
-<tr><td>6</td><td>2</td><td></td><td>Operating system type, where is 1 represents "Mac OS"</td></tr>
+<tr><td>0</td><td>Number of entries x 4</td><td></td><td>Array of block allocation table entries</td></tr>
 
 </table>
 </div>
 
-<h2 id="the-partition-map"><a class="header" href="#the-partition-map">The partition map</a></h2>
-<p>The partition map is stored after the drive descriptor. The partition map
-consists of multiple entries that must be stored continuously. The partition
-map itself is considered a partition therefore the first entry in the partition
-map describes the partition map itself.</p>
-<h3 id="the-partition-map-entry"><a class="header" href="#the-partition-map-entry">The partition map entry</a></h3>
-<p>A partition map entry is 512 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>2</td><td>"\x50\x4d" or "PM"</td><td>Signature</td></tr>
-
-<tr><td>2</td><td>2</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Total number of entries in the partition map</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Partition start sector</td></tr>
-
-<tr><td>12</td><td>4</td><td></td><td>Partition number of sectors</td></tr>
-
-<tr><td>16</td><td>32</td><td></td><td>Partition name, which contains an ASCII string</td></tr>
-
-<tr><td>48</td><td>32</td><td></td><td><a href="#partition_types">Partition type</a>, which contains an ASCII string</td></tr>
-
-<tr><td>80</td><td>4</td><td></td><td>Data area start sector</td></tr>
-
-<tr><td>84</td><td>4</td><td></td><td>Data area number of sectors</td></tr>
-
-<tr><td>88</td><td>4</td><td></td><td><a href="#status_flags">Status flags</a></td></tr>
-
-<tr><td>92</td><td>4</td><td></td><td>Boot code start sector</td></tr>
-
-<tr><td>96</td><td>4</td><td></td><td>Boot code number of sectors</td></tr>
-
-<tr><td>100</td><td>4</td><td></td><td>Boot code address</td></tr>
-
-<tr><td>104</td><td>4</td><td></td><td>Unknown (Reserved)</td></tr>
-
-<tr><td>108</td><td>4</td><td></td><td>Boot code entry point</td></tr>
-
-<tr><td>112</td><td>4</td><td></td><td>Unknown (Reserved)</td></tr>
-
-<tr><td>116</td><td>4</td><td></td><td>Boot code checksum</td></tr>
-
-<tr><td>120</td><td>16</td><td></td><td>Processor type</td></tr>
-
-<tr><td>136</td><td>( 188 x 2 ) = 376</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the partition name can be empty.</p>
-</blockquote>
-<h3 id="partition_types"><a class="header" href="#partition_types">Partition types</a></h3>
-<p>The partition types consist of the following values:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>"Apple_Boot"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Boot_RAID"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Bootstrap"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver43"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver43_CD"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver_ATA"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver_ATAPI"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver_IOKit"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Driver_OpenFirmware"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Extra"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Free"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_FWDriver"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_HFS"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_HFSX"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Loader"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_MDFW"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_MFS"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_partition_map"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Patches"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_PRODOS"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_RAID"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Rhapsody_UFS"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Scratch"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Second"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_UFS"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_UNIX_SVR2"</td><td></td><td></td></tr>
-
-<tr><td>"Apple_Void"</td><td></td><td></td></tr>
-
-<tr><td>"Be_BFS"</td><td></td><td></td></tr>
-
-<tr><td>"MFS"</td><td></td><td></td></tr>
-
-</table>
-</div>
-
-<h3 id="status_flags"><a class="header" href="#status_flags">Status flags</a></h3>
-<p>The partition status flags consist of the following values:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td></td><td>Is valid</td></tr>
-
-<tr><td>0x00000002</td><td></td><td>Is allocated</td></tr>
-
-<tr><td>0x00000004</td><td></td><td>Is in use</td></tr>
-
-<tr><td>0x00000008</td><td></td><td>Contains boot information</td></tr>
-
-<tr><td>0x00000010</td><td></td><td>Is readable</td></tr>
-
-<tr><td>0x00000020</td><td></td><td>Is writable</td></tr>
-
-<tr><td>0x00000040</td><td></td><td>Boot code is position independent</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x00000100</td><td></td><td>Contains a chain-compatible driver</td></tr>
-
-<tr><td>0x00000200</td><td></td><td>Contains a real driver</td></tr>
-
-<tr><td>0x00000400</td><td></td><td>Contains a chain driver</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x40000000</td><td></td><td>Automatic mount at startup</td></tr>
-
-<tr><td>0x80000000</td><td></td><td>Is startup partition</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the “is in use” status flags does not appear to be used consistently.</p>
-</blockquote>
+<p>An entry in the table represent a 32-bit sector number, of the block of disk
+image data in the sparse storage data image file, that corresponding to the
+logical offset in the disk image. For example block allocation table entry 0
+corresponds to disk image offset 0.</p>
+<p>A value of 0x800 represents sparse storage data image file offset 0x100000
+(0x800 x 512).</p>
+<p>A value of 0 represent a sparse block or a block stored in the parent image.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="volume_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="qcow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="gpt.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="udif.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -436,11 +471,11 @@ map describes the partition map itself.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="volume_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="qcow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="gpt.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="udif.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
