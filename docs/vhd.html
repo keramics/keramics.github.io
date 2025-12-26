@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2e5a84c8.js";
+            window.path_to_searchindex_js = "searchindex-b1b6c8fa.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-415b6163.js"></script>
+        <script src="toc-4e057007.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -369,7 +369,7 @@ the file footer without the checksum field.</p>
 
 <tr><td>24</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Number of blocks, which contains the maximum number of block allocation table entries</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of blocks, which is equivalent to the number of block allocation table entries</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td>Block size. The block size must be a power-of-two multitude of the sector size and does not include the size of the sector bitmap. The default block size is 4096 x 512-byte sectors (2 MB).</td></tr>
 
@@ -445,13 +445,13 @@ the file dynamic disk header without the checksum field.</p>
 
 <h2 id="block-allocation-table"><a class="header" href="#block-allocation-table">Block allocation table</a></h2>
 <p>The block allocation table is only used in dynamic and differential disk images.</p>
-<p>The block allocation table consists of 32-bit entries. The entries represent
-the sector number where the data block starts or unused when set to
-0xffffffff (-1).</p>
-<pre><code>if block allocation table entry == 0xffffffff (-1):
-        block is sparse or stored in parent
+<p>The block allocation table consists of 32-bit entries. An entry contains the
+sector number where the data block starts or is set to 0xffffffff (-1) if the
+block is sparse or stored in the parent disk image.</p>
+<pre><code>if block allocation table entry == 0xffffffff:
+    block is sparse or stored in parent
 else:
-        file offset = ( block allocation table entry * 512 ) + sector bitmap size
+    file offset = ( block allocation table entry * 512 ) + sector bitmap size
 </code></pre>
 <p>Unused block in a dynamic disk are sparse and should be filled with zero byte
 values. In a differential disk the block is stored in the parent disk image.</p>

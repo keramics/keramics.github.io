@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Parallels Disk Image - Keramics data format specifications</title>
+        <title>Parallels Disk Image (PDI) - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2e5a84c8.js";
+            window.path_to_searchindex_js = "searchindex-b1b6c8fa.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-415b6163.js"></script>
+        <script src="toc-4e057007.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -175,29 +175,30 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="parallels-disk-image-format"><a class="header" href="#parallels-disk-image-format">Parallels Disk Image format</a></h1>
+                        <h1 id="parallels-disk-image-pdi-format"><a class="header" href="#parallels-disk-image-pdi-format">Parallels Disk Image (PDI) format</a></h1>
 <p>The Parallels Disk Image format used in Parallels virtualization products as
 one of its image formats. It is both used the store hard disk images and
 snapshots.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>A Parallels Disk Image consists of a directory, typically named “harddisk.hdd”
+<p>A Parallels Disk Image consists of a directory, typically named “{NAME}.hdd”
 containing:</p>
 <ul>
 <li>Descriptor file (DiskDescriptor.xml) and backup (DiskDescriptor.xml.Backup)</li>
-<li>harddisk.hdd file</li>
-<li>Storage data image file (harddisk.hdd.0.{GUID}.hds)</li>
-<li>harddisk.hdd.drh</li>
+<li>{NAME}.hdd file</li>
+<li>Storage data file ({NAME}.hdd.0.{GUID}.hds)</li>
+<li>{NAME}.hdd.drh</li>
 </ul>
+<p>Where {NAME} is an arbitrary name and {GUID} is a unique identifier.</p>
 <h3 id="disk-types"><a class="header" href="#disk-types">Disk types</a></h3>
 <p>The Parallels Disk Image format support multiple disk types:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>Expanding</td><td>Disk that consists of a single (dynamic size) sparse storage data image file</td></tr>
+<tr><td>Expanding</td><td>Disk that consists of a single (dynamic size) sparse storage data file</td></tr>
 
-<tr><td>Plain</td><td>Disk that consists of a single single (fixed size) raw storage data image file</td></tr>
+<tr><td>Plain</td><td>Disk that consists of a single single (fixed size) raw storage data file</td></tr>
 
-<tr><td>Split</td><td>Disk that consists of a one or more split storage data image files, either expanding or plain, holding upto 2G of data</td></tr>
+<tr><td>Split</td><td>Disk that consists of a one or more split storage data files, either expanding or plain, holding upto 2G of data</td></tr>
 
 </table>
 </div>
@@ -207,8 +208,6 @@ containing:</p>
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
 <tr><td>Byte order</td><td>little-endian</td></tr>
-
-<tr><td>Date and time values</td><td>Number of seconds since January 1, 2000 00:00:00 UTC</td></tr>
 
 <tr><td>Character strings</td><td>UTF-8 by default, the encoding is defined in the disk descriptor XML file.</td></tr>
 
@@ -224,7 +223,7 @@ the “Parallels_disk_image” XML element tha consists of the following values:
 <thead><th>Identifier</th><th>Description</th></thead>
 <tr><td>Disk_Parameters</td><td>The disk parameters</td></tr>
 
-<tr><td>StorageData</td><td>Information about the storage data image files</td></tr>
+<tr><td>StorageData</td><td>Information about the storage data files</td></tr>
 
 <tr><td>Snapshots</td><td>Information about snapshots</td></tr>
 
@@ -246,7 +245,7 @@ the “Parallels_disk_image” XML element tha consists of the following values:
             &lt;Data&gt;&lt;/Data&gt;
         &lt;/Encryption&gt;
         &lt;UID&gt;{GUID}&lt;/UID&gt;
-        &lt;Name&gt;harddisk&lt;/Name&gt;
+        &lt;Name&gt;{NAME}&lt;/Name&gt;
         &lt;Miscellaneous&gt;
             &lt;CompatLevel&gt;level2&lt;/CompatLevel&gt;
             &lt;Bootable&gt;1&lt;/Bootable&gt;
@@ -262,7 +261,7 @@ the “Parallels_disk_image” XML element tha consists of the following values:
             &lt;Image&gt;
                 &lt;GUID&gt;{GUID}&lt;/GUID&gt;
                 &lt;Type&gt;Compressed&lt;/Type&gt;
-                &lt;File&gt;harddisk.hdd.0.{GUID}.hds&lt;/File&gt;
+                &lt;File&gt;{NAME}.hdd.0.{GUID}.hds&lt;/File&gt;
             &lt;/Image&gt;
             ...
         &lt;/Storage&gt;
@@ -287,11 +286,11 @@ contains the following values.</p>
 
 <tr><td>Disk_size</td><td>Disk size, in number of sectors</td></tr>
 
-<tr><td>Encryption</td><td>"Encryption" XML sub element</td></tr>
+<tr><td>Encryption</td><td>"Encryption" sub XML element</td></tr>
 
 <tr><td>Heads</td><td>Number of heads</td></tr>
 
-<tr><td>Miscellaneous</td><td>"Miscellaneous" XML sub element</td></tr>
+<tr><td>Miscellaneous</td><td>"Miscellaneous" sub XML element</td></tr>
 
 <tr><td>Name</td><td>Name of the disk</td></tr>
 
@@ -301,7 +300,7 @@ contains the following values.</p>
 
 <tr><td>PhysicalSectorSize</td><td>Physical sector size</td></tr>
 
-<tr><td>Sectors</td><td>Number of sectors</td></tr>
+<tr><td>Sectors</td><td>Number of sectors per cylinder</td></tr>
 
 <tr><td>UID</td><td>Unknown (identifier)</td></tr>
 
@@ -312,6 +311,7 @@ contains the following values.</p>
 <pre><code class="language-xml">&lt;Encryption&gt;
     &lt;Engine&gt;{00000000-0000-0000-0000-000000000000}&lt;/Engine&gt;
     &lt;Data&gt;&lt;/Data&gt;
+    &lt;Salt&gt;&lt;/Salt&gt;
 &lt;/Encryption&gt;
 </code></pre>
 <h4 id="miscellaneous"><a class="header" href="#miscellaneous">Miscellaneous</a></h4>
@@ -320,8 +320,20 @@ contains the following values.</p>
     &lt;Bootable&gt;1&lt;/Bootable&gt;
     &lt;ChangeState&gt;0&lt;/ChangeState&gt;
     &lt;SuspendState&gt;0&lt;/SuspendState&gt;
+    &lt;DupBlocksCnt&gt;0&lt;/DupBlocksCnt&gt;
+    &lt;CorruptBlocksCnt&gt;0&lt;/CorruptBlocksCnt&gt;
+    &lt;UnrefBlocksCnt&gt;0&lt;/UnrefBlocksCnt&gt;
+    &lt;OutOfDiskBlocksCnt&gt;0&lt;/OutOfDiskBlocksCnt&gt;
+    &lt;BatOverlapBlocksCnt&gt;0&lt;/BatOverlapBlocksCnt&gt;
+    &lt;BlocksCnt&gt;0&lt;/BlocksCnt&gt;
+    &lt;TruncatedBlocksCnt&gt;0&lt;/TruncatedBlocksCnt&gt;
+    &lt;ReferencedBlocksCnt&gt;0&lt;/ReferencedBlocksCnt&gt;
+    &lt;ShutdownState&gt;0&lt;/ShutdownState&gt;
+    &lt;GuestToolsVersion&gt;17.1.1-51537&lt;/GuestToolsVersion&gt;
 &lt;/Miscellaneous&gt;
 </code></pre>
+<h5 id="compatlevel"><a class="header" href="#compatlevel">CompatLevel</a></h5>
+<p>Seen: level0 and level2</p>
 <h3 id="storage-data"><a class="header" href="#storage-data">Storage data</a></h3>
 <p>The “StorageData” XML element contains the following values.</p>
 <div class="table-wrapper">
@@ -332,18 +344,21 @@ contains the following values.</p>
 </table>
 </div>
 
+<blockquote>
+<p>Note that a split disks contains multiple “Storage” XML sub elements.</p>
+</blockquote>
 <h4 id="storage"><a class="header" href="#storage">Storage</a></h4>
 <p>The “Storage” XML element contains the following values.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>Start</td><td>Start sector number of the segment stored in the storage data image file</td></tr>
+<tr><td>Start</td><td>Start sector number of the segment stored in the storage data file</td></tr>
 
-<tr><td>End</td><td>End sector number of the segment stored in the storage data image file</td></tr>
+<tr><td>End</td><td>End sector number of the segment stored in the storage data file</td></tr>
 
 <tr><td>Blocksize</td><td>Block size, in number of sectors</td></tr>
 
-<tr><td>Image</td><td>One or more "Image" XML sub elements</td></tr>
+<tr><td>Image</td><td>One or more "Image" sub XML elements</td></tr>
 
 </table>
 </div>
@@ -353,11 +368,11 @@ contains the following values.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>GUID</td><td>Identifier of disk (used by snapshots)</td></tr>
+<tr><td>GUID</td><td>Identifier of snapshot (or layer)</td></tr>
 
-<tr><td>Type</td><td><a href="#storage_data_image_file_types">Storage data image file type</a></td></tr>
+<tr><td>Type</td><td><a href="#storage_data_file_types">Storage data file type</a></td></tr>
 
-<tr><td>File</td><td>Name of the storage data image file</td></tr>
+<tr><td>File</td><td>Name (or path) of the storage data file</td></tr>
 
 </table>
 </div>
@@ -367,7 +382,7 @@ contains the following values.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>Shot</td><td>One or more "Shot" XML sub elements</td></tr>
+<tr><td>Shot</td><td>One or more "Shot" sub XML elements</td></tr>
 
 </table>
 </div>
@@ -377,37 +392,39 @@ contains the following values.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>GUID</td><td>Identifier of disk</td></tr>
+<tr><td>GUID</td><td>Identifier of snapshot (or layer)</td></tr>
 
-<tr><td>ParentGUID</td><td>Identifier of parent disk, which contains "{00000000-0000-0000-0000-000000000000}" if not set</td></tr>
+<tr><td>ParentGUID</td><td>Identifier of parent snapshot (or layer), which contains "{00000000-0000-0000-0000-000000000000}" if not set</td></tr>
 
 </table>
 </div>
 
-<h2 id="storage-data-image-file"><a class="header" href="#storage-data-image-file">Storage data image file</a></h2>
-<h3 id="storage_data_image_file_types"><a class="header" href="#storage_data_image_file_types">Storage data image file types</a></h3>
+<h2 id="storage-data-file"><a class="header" href="#storage-data-file">Storage data file</a></h2>
+<h3 id="storage_data_file_types"><a class="header" href="#storage_data_file_types">Storage data file types</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>"Compressed"</td><td>Sparse storage data image file</td></tr>
+<tr><td>"Compressed"</td><td>Sparse storage data file</td></tr>
 
-<tr><td>"Plain"</td><td>Raw storage data image file</td></tr>
+<tr><td>"Plain"</td><td>Raw storage data file</td></tr>
 
 </table>
 </div>
 
-<h2 id="raw-storage-data-image-file"><a class="header" href="#raw-storage-data-image-file">Raw storage data image file</a></h2>
-<p>The raw (or plain) storage data image file contains the actual disk data.</p>
-<h3 id="sparse-storage-data-image-file"><a class="header" href="#sparse-storage-data-image-file">Sparse storage data image file</a></h3>
-<p>The sparse storage data image file contains the actual disk data without free
-space. A sparse storage data image consists of:</p>
+<h2 id="raw-storage-data-file"><a class="header" href="#raw-storage-data-file">Raw storage data file</a></h2>
+<p>The raw (or plain) storage data file contains the disk image data including
+free space.</p>
+<h3 id="sparse-storage-data-file"><a class="header" href="#sparse-storage-data-file">Sparse storage data file</a></h3>
+<p>The sparse storage data file contains the actual disk image data without free
+space.</p>
+<p>A sparse storage data file consists of:</p>
 <ul>
 <li>file header</li>
 <li>block allocation table (BAT)</li>
-<li>blocks of images data</li>
+<li>data blocks</li>
 </ul>
-<h4 id="sparse-storage-data-image-file-header"><a class="header" href="#sparse-storage-data-image-file-header">Sparse storage data image file header</a></h4>
-<p>The sparse storage data image file header is 64 bytes in size and consists of:</p>
+<h4 id="sparse-storage-data-file-header"><a class="header" href="#sparse-storage-data-file-header">Sparse storage data file header</a></h4>
+<p>The sparse storage data file header is 64 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -421,47 +438,38 @@ space. A sparse storage data image consists of:</p>
 
 <tr><td>28</td><td>4</td><td></td><td>Block size (or number of tracks) in number of sectors</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Number of entries in the block allocation table</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of blocks, which is equivalent to the number of block allocation table entries</td></tr>
 
 <tr><td>36</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
 <tr><td>44</td><td>4</td><td></td><td>Unknown (Creator?), seen: "\x00\x00\x00\x00", "pd17", "pd22"</td></tr>
 
-<tr><td>48</td><td>4</td><td></td><td>Image data start sector number, which is relative to the start of the sparse storage data image file</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Data start sector number, which is relative to the start of the sparse storage data file</td></tr>
 
-<tr><td>52</td><td>12</td><td></td><td>Unknown (padding)</td></tr>
+<tr><td>52</td><td>4</td><td></td><td>Unknown (Flags?)</td></tr>
 
-</table>
-</div>
-
-<p>TODO: determine if “WithouFreSpacExt” is used for 2T extended storage data image files</p>
-<h4 id="block-allocation-table"><a class="header" href="#block-allocation-table">Block allocation table</a></h4>
-<p>The block allocation table is of variable size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>Number of entries x 4</td><td></td><td>Array of block allocation table entries</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Unknown (Features start sector?)</td></tr>
 
 </table>
 </div>
 
-<p>An entry in the table represent a 32-bit sector number, of the block of disk
-image data in the sparse storage data image file, that corresponding to the
-logical offset in the disk image. For example block allocation table entry 0
-corresponds to disk image offset 0.</p>
-<p>A value of 0x800 represents sparse storage data image file offset 0x100000
-(0x800 x 512).</p>
-<p>A value of 0 represent a sparse block or a block stored in the parent image.</p>
+<h4 id="block-allocation-table-bat"><a class="header" href="#block-allocation-table-bat">Block allocation table (BAT)</a></h4>
+<p>The block allocation table consists of 32-bit entries. An entry contains the
+sector number where the data block starts is set to 0 if the block is sparse or
+stored in the parent disk image.</p>
+<p>For example block allocation table entry 0 corresponds to disk image offset 0.
+If contains a value of 0x800 the corresponding data block is stored at file
+offset 0x100000 (0x800 x 512).</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="qcow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="sparseimage.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="udif.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="qcow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -471,11 +479,11 @@ corresponds to disk image offset 0.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="qcow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="sparseimage.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="udif.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="qcow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
