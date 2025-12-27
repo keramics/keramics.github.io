@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b1b6c8fa.js";
+            window.path_to_searchindex_js = "searchindex-e82fe897.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -3903,7 +3903,7 @@ of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>...</td><td></td><td>Data-file filename, which contains an UTF-8 string without end-of-string character</td></tr>
+<tr><td>0</td><td>...</td><td></td><td>Data-file file name, which contains an UTF-8 string without end-of-string character</td></tr>
 
 </table>
 </div>
@@ -6024,7 +6024,7 @@ data. The COW sparse extent data file consists of:</p>
 
 <tr><td colspan="4"><em>In child extent data files</em></td></tr>
 
-<tr><td>32</td><td>1024</td><td></td><td>Parent filename</td></tr>
+<tr><td>32</td><td>1024</td><td></td><td>Parent file name</td></tr>
 
 <tr><td>1056</td><td>4</td><td></td><td>Parent generation</td></tr>
 
@@ -6048,7 +6048,7 @@ data. The COW sparse extent data file consists of:</p>
 </div>
 
 <blockquote>
-<p>Note that the parent filename seems not to be set in recent delta sparse
+<p>Note that the parent file name seems not to be set in recent delta sparse
 extent files.</p>
 </blockquote>
 <h3 id="grain-directory"><a class="header" href="#grain-directory">Grain directory</a></h3>
@@ -10169,7 +10169,7 @@ cluster block number is relative to the start of the boot record.</p>
 start of a data stream.</p>
 <h4 id="long-and-short-file-name"><a class="header" href="#long-and-short-file-name">Long and short (file) name</a></h4>
 <p>In Windows terminology the name of a file (or directory) can either be short or
-long. The short name is an equivalent of the filename in the (DOS) 8.3 format.
+long. The short name is an equivalent of the file name in the (DOS) 8.3 format.
 The long name is actual the (full) name of the file. The term long refers to
 the aspect that the name is longer than the short variant. Because most
 documentation refer to the (full) name as the long name, for clarity sake so
@@ -10181,7 +10181,7 @@ metadata. There are several predefined metadata files.</p>
 <p>The following metadata files are predefined and use a fixed MFT entry number.</p>
 <div class="table-wrapper">
 <table>
-<thead><th>MFT entry number</th><th>Filename</th><th>Description</th></thead>
+<thead><th>MFT entry number</th><th>File name</th><th>Description</th></thead>
 <tr><td>0</td><td>"$MFT"</td><td>Master File Table</td></tr>
 
 <tr><td>1</td><td>"$MFTMirr"</td><td>Back up of the first 4 entries of the Master File Table</td></tr>
@@ -10255,7 +10255,7 @@ metadata. There are several predefined metadata files.</p>
 commonly used but not fixed.</p>
 <div class="table-wrapper">
 <table>
-<thead><th>MFT entry number</th><th>Filename</th><th>Description</th></thead>
+<thead><th>MFT entry number</th><th>File name</th><th>Description</th></thead>
 <tr><td></td><td>"$Extend$UsnJrnl"</td><td><a href="#usn_change_journal">USN change journal</a></td></tr>
 
 </table>
@@ -11055,7 +11055,7 @@ the long name:</p>
 <ol>
 <li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its first 3 letters, e.g. “Program Files” becomes “PROGRA~1” or “ ~PLAYMOVIE.REG“ becomes “~PLAYM~1.REG”</li>
 <li>if the name already exists try ~2 up to ~9, e.g. “Program Data”, in the same directory as “Program Files”, becomes “PROGRA~2”</li>
-<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g. “x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4” in a directory with a lot of filenames starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
+<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g. “x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4” in a directory with a lot of file names starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
 </ol>
 <p>TODO: determine if the behavior is dependent on a setting that can be changed with fsutil</p>
 <h3 id="the-volume-version-attribute"><a class="header" href="#the-volume-version-attribute">The volume version attribute</a></h3>
