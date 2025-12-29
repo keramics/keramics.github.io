@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -376,13 +376,14 @@ specific section.</p>
 
 <tr><td>32</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>72</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section header.</td></tr>
+<tr><td>72</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section header</td></tr>
 
 </table>
 </div>
 
 <p>Some sections contain additional data, refer to paragraph section types for
 more information.</p>
+<!-- rumdl-disable MD028 -->
 <blockquote>
 <p>Note Expert Witness 1.35 (for Windows) does not set the section size.</p>
 </blockquote>
@@ -390,6 +391,7 @@ more information.</p>
 <p>Note that in EnCase 2 DOS version the padding itself does not contains 0-byte
 values but data, probably the memory is not filled with 0-byte values.</p>
 </blockquote>
+<!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
 <p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 defines the following:</p>
@@ -428,7 +430,7 @@ Some aspects of this section are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td><td></td></tr>
+<tr><td>76 (0x4c)</td><td>(variable)</td><td></td><td>Information about the acquired media</td></tr>
 
 </table>
 </div>
@@ -585,20 +587,24 @@ EnCase.</p>
 </div>
 
 <p>Also see <a href="#header2_values">header2 values</a></p>
+<!-- rumdl-disable MD028 -->
 <blockquote>
 <p>Note that both the acquiry and system date and time are empty in a file
 created by winen.</p>
 </blockquote>
+<!-- rumdl-disable MD064 -->
 <blockquote>
-<p>Note that rhe date values in the <a href="#header_section">header section</a> (not the
-header2 section) are set to: Thu Jan  1 00:00:00 1970. Where the time is
+<p>Note that the date values in the <a href="#header_section">header section</a> (not the
+header2 section) are set to: “Thu Jan  1 00:00:00 1970”. Where the time is
 dependent on the time zone and daylight savings.</p>
 </blockquote>
+<!-- rumdl-enable MD064 -->
 <blockquote>
 <p>Note that in a Logicube Dossier generated header2 section an additional emtpy
 value in the 4th line was observed. The number of values in the 3rd and 4th
 can differ.</p>
 </blockquote>
+<!-- rumdl-enable MD028 -->
 <h5 id="sources_category1"><a class="header" href="#sources_category1">Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources.</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
@@ -704,7 +710,7 @@ EnCase 5 to 7 (EWF-L01) format. However:</p>
 
 <tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
 
-<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'</td></tr>
 
 <tr><td>sn</td><td>Serial Number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
@@ -721,7 +727,7 @@ have a restriction of 40 characters instead of 3000 characters.</p>
 </blockquote>
 <h5 id="extents-header-value"><a class="header" href="#extents-header-value">Extents header value</a></h5>
 <p>An extents header value consist of:</p>
-<pre><code>number of entries
+<pre><code class="language-text">number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
 <h3 id="header_section"><a class="header" href="#header_section">Header section</a></h3>
@@ -729,14 +735,17 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
-<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Typically not found in subsequent segment files with the exception of Logicube Dossier generated EWF-E01 files.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
+<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the
+first segment file. Typically not found in subsequent segment files with the exception of Logicube
+Dossier generated EWF-E01 files.</li>
 </ul>
 <p>The additional data this section contains is the following:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Number of bytes</th><th>Description</th></thead>
-<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td></tr>
+<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media</td></tr>
 
 </table>
 </div>
@@ -772,7 +781,8 @@ described. In all cases the information consists of at least 4 lines:</p>
 <h4 id="ewf-format"><a class="header" href="#ewf-format">EWF format</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of line character(s) is a newline (0x0a).</li>
+<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of
+line character(s) is a newline (0x0a).</li>
 </ul>
 <p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 the 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -801,7 +811,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 </div>
 
 <p>Also see <a href="#header_values">header values</a></p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert Witness Compression uses ‘f’, fastest compression.</p>
+<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert
+Witness Compression uses ‘f’, fastest compression.</p>
 <h4 id="encase-1-ewf-e01"><a class="header" href="#encase-1-ewf-e01">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -841,7 +852,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 <ul>
 <li>The header section is defined once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data is always processed by zlib, however the same compression level is used as for the chunks. This could mean compression level 0 which is no compression.</li>
+<li>The header data is always processed by zlib, however the same compression level is used as for
+the chunks. This could mean compression level 0 which is no compression.</li>
 </ul>
 <blockquote>
 <p>The SMART format uses the FTK Imager (EWF-E01) specification for this section.
@@ -851,7 +863,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
@@ -889,7 +902,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The header is defined only once.</li>
-<li>It resides after the header2 sections of the first segment file. It is not found in subsequent segment files.</li>
+<li>It resides after the header2 sections of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
@@ -925,7 +939,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a newline (0x0a).</li>
 </ul>
@@ -1124,8 +1139,10 @@ or earlier.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>In FTK Imager (EWF-E01) the same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data itself is compressed using zlib. Note that the compression level can be none and therefore the header looks uncompressed.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
+<li>The header data itself is compressed using zlib. Note that the compression level can be none and
+therefore the header looks uncompressed.</li>
 <li>In FTK Imager the end of line character(s) is a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -1163,7 +1180,8 @@ or earlier.</p>
 EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 <ul>
 <li>In EnCase 5 both the acquired and system date and time are set to 0.</li>
-<li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the time is dependent on the local timezone and daylight savings)</li>
+<li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the
+time is dependent on the local timezone and daylight savings)</li>
 </ul>
 <h4 id="header_values"><a class="header" href="#header_values">Header values</a></h4>
 <div class="table-wrapper">
@@ -1183,7 +1201,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>l</td><td>Device label</td><td>Free form string</td></tr>
 
-<tr><td>m</td><td>Acquisition date and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+<tr><td>m</td><td>Acquisition date and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a></td></tr>
 
 <tr><td>md</td><td>Model</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
@@ -1193,7 +1211,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
 
-<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'</td></tr>
 
 <tr><td>r</td><td>Compression level</td><td><a href="#compression_header_value">Compression header value</a></td></tr>
 
@@ -1201,7 +1219,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>t</td><td>Notes</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
-<tr><td>u</td><td>Systemdate and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+<tr><td>u</td><td>Systemdate and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a></td></tr>
 
 </table>
 </div>
@@ -1217,7 +1235,7 @@ space, e.g. “2002 3 4 10 19 59”, which represents March 4, 2002 10:19:59.</p
 e.g. “1142163845” which represents the date: March 12 2006, 11:44:05</p>
 <h5 id="extents_header_value"><a class="header" href="#extents_header_value">Extents header value</a></h5>
 <p>An extents header value consist of:</p>
-<pre><code>number of entries
+<pre><code class="language-text">number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
 <h5 id="compression_header_value"><a class="header" href="#compression_header_value">Compression header value</a></h5>
@@ -1251,7 +1269,8 @@ per EnCase version? probably not. The algorithm does not differ in EnCase
 Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 <li>Found after the header section of the first segment file. Not found in subsequent segment files.</li>
 </ul>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
@@ -1263,9 +1282,9 @@ Some aspects of this section are:</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x01</td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk, which contains 64 per default.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk, which contains 64 per default</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>The number of bytes per sectors, which contains 512 per default</td></tr>
 
@@ -1277,7 +1296,7 @@ Some aspects of this section are:</p>
 
 <tr><td>85</td><td>5</td><td></td><td>Signature, which contains the EWF file header signature</td></tr>
 
-<tr><td>90</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+<tr><td>90</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data</td></tr>
 
 </table>
 </div>
@@ -1302,9 +1321,9 @@ naming schema of the segment files.</p>
 
 <tr><td>1</td><td>3</td><td>0x00</td><td>Unknown (empty values)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk (or block size), which contains 64 per default. EnCase 5 is the first version which allows this value to be different than 64.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk (or block size), which contains 64 per default. EnCase 5 is the first version which allows this value to be different than 64</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>The number of bytes per sector</td></tr>
 
@@ -1340,7 +1359,7 @@ naming schema of the segment files.</p>
 
 <tr><td>1043</td><td>5</td><td>0x00</td><td>Unknown (Signature)</td></tr>
 
-<tr><td>1048</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+<tr><td>1048</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data</td></tr>
 
 </table>
 </div>
@@ -1356,8 +1375,10 @@ the actual storage media data.</p>
 <ul>
 <li>the volume type contains 0x0e</li>
 <li>the number of chunks is 0</li>
-<li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file system block size</li>
-<li>the sectors count, represents some other value because ( sector_size x sector_amount != total_size ). The total size is in the ltree section.</li>
+<li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file
+system block size</li>
+<li>the sectors count, represents some other value because (sector_size x sector_amount !=
+total_size). The total size is in the ltree section.</li>
 </ul>
 <h4 id="media_type"><a class="header" href="#media_type">Media type</a></h4>
 <div class="table-wrapper">
@@ -1442,9 +1463,12 @@ partition (volume) image or a physical disk image.</p>
 aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7. Not found in SMART (EWF-S01).</li>
-<li>For multiple segment files it does not reside in the first segment file. For a single segment file it does.</li>
-<li>Found after the last table2 section in a single segment file or for multiple segment files at the start of the segment files, except for the first.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7.
+Not found in SMART (EWF-S01).</li>
+<li>For multiple segment files it does not reside in the first segment file. For a single segment
+file it does.</li>
+<li>Found after the last table2 section in a single segment file or for multiple segment files at the
+start of the segment files, except for the first.</li>
 <li>The data section has data it should should contain the same information as the volume section.</li>
 </ul>
 <p>The data section is a copy of the <a href="#volume_section">volume section</a>.</p>
@@ -1459,13 +1483,19 @@ and set to 0.</p>
 Some aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
-<li>The first sectors section can be found after the volume section in the first segment file or at the after the data section in subsequent segment files. Successive sector data sections are found after the sector table2 section.</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
+found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>The first sectors section can be found after the volume section in the first segment file or at
+the after the data section in subsequent segment files. Successive sector data sections are
+found after the sector table2 section.</li>
 </ul>
 <p>The sectors section contains the actual chunks of media data.</p>
 <ul>
 <li>The sectors section can contain multiple chunks.</li>
-<li>The default size of a chunk is 32768 bytes of data (64 standard sectors, with a size of 512 bytes per sector). It is possible in EnCase 5 and 6 and linen 5 and 6 to change the number of sectors per block to 64, 128, 256, 1024, 2048, 4096, 8192, 16384 or 32768. In EnCase 7 and linen 7 this has been reduced to 64, 128, 256, 1024.</li>
+<li>The default size of a chunk is 32768 bytes of data (64 standard sectors, with a size of 512 bytes
+per sector). It is possible in EnCase 5 and 6 and linen 5 and 6 to change the number of sectors
+per block to 64, 128, 256, 1024, 2048, 4096, 8192, 16384 or 32768. In EnCase 7 and linen 7 this
+has been reduced to 64, 128, 256, 1024.</li>
 </ul>
 <h4 id="data-chunk"><a class="header" href="#data-chunk">Data chunk</a></h4>
 <p>The first chunk is often located directly after the section header, although
@@ -1513,7 +1543,8 @@ per sector (the data).</p>
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 </ul>
 <blockquote>
 <p>Note that the offsets within the section header are 8 bytes (64 bits) of
@@ -1523,7 +1554,8 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 <h4 id="ewf-specification-1"><a class="header" href="#ewf-specification-1">EWF specification</a></h4>
 <p>Some aspects of the table section according to the EWF specification are:</p>
 <ul>
-<li>The first table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>The first table section resides after the volume section in the first segment file or after the
+file header in subsequent segment files.</li>
 <li>It can be found in every segment file.</li>
 </ul>
 <p>The table section consists of:</p>
@@ -1541,7 +1573,7 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1549,7 +1581,8 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 <p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></p>
 <ul>
 <li>the number of entries, contains 0x01</li>
-<li>the table can hold 16375 entries if more entries are required an additional table section should be created.</li>
+<li>the table can hold 16375 entries if more entries are required an additional table section should
+be created.</li>
 </ul>
 <h5 id="table-entry"><a class="header" href="#table-entry">Table entry</a></h5>
 <p>The table entry is 4 bytes in size and consists of:</p>
@@ -1584,7 +1617,8 @@ EWF specification.</p>
 <h4 id="encase-1-ewf-e01-1"><a class="header" href="#encase-1-ewf-e01-1">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li>The table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>The table section resides after the volume section in the first segment file or after the file
+header in subsequent segment files.</li>
 <li>It can be found in every segment file.</li>
 </ul>
 <p>The table section consists of:</p>
@@ -1603,12 +1637,13 @@ EWF specification.</p>
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
 
-<p>The table can hold 16375 entries if more entries are required an additional table section should be created.</p>
+<p>The table can hold 16375 entries if more entries are required an additional table section should be
+created.</p>
 <h5 id="table-entry-1"><a class="header" href="#table-entry-1">Table entry</a></h5>
 <p>The table entry is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -1677,7 +1712,7 @@ checksum of the compressed data chunk is part the zlib compressed data format.</
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1738,7 +1773,7 @@ contains a value relative to the start of the file.</p>
 
 <tr><td>16</td><td>4</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1784,7 +1819,8 @@ converted by Keramics.</p>
 Some aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
+found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>Uses the same format as the table section.</li>
 <li>Resides directly after the table section.</li>
 </ul>
@@ -1798,9 +1834,11 @@ intended for recovery purposes.</p>
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 <li>The last section within a segment other than the last segment file.</li>
-<li>The offset to the next section in the section header of the next section point to itself (the start of the next section).</li>
+<li>The offset to the next section in the section header of the next section point to itself (the
+start of the next section).</li>
 <li>It should be the last section in a segment file, other than the last segment file.</li>
 </ul>
 <h4 id="smart-ewf-s01-4"><a class="header" href="#smart-ewf-s01-4">SMART (EWF-S01)</a></h4>
@@ -1855,7 +1893,7 @@ aspects of this section are:</p>
 
 <tr><td>16</td><td>8</td><td></td><td>Data size</td></tr>
 
-<tr><td>24</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the ltree header where the checksum value itself is zeroed out.</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the ltree header where the checksum value itself is zeroed out</td></tr>
 
 <tr><td>28</td><td>20</td><td></td><td>Unknown (empty values)</td></tr>
 
@@ -1966,7 +2004,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2018,7 +2056,7 @@ more information see the sections below.</p>
 
 <tr><td>5</td><td>nta</td><td>Access mask</td></tr>
 
-<tr><td>6</td><td>nti</td><td>Unknown (Windows NT access control entry (ACE) flags?, which contains an integer with a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#access-control-entry-ace-flags">Windows NT access control entry (ACE) flags</a>).</td></tr>
+<tr><td>6</td><td>nti</td><td>Unknown (Windows NT access control entry (ACE) flags?, which contains an integer with a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#access-control-entry-ace-flags">Windows NT access control entry (ACE) flags</a>)</td></tr>
 
 <tr><td>7</td><td>nts</td><td>Unknown (Permission?) (Removed in EnCase 6)</td></tr>
 
@@ -2026,6 +2064,7 @@ more information see the sections below.</p>
 </div>
 
 <h5 id="permission_types"><a class="header" href="#permission_types">Permission types</a></h5>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2046,8 +2085,10 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="access-mask"><a class="header" href="#access-mask">Access mask</a></h5>
 <p>Access mask seen in combination with property types 0, 1 and 6</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2064,11 +2105,13 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>Access mask seen in combination with property type 2</p>
-<pre><code>[0x001200a9] [R&amp;X] [R] [Sync]
+<pre><code class="language-text">[0x001200a9] [R&amp;X] [R] [Sync]
 [0x001301bf] [M] [R&amp;X] [R] [W] [Sync]
 [0x001f01ff] [FC] [M] [R&amp;X] [R] [W] [Sync]
 </code></pre>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2107,6 +2150,7 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="sources_category3"><a class="header" href="#sources_category3">Sources category</a></h4>
 <p>The srce category contains information about acquisition sources of the file entries.</p>
 <p>TODO: describe what an acquisition source is in the context of EnCase.</p>
@@ -2138,7 +2182,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2261,7 +2305,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2345,7 +2389,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2529,7 +2573,8 @@ MD5 hash is not set. The same applies for the “sha” value when it contains
 <p>A file entry name (“n” value):</p>
 <ul>
 <li>can contain path segment separator characters like “\” and “/”</li>
-<li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name seperator</li>
+<li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name
+seperator</li>
 </ul>
 <blockquote>
 <p>Note that a regular “MIDDLE DOT” Unicode character will be encoded in the
@@ -2551,7 +2596,7 @@ same way so no real way to reliably tell the difference.</p>
 <p>For example: “13 FILE10~1.TXT”</p>
 <h6 id="original-extents"><a class="header" href="#original-extents">Original extents</a></h6>
 <p>TODO: add some text</p>
-<pre><code>1 30a555b 30a6000 12011ae00 9008d7 3f 43 1 12011ae00 30a6000 120113 30a6 9008d7 18530
+<pre><code class="language-text">1 30a555b 30a6000 12011ae00 9008d7 3f 43 1 12011ae00 30a6000 120113 30a6 9008d7 18530
 </code></pre>
 <h6 id="ltree-file-entries-1"><a class="header" href="#ltree-file-entries-1">Ltree file entries</a></h6>
 <p>The ltree entries of files and directories consist of entries starting with: 26
@@ -2609,7 +2654,7 @@ followed by the number of sub file entries.</p>
 
 <tr><td>0x02000000</td><td>Folder</td><td>Is folder</td></tr>
 
-<tr><td>0x04000000</td><td></td><td>Data is sparse.</td></tr>
+<tr><td>0x04000000</td><td></td><td>Data is sparse</td></tr>
 
 </table>
 </div>
@@ -2629,7 +2674,7 @@ ignored and the duplicate data offset refers to the location where the data
 stored.</p>
 <h5 id="binary_extents"><a class="header" href="#binary_extents">Binary extents value</a></h5>
 <p>The binary extents value contains 3 values separated by a space:</p>
-<pre><code>Unknown Offset Size
+<pre><code class="language-text">Unknown Offset Size
 </code></pre>
 <p>Where:</p>
 <ul>
@@ -2748,7 +2793,8 @@ UTF-16 endian byte order mark.</p>
 </div>
 
 <h3 id="session-section"><a class="header" href="#session-section">Session section</a></h3>
-<p>The session section is identifier in the section data type field as “session”. Some aspects of this section are:</p>
+<p>The session section is identifier in the section data type field as “session”. Some aspects of this
+section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
 <li>It is not found in SMART (EWF-S01) and FTK Imager (EWF-E01).</li>
@@ -2771,7 +2817,7 @@ UTF-16 endian byte order mark.</p>
 
 <tr><td>4</td><td>28</td><td></td><td>Unknown (empty values)</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional session section data.</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional session section data</td></tr>
 
 </table>
 </div>
@@ -2843,7 +2889,7 @@ occurred are filled with zero’s during acquiry by EnCase.</p>
 
 <tr><td>4</td><td>512</td><td></td><td>Unknown (empty values)</td></tr>
 
-<tr><td>516</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the error2 header data.</td></tr>
+<tr><td>516</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the error2 header data</td></tr>
 
 </table>
 </div>
@@ -2887,7 +2933,7 @@ Some aspects of this section are:</p>
 
 <tr><td>36</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the digest section data.</td></tr>
+<tr><td>76</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the digest section data</td></tr>
 
 </table>
 </div>
@@ -2899,7 +2945,8 @@ aspects of this section are:</p>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
 <li>It is found in SMART (EWF-S01) and FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is not found in EnCase 5 (EWF-L01).</li>
-<li>The hash section is optional, it does not need to be present. If it does it resides in the last segment file before the done section.</li>
+<li>The hash section is optional, it does not need to be present. If it does it resides in the last
+segment file before the done section.</li>
 </ul>
 <p>The hash section contains a MD5 hash of the data within the chunks.</p>
 <p>The hash section data is 36 byte in size and consists of:</p>
@@ -2910,7 +2957,7 @@ aspects of this section are:</p>
 
 <tr><td>16</td><td>16</td><td></td><td>Unknown</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional hash section data.</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional hash section data</td></tr>
 
 </table>
 </div>
@@ -2922,23 +2969,28 @@ aspects of this section are:</p>
 <li>is zero in EnCase 3 and below</li>
 <li>in EnCase 4 the first 4 bytes are 0, the next 8 bytes seem random, the last 4 bytes seem fixed</li>
 <li>in EnCase 5 and 6 the first 8 bytes seem random, the last 8 bytes equal the file header signature</li>
-<li>in linen 5 the first and last set of 4 bytes seem the same, the second set of 4 bytes seem to be random, the third set of 4 bytes seem to contain a piece of the file header signature</li>
-<li>in linen 6 the first and third set of 4 bytes seem random, the second and last set of 4 bytes seem to be the same</li>
+<li>in linen 5 the first and last set of 4 bytes seem the same, the second set of 4 bytes seem to be
+random, the third set of 4 bytes seem to contain a piece of the file header signature</li>
+<li>in linen 6 the first and third set of 4 bytes seem random, the second and last set of 4 bytes
+seem to be the same</li>
 <li>EnCase5 seems to contain a GUID of the acquired device?</li>
 </ul>
 <p>Test with EnCase 4 show that:</p>
 <ul>
 <li>The value does not equal the checksum of the media data</li>
-<li>Does not differentiate for the same media acquired within the same program session, using different formats, but differ for different media and different program sessions</li>
+<li>Does not differentiate for the same media acquired within the same program session, using
+different formats, but differ for different media and different program sessions</li>
 </ul>
 <h3 id="done-section"><a class="header" href="#done-section">Done section</a></h3>
 <p>The done section is identified in the section data type field as “done”. Some
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5 (EWF-L01) files.</li>
+<li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5
+(EWF-L01) files.</li>
 <li>The done section is the last section within the last segment file.</li>
-<li>The offset to the next section in the section header of the done section point to itself (the start of the done section).</li>
+<li>The offset to the next section in the section header of the done section point to itself (the
+start of the done section).</li>
 <li>It should be the last section in the last segment file.</li>
 </ul>
 <h4 id="smart-ewf-s01-5"><a class="header" href="#smart-ewf-s01-5">SMART (EWF-S01)</a></h4>
@@ -3015,7 +3067,7 @@ complement of the uncompressed data size.</p>
 <p>Libewf currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
 <p>TODO: add description</p>
-<pre><code>reading section header from file IO pool entry: 1 at offset: 415912423
+<pre><code class="language-text">reading section header from file IO pool entry: 1 at offset: 415912423
 type                      : table2
 next offset               : 415978027
 size                      : 65604

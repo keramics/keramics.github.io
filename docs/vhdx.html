@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -299,7 +299,7 @@ where the image header checkum value is considered to be 0 during calculation.</
 
 <tr><td>24</td><td>4</td><td></td><td>Region data size, which according to MS-VHDX this value must be a multitude of 1 MiB</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Is required flag, which contains 1 to indicate the region type needs to be supported.</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Is required flag, which contains 1 to indicate the region type needs to be supported</td></tr>
 
 </table>
 </div>
@@ -521,7 +521,7 @@ image content data (or payload blocks) or blocks containing a sector bitmap.</p>
 sectors to be represented by the bitmap.</p>
 <p>Block allocation table (BAT) entries are grouped in chunks. The size of a chunk
 can be calculated as following:</p>
-<pre><code>number of entries per chunk = ( 2^23 * logical sector size ) / block size
+<pre><code class="language-python">number_of_entries_per_chunk = (2^23 * logical_sector_size) / block_size
 </code></pre>
 <p>The block allocation table (BAT) consists of:</p>
 <ul>
@@ -536,7 +536,8 @@ can be calculated as following:</p>
 <p>The block allocation table (BAT) of:</p>
 <ul>
 <li>a fixed-size image does not contain sector bitmap entries;</li>
-<li>a dynamic-size image does contain sector bitmap entries, although according to MS-VHDX are not used;</li>
+<li>a dynamic-size image does contain sector bitmap entries, although according to
+MS-VHDX are not used;</li>
 <li>a differential image does contain sector bitmap entries.</li>
 </ul>
 <h3 id="block-allocation-table-bat-entry"><a class="header" href="#block-allocation-table-bat-entry">Block allocation table (BAT) entry</a></h3>

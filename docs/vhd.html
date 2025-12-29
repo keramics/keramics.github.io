@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -231,7 +231,7 @@ with an additional footer.</p>
 <h3 id="undo-disk-image"><a class="header" href="#undo-disk-image">Undo disk image</a></h3>
 <p>Virtual PC has a feature to create “Undo Disks”. This undo disk feature stores
 a differential hard disk image in files named something similar like:</p>
-<pre><code>VirtualPCUndo_&lt;name&gt;_0_0_hhmmssMMDDYYYY.vud
+<pre><code class="language-text">VirtualPCUndo_&lt;name&gt;_0_0_hhmmssMMDDYYYY.vud
 </code></pre>
 <p>Where the date and time seems to be stored in UTC and &lt;name&gt; represents the
 name of the parent image.</p>
@@ -246,7 +246,7 @@ name of the parent image.</p>
 
 <tr><td>12</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. It should only be set in dynamic and differential disk images. In fixed disk images it should be set to 0xffffffffffffffff (-1).</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. It should only be set in dynamic and differential disk images. In fixed disk images it should be set to 0xffffffffffffffff (-1)</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC</td></tr>
 
@@ -264,21 +264,17 @@ name of the parent image.</p>
 
 <tr><td>60</td><td>4</td><td></td><td>Disk type</td></tr>
 
-<tr><td>64</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Checksum, which contains a one's complement of the sum of the file footer excluding the checksum itself</td></tr>
 
 <tr><td>68</td><td>16</td><td></td><td>Identifier, which contains a big-endian UUID</td></tr>
 
-<tr><td>84</td><td>1</td><td></td><td>Saved state, which contains a flag to indicate the image is in saved state.</td></tr>
+<tr><td>84</td><td>1</td><td></td><td>Saved state, which contains a flag to indicate the image is in saved state</td></tr>
 
 <tr><td>85</td><td>427</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
 </table>
 </div>
 
-<blockquote>
-<p>Note that the checksum is a one’s complement of the sum of all the bytes in
-the file footer without the checksum field.</p>
-</blockquote>
 <h3 id="features"><a class="header" href="#features">Features</a></h3>
 <div class="table-wrapper">
 <table>
@@ -363,27 +359,27 @@ the file footer without the checksum field.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>8</td><td>"cxsparse"</td><td>Signature (Cookie)</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. Currently this is unused and should be set to 0xffffffffffffffff (-1).</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. Currently this is unused and should be set to 0xffffffffffffffff (-1)</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, whic contains the offset to the block allocation table structure. The offset is relative from the start of the file.</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, whic contains the offset to the block allocation table structure. The offset is relative from the start of the file</td></tr>
 
 <tr><td>24</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
 <tr><td>28</td><td>4</td><td></td><td>Number of blocks, which is equivalent to the number of block allocation table entries</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Block size. The block size must be a power-of-two multitude of the sector size and does not include the size of the sector bitmap. The default block size is 4096 x 512-byte sectors (2 MB).</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Block size. The block size must be a power-of-two multitude of the sector size and does not include the size of the sector bitmap. The default block size is 4096 x 512-byte sectors (2 MiB)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Checksum, which contains a one's complement of the sum of the dynamic disk header excluding the checksum itself</td></tr>
 
-<tr><td>40</td><td>16</td><td></td><td>Parent identifier, which contains a big-endian UUID that identifies the parent image. Only used by differential hard disk images.</td></tr>
+<tr><td>40</td><td>16</td><td></td><td>Parent identifier, which contains a big-endian UUID that identifies the parent image. Only used by differential hard disk images</td></tr>
 
-<tr><td>56</td><td>4</td><td></td><td>Parent last modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC. Only used by differential hard disk images.</td></tr>
+<tr><td>56</td><td>4</td><td></td><td>Parent last modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC. Only used by differential hard disk images</td></tr>
 
 <tr><td>60</td><td>4</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
-<tr><td>64</td><td>512</td><td></td><td>Parent name, which contains an UCS-2 big-endian string. Only used by differential hard disk images.</td></tr>
+<tr><td>64</td><td>512</td><td></td><td>Parent name, which contains an UCS-2 big-endian string. Only used by differential hard disk images</td></tr>
 
-<tr><td>576</td><td>8 x 24 = 192</td><td></td><td>Array of parent locator entries. Only used by differential hard disk images.</td></tr>
+<tr><td>576</td><td>8 x 24 = 192</td><td></td><td>Array of parent locator entries. Only used by differential hard disk images</td></tr>
 
 <tr><td>768</td><td>256</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
@@ -395,10 +391,6 @@ possible number of blocks in the disk.</p>
 <blockquote>
 <p>Note that the parent name can also contain a full path, e.g. in .avhd files.
 The part segments are separated by the \ character.</p>
-</blockquote>
-<blockquote>
-<p>Note that the checksum is a one’s complement of the sum of all the bytes in
-the file dynamic disk header without the checksum field.</p>
 </blockquote>
 <h3 id="parent-locator-entry"><a class="header" href="#parent-locator-entry">Parent locator entry</a></h3>
 <p>The parent locator entry is 24 bytes in size and consists of:</p>
@@ -413,7 +405,7 @@ the file dynamic disk header without the checksum field.</p>
 
 <tr><td>12</td><td>4</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Locator data offset, which contains the offset to the locator data. The offset is relative from the start of the file.</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Locator data offset, which contains the offset to the locator data. The offset is relative from the start of the file</td></tr>
 
 </table>
 </div>
@@ -448,10 +440,10 @@ the file dynamic disk header without the checksum field.</p>
 <p>The block allocation table consists of 32-bit entries. An entry contains the
 sector number where the data block starts or is set to 0xffffffff (-1) if the
 block is sparse or stored in the parent disk image.</p>
-<pre><code>if block allocation table entry == 0xffffffff:
+<pre><code class="language-python">if block_allocation_table_entry == 0xffffffff:
     block is sparse or stored in parent
 else:
-    file offset = ( block allocation table entry * 512 ) + sector bitmap size
+    file_offset = (block_allocation_table_entry * 512 ) + sector_bitmap_size
 </code></pre>
 <p>Unused block in a dynamic disk are sparse and should be filled with zero byte
 values. In a differential disk the block is stored in the parent disk image.</p>
@@ -462,7 +454,7 @@ values. In a differential disk the block is stored in the parent disk image.</p>
 <li>sector bitmap</li>
 <li>sector data</li>
 </ul>
-<pre><code>size of bitmap (in bytes) = block size / ( 512 * 8 )
+<pre><code class="language-python">size_of_bitmap (in bytes) = block_size / (512 * 8)
 </code></pre>
 <p>The size of the bitmap is rounded up to the next multitude of the sector size.</p>
 <h3 id="sector-bitmap"><a class="header" href="#sector-bitmap">Sector bitmap</a></h3>

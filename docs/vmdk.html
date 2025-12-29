@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -195,7 +195,7 @@ as one of its image format.</p>
 
 <tr><td>Date and time values</td><td></td></tr>
 
-<tr><td>Character strings</td><td>narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a codepage defined in the descriptor file.</td></tr>
+<tr><td>Character strings</td><td>narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a codepage defined in the descriptor file</td></tr>
 
 </table>
 </div>
@@ -206,12 +206,14 @@ as one of its image format.</p>
 <p>The 2GbMaxExtentFlat (or twoGbMaxExtentFlat) disk image, which consists of:</p>
 <ul>
 <li>a descriptor file (&lt;name&gt;.vmdk)</li>
-<li>raw data extent files (&lt;name&gt;-f###.vmdk), where ### is contains a decimal value starting with 1.</li>
+<li>raw data extent files (&lt;name&gt;-f###.vmdk), where ### is contains a
+decimal value starting with 1.</li>
 </ul>
 <p>The 2GbMaxExtentSparse (or twoGbMaxExtentSparse) disk image, which consists of:</p>
 <ul>
 <li>a descriptor file (&lt;name&gt;.vmdk)</li>
-<li>VMDK sparse data extent files (&lt;name&gt;-s###.vmdk), where ### is contains a decimal value starting with 1.</li>
+<li>VMDK sparse data extent files (&lt;name&gt;-s###.vmdk), where ### is contains
+a decimal value starting with 1.</li>
 </ul>
 <p>The monolithicFlat disk image, which consists of:</p>
 <ul>
@@ -220,7 +222,8 @@ as one of its image format.</p>
 </ul>
 <p>The monolithicSparse disk image, which consists of:</p>
 <ul>
-<li>VMDK sparse data extent file (&lt;name&gt;.vmdk) also contains the descriptor file data.</li>
+<li>VMDK sparse data extent file (&lt;name&gt;.vmdk) also contains the descriptor
+file data.</li>
 </ul>
 <p>The vmfs disk image, which consists of:</p>
 <ul>
@@ -255,7 +258,7 @@ Lines are separated by a line feed character (0x0a). And leading comment
 </blockquote>
 <h3 id="header"><a class="header" href="#header">Header</a></h3>
 <p>The header of a descriptor file looks similar to the data below.</p>
-<pre><code># Disk DescriptorFile
+<pre><code class="language-text"># Disk DescriptorFile
 version=1
 CID=12345678
 parentCID=ffffffff
@@ -271,20 +274,21 @@ createType="twoGbMaxExtentSparse"
 
 <tr><td>encoding</td><td><a href="#descriptor_file_encodings">Encoding</a></td></tr>
 
-<tr><td>CID</td><td>Content identifier, which contains a random 32-bit value updated the first time the content of the virtual disk is modified after the virtual disk is opened.</td></tr>
+<tr><td>CID</td><td>Content identifier, which contains a random 32-bit value updated the first time the content of the virtual disk is modified after the virtual disk is opened</td></tr>
 
-<tr><td>parentCID</td><td>The content identifier of the parent, which contains a 32-bit value identifying the parent content, where a value of 'ffffffff' (-1) represents no parent content.</td></tr>
+<tr><td>parentCID</td><td>The content identifier of the parent, which contains a 32-bit value identifying the parent content, where a value of 'ffffffff' (-1) represents no parent content</td></tr>
 
-<tr><td>isNativeSnapshot</td><td>TODO: add description. A value of "no" has been observed in a VMWare Player 9 descriptor file.</td></tr>
+<tr><td>isNativeSnapshot</td><td>TODO: add description. A value of "no" has been observed in a VMWare Player 9 descriptor file</td></tr>
 
 <tr><td>createType</td><td><a href="#descriptor_file_disk_types">Disk type</a></td></tr>
 
-<tr><td>parentFileNameHint</td><td>Contains the path to the parent image, which is only present if the image is a differential image (delta link).</td></tr>
+<tr><td>parentFileNameHint</td><td>Contains the path to the parent image, which is only present if the image is a differential image (delta link)</td></tr>
 
 </table>
 </div>
 
-<p>TODO: confirm if a content identifier of ‘fffffffe’ (-2) represents that the long content identifier should be used</p>
+<p>TODO: confirm if a content identifier of ‘fffffffe’ (-2) represents that the
+long content identifier should be used</p>
 <h4 id="descriptor_file_format_versions"><a class="header" href="#descriptor_file_format_versions">Format versions</a></h4>
 <div class="table-wrapper">
 <table>
@@ -328,47 +332,47 @@ default is UTF-8.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>2GbMaxExtentFlat, twoGbMaxExtentFlat</td><td>The disk is split into fixed-size extents of maximum 2 GB, which consists of raw extent data files.</td></tr>
+<tr><td>2GbMaxExtentFlat, twoGbMaxExtentFlat</td><td>The disk is split into fixed-size extents of maximum 2 GB, which consists of raw extent data files</td></tr>
 
-<tr><td>2GbMaxExtentSparse, twoGbMaxExtentSparse</td><td>The disk is split into sparse (dynamic-size) extents of maximum 2 GB, which consists of VMDK sparse extent data files.</td></tr>
+<tr><td>2GbMaxExtentSparse, twoGbMaxExtentSparse</td><td>The disk is split into sparse (dynamic-size) extents of maximum 2 GB, which consists of VMDK sparse extent data files</td></tr>
 
-<tr><td>custom</td><td>TODO: add description. Descriptor file with arbitrary extents, used to mount v2i-format.</td></tr>
+<tr><td>custom</td><td>TODO: add description. Descriptor file with arbitrary extents, used to mount v2i-format</td></tr>
 
-<tr><td>fullDevice</td><td>The disk uses a full physical disk device.</td></tr>
+<tr><td>fullDevice</td><td>The disk uses a full physical disk device</td></tr>
 
-<tr><td>monolithicFlat</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>monolithicFlat</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>monolithicSparse</td><td>The disk is a single VMDK sparse extent data file.</td></tr>
+<tr><td>monolithicSparse</td><td>The disk is a single VMDK sparse extent data file</td></tr>
 
-<tr><td>partitionedDevice</td><td>The disk uses a full physical disk device, using access per partition.</td></tr>
+<tr><td>partitionedDevice</td><td>The disk uses a full physical disk device, using access per partition</td></tr>
 
-<tr><td>streamOptimized</td><td>The disk is a single compressed VMDK sparse extent data file.</td></tr>
+<tr><td>streamOptimized</td><td>The disk is a single compressed VMDK sparse extent data file</td></tr>
 
-<tr><td>vmfs</td><td>The disk is a single raw extent data file, which is similar to the "monolithicFlat".</td></tr>
+<tr><td>vmfs</td><td>The disk is a single raw extent data file, which is similar to the "monolithicFlat"</td></tr>
 
-<tr><td>vmfsEagerZeroedThick</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>vmfsEagerZeroedThick</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>vmfsPreallocated</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>vmfsPreallocated</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>vmfsRaw</td><td>The disk uses a full physical disk device.</td></tr>
+<tr><td>vmfsRaw</td><td>The disk uses a full physical disk device</td></tr>
 
 <tr><td>vmfsRDM, vmfsRawDeviceMap</td><td>The disk uses a full physical disk device, which is also referred to as Raw Device Map (RDM)</td></tr>
 
-<tr><td>vmfsRDMP, vmfsPassthroughRawDeviceMap</td><td>The disk uses a full physical disk device, which is similar to the Raw Device Map (RDM), but sends SCSI commands to underlying hardware.</td></tr>
+<tr><td>vmfsRDMP, vmfsPassthroughRawDeviceMap</td><td>The disk uses a full physical disk device, which is similar to the Raw Device Map (RDM), but sends SCSI commands to underlying hardware</td></tr>
 
-<tr><td>vmfsSparse</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+<tr><td>vmfsSparse</td><td>The disk is split into COWD sparse (dynamic-size) extents</td></tr>
 
-<tr><td>vmfsThin</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+<tr><td>vmfsThin</td><td>The disk is split into COWD sparse (dynamic-size) extents</td></tr>
 
 </table>
 </div>
 
 <h3 id="extent-descriptions"><a class="header" href="#extent-descriptions">Extent descriptions</a></h3>
 <p>The extent descriptions of a descriptor file looks similar to the data below.</p>
-<pre><code># Extent description
+<pre><code class="language-text"># Extent description
 RW 4192256 SPARSE "test-s001.vmdk"
 </code></pre>
-<pre><code># Extent description
+<pre><code class="language-text"># Extent description
 RW 1048576 FLAT "test-f001.vmdk" 0
 </code></pre>
 <p>The extent descriptions consists of the following values:</p>
@@ -384,6 +388,7 @@ RW 1048576 FLAT "test-f001.vmdk" 0
 
 <h4 id="extent-descriptor"><a class="header" href="#extent-descriptor">Extent descriptor</a></h4>
 <p>The extent descriptor consists of the following values:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -408,6 +413,7 @@ RW 1048576 FLAT "test-f001.vmdk" 0
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The extent offset is specified only for flat extents and corresponds to the
 offset in the file or device where the extent data is located. For
 device-backed virtual disks (physical or raw disks) the extent offset can be
@@ -453,7 +459,7 @@ non-zero. For raw extent data files the extent offset should be zero.</p>
 </blockquote>
 <h3 id="change-tracking-file-section"><a class="header" href="#change-tracking-file-section">Change tracking file section</a></h3>
 <p>The change tracking file section was introduced in version 3 and looks similar to:</p>
-<pre><code># Change Tracking File
+<pre><code class="language-text"># Change Tracking File
 changeTrackPath="test-flat.vmdk"
 </code></pre>
 <p>The change tracking file section consists of the following values:</p>
@@ -469,7 +475,7 @@ changeTrackPath="test-flat.vmdk"
 
 <h3 id="disk-database"><a class="header" href="#disk-database">Disk database</a></h3>
 <p>The disk data base of a descriptor file looks similar to the data below.</p>
-<pre><code># The Disk Data Base
+<pre><code class="language-text"># The Disk Data Base
 #DDB
 
 ddb.virtualHWVersion = "4"
@@ -501,11 +507,11 @@ ddb.toolsVersion = "0"
 
 <tr><td>ddb.geometry.sectors</td><td>The number of sectors</td></tr>
 
-<tr><td>ddb.geometry.biosCylinders</td><td>The number of cylinders as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosCylinders</td><td>The number of cylinders as reported by the BIOS</td></tr>
 
-<tr><td>ddb.geometry.biosHeads</td><td>The number of heads as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosHeads</td><td>The number of heads as reported by the BIOS</td></tr>
 
-<tr><td>ddb.geometry.biosSectors</td><td>The number of sectors as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosSectors</td><td>The number of sectors as reported by the BIOS</td></tr>
 
 <tr><td>ddb.adapterType</td><td><a href="#disk_adapter_types">Disk adapter type</a></td></tr>
 
@@ -517,9 +523,10 @@ ddb.toolsVersion = "0"
 </div>
 
 <p>VirtualBox has been observed to use a different case for “disk” in the section header:</p>
-<pre><code># The disk Data Base
+<pre><code class="language-text"># The disk Data Base
 </code></pre>
 <h4 id="virtual-hardware-version"><a class="header" href="#virtual-hardware-version">Virtual hardware version</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -538,6 +545,7 @@ ddb.toolsVersion = "0"
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="disk_adapter_types"><a class="header" href="#disk_adapter_types">Disk adapter types</a></h4>
 <div class="table-wrapper">
 <table>
@@ -614,15 +622,15 @@ a file that describes changed areas on the virtual disk.</p>
 
 <tr><td>20</td><td>8</td><td></td><td>Sectors per grain, which must be a power of 2 and &gt; 8</td></tr>
 
-<tr><td>28</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>28</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 <tr><td>36</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> size in sectors</td></tr>
 
 <tr><td>44</td><td>4</td><td>512</td><td>The number of grains table entries</td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Secondary grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Secondary grain directory start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
-<tr><td>56</td><td>8</td><td></td><td>Primary grain directory start sector, which is relative from the start of the file, 0 if not set or 0xffffffffffffffff (GD_AT_END) if relative from the end of the file.</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Primary grain directory start sector, which is relative from the start of the file, 0 if not set or 0xffffffffffffffff (GD_AT_END) if relative from the end of the file</td></tr>
 
 <tr><td>64</td><td>8</td><td></td><td>Metadata size in sectors</td></tr>
 
@@ -656,26 +664,28 @@ file header stored at offset -1024 relative from the end of the file (stream)
 that contains the correct grain directory start sector.</p>
 <h4 id="vmdk_extent_file_flags"><a class="header" href="#vmdk_extent_file_flags">Flags</a></h4>
 <p>The flags consist of the following values:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x00000001</td><td></td><td>Valid new line detection test</td></tr>
 
-<tr><td>0x00000002</td><td></td><td>Use secondary grain directory. The secondary (redundant) grain directory should be used instead of the primary grain directory.</td></tr>
+<tr><td>0x00000002</td><td></td><td>Use secondary grain directory. The secondary (redundant) grain directory should be used instead of the primary grain directory</td></tr>
 
 <tr><td colspan="3"><em>As of format version 2</em></td></tr>
 
-<tr><td>0x00000004</td><td></td><td>Use zeroed-grain table entry. The zeroed-grain table entry overloads grain data sector number 1 to indicate the grain is sparse.</td></tr>
+<tr><td>0x00000004</td><td></td><td>Use zeroed-grain table entry. The zeroed-grain table entry overloads grain data sector number 1 to indicate the grain is sparse</td></tr>
 
 <tr><td colspan="3"><em>Common</em></td></tr>
 
 <tr><td>0x00010000</td><td></td><td>Has compressed grain data</td></tr>
 
-<tr><td>0x00020000</td><td></td><td>Contains metadata, where the file contains markers to identify metadata or data blocks.</td></tr>
+<tr><td>0x00020000</td><td></td><td>Contains metadata, where the file contains markers to identify metadata or data blocks</td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="vmdk_compression_method"><a class="header" href="#vmdk_compression_method">Compression method</a></h4>
 <p>The compression method consist of the following values:</p>
 <div class="table-wrapper">
@@ -706,6 +716,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </ul>
 <h3 id="the-marker"><a class="header" href="#the-marker">The marker</a></h3>
 <p>The marker is 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -726,6 +737,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If the marker data size &gt; 0 the marker is a compressed grain marker.</p>
 <h4 id="vmdk_extent_file_marker_types"><a class="header" href="#vmdk_extent_file_marker_types">Marker types</a></h4>
 <div class="table-wrapper">
@@ -744,6 +756,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 
 <h4 id="compressed-grain-marker"><a class="header" href="#compressed-grain-marker">Compressed grain marker</a></h4>
 <p>The compressed grain marker indicates that compressed data follows.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -760,6 +773,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the compressed grain data can be larger than the grain data size.</p>
 </blockquote>
@@ -840,19 +854,17 @@ sector block.</p>
 <p>The size of the grain directory is dependent on the number of grains in the
 extent data file. The number of entries in the grain directory can be
 determined as following:</p>
-<pre><code>grain table size = number of grain table entries x grain size
-number of grain directory entries = maximum data size / grain table size
+<pre><code class="language-python">grain table size = number of grain table entries * grain size
 
-if( maximum data size % grain table size &gt; 0 )
-{
-	number of entries += 1
-}
+number of grain directory entries = maximum data size / grain table size
+if maximum data size % grain table size &gt; 0:
+	number of grain directory entries += 1
 </code></pre>
 <p>The grain directory consists of 32-bit grain table offsets:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image</td></tr>
 
 </table>
 </div>
@@ -873,7 +885,7 @@ the same as the value stored in the file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain data sector number, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain data sector number, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image</td></tr>
 
 </table>
 </div>
@@ -893,6 +905,7 @@ sector number.</p>
 stored compressed.</p>
 <h4 id="compressed-grain-data"><a class="header" href="#compressed-grain-data">Compressed grain data</a></h4>
 <p>The compressed grain data is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -911,6 +924,7 @@ stored compressed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The uncompressed data size should be the grain size or less for the last grain.</p>
 <h3 id="vmdk_extent_file_footer"><a class="header" href="#vmdk_extent_file_footer">Footer</a></h3>
 <p>The footer is only used in Stream-Optimized Compressed Sparse Extents. The
@@ -934,6 +948,7 @@ data. The COW sparse extent data file consists of:</p>
 <p>This type of extent data file is also known as ESX Server Sparse Extent.</p>
 <h3 id="file-header-1"><a class="header" href="#file-header-1">File header</a></h3>
 <p>The file header is 2048 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -947,7 +962,7 @@ data. The COW sparse extent data file consists of:</p>
 
 <tr><td>16</td><td>4</td><td></td><td>Sectors per grain</td></tr>
 
-<tr><td>20</td><td>4</td><td>4</td><td>Grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>20</td><td>4</td><td>4</td><td>Grain directory start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Number of grain directory entries</td></tr>
 
@@ -988,6 +1003,7 @@ data. The COW sparse extent data file consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the parent file name seems not to be set in recent delta sparse
 extent files.</p>
@@ -1001,7 +1017,7 @@ file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 </table>
 </div>
@@ -1016,7 +1032,7 @@ grain table is the fixed value of 4096.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain sector number, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain sector number, which is relative from the start of the file or 0 if not set</td></tr>
 
 </table>
 </div>

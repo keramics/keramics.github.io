@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -176,9 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="guid-partition-table-gpt-format"><a class="header" href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a></h1>
-<p>The GUID Partition Table (GPT) is a partitioning schema that is the successor
-to the <a href="mbr.html">Master Boot Record (MBR) Partition Table</a> for Intel x86 based
-computers.</p>
+<p>The GUID Partition Table (GPT) is a partitioning schema that is the successor to the
+<a href="mbr.html">Master Boot Record (MBR) Partition Table</a> for Intel x86 based computers.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A GUID Partition Table (GPT) consists of:</p>
 <ul>
@@ -194,8 +193,7 @@ computers.</p>
 <li>backup GPT partition entries (typically stored the blocks (LBA) before the last block -33 - -2)</li>
 <li>A backup GPT partition table header (typically stored in the last block (LBA) -1)</li>
 </ul>
-<p>The GPT partition table header signature can be used to determine the block
-(LBA) (or sector) size.</p>
+<p>The GPT partition table header signature can be used to determine the block (LBA) (or sector) size.</p>
 <h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
@@ -211,12 +209,11 @@ computers.</p>
 
 <h2 id="master-boot-record-mbr"><a class="header" href="#master-boot-record-mbr">Master Boot Record (MBR)</a></h2>
 <h3 id="hybrid-master-boot-record-mbr"><a class="header" href="#hybrid-master-boot-record-mbr">Hybrid Master Boot Record (MBR)</a></h3>
-<p>In hybrid configuration both GPT and MBR are used concurrently. Depending on
-the operating system one might have precedence over the other.</p>
+<p>In hybrid configuration both GPT and MBR are used concurrently. Depending on the operating system
+one might have precedence over the other.</p>
 <h3 id="protective-master-boot-record-mbr"><a class="header" href="#protective-master-boot-record-mbr">Protective Master Boot Record (MBR)</a></h3>
-<p>The Protective Master Boot Record (MBR) is an MBR with a single partition of
-type “EFI GPT protective partition” (0xee) that allocated as much of the drive
-as possible.</p>
+<p>The Protective Master Boot Record (MBR) is an MBR with a single partition of type “EFI GPT
+protective partition” (0xee) that allocated as much of the drive as possible.</p>
 <h2 id="gpt-partition-table-header"><a class="header" href="#gpt-partition-table-header">GPT partition table header</a></h2>
 <p>The GPT partition table header is 92 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -257,20 +254,18 @@ as possible.</p>
 </table>
 </div>
 
+<p>The partition entries start block number (LBA) of the backup GPT partition table header points to
+backup GPT partition entries.</p>
 <blockquote>
-<p>Note that the partition entries start block number (LBA) of the backup
-partition table header will point to the backup partition entries.</p>
-</blockquote>
-<blockquote>
-<p>Note that the number of partition entries value contains the number of
-available partition entries not the number of used partition entries. Empty
-partition entries have a unused entry partition type identifier.</p>
+<p>Note that the number of partition entries value contains the number of available partition
+entries not the number of used partition entries. Empty partition entries have a unused entry
+partition type identifier.</p>
 </blockquote>
 <h3 id="checksum-calculation"><a class="header" href="#checksum-calculation">Checksum calculation</a></h3>
-<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynominal
-0x04c11db7 and initial value of 0 is used to calculate the checksums.</p>
-<p>The checksum is calculated over the 92 bytes of the table header data, where the
-header data checkum value is considered to be 0 during calculation.</p>
+<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynominal 0x04c11db7 and
+initial value of 0 is used to calculate the checksums.</p>
+<p>The checksum is calculated over the 92 bytes of the table header data, where the header data
+checkum value is considered to be 0 during calculation.</p>
 <h2 id="gpt-partition-entries"><a class="header" href="#gpt-partition-entries">GPT partition entries</a></h2>
 <h3 id="gpt-partition-entry"><a class="header" href="#gpt-partition-entry">GPT Partition entry</a></h3>
 <p>The GPT partition entry is 128 bytes in size and consists of:</p>
@@ -293,6 +288,7 @@ header data checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h3 id="partition_types"><a class="header" href="#partition_types">Partition types</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -613,6 +609,7 @@ header data checkum value is considered to be 0 during calculation.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="partition_attribute_flags"><a class="header" href="#partition_attribute_flags">Partition attribute flags</a></h3>
 <div class="table-wrapper">
 <table>

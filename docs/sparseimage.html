@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -239,16 +239,16 @@ supported natively by Mac OS.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Band number, where 0 indicates a sparse range and any other value refers to a location in the media data.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Band number, where 0 indicates a sparse range and any other value refers to a location in the media data</td></tr>
 
 </table>
 </div>
 
 <p>Where the corresponding media offset can be calculated as following:</p>
-<pre><code>media_offset = ( band_number - 1 ) * sectors_per_band * 512
+<pre><code class="language-python">media_offset = (band_number - 1) * sectors_per_band * 512
 </code></pre>
 <p>The offset of band data can be calculated as following:</p>
-<pre><code>band_data_offset = 4096 + ( array_index * sectors_per_band * 512 )
+<pre><code class="language-python">band_data_offset = 4096 + (array_index * sectors_per_band * 512)
 </code></pre>
 <p>For example if the first array entry contains a band number of 4, then the
 band data is located at offset 4096 and the corresponding media offset is:

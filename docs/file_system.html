@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -176,22 +176,28 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
-<p>A file system format is used to manage the storage of one or more files.</p>
+<p>A file system format is used to manage the storage of files.</p>
 <h2 id="terminology"><a class="header" href="#terminology">Terminology</a></h2>
-<h3 id="file-entry"><a class="header" href="#file-entry">File entry</a></h3>
-<p>A file entry (or file system entry) is an object that represent an element within
-the file system such as a file or directory. It typically includes metadata such
-as the file name, size, permissions, date and time values, and location of the
-content on storage media.</p>
-<h3 id="data-fork-or-data-stream"><a class="header" href="#data-fork-or-data-stream">Data fork (or data stream)</a></h3>
-<p>TODO</p>
-<h3 id="extended-attribute"><a class="header" href="#extended-attribute">Extended attribute</a></h3>
-<p>TODO</p>
-<h3 id="reparse-point"><a class="header" href="#reparse-point">Reparse point</a></h3>
-<p>NTFS and ReFS use reparse points to extend the file system.</p>
 <ul>
-<li>https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points</li>
-<li>https://en.wikipedia.org/wiki/NTFS_reparse_point</li>
+<li><strong>File entry (file system entry)</strong>: an object that represent an element within
+the file system, such as a file or directory. A file system typically stores
+metadata of a file entry, such as the name, size, permissions, date and time
+values, and location of the content.</li>
+<li><strong>Data fork (or data stream)</strong>: a file system object that represents the
+content of a file entry. NTFS and HFS support multiple data forks (or data
+streams) for an individual file entry.</li>
+<li><strong>Extended attribute</strong>: A file system object that represents additional (or
+extended) metadata of an individual file entry.</li>
+<li><strong>Reparse point</strong>: a file system object that redirects to another location or
+implementation (filter driver), such as Windows Overlay Filter (WOF)
+compression. NTFS and ReFS support reparse points.</li>
+</ul>
+<h2 id="formats"><a class="header" href="#formats">Formats</a></h2>
+<ul>
+<li><a href="ext.html">Extended File System (ext)</a></li>
+<li><a href="exfat.html">Extensible File Allocation Table (exFAT)</a></li>
+<li><a href="fat.html">File Allocation Table (FAT)</a></li>
+<li><a href="ntfs.html">New Technologies File System (NTFS)</a></li>
 </ul>
 
                     </main>

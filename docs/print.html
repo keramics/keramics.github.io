@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -189,6 +189,19 @@ works in progress.</p>
 <h1 id="storage-media-image-formats"><a class="header" href="#storage-media-image-formats">Storage media image formats</a></h1>
 <p>A storage media image format is used to store data from storage media devices
 such as a hard disk, a floppy or optical disk like CD-ROM or DVD.</p>
+<h2 id="formats"><a class="header" href="#formats">Formats</a></h2>
+<ul>
+<li><a href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></li>
+<li><a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2 (EWF2)</a></li>
+<li><a href="#mac-os-sparse-bundle-sparsebundle-format">Mac OS sparse bundle</a></li>
+<li><a href="#mac-os-sparse-image-sparseimage-format">Mac OS sparse image</a></li>
+<li><a href="#parallels-disk-image-pdi-format">Parallels Disk Image (PDI)</a></li>
+<li><a href="#qemu-copy-on-write-qcow-image-file-format">QEMU Copy-On-Write (QCOW)</a></li>
+<li><a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a></li>
+<li><a href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD)</a></li>
+<li><a href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX)</a></li>
+<li><a href="#vmware-virtual-disk-vmdk-format">VMWare Virtual Disk Format (VMDK)</a></li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="expert-witness-compression-format-ewf"><a class="header" href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></h1>
 <p>EWF is short for Expert Witness Compression Format. It is a file type used to
@@ -391,13 +404,14 @@ specific section.</p>
 
 <tr><td>32</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>72</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section header.</td></tr>
+<tr><td>72</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section header</td></tr>
 
 </table>
 </div>
 
 <p>Some sections contain additional data, refer to paragraph section types for
 more information.</p>
+<!-- rumdl-disable MD028 -->
 <blockquote>
 <p>Note Expert Witness 1.35 (for Windows) does not set the section size.</p>
 </blockquote>
@@ -405,6 +419,7 @@ more information.</p>
 <p>Note that in EnCase 2 DOS version the padding itself does not contains 0-byte
 values but data, probably the memory is not filled with 0-byte values.</p>
 </blockquote>
+<!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
 <p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 defines the following:</p>
@@ -443,7 +458,7 @@ Some aspects of this section are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td><td></td></tr>
+<tr><td>76 (0x4c)</td><td>(variable)</td><td></td><td>Information about the acquired media</td></tr>
 
 </table>
 </div>
@@ -600,20 +615,24 @@ EnCase.</p>
 </div>
 
 <p>Also see <a href="#header2_values">header2 values</a></p>
+<!-- rumdl-disable MD028 -->
 <blockquote>
 <p>Note that both the acquiry and system date and time are empty in a file
 created by winen.</p>
 </blockquote>
+<!-- rumdl-disable MD064 -->
 <blockquote>
-<p>Note that rhe date values in the <a href="#header_section">header section</a> (not the
-header2 section) are set to: Thu Jan  1 00:00:00 1970. Where the time is
+<p>Note that the date values in the <a href="#header_section">header section</a> (not the
+header2 section) are set to: “Thu Jan  1 00:00:00 1970”. Where the time is
 dependent on the time zone and daylight savings.</p>
 </blockquote>
+<!-- rumdl-enable MD064 -->
 <blockquote>
 <p>Note that in a Logicube Dossier generated header2 section an additional emtpy
 value in the 4th line was observed. The number of values in the 3rd and 4th
 can differ.</p>
 </blockquote>
+<!-- rumdl-enable MD028 -->
 <h5 id="sources_category1"><a class="header" href="#sources_category1">Sources category</a></h5>
 <p>Line 6 the srce category contains information about acquisition sources.</p>
 <p>TODO: describe what a source is in the context of EnCase.</p>
@@ -719,7 +738,7 @@ EnCase 5 to 7 (EWF-L01) format. However:</p>
 
 <tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
 
-<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'</td></tr>
 
 <tr><td>sn</td><td>Serial Number</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
@@ -736,7 +755,7 @@ have a restriction of 40 characters instead of 3000 characters.</p>
 </blockquote>
 <h5 id="extents-header-value"><a class="header" href="#extents-header-value">Extents header value</a></h5>
 <p>An extents header value consist of:</p>
-<pre><code>number of entries
+<pre><code class="language-text">number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
 <h3 id="header_section"><a class="header" href="#header_section">Header section</a></h3>
@@ -744,14 +763,17 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
-<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the first segment file. Typically not found in subsequent segment files with the exception of Logicube Dossier generated EWF-E01 files.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
+<li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the
+first segment file. Typically not found in subsequent segment files with the exception of Logicube
+Dossier generated EWF-E01 files.</li>
 </ul>
 <p>The additional data this section contains is the following:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Number of bytes</th><th>Description</th></thead>
-<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media.</td></tr>
+<tr><td>76 (0x4c)</td><td>(variable)</td><td>Information about the acquired media</td></tr>
 
 </table>
 </div>
@@ -787,7 +809,8 @@ described. In all cases the information consists of at least 4 lines:</p>
 <h4 id="ewf-format"><a class="header" href="#ewf-format">EWF format</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of line character(s) is a newline (0x0a).</li>
+<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of
+line character(s) is a newline (0x0a).</li>
 </ul>
 <p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 the 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -816,7 +839,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 </div>
 
 <p>Also see <a href="#header_values">header values</a></p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert Witness Compression uses ‘f’, fastest compression.</p>
+<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert
+Witness Compression uses ‘f’, fastest compression.</p>
 <h4 id="encase-1-ewf-e01"><a class="header" href="#encase-1-ewf-e01">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -856,7 +880,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 <ul>
 <li>The header section is defined once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data is always processed by zlib, however the same compression level is used as for the chunks. This could mean compression level 0 which is no compression.</li>
+<li>The header data is always processed by zlib, however the same compression level is used as for
+the chunks. This could mean compression level 0 which is no compression.</li>
 </ul>
 <blockquote>
 <p>The SMART format uses the FTK Imager (EWF-E01) specification for this section.
@@ -866,7 +891,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
@@ -904,7 +930,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The header is defined only once.</li>
-<li>It resides after the header2 sections of the first segment file. It is not found in subsequent segment files.</li>
+<li>It resides after the header2 sections of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
@@ -940,7 +967,8 @@ Note that this could be something FTK Imager specific.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>The same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
 <li>The header data itself is compressed using zlib.</li>
 <li>The end of line character(s) is a newline (0x0a).</li>
 </ul>
@@ -1139,8 +1167,10 @@ or earlier.</p>
 <p>Some aspects of this section are:</p>
 <ul>
 <li>In FTK Imager (EWF-E01) the same header section defined twice.</li>
-<li>It is the first and second section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data itself is compressed using zlib. Note that the compression level can be none and therefore the header looks uncompressed.</li>
+<li>It is the first and second section of the first segment file. It is not found in subsequent
+segment files.</li>
+<li>The header data itself is compressed using zlib. Note that the compression level can be none and
+therefore the header looks uncompressed.</li>
 <li>In FTK Imager the end of line character(s) is a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -1178,7 +1208,8 @@ or earlier.</p>
 EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 <ul>
 <li>In EnCase 5 both the acquired and system date and time are set to 0.</li>
-<li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the time is dependent on the local timezone and daylight savings)</li>
+<li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the
+time is dependent on the local timezone and daylight savings)</li>
 </ul>
 <h4 id="header_values"><a class="header" href="#header_values">Header values</a></h4>
 <div class="table-wrapper">
@@ -1198,7 +1229,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>l</td><td>Device label</td><td>Free form string</td></tr>
 
-<tr><td>m</td><td>Acquisition date and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+<tr><td>m</td><td>Acquisition date and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a></td></tr>
 
 <tr><td>md</td><td>Model</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
@@ -1208,7 +1239,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>pid</td><td>Process identifier</td><td>String containing the process identifier (pid) number</td></tr>
 
-<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'.</td></tr>
+<tr><td>p</td><td>Password hash</td><td>String containing the password hash. If no password is set it should be simply the character '0'</td></tr>
 
 <tr><td>r</td><td>Compression level</td><td><a href="#compression_header_value">Compression header value</a></td></tr>
 
@@ -1216,7 +1247,7 @@ EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
 
 <tr><td>t</td><td>Notes</td><td>Free form string. EnCase limits this string to 3000 - 1 characters</td></tr>
 
-<tr><td>u</td><td>Systemdate and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a>.</td></tr>
+<tr><td>u</td><td>Systemdate and time</td><td>Contains a <a href="#date_time_header_value">date and time header value</a></td></tr>
 
 </table>
 </div>
@@ -1232,7 +1263,7 @@ space, e.g. “2002 3 4 10 19 59”, which represents March 4, 2002 10:19:59.</p
 e.g. “1142163845” which represents the date: March 12 2006, 11:44:05</p>
 <h5 id="extents_header_value"><a class="header" href="#extents_header_value">Extents header value</a></h5>
 <p>An extents header value consist of:</p>
-<pre><code>number of entries
+<pre><code class="language-text">number of entries
 entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 </code></pre>
 <h5 id="compression_header_value"><a class="header" href="#compression_header_value">Compression header value</a></h5>
@@ -1266,7 +1297,8 @@ per EnCase version? probably not. The algorithm does not differ in EnCase
 Some aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 <li>Found after the header section of the first segment file. Not found in subsequent segment files.</li>
 </ul>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
@@ -1278,9 +1310,9 @@ Some aspects of this section are:</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x01</td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk, which contains 64 per default.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk, which contains 64 per default</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>The number of bytes per sectors, which contains 512 per default</td></tr>
 
@@ -1292,7 +1324,7 @@ Some aspects of this section are:</p>
 
 <tr><td>85</td><td>5</td><td></td><td>Signature, which contains the EWF file header signature</td></tr>
 
-<tr><td>90</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+<tr><td>90</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data</td></tr>
 
 </table>
 </div>
@@ -1317,9 +1349,9 @@ naming schema of the segment files.</p>
 
 <tr><td>1</td><td>3</td><td>0x00</td><td>Unknown (empty values)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files.</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>The number of chunks within the all segment files</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk (or block size), which contains 64 per default. EnCase 5 is the first version which allows this value to be different than 64.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The number of sectors per chunk (or block size), which contains 64 per default. EnCase 5 is the first version which allows this value to be different than 64</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>The number of bytes per sector</td></tr>
 
@@ -1355,7 +1387,7 @@ naming schema of the segment files.</p>
 
 <tr><td>1043</td><td>5</td><td>0x00</td><td>Unknown (Signature)</td></tr>
 
-<tr><td>1048</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data.</td></tr>
+<tr><td>1048</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the volume section data</td></tr>
 
 </table>
 </div>
@@ -1371,8 +1403,10 @@ the actual storage media data.</p>
 <ul>
 <li>the volume type contains 0x0e</li>
 <li>the number of chunks is 0</li>
-<li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file system block size</li>
-<li>the sectors count, represents some other value because ( sector_size x sector_amount != total_size ). The total size is in the ltree section.</li>
+<li>the number of bytes per sectors is some kind of block size value (4096), perhaps the source file
+system block size</li>
+<li>the sectors count, represents some other value because (sector_size x sector_amount !=
+total_size). The total size is in the ltree section.</li>
 </ul>
 <h4 id="media_type"><a class="header" href="#media_type">Media type</a></h4>
 <div class="table-wrapper">
@@ -1457,9 +1491,12 @@ partition (volume) image or a physical disk image.</p>
 aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7. Not found in SMART (EWF-S01).</li>
-<li>For multiple segment files it does not reside in the first segment file. For a single segment file it does.</li>
-<li>Found after the last table2 section in a single segment file or for multiple segment files at the start of the segment files, except for the first.</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7.
+Not found in SMART (EWF-S01).</li>
+<li>For multiple segment files it does not reside in the first segment file. For a single segment
+file it does.</li>
+<li>Found after the last table2 section in a single segment file or for multiple segment files at the
+start of the segment files, except for the first.</li>
 <li>The data section has data it should should contain the same information as the volume section.</li>
 </ul>
 <p>The data section is a copy of the <a href="#volume_section">volume section</a>.</p>
@@ -1474,13 +1511,19 @@ and set to 0.</p>
 Some aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
-<li>The first sectors section can be found after the volume section in the first segment file or at the after the data section in subsequent segment files. Successive sector data sections are found after the sector table2 section.</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
+found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>The first sectors section can be found after the volume section in the first segment file or at
+the after the data section in subsequent segment files. Successive sector data sections are
+found after the sector table2 section.</li>
 </ul>
 <p>The sectors section contains the actual chunks of media data.</p>
 <ul>
 <li>The sectors section can contain multiple chunks.</li>
-<li>The default size of a chunk is 32768 bytes of data (64 standard sectors, with a size of 512 bytes per sector). It is possible in EnCase 5 and 6 and linen 5 and 6 to change the number of sectors per block to 64, 128, 256, 1024, 2048, 4096, 8192, 16384 or 32768. In EnCase 7 and linen 7 this has been reduced to 64, 128, 256, 1024.</li>
+<li>The default size of a chunk is 32768 bytes of data (64 standard sectors, with a size of 512 bytes
+per sector). It is possible in EnCase 5 and 6 and linen 5 and 6 to change the number of sectors
+per block to 64, 128, 256, 1024, 2048, 4096, 8192, 16384 or 32768. In EnCase 7 and linen 7 this
+has been reduced to 64, 128, 256, 1024.</li>
 </ul>
 <h4 id="data-chunk"><a class="header" href="#data-chunk">Data chunk</a></h4>
 <p>The first chunk is often located directly after the section header, although
@@ -1528,7 +1571,8 @@ per sector (the data).</p>
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 </ul>
 <blockquote>
 <p>Note that the offsets within the section header are 8 bytes (64 bits) of
@@ -1538,7 +1582,8 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 <h4 id="ewf-specification-1"><a class="header" href="#ewf-specification-1">EWF specification</a></h4>
 <p>Some aspects of the table section according to the EWF specification are:</p>
 <ul>
-<li>The first table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>The first table section resides after the volume section in the first segment file or after the
+file header in subsequent segment files.</li>
 <li>It can be found in every segment file.</li>
 </ul>
 <p>The table section consists of:</p>
@@ -1556,7 +1601,7 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1564,7 +1609,8 @@ size while the offsets in the table entry array are 4 bytes (32 bits) in size.</
 <p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></p>
 <ul>
 <li>the number of entries, contains 0x01</li>
-<li>the table can hold 16375 entries if more entries are required an additional table section should be created.</li>
+<li>the table can hold 16375 entries if more entries are required an additional table section should
+be created.</li>
 </ul>
 <h5 id="table-entry"><a class="header" href="#table-entry">Table entry</a></h5>
 <p>The table entry is 4 bytes in size and consists of:</p>
@@ -1599,7 +1645,8 @@ EWF specification.</p>
 <h4 id="encase-1-ewf-e01-1"><a class="header" href="#encase-1-ewf-e01-1">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li>The table section resides after the volume section in the first segment file or after the file header in subsequent segment files.</li>
+<li>The table section resides after the volume section in the first segment file or after the file
+header in subsequent segment files.</li>
 <li>It can be found in every segment file.</li>
 </ul>
 <p>The table section consists of:</p>
@@ -1618,12 +1665,13 @@ EWF specification.</p>
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
 
-<p>The table can hold 16375 entries if more entries are required an additional table section should be created.</p>
+<p>The table can hold 16375 entries if more entries are required an additional table section should be
+created.</p>
 <h5 id="table-entry-1"><a class="header" href="#table-entry-1">Table entry</a></h5>
 <p>The table entry is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -1692,7 +1740,7 @@ checksum of the compressed data chunk is part the zlib compressed data format.</
 
 <tr><td>4</td><td>16</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1753,7 +1801,7 @@ contains a value relative to the start of the file.</p>
 
 <tr><td>16</td><td>4</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data.</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the table header data</td></tr>
 
 </table>
 </div>
@@ -1799,7 +1847,8 @@ converted by Keramics.</p>
 Some aspects of this section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
+<li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
+found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>Uses the same format as the table section.</li>
 <li>Resides directly after the table section.</li>
 </ul>
@@ -1813,9 +1862,11 @@ intended for recovery purposes.</p>
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and SMART (EWF-S01)</li>
+<li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
+SMART (EWF-S01)</li>
 <li>The last section within a segment other than the last segment file.</li>
-<li>The offset to the next section in the section header of the next section point to itself (the start of the next section).</li>
+<li>The offset to the next section in the section header of the next section point to itself (the
+start of the next section).</li>
 <li>It should be the last section in a segment file, other than the last segment file.</li>
 </ul>
 <h4 id="smart-ewf-s01-4"><a class="header" href="#smart-ewf-s01-4">SMART (EWF-S01)</a></h4>
@@ -1870,7 +1921,7 @@ aspects of this section are:</p>
 
 <tr><td>16</td><td>8</td><td></td><td>Data size</td></tr>
 
-<tr><td>24</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the ltree header where the checksum value itself is zeroed out.</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the data within the ltree header where the checksum value itself is zeroed out</td></tr>
 
 <tr><td>28</td><td>20</td><td></td><td>Unknown (empty values)</td></tr>
 
@@ -1981,7 +2032,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2033,7 +2084,7 @@ more information see the sections below.</p>
 
 <tr><td>5</td><td>nta</td><td>Access mask</td></tr>
 
-<tr><td>6</td><td>nti</td><td>Unknown (Windows NT access control entry (ACE) flags?, which contains an integer with a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#access-control-entry-ace-flags">Windows NT access control entry (ACE) flags</a>).</td></tr>
+<tr><td>6</td><td>nti</td><td>Unknown (Windows NT access control entry (ACE) flags?, which contains an integer with a <a href="https://github.com/libyal/libfwnt/blob/master/documentation/Security%20Descriptor.asciidoc#access-control-entry-ace-flags">Windows NT access control entry (ACE) flags</a>)</td></tr>
 
 <tr><td>7</td><td>nts</td><td>Unknown (Permission?) (Removed in EnCase 6)</td></tr>
 
@@ -2041,6 +2092,7 @@ more information see the sections below.</p>
 </div>
 
 <h5 id="permission_types"><a class="header" href="#permission_types">Permission types</a></h5>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2061,8 +2113,10 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="access-mask"><a class="header" href="#access-mask">Access mask</a></h5>
 <p>Access mask seen in combination with property types 0, 1 and 6</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2079,11 +2133,13 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>Access mask seen in combination with property type 2</p>
-<pre><code>[0x001200a9] [R&amp;X] [R] [Sync]
+<pre><code class="language-text">[0x001200a9] [R&amp;X] [R] [Sync]
 [0x001301bf] [M] [R&amp;X] [R] [W] [Sync]
 [0x001f01ff] [FC] [M] [R&amp;X] [R] [W] [Sync]
 </code></pre>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2122,6 +2178,7 @@ more information see the sections below.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="sources_category3"><a class="header" href="#sources_category3">Sources category</a></h4>
 <p>The srce category contains information about acquisition sources of the file entries.</p>
 <p>TODO: describe what an acquisition source is in the context of EnCase.</p>
@@ -2153,7 +2210,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2276,7 +2333,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2360,7 +2417,7 @@ more information see the sections below.</p>
 <thead><th>Line number</th><th>Value</th><th>Description</th></thead>
 <tr><td>1</td><td></td><td>Number of entries</td></tr>
 
-<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators.</td></tr>
+<tr><td>2</td><td></td><td>Tab (0x09) separated values that correspond to the type indicators</td></tr>
 
 </table>
 </div>
@@ -2544,7 +2601,8 @@ MD5 hash is not set. The same applies for the “sha” value when it contains
 <p>A file entry name (“n” value):</p>
 <ul>
 <li>can contain path segment separator characters like “\” and “/”</li>
-<li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name seperator</li>
+<li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name
+seperator</li>
 </ul>
 <blockquote>
 <p>Note that a regular “MIDDLE DOT” Unicode character will be encoded in the
@@ -2566,7 +2624,7 @@ same way so no real way to reliably tell the difference.</p>
 <p>For example: “13 FILE10~1.TXT”</p>
 <h6 id="original-extents"><a class="header" href="#original-extents">Original extents</a></h6>
 <p>TODO: add some text</p>
-<pre><code>1 30a555b 30a6000 12011ae00 9008d7 3f 43 1 12011ae00 30a6000 120113 30a6 9008d7 18530
+<pre><code class="language-text">1 30a555b 30a6000 12011ae00 9008d7 3f 43 1 12011ae00 30a6000 120113 30a6 9008d7 18530
 </code></pre>
 <h6 id="ltree-file-entries-1"><a class="header" href="#ltree-file-entries-1">Ltree file entries</a></h6>
 <p>The ltree entries of files and directories consist of entries starting with: 26
@@ -2624,7 +2682,7 @@ followed by the number of sub file entries.</p>
 
 <tr><td>0x02000000</td><td>Folder</td><td>Is folder</td></tr>
 
-<tr><td>0x04000000</td><td></td><td>Data is sparse.</td></tr>
+<tr><td>0x04000000</td><td></td><td>Data is sparse</td></tr>
 
 </table>
 </div>
@@ -2644,7 +2702,7 @@ ignored and the duplicate data offset refers to the location where the data
 stored.</p>
 <h5 id="binary_extents"><a class="header" href="#binary_extents">Binary extents value</a></h5>
 <p>The binary extents value contains 3 values separated by a space:</p>
-<pre><code>Unknown Offset Size
+<pre><code class="language-text">Unknown Offset Size
 </code></pre>
 <p>Where:</p>
 <ul>
@@ -2763,7 +2821,8 @@ UTF-16 endian byte order mark.</p>
 </div>
 
 <h3 id="session-section"><a class="header" href="#session-section">Session section</a></h3>
-<p>The session section is identifier in the section data type field as “session”. Some aspects of this section are:</p>
+<p>The session section is identifier in the section data type field as “session”. Some aspects of this
+section are:</p>
 <ul>
 <li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
 <li>It is not found in SMART (EWF-S01) and FTK Imager (EWF-E01).</li>
@@ -2786,7 +2845,7 @@ UTF-16 endian byte order mark.</p>
 
 <tr><td>4</td><td>28</td><td></td><td>Unknown (empty values)</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional session section data.</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional session section data</td></tr>
 
 </table>
 </div>
@@ -2858,7 +2917,7 @@ occurred are filled with zero’s during acquiry by EnCase.</p>
 
 <tr><td>4</td><td>512</td><td></td><td>Unknown (empty values)</td></tr>
 
-<tr><td>516</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the error2 header data.</td></tr>
+<tr><td>516</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the error2 header data</td></tr>
 
 </table>
 </div>
@@ -2902,7 +2961,7 @@ Some aspects of this section are:</p>
 
 <tr><td>36</td><td>40</td><td>0x00</td><td>Unknown (Padding)</td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the digest section data.</td></tr>
+<tr><td>76</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the digest section data</td></tr>
 
 </table>
 </div>
@@ -2914,7 +2973,8 @@ aspects of this section are:</p>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
 <li>It is found in SMART (EWF-S01) and FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is not found in EnCase 5 (EWF-L01).</li>
-<li>The hash section is optional, it does not need to be present. If it does it resides in the last segment file before the done section.</li>
+<li>The hash section is optional, it does not need to be present. If it does it resides in the last
+segment file before the done section.</li>
 </ul>
 <p>The hash section contains a MD5 hash of the data within the chunks.</p>
 <p>The hash section data is 36 byte in size and consists of:</p>
@@ -2925,7 +2985,7 @@ aspects of this section are:</p>
 
 <tr><td>16</td><td>16</td><td></td><td>Unknown</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional hash section data.</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the additional hash section data</td></tr>
 
 </table>
 </div>
@@ -2937,23 +2997,28 @@ aspects of this section are:</p>
 <li>is zero in EnCase 3 and below</li>
 <li>in EnCase 4 the first 4 bytes are 0, the next 8 bytes seem random, the last 4 bytes seem fixed</li>
 <li>in EnCase 5 and 6 the first 8 bytes seem random, the last 8 bytes equal the file header signature</li>
-<li>in linen 5 the first and last set of 4 bytes seem the same, the second set of 4 bytes seem to be random, the third set of 4 bytes seem to contain a piece of the file header signature</li>
-<li>in linen 6 the first and third set of 4 bytes seem random, the second and last set of 4 bytes seem to be the same</li>
+<li>in linen 5 the first and last set of 4 bytes seem the same, the second set of 4 bytes seem to be
+random, the third set of 4 bytes seem to contain a piece of the file header signature</li>
+<li>in linen 6 the first and third set of 4 bytes seem random, the second and last set of 4 bytes
+seem to be the same</li>
 <li>EnCase5 seems to contain a GUID of the acquired device?</li>
 </ul>
 <p>Test with EnCase 4 show that:</p>
 <ul>
 <li>The value does not equal the checksum of the media data</li>
-<li>Does not differentiate for the same media acquired within the same program session, using different formats, but differ for different media and different program sessions</li>
+<li>Does not differentiate for the same media acquired within the same program session, using
+different formats, but differ for different media and different program sessions</li>
 </ul>
 <h3 id="done-section"><a class="header" href="#done-section">Done section</a></h3>
 <p>The done section is identified in the section data type field as “done”. Some
 aspects of this section are:</p>
 <ul>
 <li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
-<li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5 (EWF-L01) files.</li>
+<li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5
+(EWF-L01) files.</li>
 <li>The done section is the last section within the last segment file.</li>
-<li>The offset to the next section in the section header of the done section point to itself (the start of the done section).</li>
+<li>The offset to the next section in the section header of the done section point to itself (the
+start of the done section).</li>
 <li>It should be the last section in the last segment file.</li>
 </ul>
 <h4 id="smart-ewf-s01-5"><a class="header" href="#smart-ewf-s01-5">SMART (EWF-S01)</a></h4>
@@ -3030,7 +3095,7 @@ complement of the uncompressed data size.</p>
 <p>Libewf currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
 <p>TODO: add description</p>
-<pre><code>reading section header from file IO pool entry: 1 at offset: 415912423
+<pre><code class="language-text">reading section header from file IO pool entry: 1 at offset: 415912423
 type                      : table2
 next offset               : 415978027
 size                      : 65604
@@ -3235,16 +3300,16 @@ supported natively by Mac OS.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Band number, where 0 indicates a sparse range and any other value refers to a location in the media data.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Band number, where 0 indicates a sparse range and any other value refers to a location in the media data</td></tr>
 
 </table>
 </div>
 
 <p>Where the corresponding media offset can be calculated as following:</p>
-<pre><code>media_offset = ( band_number - 1 ) * sectors_per_band * 512
+<pre><code class="language-python">media_offset = (band_number - 1) * sectors_per_band * 512
 </code></pre>
 <p>The offset of band data can be calculated as following:</p>
-<pre><code>band_data_offset = 4096 + ( array_index * sectors_per_band * 512 )
+<pre><code class="language-python">band_data_offset = 4096 + (array_index * sectors_per_band * 512)
 </code></pre>
 <p>For example if the first array entry contains a band number of 4, then the
 band data is located at offset 4096 and the corresponding media offset is:
@@ -3284,7 +3349,7 @@ containing:</p>
 <thead><th>Characteristics</th><th>Description</th></thead>
 <tr><td>Byte order</td><td>little-endian</td></tr>
 
-<tr><td>Character strings</td><td>UTF-8 by default, the encoding is defined in the disk descriptor XML file.</td></tr>
+<tr><td>Character strings</td><td>UTF-8 by default, the encoding is defined in the disk descriptor XML file</td></tr>
 
 </table>
 </div>
@@ -3620,7 +3685,7 @@ sector are 512.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>1</td><td>Format version</td></tr>
 
@@ -3646,23 +3711,19 @@ sector are 512.</p>
 </div>
 
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level2_table_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = cluster block size * ( 1 &lt;&lt; number of level 2 table bits )
+<pre><code class="language-python">level1_table_entry_size = cluster_block_size * (1 &lt;&lt; number_of_level2_table_bits)
 
-if( media size % level 1 table size != 0 )
-{
-    level 1 table size = ( media size / level 1 table size ) + 1
-}
-else
-{
-    level 1 table size = media size / level 1 table size
-}
-level 1 table size *= 8
+level1_table_size = media_size / level1_table_entry_size
+if media_size % level1_table_entry_size != 0:
+    level1_table_size += 1
+
+level1_table_size *= 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
@@ -3671,7 +3732,7 @@ after the file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>2</td><td>Format version</td></tr>
 
@@ -3701,25 +3762,26 @@ after the file header.</p>
 </div>
 
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
 <p>The number of level 2 table bits is calculated as:</p>
-<pre><code>number of level 2 table bits = number of cluster block bits - 3
+<pre><code class="language-python">number_of_level2_table_bits = number_of_cluster_block_bits - 3
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level_table2_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = number of level 1 table references * 8
+<pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
 <h3 id="file-header--version-3"><a class="header" href="#file-header--version-3">File header – version 3</a></h3>
 <p>The file header - version 3 is 104 or 112 bytes in size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>3</td><td>Format version</td></tr>
 
@@ -3764,17 +3826,18 @@ after the file header.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
 <p>The number of level 2 table bits is calculated as:</p>
-<pre><code>number of level 2 table bits = number of cluster block bits - 3
+<pre><code class="language-python">number_of_level2_table_bits = number_of_cluster_block_bits - 3
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level_table2_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = number of level 1 table references * 8
+<pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
@@ -3945,7 +4008,7 @@ level 2 table is exactly one.</p>
 <h2 id="level-2-table"><a class="header" href="#level-2-table">Level 2 table</a></h2>
 <p>The level 2 table contains cluster block references.</p>
 <p>The level 2 table size is calculated as:</p>
-<pre><code>level 2 table size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<pre><code class="language-python">level2_table_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>A reference value of 0 represents unused or unallocated and is considered as
 sparse or stored in a corresponding backing file.</p>
@@ -3984,7 +4047,7 @@ cluster block is exactly one.</p>
 contains the number of blocks (or reference count table clusters).</p>
 <p>TODO: complete section</p>
 <h3 id="notes-2"><a class="header" href="#notes-2">Notes</a></h3>
-<pre><code>reference count cluster block offset = cluster data block offset /
+<pre><code class="language-text">reference count cluster block offset = cluster data block offset /
 reference count table offset = cluster data block /
 
 In order to obtain the reference count of a given cluster, you split the
@@ -4003,31 +4066,31 @@ for any snapshots referencing it.
 <h2 id="cluster-data-block"><a class="header" href="#cluster-data-block">Cluster data block</a></h2>
 <p>To retrieve a cluster data block corresponding a certain storage media offset:</p>
 <p>Determine the level 1 table index from the offset:</p>
-<pre><code>level 1 table index bit shift = number of cluster block bits + number of level 2 table bits
+<pre><code class="language-python">level1_table_index_bit_shift = number_of_cluster_block_bits + number_of_level2_table_bits
 </code></pre>
 <p>For version 1:</p>
-<pre><code>level 1 table index = ( offset &amp; 0x7fffffffffffffffULL ) &gt;&gt; level 1 table index bit shift
+<pre><code class="language-python">level1_table_index = (offset &amp; 0x7fffffffffffffff) &gt;&gt; level1_table_index_bit_shift
 </code></pre>
 <p>For version 2 and 3:</p>
-<pre><code>level 1 table index = ( offset &amp; 0x3fffffffffffffffULL ) &gt;&gt; level 1 table index bit shift
+<pre><code class="language-python">level1_table_index = (offset &amp; 0x3fffffffffffffff) &gt;&gt; level1_table_index_bit_shift
 </code></pre>
-<p>Retrieve the level 2 table offset from the level 1 table. If the level table 2
+<p>Retrieve the level 2 table offset from the level 1 table. If the level 2 table
 offset is 0 and the image has a backing file the cluster data block is stored
 in the backing file otherwise the cluster block is considered sparse.</p>
 <p>Read the corresponding level 2 table.</p>
 <p>Determine the level 2 table index from the offset:</p>
-<pre><code>level 2 table index bit mask = ~( 0xffffffffffffffffULL &lt;&lt; number of level 2 table bits )
+<pre><code class="language-python">level2_table_index_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_level2_table_bits)
 </code></pre>
-<pre><code>level 2 table index = ( offset &gt;&gt; number of cluster block bits ) &gt;&gt; level 2 table index bit mask
+<pre><code class="language-python">level2_table_index = (offset &gt;&gt; number_of_cluster_block_bits) &gt;&gt; level2_table_index_bit_mask
 </code></pre>
 <p>Retrieve the cluster block offset from the level 2 table. If the cluster block
 offset is 0 and the image has a backing file the cluster data block is stored
 in the backing file otherwise the cluster block is considered sparse.</p>
 <h3 id="uncompressed-cluster-data-block"><a class="header" href="#uncompressed-cluster-data-block">Uncompressed cluster data block</a></h3>
 <p>If the is compressed flag (QCOW_OFLAG_COMPRESSED) is not set:</p>
-<pre><code>cluster block bit mask = ~( 0xffffffffffffffffULL &lt;&lt; number of cluster block bits )
+<pre><code class="language-python">cluster_block_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_cluster_block_bits)
 </code></pre>
-<pre><code>cluster block data offset = ( offset &amp; cluster block bit mask ) + cluster block offset
+<pre><code class="language-python">cluster_block_data_offset = (offset &amp; cluster_block_bit_mask) + cluster_block_offset
 </code></pre>
 <p>Note that in version 2 or 3 the last cluster block in the file can be smaller than
 the cluster block size defined by the number of cluster block bits in the file
@@ -4040,25 +4103,27 @@ default.</p>
 sizes. The compressed cluster data blocks are sector (512 bytes) aligned.</p>
 <p>The compressed data uses a DEFLATE (inflate) window bits value of -12</p>
 <h4 id="compressed-chunk-data-block--version-1"><a class="header" href="#compressed-chunk-data-block--version-1">Compressed chunk data block – version 1</a></h4>
-<pre><code>compressed size bit shift = 63 - number of cluster block bits
+<pre><code class="language-python">compressed_size_bit_shift = 63 - number_of_cluster_block_bits
 </code></pre>
-<pre><code>compressed block size = ( ( cluster block offset &amp; 0x7fffffffffffffffULL ) &gt;&gt; compressed size bit shift
+<pre><code class="language-python">compressed_block_size = (
+    (cluster_block_offset &amp; 0x7fffffffffffffff) &gt;&gt; compressed_size_bit_shift)
 </code></pre>
-<pre><code>compressed block offset &amp;= ~( 0xffffffffffffffffULL &lt;&lt; compressed size bit shift )
+<pre><code class="language-python">compressed_block_offset &amp;= ~(0xffffffffffffffff &lt;&lt; compressed_size_bit_shift)
 </code></pre>
 <h4 id="compressed-chunk-data-block--version-2-or-3"><a class="header" href="#compressed-chunk-data-block--version-2-or-3">Compressed chunk data block – version 2 or 3</a></h4>
-<pre><code>compressed size bit shift = 62 - ( number of cluster block bits – 8 )
+<pre><code class="language-python">compressed_size_bit_shift = 62 - (number_of_cluster_block_bits – 8)
 </code></pre>
 <p>According to “the QCOW2 Image Format” the compressed block size is calculated
 as following:</p>
-<pre><code>compressed block size = ( ( ( cluster block offset &amp; 0x3fffffffffffffffULL ) &gt;&gt; compressed size bit shift ) + 1 ) * 512
+<pre><code class="language-python">compressed_block_size = (
+    (((cluster_block_offset &amp; 0x3fffffffffffffff) &gt;&gt; compressed_size_bit_shift) + 1) * 512)
 </code></pre>
 <p>Since the compressed block size is stored in 512 byte sectors this value does
 not contain the exact byte size of the compressed cluster block data. It
 sometimes lacks the size of the last partially filled sector and one sector
 should be added if possible within the bounds of the cluster blocks size and
 the file size.</p>
-<pre><code>cluster block offset &amp;= ~( 0xffffffffffffffffULL &lt;&lt; compressed size bit shift )
+<pre><code class="language-python">cluster_block_offset &amp;= ~(0xffffffffffffffff &lt;&lt; compressed_size_bit_shift)
 </code></pre>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>As of version 1 QCOW can use the backing file name in the file header to point
@@ -4215,7 +4280,7 @@ and consists of:</p>
 
 <tr><td>360</td><td>128</td><td></td><td>Master checksum</td></tr>
 
-<tr><td>488</td><td>4</td><td></td><td><a href="#image_type">Image type</a> (or variant)</td></tr>
+<tr><td>488</td><td>4</td><td></td><td><a href="#image_types">Image type</a> (or variant)</td></tr>
 
 <tr><td>492</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
@@ -4486,11 +4551,9 @@ and consists of:</p>
 <h2 id="udif-resource-fork"><a class="header" href="#udif-resource-fork">UDIF resource fork</a></h2>
 <p>TODO: complete section</p>
 <h2 id="notes-3"><a class="header" href="#notes-3">Notes</a></h2>
-<pre><code>Is the maximum compressed chunk size 2048 sectors?
-</code></pre>
-<pre><code>Comment seems to reference compressed data but has no size or number of sectors
-value.
-</code></pre>
+<p>Is the maximum compressed chunk size 2048 sectors?</p>
+<p>Comment seems to reference compressed data but has no size or number of sectors
+value.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="virtual-hard-disk-vhd-image-format"><a class="header" href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD) image format</a></h1>
 <p>The Virtual Hard Disk (VHD) format is used by Microsoft vitualization products
@@ -4548,7 +4611,7 @@ with an additional footer.</p>
 <h3 id="undo-disk-image"><a class="header" href="#undo-disk-image">Undo disk image</a></h3>
 <p>Virtual PC has a feature to create “Undo Disks”. This undo disk feature stores
 a differential hard disk image in files named something similar like:</p>
-<pre><code>VirtualPCUndo_&lt;name&gt;_0_0_hhmmssMMDDYYYY.vud
+<pre><code class="language-text">VirtualPCUndo_&lt;name&gt;_0_0_hhmmssMMDDYYYY.vud
 </code></pre>
 <p>Where the date and time seems to be stored in UTC and &lt;name&gt; represents the
 name of the parent image.</p>
@@ -4563,7 +4626,7 @@ name of the parent image.</p>
 
 <tr><td>12</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. It should only be set in dynamic and differential disk images. In fixed disk images it should be set to 0xffffffffffffffff (-1).</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. It should only be set in dynamic and differential disk images. In fixed disk images it should be set to 0xffffffffffffffff (-1)</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC</td></tr>
 
@@ -4581,21 +4644,17 @@ name of the parent image.</p>
 
 <tr><td>60</td><td>4</td><td></td><td>Disk type</td></tr>
 
-<tr><td>64</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Checksum, which contains a one's complement of the sum of the file footer excluding the checksum itself</td></tr>
 
 <tr><td>68</td><td>16</td><td></td><td>Identifier, which contains a big-endian UUID</td></tr>
 
-<tr><td>84</td><td>1</td><td></td><td>Saved state, which contains a flag to indicate the image is in saved state.</td></tr>
+<tr><td>84</td><td>1</td><td></td><td>Saved state, which contains a flag to indicate the image is in saved state</td></tr>
 
 <tr><td>85</td><td>427</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
 </table>
 </div>
 
-<blockquote>
-<p>Note that the checksum is a one’s complement of the sum of all the bytes in
-the file footer without the checksum field.</p>
-</blockquote>
 <h3 id="features"><a class="header" href="#features">Features</a></h3>
 <div class="table-wrapper">
 <table>
@@ -4680,27 +4739,27 @@ the file footer without the checksum field.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>8</td><td>"cxsparse"</td><td>Signature (Cookie)</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. Currently this is unused and should be set to 0xffffffffffffffff (-1).</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. Currently this is unused and should be set to 0xffffffffffffffff (-1)</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, whic contains the offset to the block allocation table structure. The offset is relative from the start of the file.</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, whic contains the offset to the block allocation table structure. The offset is relative from the start of the file</td></tr>
 
 <tr><td>24</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
 <tr><td>28</td><td>4</td><td></td><td>Number of blocks, which is equivalent to the number of block allocation table entries</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Block size. The block size must be a power-of-two multitude of the sector size and does not include the size of the sector bitmap. The default block size is 4096 x 512-byte sectors (2 MB).</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Block size. The block size must be a power-of-two multitude of the sector size and does not include the size of the sector bitmap. The default block size is 4096 x 512-byte sectors (2 MiB)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Checksum, which contains a one's complement of the sum of the dynamic disk header excluding the checksum itself</td></tr>
 
-<tr><td>40</td><td>16</td><td></td><td>Parent identifier, which contains a big-endian UUID that identifies the parent image. Only used by differential hard disk images.</td></tr>
+<tr><td>40</td><td>16</td><td></td><td>Parent identifier, which contains a big-endian UUID that identifies the parent image. Only used by differential hard disk images</td></tr>
 
-<tr><td>56</td><td>4</td><td></td><td>Parent last modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC. Only used by differential hard disk images.</td></tr>
+<tr><td>56</td><td>4</td><td></td><td>Parent last modification time, which contains the number of seconds since January 1, 2000 00:00:00 UTC. Only used by differential hard disk images</td></tr>
 
 <tr><td>60</td><td>4</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
-<tr><td>64</td><td>512</td><td></td><td>Parent name, which contains an UCS-2 big-endian string. Only used by differential hard disk images.</td></tr>
+<tr><td>64</td><td>512</td><td></td><td>Parent name, which contains an UCS-2 big-endian string. Only used by differential hard disk images</td></tr>
 
-<tr><td>576</td><td>8 x 24 = 192</td><td></td><td>Array of parent locator entries. Only used by differential hard disk images.</td></tr>
+<tr><td>576</td><td>8 x 24 = 192</td><td></td><td>Array of parent locator entries. Only used by differential hard disk images</td></tr>
 
 <tr><td>768</td><td>256</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
@@ -4712,10 +4771,6 @@ possible number of blocks in the disk.</p>
 <blockquote>
 <p>Note that the parent name can also contain a full path, e.g. in .avhd files.
 The part segments are separated by the \ character.</p>
-</blockquote>
-<blockquote>
-<p>Note that the checksum is a one’s complement of the sum of all the bytes in
-the file dynamic disk header without the checksum field.</p>
 </blockquote>
 <h3 id="parent-locator-entry"><a class="header" href="#parent-locator-entry">Parent locator entry</a></h3>
 <p>The parent locator entry is 24 bytes in size and consists of:</p>
@@ -4730,7 +4785,7 @@ the file dynamic disk header without the checksum field.</p>
 
 <tr><td>12</td><td>4</td><td>0</td><td>Unknown (Reserved should contain 0-byte values)</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Locator data offset, which contains the offset to the locator data. The offset is relative from the start of the file.</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Locator data offset, which contains the offset to the locator data. The offset is relative from the start of the file</td></tr>
 
 </table>
 </div>
@@ -4765,10 +4820,10 @@ the file dynamic disk header without the checksum field.</p>
 <p>The block allocation table consists of 32-bit entries. An entry contains the
 sector number where the data block starts or is set to 0xffffffff (-1) if the
 block is sparse or stored in the parent disk image.</p>
-<pre><code>if block allocation table entry == 0xffffffff:
+<pre><code class="language-python">if block_allocation_table_entry == 0xffffffff:
     block is sparse or stored in parent
 else:
-    file offset = ( block allocation table entry * 512 ) + sector bitmap size
+    file_offset = (block_allocation_table_entry * 512 ) + sector_bitmap_size
 </code></pre>
 <p>Unused block in a dynamic disk are sparse and should be filled with zero byte
 values. In a differential disk the block is stored in the parent disk image.</p>
@@ -4779,7 +4834,7 @@ values. In a differential disk the block is stored in the parent disk image.</p>
 <li>sector bitmap</li>
 <li>sector data</li>
 </ul>
-<pre><code>size of bitmap (in bytes) = block size / ( 512 * 8 )
+<pre><code class="language-python">size_of_bitmap (in bytes) = block_size / (512 * 8)
 </code></pre>
 <p>The size of the bitmap is rounded up to the next multitude of the sector size.</p>
 <h3 id="sector-bitmap"><a class="header" href="#sector-bitmap">Sector bitmap</a></h3>
@@ -4919,7 +4974,7 @@ where the image header checkum value is considered to be 0 during calculation.</
 
 <tr><td>24</td><td>4</td><td></td><td>Region data size, which according to MS-VHDX this value must be a multitude of 1 MiB</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Is required flag, which contains 1 to indicate the region type needs to be supported.</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Is required flag, which contains 1 to indicate the region type needs to be supported</td></tr>
 
 </table>
 </div>
@@ -5141,7 +5196,7 @@ image content data (or payload blocks) or blocks containing a sector bitmap.</p>
 sectors to be represented by the bitmap.</p>
 <p>Block allocation table (BAT) entries are grouped in chunks. The size of a chunk
 can be calculated as following:</p>
-<pre><code>number of entries per chunk = ( 2^23 * logical sector size ) / block size
+<pre><code class="language-python">number_of_entries_per_chunk = (2^23 * logical_sector_size) / block_size
 </code></pre>
 <p>The block allocation table (BAT) consists of:</p>
 <ul>
@@ -5156,7 +5211,8 @@ can be calculated as following:</p>
 <p>The block allocation table (BAT) of:</p>
 <ul>
 <li>a fixed-size image does not contain sector bitmap entries;</li>
-<li>a dynamic-size image does contain sector bitmap entries, although according to MS-VHDX are not used;</li>
+<li>a dynamic-size image does contain sector bitmap entries, although according to
+MS-VHDX are not used;</li>
 <li>a differential image does contain sector bitmap entries.</li>
 </ul>
 <h3 id="block-allocation-table-bat-entry"><a class="header" href="#block-allocation-table-bat-entry">Block allocation table (BAT) entry</a></h3>
@@ -5254,7 +5310,7 @@ as one of its image format.</p>
 
 <tr><td>Date and time values</td><td></td></tr>
 
-<tr><td>Character strings</td><td>narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a codepage defined in the descriptor file.</td></tr>
+<tr><td>Character strings</td><td>narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a codepage defined in the descriptor file</td></tr>
 
 </table>
 </div>
@@ -5265,12 +5321,14 @@ as one of its image format.</p>
 <p>The 2GbMaxExtentFlat (or twoGbMaxExtentFlat) disk image, which consists of:</p>
 <ul>
 <li>a descriptor file (&lt;name&gt;.vmdk)</li>
-<li>raw data extent files (&lt;name&gt;-f###.vmdk), where ### is contains a decimal value starting with 1.</li>
+<li>raw data extent files (&lt;name&gt;-f###.vmdk), where ### is contains a
+decimal value starting with 1.</li>
 </ul>
 <p>The 2GbMaxExtentSparse (or twoGbMaxExtentSparse) disk image, which consists of:</p>
 <ul>
 <li>a descriptor file (&lt;name&gt;.vmdk)</li>
-<li>VMDK sparse data extent files (&lt;name&gt;-s###.vmdk), where ### is contains a decimal value starting with 1.</li>
+<li>VMDK sparse data extent files (&lt;name&gt;-s###.vmdk), where ### is contains
+a decimal value starting with 1.</li>
 </ul>
 <p>The monolithicFlat disk image, which consists of:</p>
 <ul>
@@ -5279,7 +5337,8 @@ as one of its image format.</p>
 </ul>
 <p>The monolithicSparse disk image, which consists of:</p>
 <ul>
-<li>VMDK sparse data extent file (&lt;name&gt;.vmdk) also contains the descriptor file data.</li>
+<li>VMDK sparse data extent file (&lt;name&gt;.vmdk) also contains the descriptor
+file data.</li>
 </ul>
 <p>The vmfs disk image, which consists of:</p>
 <ul>
@@ -5314,7 +5373,7 @@ Lines are separated by a line feed character (0x0a). And leading comment
 </blockquote>
 <h3 id="header"><a class="header" href="#header">Header</a></h3>
 <p>The header of a descriptor file looks similar to the data below.</p>
-<pre><code># Disk DescriptorFile
+<pre><code class="language-text"># Disk DescriptorFile
 version=1
 CID=12345678
 parentCID=ffffffff
@@ -5330,20 +5389,21 @@ createType="twoGbMaxExtentSparse"
 
 <tr><td>encoding</td><td><a href="#descriptor_file_encodings">Encoding</a></td></tr>
 
-<tr><td>CID</td><td>Content identifier, which contains a random 32-bit value updated the first time the content of the virtual disk is modified after the virtual disk is opened.</td></tr>
+<tr><td>CID</td><td>Content identifier, which contains a random 32-bit value updated the first time the content of the virtual disk is modified after the virtual disk is opened</td></tr>
 
-<tr><td>parentCID</td><td>The content identifier of the parent, which contains a 32-bit value identifying the parent content, where a value of 'ffffffff' (-1) represents no parent content.</td></tr>
+<tr><td>parentCID</td><td>The content identifier of the parent, which contains a 32-bit value identifying the parent content, where a value of 'ffffffff' (-1) represents no parent content</td></tr>
 
-<tr><td>isNativeSnapshot</td><td>TODO: add description. A value of "no" has been observed in a VMWare Player 9 descriptor file.</td></tr>
+<tr><td>isNativeSnapshot</td><td>TODO: add description. A value of "no" has been observed in a VMWare Player 9 descriptor file</td></tr>
 
 <tr><td>createType</td><td><a href="#descriptor_file_disk_types">Disk type</a></td></tr>
 
-<tr><td>parentFileNameHint</td><td>Contains the path to the parent image, which is only present if the image is a differential image (delta link).</td></tr>
+<tr><td>parentFileNameHint</td><td>Contains the path to the parent image, which is only present if the image is a differential image (delta link)</td></tr>
 
 </table>
 </div>
 
-<p>TODO: confirm if a content identifier of ‘fffffffe’ (-2) represents that the long content identifier should be used</p>
+<p>TODO: confirm if a content identifier of ‘fffffffe’ (-2) represents that the
+long content identifier should be used</p>
 <h4 id="descriptor_file_format_versions"><a class="header" href="#descriptor_file_format_versions">Format versions</a></h4>
 <div class="table-wrapper">
 <table>
@@ -5387,47 +5447,47 @@ default is UTF-8.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>2GbMaxExtentFlat, twoGbMaxExtentFlat</td><td>The disk is split into fixed-size extents of maximum 2 GB, which consists of raw extent data files.</td></tr>
+<tr><td>2GbMaxExtentFlat, twoGbMaxExtentFlat</td><td>The disk is split into fixed-size extents of maximum 2 GB, which consists of raw extent data files</td></tr>
 
-<tr><td>2GbMaxExtentSparse, twoGbMaxExtentSparse</td><td>The disk is split into sparse (dynamic-size) extents of maximum 2 GB, which consists of VMDK sparse extent data files.</td></tr>
+<tr><td>2GbMaxExtentSparse, twoGbMaxExtentSparse</td><td>The disk is split into sparse (dynamic-size) extents of maximum 2 GB, which consists of VMDK sparse extent data files</td></tr>
 
-<tr><td>custom</td><td>TODO: add description. Descriptor file with arbitrary extents, used to mount v2i-format.</td></tr>
+<tr><td>custom</td><td>TODO: add description. Descriptor file with arbitrary extents, used to mount v2i-format</td></tr>
 
-<tr><td>fullDevice</td><td>The disk uses a full physical disk device.</td></tr>
+<tr><td>fullDevice</td><td>The disk uses a full physical disk device</td></tr>
 
-<tr><td>monolithicFlat</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>monolithicFlat</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>monolithicSparse</td><td>The disk is a single VMDK sparse extent data file.</td></tr>
+<tr><td>monolithicSparse</td><td>The disk is a single VMDK sparse extent data file</td></tr>
 
-<tr><td>partitionedDevice</td><td>The disk uses a full physical disk device, using access per partition.</td></tr>
+<tr><td>partitionedDevice</td><td>The disk uses a full physical disk device, using access per partition</td></tr>
 
-<tr><td>streamOptimized</td><td>The disk is a single compressed VMDK sparse extent data file.</td></tr>
+<tr><td>streamOptimized</td><td>The disk is a single compressed VMDK sparse extent data file</td></tr>
 
-<tr><td>vmfs</td><td>The disk is a single raw extent data file, which is similar to the "monolithicFlat".</td></tr>
+<tr><td>vmfs</td><td>The disk is a single raw extent data file, which is similar to the "monolithicFlat"</td></tr>
 
-<tr><td>vmfsEagerZeroedThick</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>vmfsEagerZeroedThick</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>vmfsPreallocated</td><td>The disk is a single raw extent data file.</td></tr>
+<tr><td>vmfsPreallocated</td><td>The disk is a single raw extent data file</td></tr>
 
-<tr><td>vmfsRaw</td><td>The disk uses a full physical disk device.</td></tr>
+<tr><td>vmfsRaw</td><td>The disk uses a full physical disk device</td></tr>
 
 <tr><td>vmfsRDM, vmfsRawDeviceMap</td><td>The disk uses a full physical disk device, which is also referred to as Raw Device Map (RDM)</td></tr>
 
-<tr><td>vmfsRDMP, vmfsPassthroughRawDeviceMap</td><td>The disk uses a full physical disk device, which is similar to the Raw Device Map (RDM), but sends SCSI commands to underlying hardware.</td></tr>
+<tr><td>vmfsRDMP, vmfsPassthroughRawDeviceMap</td><td>The disk uses a full physical disk device, which is similar to the Raw Device Map (RDM), but sends SCSI commands to underlying hardware</td></tr>
 
-<tr><td>vmfsSparse</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+<tr><td>vmfsSparse</td><td>The disk is split into COWD sparse (dynamic-size) extents</td></tr>
 
-<tr><td>vmfsThin</td><td>The disk is split into COWD sparse (dynamic-size) extents.</td></tr>
+<tr><td>vmfsThin</td><td>The disk is split into COWD sparse (dynamic-size) extents</td></tr>
 
 </table>
 </div>
 
 <h3 id="extent-descriptions"><a class="header" href="#extent-descriptions">Extent descriptions</a></h3>
 <p>The extent descriptions of a descriptor file looks similar to the data below.</p>
-<pre><code># Extent description
+<pre><code class="language-text"># Extent description
 RW 4192256 SPARSE "test-s001.vmdk"
 </code></pre>
-<pre><code># Extent description
+<pre><code class="language-text"># Extent description
 RW 1048576 FLAT "test-f001.vmdk" 0
 </code></pre>
 <p>The extent descriptions consists of the following values:</p>
@@ -5443,6 +5503,7 @@ RW 1048576 FLAT "test-f001.vmdk" 0
 
 <h4 id="extent-descriptor"><a class="header" href="#extent-descriptor">Extent descriptor</a></h4>
 <p>The extent descriptor consists of the following values:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -5467,6 +5528,7 @@ RW 1048576 FLAT "test-f001.vmdk" 0
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The extent offset is specified only for flat extents and corresponds to the
 offset in the file or device where the extent data is located. For
 device-backed virtual disks (physical or raw disks) the extent offset can be
@@ -5512,7 +5574,7 @@ non-zero. For raw extent data files the extent offset should be zero.</p>
 </blockquote>
 <h3 id="change-tracking-file-section"><a class="header" href="#change-tracking-file-section">Change tracking file section</a></h3>
 <p>The change tracking file section was introduced in version 3 and looks similar to:</p>
-<pre><code># Change Tracking File
+<pre><code class="language-text"># Change Tracking File
 changeTrackPath="test-flat.vmdk"
 </code></pre>
 <p>The change tracking file section consists of the following values:</p>
@@ -5528,7 +5590,7 @@ changeTrackPath="test-flat.vmdk"
 
 <h3 id="disk-database"><a class="header" href="#disk-database">Disk database</a></h3>
 <p>The disk data base of a descriptor file looks similar to the data below.</p>
-<pre><code># The Disk Data Base
+<pre><code class="language-text"># The Disk Data Base
 #DDB
 
 ddb.virtualHWVersion = "4"
@@ -5560,11 +5622,11 @@ ddb.toolsVersion = "0"
 
 <tr><td>ddb.geometry.sectors</td><td>The number of sectors</td></tr>
 
-<tr><td>ddb.geometry.biosCylinders</td><td>The number of cylinders as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosCylinders</td><td>The number of cylinders as reported by the BIOS</td></tr>
 
-<tr><td>ddb.geometry.biosHeads</td><td>The number of heads as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosHeads</td><td>The number of heads as reported by the BIOS</td></tr>
 
-<tr><td>ddb.geometry.biosSectors</td><td>The number of sectors as reported by the BIOS.</td></tr>
+<tr><td>ddb.geometry.biosSectors</td><td>The number of sectors as reported by the BIOS</td></tr>
 
 <tr><td>ddb.adapterType</td><td><a href="#disk_adapter_types">Disk adapter type</a></td></tr>
 
@@ -5576,9 +5638,10 @@ ddb.toolsVersion = "0"
 </div>
 
 <p>VirtualBox has been observed to use a different case for “disk” in the section header:</p>
-<pre><code># The disk Data Base
+<pre><code class="language-text"># The disk Data Base
 </code></pre>
 <h4 id="virtual-hardware-version"><a class="header" href="#virtual-hardware-version">Virtual hardware version</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -5597,6 +5660,7 @@ ddb.toolsVersion = "0"
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="disk_adapter_types"><a class="header" href="#disk_adapter_types">Disk adapter types</a></h4>
 <div class="table-wrapper">
 <table>
@@ -5673,15 +5737,15 @@ a file that describes changed areas on the virtual disk.</p>
 
 <tr><td>20</td><td>8</td><td></td><td>Sectors per grain, which must be a power of 2 and &gt; 8</td></tr>
 
-<tr><td>28</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>28</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 <tr><td>36</td><td>8</td><td></td><td><a href="#descriptor_file">Embedded descriptor file</a> size in sectors</td></tr>
 
 <tr><td>44</td><td>4</td><td>512</td><td>The number of grains table entries</td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Secondary grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Secondary grain directory start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
-<tr><td>56</td><td>8</td><td></td><td>Primary grain directory start sector, which is relative from the start of the file, 0 if not set or 0xffffffffffffffff (GD_AT_END) if relative from the end of the file.</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Primary grain directory start sector, which is relative from the start of the file, 0 if not set or 0xffffffffffffffff (GD_AT_END) if relative from the end of the file</td></tr>
 
 <tr><td>64</td><td>8</td><td></td><td>Metadata size in sectors</td></tr>
 
@@ -5715,26 +5779,28 @@ file header stored at offset -1024 relative from the end of the file (stream)
 that contains the correct grain directory start sector.</p>
 <h4 id="vmdk_extent_file_flags"><a class="header" href="#vmdk_extent_file_flags">Flags</a></h4>
 <p>The flags consist of the following values:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x00000001</td><td></td><td>Valid new line detection test</td></tr>
 
-<tr><td>0x00000002</td><td></td><td>Use secondary grain directory. The secondary (redundant) grain directory should be used instead of the primary grain directory.</td></tr>
+<tr><td>0x00000002</td><td></td><td>Use secondary grain directory. The secondary (redundant) grain directory should be used instead of the primary grain directory</td></tr>
 
 <tr><td colspan="3"><em>As of format version 2</em></td></tr>
 
-<tr><td>0x00000004</td><td></td><td>Use zeroed-grain table entry. The zeroed-grain table entry overloads grain data sector number 1 to indicate the grain is sparse.</td></tr>
+<tr><td>0x00000004</td><td></td><td>Use zeroed-grain table entry. The zeroed-grain table entry overloads grain data sector number 1 to indicate the grain is sparse</td></tr>
 
 <tr><td colspan="3"><em>Common</em></td></tr>
 
 <tr><td>0x00010000</td><td></td><td>Has compressed grain data</td></tr>
 
-<tr><td>0x00020000</td><td></td><td>Contains metadata, where the file contains markers to identify metadata or data blocks.</td></tr>
+<tr><td>0x00020000</td><td></td><td>Contains metadata, where the file contains markers to identify metadata or data blocks</td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="vmdk_compression_method"><a class="header" href="#vmdk_compression_method">Compression method</a></h4>
 <p>The compression method consist of the following values:</p>
 <div class="table-wrapper">
@@ -5765,6 +5831,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </ul>
 <h3 id="the-marker"><a class="header" href="#the-marker">The marker</a></h3>
 <p>The marker is 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -5785,6 +5852,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If the marker data size &gt; 0 the marker is a compressed grain marker.</p>
 <h4 id="vmdk_extent_file_marker_types"><a class="header" href="#vmdk_extent_file_marker_types">Marker types</a></h4>
 <div class="table-wrapper">
@@ -5803,6 +5871,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 
 <h4 id="compressed-grain-marker"><a class="header" href="#compressed-grain-marker">Compressed grain marker</a></h4>
 <p>The compressed grain marker indicates that compressed data follows.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -5819,6 +5888,7 @@ layout of a Stream-Optimized Compressed Sparse Extent that uses markers is:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the compressed grain data can be larger than the grain data size.</p>
 </blockquote>
@@ -5899,19 +5969,17 @@ sector block.</p>
 <p>The size of the grain directory is dependent on the number of grains in the
 extent data file. The number of entries in the grain directory can be
 determined as following:</p>
-<pre><code>grain table size = number of grain table entries x grain size
-number of grain directory entries = maximum data size / grain table size
+<pre><code class="language-python">grain table size = number of grain table entries * grain size
 
-if( maximum data size % grain table size &gt; 0 )
-{
-	number of entries += 1
-}
+number of grain directory entries = maximum data size / grain table size
+if maximum data size % grain table size &gt; 0:
+	number of grain directory entries += 1
 </code></pre>
 <p>The grain directory consists of 32-bit grain table offsets:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image</td></tr>
 
 </table>
 </div>
@@ -5932,7 +6000,7 @@ the same as the value stored in the file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain data sector number, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain data sector number, which is relative from the start of the file or 0 if sparse or the sector is stored in the parent image</td></tr>
 
 </table>
 </div>
@@ -5952,6 +6020,7 @@ sector number.</p>
 stored compressed.</p>
 <h4 id="compressed-grain-data"><a class="header" href="#compressed-grain-data">Compressed grain data</a></h4>
 <p>The compressed grain data is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -5970,6 +6039,7 @@ stored compressed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The uncompressed data size should be the grain size or less for the last grain.</p>
 <h3 id="vmdk_extent_file_footer"><a class="header" href="#vmdk_extent_file_footer">Footer</a></h3>
 <p>The footer is only used in Stream-Optimized Compressed Sparse Extents. The
@@ -5993,6 +6063,7 @@ data. The COW sparse extent data file consists of:</p>
 <p>This type of extent data file is also known as ESX Server Sparse Extent.</p>
 <h3 id="file-header-1-1"><a class="header" href="#file-header-1-1">File header</a></h3>
 <p>The file header is 2048 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -6006,7 +6077,7 @@ data. The COW sparse extent data file consists of:</p>
 
 <tr><td>16</td><td>4</td><td></td><td>Sectors per grain</td></tr>
 
-<tr><td>20</td><td>4</td><td>4</td><td>Grain directory start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>20</td><td>4</td><td>4</td><td>Grain directory start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Number of grain directory entries</td></tr>
 
@@ -6047,6 +6118,7 @@ data. The COW sparse extent data file consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the parent file name seems not to be set in recent delta sparse
 extent files.</p>
@@ -6060,7 +6132,7 @@ file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain table start sector, which is relative from the start of the file or 0 if not set</td></tr>
 
 </table>
 </div>
@@ -6075,7 +6147,7 @@ grain table is the fixed value of 4096.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Grain sector number, which is relative from the start of the file or 0 if not set.</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Grain sector number, which is relative from the start of the file or 0 if not set</td></tr>
 
 </table>
 </div>
@@ -6129,9 +6201,13 @@ very expensive process IO-wise.</p>
 <p>A volume (or logical drive) is a single continous accessible storage area,
 typically containing a file system. A volume system format is used to manage
 the storage of one or more volumes.</p>
-<blockquote>
-<p>Note that although related, a volume is a different concept as a partition.</p>
-</blockquote>
+<p>Although related, a volume is a different concept as a partition.</p>
+<h2 id="formats-1"><a class="header" href="#formats-1">Formats</a></h2>
+<ul>
+<li><a href="#apple-partition-map-apm-format">Apple Partition Map (APM)</a></li>
+<li><a href="#guid-partition-table-gpt-format">GUID Partition Table (GPT)</a></li>
+<li><a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR)</a></li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="apple-partition-map-apm-format"><a class="header" href="#apple-partition-map-apm-format">Apple Partition Map (APM) format</a></h1>
 <p>The Apple Partition Map (APM) format is used on Motorola based Macintosh
@@ -6161,9 +6237,9 @@ is used.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
-<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media.</td></tr>
+<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media</td></tr>
 
-<tr><td>Logical block</td><td>An abstract location on the storage media defined by software.</td></tr>
+<tr><td>Logical block</td><td>An abstract location on the storage media defined by software</td></tr>
 
 </table>
 </div>
@@ -6260,7 +6336,7 @@ map describes the partition map itself.</p>
 
 <tr><td>120</td><td>16</td><td></td><td>Processor type</td></tr>
 
-<tr><td>136</td><td>( 188 x 2 ) = 376</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+<tr><td>136</td><td>188 x 2 = 376</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
 
 </table>
 </div>
@@ -6377,9 +6453,8 @@ map describes the partition map itself.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="guid-partition-table-gpt-format"><a class="header" href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a></h1>
-<p>The GUID Partition Table (GPT) is a partitioning schema that is the successor
-to the <a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) Partition Table</a> for Intel x86 based
-computers.</p>
+<p>The GUID Partition Table (GPT) is a partitioning schema that is the successor to the
+<a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) Partition Table</a> for Intel x86 based computers.</p>
 <h2 id="overview-10"><a class="header" href="#overview-10">Overview</a></h2>
 <p>A GUID Partition Table (GPT) consists of:</p>
 <ul>
@@ -6395,8 +6470,7 @@ computers.</p>
 <li>backup GPT partition entries (typically stored the blocks (LBA) before the last block -33 - -2)</li>
 <li>A backup GPT partition table header (typically stored in the last block (LBA) -1)</li>
 </ul>
-<p>The GPT partition table header signature can be used to determine the block
-(LBA) (or sector) size.</p>
+<p>The GPT partition table header signature can be used to determine the block (LBA) (or sector) size.</p>
 <h3 id="characteristics-9"><a class="header" href="#characteristics-9">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
@@ -6412,12 +6486,11 @@ computers.</p>
 
 <h2 id="master-boot-record-mbr"><a class="header" href="#master-boot-record-mbr">Master Boot Record (MBR)</a></h2>
 <h3 id="hybrid-master-boot-record-mbr"><a class="header" href="#hybrid-master-boot-record-mbr">Hybrid Master Boot Record (MBR)</a></h3>
-<p>In hybrid configuration both GPT and MBR are used concurrently. Depending on
-the operating system one might have precedence over the other.</p>
+<p>In hybrid configuration both GPT and MBR are used concurrently. Depending on the operating system
+one might have precedence over the other.</p>
 <h3 id="protective-master-boot-record-mbr"><a class="header" href="#protective-master-boot-record-mbr">Protective Master Boot Record (MBR)</a></h3>
-<p>The Protective Master Boot Record (MBR) is an MBR with a single partition of
-type “EFI GPT protective partition” (0xee) that allocated as much of the drive
-as possible.</p>
+<p>The Protective Master Boot Record (MBR) is an MBR with a single partition of type “EFI GPT
+protective partition” (0xee) that allocated as much of the drive as possible.</p>
 <h2 id="gpt-partition-table-header"><a class="header" href="#gpt-partition-table-header">GPT partition table header</a></h2>
 <p>The GPT partition table header is 92 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -6458,20 +6531,18 @@ as possible.</p>
 </table>
 </div>
 
+<p>The partition entries start block number (LBA) of the backup GPT partition table header points to
+backup GPT partition entries.</p>
 <blockquote>
-<p>Note that the partition entries start block number (LBA) of the backup
-partition table header will point to the backup partition entries.</p>
-</blockquote>
-<blockquote>
-<p>Note that the number of partition entries value contains the number of
-available partition entries not the number of used partition entries. Empty
-partition entries have a unused entry partition type identifier.</p>
+<p>Note that the number of partition entries value contains the number of available partition
+entries not the number of used partition entries. Empty partition entries have a unused entry
+partition type identifier.</p>
 </blockquote>
 <h3 id="checksum-calculation-1"><a class="header" href="#checksum-calculation-1">Checksum calculation</a></h3>
-<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynominal
-0x04c11db7 and initial value of 0 is used to calculate the checksums.</p>
-<p>The checksum is calculated over the 92 bytes of the table header data, where the
-header data checkum value is considered to be 0 during calculation.</p>
+<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynominal 0x04c11db7 and
+initial value of 0 is used to calculate the checksums.</p>
+<p>The checksum is calculated over the 92 bytes of the table header data, where the header data
+checkum value is considered to be 0 during calculation.</p>
 <h2 id="gpt-partition-entries"><a class="header" href="#gpt-partition-entries">GPT partition entries</a></h2>
 <h3 id="gpt-partition-entry"><a class="header" href="#gpt-partition-entry">GPT Partition entry</a></h3>
 <p>The GPT partition entry is 128 bytes in size and consists of:</p>
@@ -6494,6 +6565,7 @@ header data checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h3 id="partition_types-1"><a class="header" href="#partition_types-1">Partition types</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -6814,6 +6886,7 @@ header data checkum value is considered to be 0 during calculation.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="partition_attribute_flags"><a class="header" href="#partition_attribute_flags">Partition attribute flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -6860,8 +6933,8 @@ header data checkum value is considered to be 0 during calculation.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="master-boot-record-mbr-partition-table-format"><a class="header" href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) partition table format</a></h1>
-<p>The Master Boot Record (MBR) partition table is mainly used on the family of
-Intel x86 based computers.</p>
+<p>The Master Boot Record (MBR) partition table is mainly used on the family of Intel x86 based
+computers.</p>
 <h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
 <p>A MBR partition table consists of:</p>
 <ul>
@@ -6885,19 +6958,18 @@ Intel x86 based computers.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
-<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media.</td></tr>
+<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media</td></tr>
 
-<tr><td>Logical block</td><td>An abstract location on the storage media defined by software.</td></tr>
+<tr><td>Logical block</td><td>An abstract location on the storage media defined by software</td></tr>
 
 </table>
 </div>
 
 <h3 id="sector-sizes"><a class="header" href="#sector-sizes">Sector size(s)</a></h3>
-<p>Traditionally the size of sector is 512 bytes, but modern hard disk drives use
-4096 bytes. The linux fdisk utility supports sector sizes of: 512, 1024, 2048
-and 4096.</p>
-<p>The location of of the “boot signature” of the MBR does not indicate the sector
-size. Methods to derive the sector size from the data:</p>
+<p>Traditionally the size of sector is 512 bytes, but modern hard disk drives use 4096 bytes. The
+linux fdisk utility supports sector sizes of: 512, 1024, 2048 and 4096.</p>
+<p>The location of of the “boot signature” of the MBR does not indicate the sector size. Methods to
+derive the sector size from the data:</p>
 <ul>
 <li>check the “boot signature” of the first EPR, if present</li>
 <li>check the content of well known partition types</li>
@@ -6916,16 +6988,15 @@ size. Methods to derive the sector size from the data:</p>
 </table>
 </div>
 
-<p>The logical block address (LBA) can be determined from the CHS with the
-following calculation:</p>
-<pre><code>LBA = ( ( ( cylinder * heads per cylinder ) + head ) * sectors per track ) + sector - 1
+<p>The logical block address (LBA) can be determined from the CHS with the following calculation:</p>
+<pre><code class="language-python">lba = (((cylinder * heads_per_cylinder) + head) * sectors_per_track) + sector - 1
 </code></pre>
 <h2 id="the-master-boot-record-mbr"><a class="header" href="#the-master-boot-record-mbr">The Master Boot Record (MBR)</a></h2>
-<p>The Master Boot Record (MBR) is a data structure that describes the properties
-of the storage medium and its partitions.</p>
-<p>The classical MBR can only contain 4 partition table entries. Additional
-partition entries must be stored using extended partition records (EPR). The
-classical MBR has evolved into different variants like:</p>
+<p>The Master Boot Record (MBR) is a data structure that describes the properties of the storage
+medium and its partitions.</p>
+<p>The classical MBR can only contain 4 partition table entries. Additional partition entries must be
+stored using extended partition records (EPR). The classical MBR has evolved into different
+variants like:</p>
 <ul>
 <li>The modern MBR</li>
 <li>The Advanced Active Partitions (AAP) MBR</li>
@@ -6955,6 +7026,7 @@ classical MBR has evolved into different variants like:</p>
 
 <h3 id="the-modern-mbr"><a class="header" href="#the-modern-mbr">The modern MBR</a></h3>
 <p>The modern MBR is 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -6999,11 +7071,11 @@ classical MBR has evolved into different variants like:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h2 id="the-extended-partition-record"><a class="header" href="#the-extended-partition-record">The extended partition record</a></h2>
-<p>The extended partition record (EPR) (also referred to as extended boot record
-(EBR)) starts with a 64 byte (extended) partition record (EPR) like the MBR.
-This partition table contains information about the logical partition (volume)
-and additional extended partition tables.</p>
+<p>The extended partition record (EPR) (also referred to as extended boot record (EBR)) starts with a
+64 byte (extended) partition record (EPR) like the MBR. This partition table contains information
+about the logical partition (volume) and additional extended partition tables.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -7022,12 +7094,10 @@ and additional extended partition tables.</p>
 </table>
 </div>
 
-<p>The second partition entry contains an extended partition which points to the
-next EPR. The LBA addresses in the EPR are relative to the start of the first
-EPR.</p>
-<p>The first EPR typically has a <a href="#partition_types-2">partition type</a> of 0x05 but
-certain version of Windows are known to use a partition type 0x0f, such as
-Windows 98.</p>
+<p>The second partition entry contains an extended partition which points to the next EPR. The LBA
+addresses in the EPR are relative to the start of the first EPR.</p>
+<p>The first EPR typically has a <a href="#partition_types-2">partition type</a> of 0x05 but certain version of
+Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 <h2 id="the-partition-table-entry"><a class="header" href="#the-partition-table-entry">The partition table entry</a></h2>
 <p>The partition table entry is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -7335,22 +7405,28 @@ Windows 98.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
-<p>A file system format is used to manage the storage of one or more files.</p>
+<p>A file system format is used to manage the storage of files.</p>
 <h2 id="terminology-3"><a class="header" href="#terminology-3">Terminology</a></h2>
-<h3 id="file-entry"><a class="header" href="#file-entry">File entry</a></h3>
-<p>A file entry (or file system entry) is an object that represent an element within
-the file system such as a file or directory. It typically includes metadata such
-as the file name, size, permissions, date and time values, and location of the
-content on storage media.</p>
-<h3 id="data-fork-or-data-stream"><a class="header" href="#data-fork-or-data-stream">Data fork (or data stream)</a></h3>
-<p>TODO</p>
-<h3 id="extended-attribute-1"><a class="header" href="#extended-attribute-1">Extended attribute</a></h3>
-<p>TODO</p>
-<h3 id="reparse-point"><a class="header" href="#reparse-point">Reparse point</a></h3>
-<p>NTFS and ReFS use reparse points to extend the file system.</p>
 <ul>
-<li>https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points</li>
-<li>https://en.wikipedia.org/wiki/NTFS_reparse_point</li>
+<li><strong>File entry (file system entry)</strong>: an object that represent an element within
+the file system, such as a file or directory. A file system typically stores
+metadata of a file entry, such as the name, size, permissions, date and time
+values, and location of the content.</li>
+<li><strong>Data fork (or data stream)</strong>: a file system object that represents the
+content of a file entry. NTFS and HFS support multiple data forks (or data
+streams) for an individual file entry.</li>
+<li><strong>Extended attribute</strong>: A file system object that represents additional (or
+extended) metadata of an individual file entry.</li>
+<li><strong>Reparse point</strong>: a file system object that redirects to another location or
+implementation (filter driver), such as Windows Overlay Filter (WOF)
+compression. NTFS and ReFS support reparse points.</li>
+</ul>
+<h2 id="formats-2"><a class="header" href="#formats-2">Formats</a></h2>
+<ul>
+<li><a href="#extended-file-system-ext-format">Extended File System (ext)</a></li>
+<li><a href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT)</a></li>
+<li><a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a></li>
+<li><a href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS)</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="extended-file-system-ext-format"><a class="header" href="#extended-file-system-ext-format">Extended File System (ext) format</a></h1>
@@ -7380,11 +7456,11 @@ Linux.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
-<tr><td>Byte order</td><td>little-endian, with the exception of UUID values that are stored in big-endian.</td></tr>
+<tr><td>Byte order</td><td>little-endian, with the exception of UUID values that are stored in big-endian</td></tr>
 
-<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 (POSIX epoch), disregarding leap seconds. Or number of nanoseconds, when extra precision is enabled. Date and time values are stored in UTC.</td></tr>
+<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 (POSIX epoch), disregarding leap seconds. Or number of nanoseconds, when extra precision is enabled. Date and time values are stored in UTC</td></tr>
 
-<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage.</td></tr>
+<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage</td></tr>
 
 </table>
 </div>
@@ -7404,18 +7480,15 @@ volume. Backup superblocks are stored at offset 1024 relative from the start of
 the block group if block size &lt;= 1024 or otherwise at offset 0 from the start
 of the block group.</p>
 <p>The group descriptor table is stored in the block after the superblock.</p>
-<p>The ext2 revision 0 stores a copy at the start of every block group, along with
-backups of the group descriptor table. Later revisions can reduce the number of
-backup copies by only putting backups in specific groups (sparse superblock
-feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<p>An ext2 file system with revision 0 stores a copy at the start of every block
+group, along with backups of the group descriptor table. Later revisions reduce
+the number of backup copies by only putting backups in specific groups (sparse
+superblock feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<p>Not all values in a backup superblock and backup group descriptor tables match
+those of the primary superblock and group descriptor table.</p>
 <blockquote>
-<p>Note backup superblocks can be empty (filled with 0-byte values) or contain
-remnant data on an Android ext file system with sparse_super.</p>
-</blockquote>
-<blockquote>
-<p>Note that not all values in a backup superblock and backup group descriptor
-tables always match those of the primary superblock and group descriptor
-table.</p>
+<p>Note that backup superblocks can be empty (filled with 0-byte values) or
+contain remnant data on an Android ext file system with sparse_super.</p>
 </blockquote>
 <h3 id="flex-block-groups"><a class="header" href="#flex-block-groups">Flex block groups</a></h3>
 <p>Flex (or flexible) block groups are a set of block groups that treated as
@@ -7435,7 +7508,7 @@ the first block group of a meta block group and backups in the second and last
 block groups of the meta block group.</p>
 <h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
 <p>The volume is devided in blocks:</p>
-<pre><code>block offset = block number x block size
+<pre><code class="language-python">block offset = block number * block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
 <blockquote>
@@ -7444,6 +7517,7 @@ block groups of the meta block group.</p>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
 <h3 id="the-ext2-superblock"><a class="header" href="#the-ext2-superblock">The ext2 superblock</a></h3>
 <p>The ext2 superblock is 208 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -7451,7 +7525,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
 
@@ -7530,8 +7604,10 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="the-ext3-superblock"><a class="header" href="#the-ext3-superblock">The ext3 superblock</a></h3>
 <p>The ext3 superblock is 336 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -7539,7 +7615,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
 
@@ -7623,7 +7699,7 @@ block groups of the meta block group.</p>
 
 <tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
 
-<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete</td></tr>
 
 <tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
 
@@ -7644,8 +7720,10 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="the-ext4-superblock"><a class="header" href="#the-ext4-superblock">The ext4 superblock</a></h3>
 <p>The superblock is 1024 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -7653,7 +7731,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks, which contains the lower 32-bit of the value</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks, which contains the lower 32-bit of the value. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks, which contains the lower 32-bit of the value. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks, which contains the lower 32-bit of the value</td></tr>
 
@@ -7737,7 +7815,7 @@ block groups of the meta block group.</p>
 
 <tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
 
-<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete</td></tr>
 
 <tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
 
@@ -7779,7 +7857,7 @@ block groups of the meta block group.</p>
 
 <tr><td>372</td><td>1</td><td></td><td>Number of block groups per flex block group, which is stored as: 2 ^ value</td></tr>
 
-<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_type">Checksum type</a></td></tr>
+<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_types">Checksum type</a></td></tr>
 
 <tr><td>374</td><td>1</td><td></td><td>Unknown (encryption level)</td></tr>
 
@@ -7866,6 +7944,7 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
 <p>Note that some versions of mkfs.ext set the file system creation time even for
@@ -7948,13 +8027,13 @@ file system identifier.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>EXT2_COMPAT_PREALLOC</td><td>Pre-allocate directory blocks, which is intended to reduce fragmentation.</td></tr>
+<tr><td>0x00000001</td><td>EXT2_COMPAT_PREALLOC</td><td>Pre-allocate directory blocks, which is intended to reduce fragmentation</td></tr>
 
-<tr><td>0x00000002</td><td>EXT2_FEATURE_COMPAT_IMAGIC_INODES</td><td>Has AFS server inodes.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_COMPAT_IMAGIC_INODES</td><td>Has AFS server inodes</td></tr>
 
-<tr><td>0x00000004</td><td>EXT3_FEATURE_COMPAT_HAS_JOURNAL</td><td>Has a journal.</td></tr>
+<tr><td>0x00000004</td><td>EXT3_FEATURE_COMPAT_HAS_JOURNAL</td><td>Has a journal</td></tr>
 
-<tr><td>0x00000008</td><td>EXT2_FEATURE_COMPAT_EXT_ATTR</td><td>Has extended attributes.</td></tr>
+<tr><td>0x00000008</td><td>EXT2_FEATURE_COMPAT_EXT_ATTR</td><td>Has extended attributes</td></tr>
 
 <tr><td>0x00000010</td><td>EXT2_FEATURE_COMPAT_RESIZE_INO, EXT2_FEATURE_COMPAT_RESIZE_INODE</td><td>Is resizeable, the file system has reserved GDT blocks for expansion, which also requires RO_COMPAT_SPARSE_SUPER</td></tr>
 
@@ -7972,7 +8051,7 @@ file system identifier.</p>
 
 <tr><td>0x00000800</td><td>EXT4_FEATURE_COMPAT_STABLE_INODES</td><td>Unknown (stable inodes)</td></tr>
 
-<tr><td>0x00001000</td><td>EXT4_FEATURE_COMPAT_ORPHAN_FILE</td><td>Has orphan file.</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_COMPAT_ORPHAN_FILE</td><td>Has orphan file</td></tr>
 
 </table>
 </div>
@@ -8005,7 +8084,7 @@ COMPAT_ can be used interchangeably.</p>
 
 <tr><td>0x00000200</td><td>EXT4_FEATURE_INCOMPAT_FLEX_BG</td><td>Has flex (or flexible) block groups</td></tr>
 
-<tr><td>0x00000400</td><td>EXT4_FEATURE_INCOMPAT_EA_INODE</td><td>Has large inodes, which are larger than 128 bytes.</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_INCOMPAT_EA_INODE</td><td>Has large inodes, which are larger than 128 bytes</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
@@ -8013,11 +8092,11 @@ COMPAT_ can be used interchangeably.</p>
 
 <tr><td>0x00002000</td><td>EXT4_FEATURE_INCOMPAT_CSUM_SEED, EXT4_FEATURE_INCOMPAT_BG_USE_META_CSUM</td><td>Initial metadata checksum value (or seed) is stored in the superblock</td></tr>
 
-<tr><td>0x00004000</td><td>EXT4_FEATURE_INCOMPAT_LARGEDIR</td><td>Large directory &gt;2GB or 3-level hash tree (HTree).</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_INCOMPAT_LARGEDIR</td><td>Large directory &gt;2GB or 3-level hash tree (HTree)</td></tr>
 
-<tr><td>0x00008000</td><td>EXT4_FEATURE_INCOMPAT_INLINE_DATA</td><td>Has data stored in inode.</td></tr>
+<tr><td>0x00008000</td><td>EXT4_FEATURE_INCOMPAT_INLINE_DATA</td><td>Has data stored in inode</td></tr>
 
-<tr><td>0x00010000</td><td>EXT4_FEATURE_INCOMPAT_ENCRYPT</td><td>Has encrypted inodes.</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_INCOMPAT_ENCRYPT</td><td>Has encrypted inodes</td></tr>
 
 <tr><td>0x00020000</td><td>EXT4_FEATURE_INCOMPAT_CASEFOLD</td><td>Hash case folding</td></tr>
 
@@ -8032,47 +8111,45 @@ EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER</td><td>Has sparse superblocks and group descriptor tables. If set a superblock is stored in block groups 0, 1 and those that are powers of 3, 5 and 7. If not set a superblock is stored in every block group.</td></tr>
+<tr><td>0x00000001</td><td>EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER</td><td>Has sparse superblocks and group descriptor tables. If set a superblock is stored in block groups 0, 1 and those that are powers of 3, 5 and 7. If not set a superblock is stored in every block group</td></tr>
 
-<tr><td>0x00000002</td><td>EXT2_FEATURE_RO_COMPAT_LARGE_FILE</td><td>Contains large files.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_RO_COMPAT_LARGE_FILE</td><td>Contains large files</td></tr>
 
 <tr><td>0x00000004</td><td>EXT2_FEATURE_RO_COMPAT_BTREE_DIR</td><td>Intended for hash-tree directory (or directory B-tree), which is not yet implemented</td></tr>
 
-<tr><td>0x00000008</td><td>EXT4_FEATURE_RO_COMPAT_HUGE_FILE</td><td>Has huge file support.</td></tr>
+<tr><td>0x00000008</td><td>EXT4_FEATURE_RO_COMPAT_HUGE_FILE</td><td>Has huge file support</td></tr>
 
-<tr><td>0x00000010</td><td>EXT4_FEATURE_RO_COMPAT_GDT_CSUM</td><td>Has group descriptors with checksums.</td></tr>
+<tr><td>0x00000010</td><td>EXT4_FEATURE_RO_COMPAT_GDT_CSUM</td><td>Has group descriptors with checksums</td></tr>
 
-<tr><td>0x00000020</td><td>EXT4_FEATURE_RO_COMPAT_DIR_NLINK</td><td>The ext3 32000 subdirectory limit does not apply. A directory's number of links will be set to 1 if it is incremented past 64999.</td></tr>
+<tr><td>0x00000020</td><td>EXT4_FEATURE_RO_COMPAT_DIR_NLINK</td><td>The ext3 32000 subdirectory limit does not apply. A directory's number of links will be set to 1 if it is incremented past 64999</td></tr>
 
-<tr><td>0x00000040</td><td>EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE</td><td>Has large inodes. The size of an inode can be larger than 128 bytes.</td></tr>
+<tr><td>0x00000040</td><td>EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE</td><td>Has large inodes. The size of an inode can be larger than 128 bytes</td></tr>
 
 <tr><td>0x00000080</td><td>EXT4_FEATURE_RO_COMPAT_HAS_SNAPSHOT</td><td>Has snapshots, which is not yet implemented and intended for a future file system snapshot feature</td></tr>
 
-<tr><td>0x00000100</td><td>EXT4_FEATURE_RO_COMPAT_QUOTA</td><td>Quota is handled transactionally with the journal.</td></tr>
+<tr><td>0x00000100</td><td>EXT4_FEATURE_RO_COMPAT_QUOTA</td><td>Quota is handled transactionally with the journal</td></tr>
 
-<tr><td>0x00000200</td><td>EXT4_FEATURE_RO_COMPAT_BIGALLOC</td><td>Has big block allocation bitmaps. Block allocation bitmaps are tracked in units of clusters (of blocks) instead of blocks.</td></tr>
+<tr><td>0x00000200</td><td>EXT4_FEATURE_RO_COMPAT_BIGALLOC</td><td>Has big block allocation bitmaps. Block allocation bitmaps are tracked in units of clusters (of blocks) instead of blocks</td></tr>
 
-<tr><td>0x00000400</td><td>EXT4_FEATURE_RO_COMPAT_METADATA_CSUM</td><td>File system metadata has checksums.</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_RO_COMPAT_METADATA_CSUM</td><td>File system metadata has checksums</td></tr>
 
-<tr><td>0x00000800</td><td>EXT4_FEATURE_RO_COMPAT_REPLICA</td><td>Supports replicas.</td></tr>
+<tr><td>0x00000800</td><td>EXT4_FEATURE_RO_COMPAT_REPLICA</td><td>Supports replicas</td></tr>
 
-<tr><td>0x00001000</td><td>EXT4_FEATURE_RO_COMPAT_READONLY</td><td>Read-only file system image.</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_RO_COMPAT_READONLY</td><td>Read-only file system image</td></tr>
 
-<tr><td>0x00002000</td><td>EXT4_FEATURE_RO_COMPAT_PROJECT</td><td>File system tracks project quotas.</td></tr>
+<tr><td>0x00002000</td><td>EXT4_FEATURE_RO_COMPAT_PROJECT</td><td>File system tracks project quotas</td></tr>
 
-<tr><td>0x00004000</td><td>EXT4_FEATURE_RO_COMPAT_SHARED_BLOCKS</td><td>File system has (read-only) shared blocks.</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_RO_COMPAT_SHARED_BLOCKS</td><td>File system has (read-only) shared blocks</td></tr>
 
 <tr><td>0x00008000</td><td>EXT4_FEATURE_RO_COMPAT_VERITY</td><td>Unknown (Verity inodes may be present on the filesystem)</td></tr>
 
-<tr><td>0x00010000</td><td>EXT4_FEATURE_RO_COMPAT_ORPHAN_PRESENT</td><td>Orphan file may be non-empty.</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_RO_COMPAT_ORPHAN_PRESENT</td><td>Orphan file may be non-empty</td></tr>
 
 </table>
 </div>
 
-<blockquote>
-<p>Note that EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_,
-EXT4_FEATURE_RO_COMPAT_ and RO_COMPAT_ can be used interchangeably.</p>
-</blockquote>
+<p>EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_, EXT4_FEATURE_RO_COMPAT_ and
+RO_COMPAT_ are used interchangeably.</p>
 <blockquote>
 <p>Note that in some ext file systems used by ChromeOS it has been observed that
 the upper 8-bits of the read-only compatible feature flags are set as in
@@ -8124,6 +8201,7 @@ a value in the padding. It is currently assumed that this value contains
 </blockquote>
 <h3 id="the-ext4-group-descriptor"><a class="header" href="#the-ext4-group-descriptor">The ext4 group descriptor</a></h3>
 <p>The ext4 group descriptor is 68 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8178,6 +8256,7 @@ a value in the padding. It is currently assumed that this value contains
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as the lower 16-bits of
 0xffffffff - CRC-32C, otherwise the checksum is stored as a CRC-16.</p>
 <h3 id="checksum-calculation-1-1"><a class="header" href="#checksum-calculation-1-1">Checksum calculation</a></h3>
@@ -8248,9 +8327,9 @@ descriptors.</p>
 
 <tr><td>4</td><td>2</td><td></td><td>Maximum number of entries</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes.</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4</td></tr>
 
 </table>
 </div>
@@ -8274,13 +8353,11 @@ descriptors.</p>
 <p>If number of blocks &gt; 32768 the extent is considered “uninitialized” which is
 (as far as currently known) comparable to extent being sparse. The number of
 blocks of the sparse extent can be determined as following:</p>
-<pre><code>sparse_number_of_blocks = number_of_blocks - 32768
+<pre><code class="language-python">sparse_number_of_blocks = number_of_blocks - 32768
 </code></pre>
-<blockquote>
-<p>Note that sparse extents can exist between the extent descriptors. In such a
-case the logical block number will not align with the information from the
-previous extent descriptors.</p>
-</blockquote>
+<p>Sparse extents can exist between the extent descriptors. In such a case the
+logical block number will not align with the information from the previous
+extent descriptors.</p>
 <blockquote>
 <p>Note that the native Linux ext implementation expects the extents to be stored
 in order of logical block number.</p>
@@ -8312,13 +8389,12 @@ in order of logical block number.</p>
 </div>
 
 <h2 id="the-inode"><a class="header" href="#the-inode">The inode</a></h2>
+<p>The size of the inode is defined in the superblock when dynamic inode
+information is present.</p>
 <blockquote>
-<p>Note that the size of the inode is defined in the superblock when dynamic
-inode information is present.</p>
-</blockquote>
-<blockquote>
-<p>Note that an ext4 inode can be used on ext2 formatted file system. Seen in
-combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.</p>
+<p>Note that the ext4 inode format can be used on ext2 formatted file system.
+This was observed in combination with format revision 1 and inode size &gt; 128
+created by mkfs.ext2.</p>
 </blockquote>
 <h3 id="the-ext2-inode"><a class="header" href="#the-ext2-inode">The ext2 inode</a></h3>
 <p>The ext2 inode is 128 bytes in size and consists of:</p>
@@ -8384,12 +8460,11 @@ combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
 </blockquote>
-<blockquote>
-<p>Note that if the inode size is larger than 128 bytes, the additional data can
-be stored using an ext4 inode extension.</p>
-</blockquote>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored
+using an ext4 inode extension.</p>
 <h3 id="the-ext3-inode"><a class="header" href="#the-ext3-inode">The ext3 inode</a></h3>
 <p>The ext3 inode is 132 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8454,16 +8529,16 @@ be stored using an ext4 inode extension.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
 </blockquote>
-<blockquote>
-<p>Note that if the inode size is larger than 128 bytes, the additional data can
-be stored using an ext4 inode extension.</p>
-</blockquote>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored
+using an ext4 inode extension.</p>
 <h3 id="the-ext4-inode"><a class="header" href="#the-ext4-inode">The ext4 inode</a></h3>
 <p>The ext4 inode is 160 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8521,7 +8596,7 @@ be stored using an ext4 inode extension.</p>
 
 <tr><td colspan="4"><em>If EXT4_EXTENTS_FL is set</em></td></tr>
 
-<tr><td>40</td><td>12</td><td></td><td><a href="#xt4_extents_header">Extents header</a></td></tr>
+<tr><td>40</td><td>12</td><td></td><td><a href="#ext4_extents_header">Extents header</a></td></tr>
 
 <tr><td>52</td><td>4 x 12</td><td></td><td><a href="#ext4_extent_descriptor">extent descriptors</a> or <a href="#ext4_extent_index">extents indexes</a></td></tr>
 
@@ -8553,7 +8628,7 @@ be stored using an ext4 inode extension.</p>
 
 <tr><td colspan="4"><em>Extension (if inode size &gt; 128)</em></td></tr>
 
-<tr><td>128</td><td>2</td><td></td><td>Extended inode size</td></tr>
+<tr><td>128</td><td>2</td><td></td><td>Extended inode size, which can vary, values of 4, 28 and 32 have been observed</td></tr>
 
 <tr><td>130</td><td>2</td><td></td><td>Upper 16-bits of checksum</td></tr>
 
@@ -8574,13 +8649,11 @@ be stored using an ext4 inode extension.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
-</blockquote>
-<blockquote>
-<p>Note that extended inode size can vary, seen 4, 28 and 32.</p>
 </blockquote>
 <h4 id="checksum-calculation-2-1"><a class="header" href="#checksum-calculation-2-1">Checksum calculation</a></h4>
 <p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
@@ -8607,7 +8680,7 @@ checksum.</p>
 
 <p>The 34 bits extra precision timestamp (in number of seconds) can be calculated as
 following:</p>
-<pre><code>extra_precision_timestamp = ( extra_epoch_value x 0x100000000 ) + timestamp
+<pre><code class="language-python">extra_precision_timestamp = (extra_epoch_value * 0x100000000) + timestamp
 </code></pre>
 <h4 id="notes-5"><a class="header" href="#notes-5">Notes</a></h4>
 <p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification
@@ -8621,6 +8694,7 @@ referenced by multiple inodes) to verify that the EA inode is the correct
 one being accessed.</p>
 </blockquote>
 <h3 id="file_mode"><a class="header" href="#file_mode">File mode</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -8675,7 +8749,9 @@ one being accessed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode_flags"><a class="header" href="#inode_flags">Inode flags</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -8711,11 +8787,11 @@ one being accessed.</p>
 
 <tr><td colspan="3"><em>Common</em></td></tr>
 
-<tr><td>0x00001000</td><td>EXT2_BTREE_FL, EXT2_INDEX_FL, EXT3_INDEX_FL, EXT4_INDEX_FL, EXT4_INODE_INDEX</td><td>Hash-indexed directory (previously referred to as B-tree format).</td></tr>
+<tr><td>0x00001000</td><td>EXT2_BTREE_FL, EXT2_INDEX_FL, EXT3_INDEX_FL, EXT4_INDEX_FL, EXT4_INODE_INDEX</td><td>Hash-indexed directory (previously referred to as B-tree format)</td></tr>
 
 <tr><td>0x00002000</td><td>EXT2_IMAGIC_FL, EXT3_IMAGIC_FL, EXT4_IMAGIC_FL, EXT4_INODE_IMAGIC</td><td>AFS directory</td></tr>
 
-<tr><td>0x00004000</td><td>EXT2_JOURNAL_DATA_FL, EXT3_JOURNAL_DATA_FL, EXT4_JOURNAL_DATA_FL, EXT4_INODE_JOURNAL_DATA</td><td>File data must be written using the journal.</td></tr>
+<tr><td>0x00004000</td><td>EXT2_JOURNAL_DATA_FL, EXT3_JOURNAL_DATA_FL, EXT4_JOURNAL_DATA_FL, EXT4_INODE_JOURNAL_DATA</td><td>File data must be written using the journal</td></tr>
 
 <tr><td>0x00008000</td><td>EXT2_NOTAIL_FL, EXT3_NOTAIL_FL, EXT4_NOTAIL_FL, EXT4_INODE_NOTAIL</td><td>File tail should not be merged, which is not used by ext4</td></tr>
 
@@ -8756,6 +8832,7 @@ one being accessed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="reserved-inode-numbers"><a class="header" href="#reserved-inode-numbers">Reserved inode numbers</a></h3>
 <div class="table-wrapper">
 <table>
@@ -8811,7 +8888,7 @@ directory entries can be stored in multiple ways:</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td>Inode number</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>Directory entry size, which must be a multitude of 4.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Directory entry size, which must be a multitude of 4</td></tr>
 
 <tr><td>6</td><td>1</td><td></td><td>Name size, which contains the size of the name without the end-of-string character and has a maximum of 255</td></tr>
 
@@ -8900,7 +8977,7 @@ with the <a href="#directory_entry">linear directory entry</a>.</p>
 
 <h4 id="dx_entry"><a class="header" href="#dx_entry">dx_entry</a></h4>
 <p>TODO: complete section</p>
-<pre><code>struct dx_entry
+<pre><code class="language-text">struct dx_entry
 {
         __le32 hash;
         __le32 block;
@@ -8997,7 +9074,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 
 <tr><td>12</td><td>4</td><td></td><td>Unknown (Attribute hash)</td></tr>
 
-<tr><td>16</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+<tr><td>16</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character and can be empty, for example in combination with a prefix or with an encrypted file</td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>32-bit alignment padding</td></tr>
 
@@ -9008,11 +9085,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 and is used as a terminator.</p>
 <blockquote>
 <p>Note that some implementations of older Android versions of ext appear to
-only set the first 4 bytes to 0.</p>
-</blockquote>
-<blockquote>
-<p>Note that the name can be empty, for example in combination with a prefix or
-with an encrypted file.</p>
+only set the first 4 bytes to 0 for the terminator.</p>
 </blockquote>
 <h3 id="the-extended-attribute-name-index"><a class="header" href="#the-extended-attribute-name-index">The extended attribute name index</a></h3>
 <p>The name index indicates the prefix of the extended attribute name.</p>
@@ -9094,7 +9167,7 @@ of the <a href="#file-allocation-table-fat-file-system-format">File Allocation T
 
 <tr><td>3</td><td>8</td><td>"EXFAT\x20\x20\x20"</td><td>File system signature (or OEM name)</td></tr>
 
-<tr><td>11</td><td>53</td><td>0</td><td>Unknown (reserved), which must be 0.</td></tr>
+<tr><td>11</td><td>53</td><td>0</td><td>Unknown (reserved), which must be 0</td></tr>
 
 <tr><td>64</td><td>8</td><td></td><td>Partition offset</td></tr>
 
@@ -9118,9 +9191,9 @@ of the <a href="#file-allocation-table-fat-file-system-format">File Allocation T
 
 <tr><td>106</td><td>2</td><td></td><td>Volume flags</td></tr>
 
-<tr><td>108</td><td>1</td><td></td><td>Bytes per sector, which is stored as <code>2^n</code>, for example 9 is <code>2^9 = 512</code>. The bytes per sector value must be 512, 1024, 2048 or 4096.</td></tr>
+<tr><td>108</td><td>1</td><td></td><td>Bytes per sector, which is stored as 2^n, for example 9 is 2^9 = 512. The bytes per sector value must be 512, 1024, 2048 or 4096</td></tr>
 
-<tr><td>109</td><td>1</td><td></td><td>Sectors per cluster block, which is stored as <code>2^n</code>, for example 3 is <code>2^3 = 8</code>. The sectors per cluster block must be 1 upto 32M (<code>2^25</code>).</td></tr>
+<tr><td>109</td><td>1</td><td></td><td>Sectors per cluster block, which is stored as 2^n, for example 3 is 2^3 = 8. The sectors per cluster block must be 1 upto 32M (2^25)</td></tr>
 
 <tr><td>110</td><td>1</td><td></td><td>Number of cluster block allocation tables</td></tr>
 
@@ -9240,6 +9313,7 @@ of the <a href="#file-allocation-table-fat-file-system-format">File Allocation T
 </div>
 
 <h5 id="directory-entry-type-codes"><a class="header" href="#directory-entry-type-codes">Directory entry type codes</a></h5>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -9282,6 +9356,7 @@ of the <a href="#file-allocation-table-fat-file-system-format">File Allocation T
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="allocation-bitmap-directory-entry"><a class="header" href="#allocation-bitmap-directory-entry">Allocation bitmap directory entry</a></h5>
 <div class="table-wrapper">
 <table>
@@ -9502,7 +9577,7 @@ data.</p>
 
 <tr><td>Date and time values</td><td>FAT date and time</td></tr>
 
-<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string.</td></tr>
+<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string</td></tr>
 
 </table>
 </div>
@@ -9511,7 +9586,7 @@ data.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
-<tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table.</td></tr>
+<tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table</td></tr>
 
 </table>
 </div>
@@ -9519,9 +9594,10 @@ data.</p>
 <h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
 <p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters
 in the data area:</p>
-<pre><code>data area size = total number of sectors - ( number of reserved sectors s tables + size of root directory )
+<pre><code class="language-python">data_area_size = total_number_of_sectors - (number_of_reserved_sectors + (
+    number_of_allocation_tables * allocation_table_size) + size_of_root_directory)
 </code></pre>
-<pre><code>number of clusters = round down ( data area size / sectors per cluster )
+<pre><code class="language-python">number_of_clusters = round down (data_area_size / sectors_per_cluster)
 </code></pre>
 <ul>
 <li>FAT-12 is used if the number of clusters is less than 4085</li>
@@ -9532,6 +9608,7 @@ in the data area:</p>
 <p>The boot record is stored in the first sector of the volume.</p>
 <h3 id="fat-12-and-fat-16-boot-record"><a class="header" href="#fat-12-and-fat-16-boot-record">FAT-12 and FAT-16 boot record</a></h3>
 <p>The FAT-12 and FAT-16 boot record is at least 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9543,9 +9620,9 @@ in the data area:</p>
 
 <tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32)</td></tr>
 
-<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2)</td></tr>
 
 <tr><td>17</td><td>2</td><td></td><td>Number of root directory entries</td></tr>
 
@@ -9571,11 +9648,11 @@ in the data area:</p>
 
 <tr><td colspan="4"><em>If extended boot signature == 0x29</em></td></tr>
 
-<tr><td>39</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>39</td><td>4</td><td></td><td>Volume serial number, which can be derived from the system current date and time</td></tr>
 
 <tr><td>43</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
 
-<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint, which is informational and not required</td></tr>
 
 <tr><td colspan="4"><em>If extended boot signature != 0x29</em></td></tr>
 
@@ -9590,20 +9667,14 @@ in the data area:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the sector signature must be set at offset 512 but can, in
-addition, it can be set in the last 2 bytes of the sector.</p>
-</blockquote>
-<blockquote>
-<p>Note that the volume serial number can be derived from the system current
-date and time.</p>
-</blockquote>
-<blockquote>
-<p>Note that the file system hint value is purely informational and not enforced
-by the format.</p>
+<p>Note that the sector signature must be set at offset 512 but in addition can
+be set in the last 2 bytes of the sector.</p>
 </blockquote>
 <h3 id="fat-32-boot-record"><a class="header" href="#fat-32-boot-record">FAT-32 boot record</a></h3>
 <p>The FAT-32 boot record is at least 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9615,9 +9686,9 @@ by the format.</p>
 
 <tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32)</td></tr>
 
-<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2)</td></tr>
 
 <tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which must be 0 for FAT-32</td></tr>
 
@@ -9659,11 +9730,11 @@ by the format.</p>
 
 <tr><td colspan="4"><em>If extended boot signature == 0x29</em></td></tr>
 
-<tr><td>67</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>67</td><td>4</td><td></td><td>Volume serial number, which can be derived from the system current date and time</td></tr>
 
 <tr><td>71</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
 
-<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint, which is informational and not required</td></tr>
 
 <tr><td colspan="4"><em>If extended boot signature != 0x29</em></td></tr>
 
@@ -9678,17 +9749,10 @@ by the format.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the sector signature must be set at offset 512 but can, in
-addition, it can be set in the last 2 bytes of the sector.</p>
-</blockquote>
-<blockquote>
-<p>Note that the volume serial number can be derived from the system current
-date and time.</p>
-</blockquote>
-<blockquote>
-<p>Note that the file system hint value is purely informational and not enforced
-by the format.</p>
+<p>Note that the sector signature must be set at offset 512 but in addition can
+be set in the last 2 bytes of the sector.</p>
 </blockquote>
 <h3 id="oem-names"><a class="header" href="#oem-names">OEM names</a></h3>
 <div class="table-wrapper">
@@ -9707,7 +9771,7 @@ by the format.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0xe5</td><td></td><td></td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xed</td><td></td><td></td></tr>
 
@@ -9717,13 +9781,13 @@ by the format.</p>
 
 <tr><td>0xf0</td><td></td><td>removable media</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xf4</td><td></td><td></td></tr>
 
 <tr><td>0xf5</td><td></td><td></td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xf8</td><td></td><td>fixed (non-removable) media</td></tr>
 
@@ -9854,17 +9918,20 @@ of:</p>
 </ul>
 <h3 id="directory-entry-1"><a class="header" href="#directory-entry-1">Directory entry</a></h3>
 <h3 id="determining-the-root-directory-location"><a class="header" href="#determining-the-root-directory-location">Determining the root directory location</a></h3>
-<pre><code>first allocation table offset = number of reserved sectors * bytes per sector
+<pre><code class="language-python">first_allocation_table_offset = number_of_reserved_sectors * bytes_per_sector
 </code></pre>
 <h4 id="fat-12-and-fat-16-root-directory"><a class="header" href="#fat-12-and-fat-16-root-directory">FAT-12 and FAT-16 root directory</a></h4>
-<pre><code>root directory start offset = first allocation table offset + ( number of allocation tables * allocation table size * bytes per sector )
+<pre><code class="language-python">root_directory_start_offset = first_allocation_table_offset + (
+    number_of_allocation_tables * allocation_table_size * bytes_per_sector)
 </code></pre>
-<pre><code>first cluster offset = directory start sector + ( number of root directory entries * 32 )
+<pre><code class="language-python">first_cluster_offset = directory_start_sector + (number_of_root_directory_entries * 32)
 </code></pre>
 <h4 id="fat-32-root-directory"><a class="header" href="#fat-32-root-directory">FAT-32 root directory</a></h4>
-<pre><code>first cluster offset = first allocation table sector + ( number of allocation tables * allocation table size * bytes per sector )
+<pre><code class="language-python">first_cluster_offset = first_allocation_table_sector + (
+    number_of_allocation_tables * allocation_table_size * bytes_per_sector)
 </code></pre>
-<pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
+<pre><code class="language-python">root_directory_start_offset = first_cluster_sector + (
+    (root_directory_cluster - 2) * number_of_sectors_per_cluster)
 </code></pre>
 <h4 id="fat-12-and-fat-16-directory-entry"><a class="header" href="#fat-12-and-fat-16-directory-entry">FAT-12 and FAT-16 directory entry</a></h4>
 <p>A FAT-12 and FAT-16 directory entry is 32 bytes in size and consists of:</p>
@@ -9945,9 +10012,9 @@ of:</p>
 
 <tr><td>'0-9'</td><td>Numeric character</td></tr>
 
-<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored.</td></tr>
+<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored</td></tr>
 
-<tr><td>'.'</td><td>Dot, with the exception of "." and  "..", where trailing dot characters are ignored.</td></tr>
+<tr><td>'.'</td><td>Dot, with the exception of "." and  "..", where trailing dot characters are ignored</td></tr>
 
 <tr><td>'!'</td><td>Exclamation mark</td></tr>
 
@@ -9981,7 +10048,7 @@ of:</p>
 
 <tr><td>'~'</td><td>Tilde</td></tr>
 
-<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent.</td></tr>
+<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent</td></tr>
 
 </table>
 </div>
@@ -10038,7 +10105,7 @@ short file names.</p>
 
 <tr><td>0x02</td><td>Data contains large EFS header</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td></tr>
 
 <tr><td>0x08</td><td>Name should be represented in lower case</td></tr>
 
@@ -10152,10 +10219,8 @@ Another common versioning schema uses the Windows version, e.g. NTFS 5.0 is the
 version of NTFS used on Windows XP which is version 3.1 in schema mentioned
 above.</p>
 </blockquote>
-<blockquote>
-<p>Note Windows does not necessarily uses the latest version, e.g. Windows 10
-(1809) has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
-</blockquote>
+<p>Windows does not necessarily uses the latest format version, e.g. Windows 10 (1809)
+has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
 <h3 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h3>
 <h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
 <p>NTFS refers to it file system blocks as clusters. Note that these are not the
@@ -10179,6 +10244,7 @@ will this document.</p>
 directories. The MFT entries reference the different volume and file system
 metadata. There are several predefined metadata files.</p>
 <p>The following metadata files are predefined and use a fixed MFT entry number.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>MFT entry number</th><th>File name</th><th>Description</th></thead>
@@ -10251,6 +10317,7 @@ metadata. There are several predefined metadata files.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The following metadata files are predefined, however the MFT entry number is
 commonly used but not fixed.</p>
 <div class="table-wrapper">
@@ -10269,6 +10336,7 @@ file) and contains:</p>
 <li>the BIOS parameter block</li>
 <li>the boot loader</li>
 </ul>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10328,7 +10396,7 @@ file) and contains:</p>
 
 <tr><td>80</td><td>4</td><td>0</td><td>Checksum, which is not used by NTFS</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>84</td><td>426</td><td></td><td>Boot code</td></tr>
 
@@ -10337,10 +10405,11 @@ file) and contains:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="boot-entry-point"><a class="header" href="#boot-entry-point">Boot entry point</a></h3>
 <p>The boot entry point often contains a jump instruction to the boot code at
 offset 84 followed by a no-operation, e.g.</p>
-<pre><code>eb52   jmp 0x52
+<pre><code class="language-text">eb52   jmp 0x52
 90     nop
 </code></pre>
 <h3 id="number-of-sectors-per-cluster-block"><a class="header" href="#number-of-sectors-per-cluster-block">Number of sectors per cluster block</a></h3>
@@ -10353,7 +10422,7 @@ following:</p>
 </ul>
 <h3 id="cluster-block-size"><a class="header" href="#cluster-block-size">Cluster block size</a></h3>
 <p>The cluster block size can be determined as following:</p>
-<pre><code>cluster block size = bytes per sector x sectors per cluster block
+<pre><code class="language-python">cluster block size = bytes per sector x sectors per cluster block
 </code></pre>
 <p>Different NTFS implementations support different cluster block sizes. Known
 supported cluster block size:</p>
@@ -10398,16 +10467,16 @@ block size of 128k the partition must 128 KiB aligned. The default partition
 partition alignment appears to be 64 KiB.</p>
 </blockquote>
 <p>mkntfs restricts the cluster size to:</p>
-<pre><code>bytes per sector &gt;= cluster size &gt; 4096 x bytes per sector
+<pre><code class="language-python">bytes_per_sector &gt;= cluster_block_size &gt; 4096 * bytes_per_sector
 </code></pre>
 <h3 id="master-file-table-mft-offset"><a class="header" href="#master-file-table-mft-offset">Master File Table (MFT) offset</a></h3>
 <p>The Master File Table (MFT) offset can be determined as following:</p>
-<pre><code>MFT offset = boot record offset + ( MFT cluster block number x Cluster block size )
+<pre><code class="language-python">mft_offset = boot_record_offset + (mft_cluster_block_number * cluster_block_size)
 </code></pre>
 <p>The lower 32-bit part of the NTFS volume serial number is the Windows API
 (WINAPI) volume serial number. This can be determined by comparing the output
 of:</p>
-<pre><code>fsutil fsinfo volumeinfo C:
+<pre><code class="language-text">fsutil fsinfo volumeinfo C:
 fsutil fsinfo ntfsinfo C:
 </code></pre>
 <p>Often the total number of sectors in the boot record will be smaller than the
@@ -10421,7 +10490,7 @@ sectors.</p>
 following:</p>
 <ul>
 <li>Values 0 to 127 represent sizes of 0 to 127 cluster blocks.</li>
-<li>Values 128 to 255 represent sizes of <code>2^(256-n)</code> bytes; or <code>2^(-n)</code> if considered as a signed byte.</li>
+<li>Values 128 to 255 represent sizes of 2^(256-n) bytes or 2^(-n) if considered as a signed byte.</li>
 <li>Other values are not considered valid.</li>
 </ul>
 <h3 id="bitlocker-drive-encryption-bde"><a class="header" href="#bitlocker-drive-encryption-bde">BitLocker Drive Encryption (BDE)</a></h3>
@@ -10429,10 +10498,10 @@ following:</p>
 Where FVE is an abbreviation of Full Volume Encryption.</p>
 <p>The data structures of BDE on Windows Vista and 7 differ.</p>
 <p>A Windows Vista BDE volume starts with:</p>
-<pre><code>eb 52 90 2d 46 56 45 26 46 53 2d
+<pre><code class="language-text">eb 52 90 2d 46 56 45 26 46 53 2d
 </code></pre>
 <p>A Windows 7 BDE volume starts with:</p>
-<pre><code>eb 58 90 2d 46 56 45 26 46 53 2d
+<pre><code class="language-text">eb 58 90 2d 46 56 45 26 46 53 2d
 </code></pre>
 <p>BDE is largely a stand-alone but has some integration with NTFS.</p>
 <p>TODO: link to BDE format documentation</p>
@@ -10492,6 +10561,7 @@ Windows XP for MFT entry numbers 16 - 23.</p>
 <h4 id="mft-entry-header"><a class="header" href="#mft-entry-header">MFT entry header</a></h4>
 <p>The MFT entry header (FILE_RECORD_SEGMENT_HEADER) is 42 or 48 bytes in size
 and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10499,11 +10569,11 @@ and consists of:</p>
 
 <tr><td>0</td><td>4</td><td>"BAAD", "FILE"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the MFT entry.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the MFT entry</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Metadata transaction journal sequence number, which contains a $LogFile Sequence Number (LSN)</td></tr>
 
@@ -10538,6 +10608,7 @@ and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="baad-signature"><a class="header" href="#baad-signature">“BAAD” signature</a></h5>
 <p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if
 during chkdsk, when a multi-sector item is found where the multi-sector header
@@ -10639,7 +10710,7 @@ consists of:</p>
 
 <tr><td>12</td><td>2</td><td></td><td><a href="#mft_attribute_data_flags">Attribute data flags</a></td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data</td></tr>
 
 </table>
 </div>
@@ -10687,6 +10758,7 @@ set (0). The resident data is 8 bytes in size and consists of:</p>
 <h4 id="non-resident-mft-attribute"><a class="header" href="#non-resident-mft-attribute">Non-resident MFT attribute</a></h4>
 <p>The non-resident MFT attribute data is present when the non-resident flag is
 set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10696,32 +10768,30 @@ set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
 
 <tr><td>16</td><td>2</td><td></td><td>Data runs offset (or mappings pairs offset), which contains an offset relative from the start of the MFT attribute</td></tr>
 
-<tr><td>18</td><td>2</td><td></td><td>Compression unit size, which contains the compression unit size as <code>2^(n)</code> number of cluster blocks.</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Compression unit size, which contains the compression unit size as <code>2^(n)</code> number of cluster blocks</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Unknown (Padding)</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Allocated data size (or allocated length), which contains the allocated data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Allocated data size (or allocated length), which contains the allocated data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
-<tr><td>32</td><td>8</td><td></td><td>Data size (or file size), which contains the data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Data size (or file size), which contains the data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
-<tr><td>40</td><td>8</td><td></td><td>Valid data size (or valid data length), which contains the valid data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Valid data size (or valid data length), which contains the valid data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
 <tr><td colspan="4"><em>If compression unit size &gt; 0</em></td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Compressed data size.</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Compressed data size</td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
+<p>The total size of the data runs should be larger or equal to the data size.</p>
 <blockquote>
-<p>Note that the total size of the data runs should be larger or equal to the
-data size.</p>
-</blockquote>
-<blockquote>
-<p>Note that Windows will fill data ranges beyond the valid data size with 0-byte
-values. The data size remains unchanged. This applies to compressed and
-uncompressed data. If the first VCN is zero a valid data size of 0 represents
-a file entirely filled with 0-byte values.</p>
+<p>Note that Windows will fill data beyond the valid data size with 0-byte values.
+The data size remains unchanged. This applies to compressed and uncompressed
+data. If the first VCN is zero a valid data size of 0 represents a file
+entirely filled with 0-byte values.</p>
 </blockquote>
 <p>TODO: determine the meaning of a VCN of -1</p>
 <p>For more information about compressed MFT attributes see <a href="#compression">compression</a>.</p>
@@ -10785,23 +10855,19 @@ value size of 0, without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 <h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
 <p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed
 or not.</p>
-<blockquote>
-<p>Note that Windows supports compressed data runs for NTFS file systems with a
-cluster block size of 4096 bytes or less.</p>
-</blockquote>
-<blockquote>
-<p>Note that Windows 10 supports Windows Overlay Filter (WOF) compressed data,
-which stores the LZXPRESS Huffman or LZX compressed data in alternate data
-stream named WofCompressedData and links it to the default data stream using
-a reparse point.</p>
-</blockquote>
+<p>Windows supports compressed data runs for NTFS file systems with a cluster block
+size of 4096 bytes or less.</p>
+<p>Windows 10 supports Windows Overlay Filter (WOF) compressed data, which stores
+the LZXPRESS Huffman or LZX compressed data in alternate data stream named
+WofCompressedData and links it to the default data stream using a reparse point.</p>
 <p>The data is stored in compression unit blocks. A compression unit typically
 consists of 16 cluster blocks. However the actual value is stored in the
 non-resident MFT attribute.</p>
 <p>Also see <a href="#compression">compression</a>.</p>
 <h2 id="the-attributes"><a class="header" href="#the-attributes">The attributes</a></h2>
 <h3 id="attribute_types"><a class="header" href="#attribute_types-1">Known attribute types</a></h3>
-<p>The attribute types are stored in the <a href="#attribute_definitions">$AttrDef metadata file</a>.</p>
+<p>The attribute types are stored in the <a href="#attribute_types-1">$AttrDef metadata file</a>.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -10872,6 +10938,7 @@ non-resident MFT attribute.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="attribute_chains"><a class="header" href="#attribute_chains">Attribute chains</a></h3>
 <p>Multiple attributes can be chained to make up a single attribute data stream,
 e.g. the attributes:</p>
@@ -10888,6 +10955,7 @@ in-order.</p>
 file entry metadata. It is stored as a resident MFT attribute.</p>
 <p>The standard information data (STANDARD_INFORMATION) is either 48 or 72 bytes
 in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10920,6 +10988,7 @@ in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that MFT entries have been observed without a $STANDARD_INFORMATION
 attribute, but with other attributes such as $FILE_NAME and an $I30 index.</p>
@@ -10958,7 +11027,7 @@ consists of:</p>
 
 <tr><td>16</td><td>8</td><td></td><td><a href="#file_reference">File reference</a> (or segment reference), which contains a reference to the MFT entry that contains (part of) the attribute data</td></tr>
 
-<tr><td>24</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data</td></tr>
 
 <tr><td>26</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
 
@@ -10972,6 +11041,7 @@ consists of:</p>
 like the parent file entry, various date and time values and name. It is stored
 as a resident MFT attribute.</p>
 <p>The file name data (FILE_NAME) is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11010,7 +11080,9 @@ as a resident MFT attribute.</p>
 </table>
 </div>
 
-<p>TODO: determine if the allocated file size and file size values contain accurate values when the file name data is stored in a MFT attribute.</p>
+<!-- rumdl-enable MD033 MD056 -->
+<p>TODO: determine if the allocated file size and file size values contain accurate
+values when the file name data is stored in a MFT attribute.</p>
 <p>An MFT attribute can contain multiple file name attributes, e.g. for a separate
 (long) name and short name.</p>
 <p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp;
@@ -11022,13 +11094,13 @@ attributes with the parent file reference of each hard link.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows.</td></tr>
+<tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows</td></tr>
 
-<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space).</td></tr>
+<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space)</td></tr>
 
-<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format.</td></tr>
+<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format</td></tr>
 
-<tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well.</td></tr>
+<tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well</td></tr>
 
 </table>
 </div>
@@ -11052,11 +11124,18 @@ the long name:</p>
 <li><code>[</code> or <code>]</code> are replaced by an underscore (<code>_</code>)</li>
 </ul>
 <p>Make the name unique:</p>
+<!-- rumdl-disable MD013 -->
 <ol>
-<li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its first 3 letters, e.g. “Program Files” becomes “PROGRA~1” or “ ~PLAYMOVIE.REG“ becomes “~PLAYM~1.REG”</li>
-<li>if the name already exists try ~2 up to ~9, e.g. “Program Data”, in the same directory as “Program Files”, becomes “PROGRA~2”</li>
-<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g. “x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4” in a directory with a lot of file names starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
+<li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its
+first 3 letters, e.g. “Program Files” becomes “PROGRA~1” or “ ~PLAYMOVIE.REG“ becomes
+“~PLAYM~1.REG”</li>
+<li>if the name already exists try ~2 up to ~9, e.g. “Program Data”, in the same directory as
+“Program Files”, becomes “PROGRA~2”</li>
+<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g.
+“x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4”
+in a directory with a lot of file names starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
 </ol>
+<!-- rumdl-enable MD013 -->
 <p>TODO: determine if the behavior is dependent on a setting that can be changed with fsutil</p>
 <h3 id="the-volume-version-attribute"><a class="header" href="#the-volume-version-attribute">The volume version attribute</a></h3>
 <p>The volume version attribute ($VOLUME_VERSION) contains volume version.</p>
@@ -11274,7 +11353,7 @@ $AttrDef does not seem to always define this attribute.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>128</td><td></td><td>Attribute which contains an UCS-2 little-endian string with end-of-string character. Unused bytes are filled with 0-byte values.</td></tr>
+<tr><td>0</td><td>128</td><td></td><td>Attribute which contains an UCS-2 little-endian string with end-of-string character. Unused bytes are filled with 0-byte values</td></tr>
 
 <tr><td>128</td><td>4</td><td></td><td><a href="#attribute_types-1">Attribute type</a> (or type code)</td></tr>
 
@@ -11405,7 +11484,7 @@ value in the index root header.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>"INDX"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values offset, which contains an offset relative from the start of the index entry header.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values offset, which contains an offset relative from the start of the index entry header</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values</td></tr>
 
@@ -11450,6 +11529,7 @@ size of the fix-up values and the alignment padding following it.</p>
 
 <h3 id="the-index-value"><a class="header" href="#the-index-value">The index value</a></h3>
 <p>The index value is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11474,6 +11554,7 @@ size of the fix-up values and the alignment padding following it.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The index values are stored 8 byte aligned.</p>
 <blockquote>
 <p>Note that some other sources define the index value flags as a 16-bit value
@@ -11527,7 +11608,7 @@ maximum uncompressed data size is always the cluster size (in most case
 data flags is stored uncompressed.</p>
 </blockquote>
 <p>The data runs in the $DATA attribute define cluster block ranges, e.g.</p>
-<pre><code>21 02 35 52
+<pre><code class="language-text">21 02 35 52
 </code></pre>
 <p>This data run defines 2 data blocks starting at block number 21045 followed by
 14 sparse blocks. The total number of blocks in the compression unit is 16.
@@ -11535,7 +11616,7 @@ Compressed data is stored in the first 2 blocks and the 14 sparse blocks are
 only there to make sure the data runs add up to the compression unit size. They
 do not define actual sparse data.</p>
 <p>Another example:</p>
-<pre><code>21 40 37 52
+<pre><code class="language-text">21 40 37 52
 </code></pre>
 <p>This data run defines 64 data blocks starting at block number 21047. Since
 this data run is larger than the compression unit size the data is stored
@@ -11587,6 +11668,7 @@ following attributes:</p>
 <li>a nameless data attribute that is sparse and contains the uncompressed data size</li>
 <li>a data attribute named WofCompressedData that contains LZXPRESS Huffman or LZX compressed data</li>
 </ul>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11601,12 +11683,13 @@ following attributes:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that if the chunk size equals the size of the uncompressed data the chunk
 is stored (as-is) uncompressed.</p>
 </blockquote>
 <p>The size of the chunk offset table is:</p>
-<pre><code>number of chunk offsets = uncompressed size / compression unit size
+<pre><code class="language-python">number of chunk offsets = uncompressed size / compression unit size
 </code></pre>
 <p>The offset of the first compressed data chunk is at the end of the chunk offset
 table and is not stored in the chunk offset table.</p>
@@ -11651,7 +11734,7 @@ stored in the reparse point attribute. The reparse point data
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x1</td><td></td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>0x2</td><td></td><td>Is alias (Name surrogate bit), when this bit is set, the file or directory represents another named entity in the system.</td></tr>
+<tr><td>0x2</td><td></td><td>Is alias (Name surrogate bit), when this bit is set, the file or directory represents another named entity in the system</td></tr>
 
 <tr><td>0x4</td><td></td><td>Is high-latency media (Reserved)</td></tr>
 
@@ -11847,6 +11930,7 @@ stored in the reparse point attribute. The reparse point data
 <p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains
 junction or mount point reparse data. The junction or mount point reparse data
 is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11867,12 +11951,13 @@ is of variable size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that it is currently unclear if the names contain an end-of-string
 character or if they are followed by alignment padding.</p>
 </blockquote>
 <p>TODO: determine what character values like 0x0002 represent in the substitute name</p>
-<pre><code>00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
+<pre><code class="language-text">00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
 00000020: 73 00 65 00 72 00 73 00  5c 00 74 00 65 00 73 00   s.e.r.s. \.t.e.s.
 00000030: 74 00 5c 00 44 00 6f 00  63 00 75 00 6d 00 65 00   t.\.D.o. c.u.m.e.
 00000040: 6e 00 74 00 73 00 00 00                            n.t.s...
@@ -11881,6 +11966,7 @@ character or if they are followed by alignment padding.</p>
 <p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic
 link reparse data. The symbolic link reparse data is of variable size and
 consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11903,11 +11989,12 @@ consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="symbolic-link-flags"><a class="header" href="#symbolic-link-flags">Symbolic link flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>SYMLINK_FLAG_RELATIVE</td><td>The substitute name is a path name relative to the directory containing the symbolic link.</td></tr>
+<tr><td>0x00000001</td><td>SYMLINK_FLAG_RELATIVE</td><td>The substitute name is a path name relative to the directory containing the symbolic link</td></tr>
 
 </table>
 </div>
@@ -11916,6 +12003,7 @@ consists of:</p>
 <p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows
 Overlay Filter (WOF) reparse data. The Windows Overlay Filter (WOF) reparse
 data is 16 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11934,6 +12022,7 @@ data is 16 bytes in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="wof_compression_method"><a class="header" href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a></h3>
 <div class="table-wrapper">
 <table>
@@ -11991,6 +12080,7 @@ block, where the LSB is the first bit in a byte.</p>
 
 <h3 id="security-descriptor-hash-sdh-index"><a class="header" href="#security-descriptor-hash-sdh-index">Security descriptor hash ($SDH) index</a></h3>
 <h4 id="security_descriptor_hash_index_value"><a class="header" href="#security_descriptor_hash_index_value">The security descriptor hash index value</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -12015,8 +12105,10 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="security-descriptor-identifier-sii-index"><a class="header" href="#security-descriptor-identifier-sii-index">Security descriptor identifier ($SII) index</a></h3>
 <h4 id="security_descriptor_identifier_index_value"><a class="header" href="#security_descriptor_identifier_index_value">The security descriptor identifier index value</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -12037,6 +12129,7 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: describe the hash algorithm</p>
 <h3 id="security-descriptor-sds-data-stream"><a class="header" href="#security-descriptor-sds-data-stream">Security descriptor ($SDS) data stream</a></h3>
 <div class="table-wrapper">
@@ -12060,6 +12153,7 @@ block, where the LSB is the first bit in a byte.</p>
 <p>TODO: link to security descriptor format documentation</p>
 <h2 id="the-object-identifiers"><a class="header" href="#the-object-identifiers">The object identifiers</a></h2>
 <h3 id="objido"><a class="header" href="#objido">$ObjID:$O</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -12080,6 +12174,7 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h2 id="log_file"><a class="header" href="#log_file">Metadata transaction journal (log file)</a></h2>
 <p>TODO: complete section</p>
 <p>The metadata file $LogFile contains the metadata transaction journal and
@@ -12091,6 +12186,7 @@ consists of:</p>
 <h3 id="log-file-service-restart-page-header"><a class="header" href="#log-file-service-restart-page-header">Log File service restart page header</a></h3>
 <p>The Log File service restart page header (LFS_RESTART_PAGE_HEADER) is 30 bytes
 in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -12098,11 +12194,11 @@ in size and consists of:</p>
 
 <tr><td>0</td><td>4</td><td>"CHKD", "RCRD", "RSTR"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the restart page header.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the restart page header</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Checkdisk last LSN</td></tr>
 
@@ -12119,6 +12215,7 @@ in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="log-file-service-restart-page-versions"><a class="header" href="#log-file-service-restart-page-versions">Log File service restart page versions</a></h4>
 <div class="table-wrapper">
 <table>
@@ -12141,7 +12238,8 @@ Windows (Desktop) Search service.</p>
 <p>The USN change journal consists of:</p>
 <ul>
 <li>the $UsnJrnl:$Max data stream, containing metadata like the maximum size of the journal</li>
-<li>the $UsnJrnl:$J data stream, containing the update (or change) entries. The $UsnJrnl:$J data stream is sparse.</li>
+<li>the $UsnJrnl:$J data stream, containing the update (or change) entries. The $UsnJrnl:$J data
+stream is sparse.</li>
 </ul>
 <h3 id="usn-change-journal-metadata"><a class="header" href="#usn-change-journal-metadata">USN change journal metadata</a></h3>
 <p>The USN change journal metadata is 32 bytes in size and consists of:</p>
@@ -12209,11 +12307,11 @@ of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>USN_REASON_DATA_OVERWRITE</td><td>The data in the file or directory is overwritten.</td></tr>
+<tr><td>0x00000001</td><td>USN_REASON_DATA_OVERWRITE</td><td>The data in the file or directory is overwritten</td></tr>
 
-<tr><td>0x00000002</td><td>USN_REASON_DATA_EXTEND</td><td>The file or directory is extended.</td></tr>
+<tr><td>0x00000002</td><td>USN_REASON_DATA_EXTEND</td><td>The file or directory is extended</td></tr>
 
-<tr><td>0x00000004</td><td>USN_REASON_DATA_TRUNCATION</td><td>The file or directory is truncated.</td></tr>
+<tr><td>0x00000004</td><td>USN_REASON_DATA_TRUNCATION</td><td>The file or directory is truncated</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
@@ -12239,7 +12337,7 @@ of:</p>
 
 <tr><td>0x00004000</td><td>USN_REASON_INDEXABLE_CHANGE</td><td>Content indexed status changed. The file attribute FILE_ATTRIBUTE_NOT_CONTENT_INDEXED was changed</td></tr>
 
-<tr><td>0x00008000</td><td>USN_REASON_BASIC_INFO_CHANGE</td><td>Basic file or directory attributes changed. One or more file or directory attributes were changed e.g. read-only, hidden, system, archive, or sparse attribute, or one or more time stamps.</td></tr>
+<tr><td>0x00008000</td><td>USN_REASON_BASIC_INFO_CHANGE</td><td>Basic file or directory attributes changed. One or more file or directory attributes were changed e.g. read-only, hidden, system, archive, or sparse attribute, or one or more time stamps</td></tr>
 
 <tr><td>0x00010000</td><td>USN_REASON_HARD_LINK_CHANGE</td><td>A hard link was created or deleted</td></tr>
 
@@ -12249,7 +12347,7 @@ of:</p>
 
 <tr><td>0x00080000</td><td>USN_REASON_OBJECT_ID_CHANGE</td><td>The object identifier of a file or directory was changed</td></tr>
 
-<tr><td>0x00100000</td><td>USN_REASON_REPARSE_POINT_CHANGE</td><td>The reparse point that in a file or directory was changed, or a reparse point was added to or deleted from a file or directory.</td></tr>
+<tr><td>0x00100000</td><td>USN_REASON_REPARSE_POINT_CHANGE</td><td>The reparse point that in a file or directory was changed, or a reparse point was added to or deleted from a file or directory</td></tr>
 
 <tr><td>0x00200000</td><td>USN_REASON_STREAM_CHANGE</td><td>A named data stream ($DATA attribute) is added to or removed from a file, or a named stream is renamed</td></tr>
 
@@ -12266,9 +12364,9 @@ of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>USN_SOURCE_DATA_MANAGEMENT</td><td>The operation added a private data stream to a file or directory. The modifications did not change the application data.</td></tr>
+<tr><td>0x00000001</td><td>USN_SOURCE_DATA_MANAGEMENT</td><td>The operation added a private data stream to a file or directory. The modifications did not change the application data</td></tr>
 
-<tr><td>0x00000002</td><td>USN_SOURCE_AUXILIARY_DATA</td><td>The operation was caused by the operating system. Although a write operation is performed on the item, the data was not changed.</td></tr>
+<tr><td>0x00000002</td><td>USN_SOURCE_AUXILIARY_DATA</td><td>The operation was caused by the operating system. Although a write operation is performed on the item, the data was not changed</td></tr>
 
 <tr><td>0x00000004</td><td>USN_SOURCE_REPLICATION_MANAGEMENT</td><td>The operation was caused by file replication</td></tr>
 
@@ -12304,7 +12402,7 @@ Store (SPS).</p>
 <p>TODO: link to Windows Serialized Property Store (SPS) format documentation</p>
 <h3 id="zoneidentifier"><a class="header" href="#zoneidentifier">Zone.Identifier</a></h3>
 <p>The Zone.Identifier alternate data stream contains ASCII text in the form:</p>
-<pre><code>[ZoneTransfer]
+<pre><code class="language-text">[ZoneTransfer]
 ZoneId=3
 </code></pre>
 <p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
@@ -12313,7 +12411,7 @@ of the origin.</p>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
 <p>In TxF the resource manager (RM) keeps track of transactional metadata and log
 files. The TxF related metadata files are stored in the metadata directory:</p>
-<pre><code>$Extend\$RmMetadata
+<pre><code class="language-text">$Extend\$RmMetadata
 </code></pre>
 <h3 id="resource-manager-repair-information"><a class="header" href="#resource-manager-repair-information">Resource manager repair information</a></h3>
 <p>The resource manager repair information metadata file:
@@ -12344,8 +12442,11 @@ used to isolate files for delete or overwrite operations.</p>
 <p>The TxF Old Page Stream (TOPS) file: $Extend$RmMetadata$TxfLog$Tops consists
 of the following data streams:</p>
 <ul>
-<li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID, its CLFS log policy, and the LSN at which recovery should start</li>
-<li>the $T data stream, contains the file data that is partially overwritten by a transaction as opposed to a full overwrite, which would move the file into the Transactional NTFS (TxF) metadata directory</li>
+<li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID,
+its CLFS log policy, and the LSN at which recovery should start</li>
+<li>the $T data stream, contains the file data that is partially overwritten by a transaction as
+opposed to a full overwrite, which would move the file into the Transactional NTFS (TxF) metadata
+directory</li>
 </ul>
 <h4 id="txf-old-page-stream-tops-metadata"><a class="header" href="#txf-old-page-stream-tops-metadata">TxF Old Page Stream (TOPS) metadata</a></h4>
 <p>TODO: complete section</p>
@@ -12386,7 +12487,7 @@ by a transaction. It consists of multiple pending transaction XML-documents.</p>
 <p>TODO: describe start of each sector containing 0x0001</p>
 <p>A pending transaction XML-document starts with an UTF-8 byte-order-mark. Is
 roughly contains the following data:</p>
-<pre><code>&lt;?xml version='1.0' encoding='utf-8'?&gt;
+<pre><code class="language-xml">&lt;?xml version='1.0' encoding='utf-8'?&gt;
 &lt;PendingTransaction Version="2.0" Identifier="..."&gt;
    &lt;Transactions&gt;
       &lt;Transaction TransactionId="..."&gt;
@@ -12445,10 +12546,10 @@ roughly contains the following data:</p>
 stream attribute named $TXF_DATA.</p>
 <p>TODO: link to CLFS format documentation</p>
 <p>The base log file (BLF) of the TxF log store is:</p>
-<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLog.blf
+<pre><code class="language-text">$Extend\$RmMetadata\$TxfLog\TxfLog.blf
 </code></pre>
 <p>Commonly the corresponding container files are:</p>
-<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000001
+<pre><code class="language-text">$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000001
 $Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000002
 </code></pre>
 <p>TxF uses a multiplexed log store which contains the following streams:</p>
@@ -12515,9 +12616,9 @@ utility stream attributes.</p>
 
 <tr><td>0x00000800</td><td>FILE_ATTRIBUTE_COMPRESSED</td><td>Is compressed</td></tr>
 
-<tr><td>0x00001000</td><td>FILE_ATTRIBUTE_OFFLINE</td><td>Is offline. The data of the file is stored on an offline storage.</td></tr>
+<tr><td>0x00001000</td><td>FILE_ATTRIBUTE_OFFLINE</td><td>Is offline. The data of the file is stored on an offline storage</td></tr>
 
-<tr><td>0x00002000</td><td>FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</td><td>Do not index content. The content of the file or directory should not be indexed by the indexing service.</td></tr>
+<tr><td>0x00002000</td><td>FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</td><td>Do not index content. The content of the file or directory should not be indexed by the indexing service</td></tr>
 
 <tr><td>0x00004000</td><td>FILE_ATTRIBUTE_ENCRYPTED</td><td>Is encrypted</td></tr>
 
@@ -12550,7 +12651,7 @@ only the first $DATA attribute has the compressed data flag set.</p>
 <blockquote>
 <p>Note that it is unclear if this is a corruption scenario or not.</p>
 </blockquote>
-<pre><code>MFT entry: 220 information:
+<pre><code class="language-text">MFT entry: 220 information:
     Is allocated                   : true
     File reference                 : 220-59
     Base record file reference     : Not set (0)
@@ -12598,7 +12699,7 @@ Attribute: 5
 </code></pre>
 <h3 id="directory-entry-with-outdated-file-reference"><a class="header" href="#directory-entry-with-outdated-file-reference">Directory entry with outdated file reference</a></h3>
 <p>The directory entry: \ProgramData\McAfee\Common Framework\Task\5.ini</p>
-<pre><code>File entry:
+<pre><code class="language-text">File entry:
     Path                           : \ProgramData\McAfee\Common Framework\Task\5.ini
     File reference                 : 51106-400
     Name                           : 5.ini
@@ -12613,7 +12714,7 @@ Attribute: 5
        Content should not be indexed (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
 </code></pre>
 <p>The corresponding MFT entry:</p>
-<pre><code>MFT entry: 51106 information:
+<pre><code class="language-text">MFT entry: 51106 information:
     Is allocated                   : true
     File reference                 : 51106-496
     Base record file reference     : Not set (0)
@@ -12655,7 +12756,7 @@ Attribute: 3
 <h3 id="lznt1-compressed-block-with-data-size-of-0"><a class="header" href="#lznt1-compressed-block-with-data-size-of-0">LZNT1 compressed block with data size of 0</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
 <p>A compression unit (index 30) consisting of the following data runs:</p>
-<pre><code>reading data run: 60.
+<pre><code class="language-text">reading data run: 60.
 data run:
 00000000: 11 01 01                                           ...
 
@@ -12673,12 +12774,12 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
         Is sparse
 </code></pre>
 <p>Contains the following data:</p>
-<pre><code>a7c27000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+<pre><code class="language-text">a7c27000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 ...
 a7c27ff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 </code></pre>
 <p>This relates to an empty LZNT1 compressed block.</p>
-<pre><code>compressed data offset                    : 0 (0x00000000)
+<pre><code class="language-text">compressed data offset                    : 0 (0x00000000)
 compression chunk header                  : 0x0000
 compressed chunk size                     : 1
 signature value                           : 0
@@ -12690,7 +12791,7 @@ filled with 0-byte values.</p>
 <h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
 <p>A compression unit (index 0) consisting of the following data runs:</p>
-<pre><code>reading data run: 0.
+<pre><code class="language-text">reading data run: 0.
 data run:
 00000000: 31 08 48 d8 01                                     1.H..
 
@@ -12708,7 +12809,7 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
         Is sparse
 </code></pre>
 <p>Contains the following data:</p>
-<pre><code>1d848000  bd b7 50 44 46 50 00 01  00 01 00 40 e0 00 07 0b  |..PDFP.....@....|
+<pre><code class="language-text">1d848000  bd b7 50 44 46 50 00 01  00 01 00 40 e0 00 07 0b  |..PDFP.....@....|
 ...
 1d84c000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
@@ -12716,12 +12817,13 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
 </code></pre>
 <p>This relates to a LZNT1 compressed block that appears to be truncated at offset
 16384 (0x00004000).</p>
-<pre><code>compressed data offset                    : 16384 (0x00004000)
+<pre><code class="language-text">compressed data offset                    : 16384 (0x00004000)
 compression flag byte                     : 0x00
 </code></pre>
 <p>Different behavior was observed in 2 differnt NTFS implementations:</p>
 <ul>
-<li>one implementation fills the compressed block with the uncompressed data it could read and the rest with with 0-byte values</li>
+<li>one implementation fills the compressed block with the uncompressed data it could read and the
+rest with with 0-byte values</li>
 <li>another implementation seems to provide the data that was already in its buffer</li>
 </ul>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
@@ -12866,7 +12968,7 @@ of:</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x4#</td><td>kCFBinaryPlistMarkerData</td><td>Binary data, where # is the number of bytes. If # is 15 then the object marker byte is followed by a 32-bit integer that contains the size of the data.</td></tr>
+<tr><td>0x4#</td><td>kCFBinaryPlistMarkerData</td><td>Binary data, where # is the number of bytes. If # is 15 then the object marker byte is followed by a 32-bit integer that contains the size of the data</td></tr>
 
 <tr><td>0x5#</td><td>kCFBinaryPlistMarkerASCIIString</td><td>ASCII string, where # is the number of characters. If # is 15 then the object marker byte is followed by an integer object that contains the number of characters in the string. The string is stored in ASCII (with codepage?) without an end-of-string marker</td></tr>
 
@@ -12874,17 +12976,17 @@ of:</p>
 
 <tr><td>0x7#</td><td></td><td>Unused</td></tr>
 
-<tr><td>0x8#</td><td>kCFBinaryPlistMarkerUID</td><td>UID, where # + 1 is the number of bytes.</td></tr>
+<tr><td>0x8#</td><td>kCFBinaryPlistMarkerUID</td><td>UID, where # + 1 is the number of bytes</td></tr>
 
 <tr><td>0x9#</td><td></td><td>Unused</td></tr>
 
-<tr><td>0xa#</td><td>kCFBinaryPlistMarkerArray</td><td>Array of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of elements in the array.</td></tr>
+<tr><td>0xa#</td><td>kCFBinaryPlistMarkerArray</td><td>Array of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of elements in the array</td></tr>
 
 <tr><td>0xb#</td><td></td><td>Unused</td></tr>
 
-<tr><td>0xc#</td><td>kCFBinaryPlistMarkerSet</td><td>Set of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of ele,emts in the set.</td></tr>
+<tr><td>0xc#</td><td>kCFBinaryPlistMarkerSet</td><td>Set of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of ele,emts in the set</td></tr>
 
-<tr><td>0xd#</td><td>kCFBinaryPlistMarkerDict</td><td>Dictionary of key value pairs, where # is the number of key value pairs. If # is 15 then the object marker byte is followed by an integer object that contains the number of key value pairs in the dictionary.</td></tr>
+<tr><td>0xd#</td><td>kCFBinaryPlistMarkerDict</td><td>Dictionary of key value pairs, where # is the number of key value pairs. If # is 15 then the object marker byte is followed by an integer object that contains the number of key value pairs in the dictionary</td></tr>
 
 <tr><td>0xe#</td><td></td><td>Unused</td></tr>
 
@@ -12991,6 +13093,7 @@ Deflate compression method, a variation of LZ77, is used.</p>
 
 <h2 id="data-header"><a class="header" href="#data-header">Data header</a></h2>
 <p>The data header is 2 or 6 bytes in size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -13021,10 +13124,11 @@ Deflate compression method, a variation of LZ77, is used.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The check bits value must be such that when the first 2 bytes are represented
 as a 16-bit unsigned integer in big-endian byte order the value is a multiple
 of 31, such that:</p>
-<pre><code>( ( first x 256 ) + second ) mod 31 = 0
+<pre><code class="language-python">((first * 256) + second) % 31 = 0
 </code></pre>
 <h3 id="compression_method"><a class="header" href="#compression_method">Compression method</a></h3>
 <div class="table-wrapper">
@@ -13056,7 +13160,7 @@ base-2 logarithm of the LZ77 window size minus 8.</p>
 </div>
 
 <p>To determine the corresponding window size:</p>
-<pre><code>1 &lt;&lt; ( 7 + 8 )
+<pre><code class="language-python">1 &lt;&lt; (7 + 8)
 </code></pre>
 <p>E.g. a compression information value of 7 indicates a 32768 bytes window size.
 Values larger than 7 are not allowed according to RFC1950 and thus the maximum
@@ -13162,7 +13266,7 @@ block.</p>
 <p>A single code size value is 3 bits of size. A value of 0 means the code size is
 not used in the Huffman encoding of the literal and distance codes.</p>
 <p>The codes size values are stored in the following sequence:</p>
-<pre><code>16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
+<pre><code class="language-text">16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
 </code></pre>
 <p>The first value applies to a code size of 16, the second to 17, etc. Code sizes
 that are not stored default to 0.</p>
@@ -13196,8 +13300,10 @@ LSB of the byte value.</p>
 <ul>
 <li>0 - 255; represent the literal byte values: 0 - 255</li>
 <li>256: represents the end of (compressed) stream (or block)</li>
-<li>257 - 285 (combined with extra-bits): represent a (size, offset) tuple (or match length) of 3 - 258 bytes</li>
-<li>286, 287: are not used (reserved) and their use is considered illegal although the values are still part of the tree</li>
+<li>257 - 285 (combined with extra-bits): represent a (size, offset) tuple (or
+match length) of 3 - 258 bytes</li>
+<li>286, 287: are not used (reserved) and their use is considered illegal although
+the values are still part of the tree</li>
 </ul>
 <p>This document refers to this Huffman tree as the literals Huffman tree.</p>
 <p>The bits in the encoded bit-stream correspond to values in the literals
@@ -13210,6 +13316,7 @@ additional (or extra) bits to store the length (or size).</p>
 additional (or extra) bits to store the distance.</p>
 <h5 id="literal-codes"><a class="header" href="#literal-codes">Literal codes</a></h5>
 <p>The literal codes consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -13292,8 +13399,10 @@ additional (or extra) bits to store the distance.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="deflate_distance_codes"><a class="header" href="#deflate_distance_codes">Distance codes</a></h5>
 <p>The distance codes consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -13385,15 +13494,17 @@ additional (or extra) bits to store the distance.</p>
 
 <tr><td colspan="3"><em>other</em></td></tr>
 
-<tr><td>30-31</td><td>not used, reserved and illegal but still part of the tree.</td><td></td></tr>
+<tr><td>30-31</td><td>not used, reserved and illegal but still part of the tree</td><td></td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: complete this section</p>
 <h4 id="additional-bits"><a class="header" href="#additional-bits">Additional bits</a></h4>
 <p>The additional bits are stored in big-endian (MSB first) and indicate the index
 into the corresponding array of size values (or base size + additional size).</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -13414,10 +13525,11 @@ into the corresponding array of size values (or base size + additional size).</p
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: complete this section</p>
 <h4 id="decompression"><a class="header" href="#decompression">Decompression</a></h4>
 <p>The decompression in pseudo code:</p>
-<pre><code>if( block_header.type == HUFFMANN_FIXED )
+<pre><code class="language-text">if block_header.type == HUFFMANN_FIXED:
 {
     initialize the fixed Huffman trees
 }
@@ -13464,7 +13576,7 @@ while( block_header.last_block_flag == 0 );
 </code></pre>
 <h3 id="adler-32-checksum"><a class="header" href="#adler-32-checksum">Adler-32 checksum</a></h3>
 <p>Zlib provides a highly optimized version of the algorithm provided below.</p>
-<pre><code>uint32_t adler32(
+<pre><code class="language-text">uint32_t adler32(
           uint8_t *buffer,
           size_t buffer_size,
           uint32_t previous_key )

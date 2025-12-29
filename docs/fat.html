@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -211,7 +211,7 @@ data.</p>
 
 <tr><td>Date and time values</td><td>FAT date and time</td></tr>
 
-<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string.</td></tr>
+<tr><td>Character strings</td><td>A narrow character Single Byte Character (SBC) ASCII string</td></tr>
 
 </table>
 </div>
@@ -220,7 +220,7 @@ data.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
-<tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table.</td></tr>
+<tr><td>Hidden sectors</td><td>The sectors stored before the FAT volume, such as those used to store a parition table</td></tr>
 
 </table>
 </div>
@@ -228,9 +228,10 @@ data.</p>
 <h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
 <p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters
 in the data area:</p>
-<pre><code>data area size = total number of sectors - ( number of reserved sectors s tables + size of root directory )
+<pre><code class="language-python">data_area_size = total_number_of_sectors - (number_of_reserved_sectors + (
+    number_of_allocation_tables * allocation_table_size) + size_of_root_directory)
 </code></pre>
-<pre><code>number of clusters = round down ( data area size / sectors per cluster )
+<pre><code class="language-python">number_of_clusters = round down (data_area_size / sectors_per_cluster)
 </code></pre>
 <ul>
 <li>FAT-12 is used if the number of clusters is less than 4085</li>
@@ -241,6 +242,7 @@ in the data area:</p>
 <p>The boot record is stored in the first sector of the volume.</p>
 <h3 id="fat-12-and-fat-16-boot-record"><a class="header" href="#fat-12-and-fat-16-boot-record">FAT-12 and FAT-16 boot record</a></h3>
 <p>The FAT-12 and FAT-16 boot record is at least 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -252,9 +254,9 @@ in the data area:</p>
 
 <tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32)</td></tr>
 
-<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2)</td></tr>
 
 <tr><td>17</td><td>2</td><td></td><td>Number of root directory entries</td></tr>
 
@@ -280,11 +282,11 @@ in the data area:</p>
 
 <tr><td colspan="4"><em>If extended boot signature == 0x29</em></td></tr>
 
-<tr><td>39</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>39</td><td>4</td><td></td><td>Volume serial number, which can be derived from the system current date and time</td></tr>
 
 <tr><td>43</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
 
-<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td>54</td><td>8</td><td>"FAT12\x20\x20\x20" or "FAT16\x20\x20\x20"</td><td>File system hint, which is informational and not required</td></tr>
 
 <tr><td colspan="4"><em>If extended boot signature != 0x29</em></td></tr>
 
@@ -299,20 +301,14 @@ in the data area:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the sector signature must be set at offset 512 but can, in
-addition, it can be set in the last 2 bytes of the sector.</p>
-</blockquote>
-<blockquote>
-<p>Note that the volume serial number can be derived from the system current
-date and time.</p>
-</blockquote>
-<blockquote>
-<p>Note that the file system hint value is purely informational and not enforced
-by the format.</p>
+<p>Note that the sector signature must be set at offset 512 but in addition can
+be set in the last 2 bytes of the sector.</p>
 </blockquote>
 <h3 id="fat-32-boot-record"><a class="header" href="#fat-32-boot-record">FAT-32 boot record</a></h3>
 <p>The FAT-32 boot record is at least 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -324,9 +320,9 @@ by the format.</p>
 
 <tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32).</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Number of reserved sectors (reserved region), which starts at the first sector of the volume (sector 0) and must be 1 or more (typically 1 or 32)</td></tr>
 
-<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2).</td></tr>
+<tr><td>16</td><td>1</td><td></td><td>Number of cluster block allocation tables, which must be 1 or more (typically 2)</td></tr>
 
 <tr><td>17</td><td>2</td><td>0</td><td>Number of root directory entries, which must be 0 for FAT-32</td></tr>
 
@@ -368,11 +364,11 @@ by the format.</p>
 
 <tr><td colspan="4"><em>If extended boot signature == 0x29</em></td></tr>
 
-<tr><td>67</td><td>4</td><td></td><td>Volume serial number</td></tr>
+<tr><td>67</td><td>4</td><td></td><td>Volume serial number, which can be derived from the system current date and time</td></tr>
 
 <tr><td>71</td><td>11</td><td></td><td>Volume label, which contains a narrow character string or "NO\x20NAME\x20\x20\x20\x20" if not set</td></tr>
 
-<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint</td></tr>
+<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system hint, which is informational and not required</td></tr>
 
 <tr><td colspan="4"><em>If extended boot signature != 0x29</em></td></tr>
 
@@ -387,17 +383,10 @@ by the format.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the sector signature must be set at offset 512 but can, in
-addition, it can be set in the last 2 bytes of the sector.</p>
-</blockquote>
-<blockquote>
-<p>Note that the volume serial number can be derived from the system current
-date and time.</p>
-</blockquote>
-<blockquote>
-<p>Note that the file system hint value is purely informational and not enforced
-by the format.</p>
+<p>Note that the sector signature must be set at offset 512 but in addition can
+be set in the last 2 bytes of the sector.</p>
 </blockquote>
 <h3 id="oem-names"><a class="header" href="#oem-names">OEM names</a></h3>
 <div class="table-wrapper">
@@ -416,7 +405,7 @@ by the format.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0xe5</td><td></td><td></td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xed</td><td></td><td></td></tr>
 
@@ -426,13 +415,13 @@ by the format.</p>
 
 <tr><td>0xf0</td><td></td><td>removable media</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xf4</td><td></td><td></td></tr>
 
 <tr><td>0xf5</td><td></td><td></td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>0xf8</td><td></td><td>fixed (non-removable) media</td></tr>
 
@@ -563,17 +552,20 @@ of:</p>
 </ul>
 <h3 id="directory-entry"><a class="header" href="#directory-entry">Directory entry</a></h3>
 <h3 id="determining-the-root-directory-location"><a class="header" href="#determining-the-root-directory-location">Determining the root directory location</a></h3>
-<pre><code>first allocation table offset = number of reserved sectors * bytes per sector
+<pre><code class="language-python">first_allocation_table_offset = number_of_reserved_sectors * bytes_per_sector
 </code></pre>
 <h4 id="fat-12-and-fat-16-root-directory"><a class="header" href="#fat-12-and-fat-16-root-directory">FAT-12 and FAT-16 root directory</a></h4>
-<pre><code>root directory start offset = first allocation table offset + ( number of allocation tables * allocation table size * bytes per sector )
+<pre><code class="language-python">root_directory_start_offset = first_allocation_table_offset + (
+    number_of_allocation_tables * allocation_table_size * bytes_per_sector)
 </code></pre>
-<pre><code>first cluster offset = directory start sector + ( number of root directory entries * 32 )
+<pre><code class="language-python">first_cluster_offset = directory_start_sector + (number_of_root_directory_entries * 32)
 </code></pre>
 <h4 id="fat-32-root-directory"><a class="header" href="#fat-32-root-directory">FAT-32 root directory</a></h4>
-<pre><code>first cluster offset = first allocation table sector + ( number of allocation tables * allocation table size * bytes per sector )
+<pre><code class="language-python">first_cluster_offset = first_allocation_table_sector + (
+    number_of_allocation_tables * allocation_table_size * bytes_per_sector)
 </code></pre>
-<pre><code>root directory start offset = first cluster sector + ( ( root directory cluster - 2 ) * number of sectors per cluster )
+<pre><code class="language-python">root_directory_start_offset = first_cluster_sector + (
+    (root_directory_cluster - 2) * number_of_sectors_per_cluster)
 </code></pre>
 <h4 id="fat-12-and-fat-16-directory-entry"><a class="header" href="#fat-12-and-fat-16-directory-entry">FAT-12 and FAT-16 directory entry</a></h4>
 <p>A FAT-12 and FAT-16 directory entry is 32 bytes in size and consists of:</p>
@@ -654,9 +646,9 @@ of:</p>
 
 <tr><td>'0-9'</td><td>Numeric character</td></tr>
 
-<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored.</td></tr>
+<tr><td>' '</td><td>Space, where trailing spaces are considered padding and therefore ignored</td></tr>
 
-<tr><td>'.'</td><td>Dot, with the exception of "." and  "..", where trailing dot characters are ignored.</td></tr>
+<tr><td>'.'</td><td>Dot, with the exception of "." and  "..", where trailing dot characters are ignored</td></tr>
 
 <tr><td>'!'</td><td>Exclamation mark</td></tr>
 
@@ -690,7 +682,7 @@ of:</p>
 
 <tr><td>'~'</td><td>Tilde</td></tr>
 
-<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent.</td></tr>
+<tr><td>0x80 - 0xff</td><td>Extended ASCII character, which are codepage dependent</td></tr>
 
 </table>
 </div>
@@ -747,7 +739,7 @@ short file names.</p>
 
 <tr><td>0x02</td><td>Data contains large EFS header</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td></tr>
 
 <tr><td>0x08</td><td>Name should be represented in lower case</td></tr>
 

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -197,6 +197,7 @@ Deflate compression method, a variation of LZ77, is used.</p>
 
 <h2 id="data-header"><a class="header" href="#data-header">Data header</a></h2>
 <p>The data header is 2 or 6 bytes in size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -227,10 +228,11 @@ Deflate compression method, a variation of LZ77, is used.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The check bits value must be such that when the first 2 bytes are represented
 as a 16-bit unsigned integer in big-endian byte order the value is a multiple
 of 31, such that:</p>
-<pre><code>( ( first x 256 ) + second ) mod 31 = 0
+<pre><code class="language-python">((first * 256) + second) % 31 = 0
 </code></pre>
 <h3 id="compression_method"><a class="header" href="#compression_method">Compression method</a></h3>
 <div class="table-wrapper">
@@ -262,7 +264,7 @@ base-2 logarithm of the LZ77 window size minus 8.</p>
 </div>
 
 <p>To determine the corresponding window size:</p>
-<pre><code>1 &lt;&lt; ( 7 + 8 )
+<pre><code class="language-python">1 &lt;&lt; (7 + 8)
 </code></pre>
 <p>E.g. a compression information value of 7 indicates a 32768 bytes window size.
 Values larger than 7 are not allowed according to RFC1950 and thus the maximum
@@ -368,7 +370,7 @@ block.</p>
 <p>A single code size value is 3 bits of size. A value of 0 means the code size is
 not used in the Huffman encoding of the literal and distance codes.</p>
 <p>The codes size values are stored in the following sequence:</p>
-<pre><code>16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
+<pre><code class="language-text">16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
 </code></pre>
 <p>The first value applies to a code size of 16, the second to 17, etc. Code sizes
 that are not stored default to 0.</p>
@@ -402,8 +404,10 @@ LSB of the byte value.</p>
 <ul>
 <li>0 - 255; represent the literal byte values: 0 - 255</li>
 <li>256: represents the end of (compressed) stream (or block)</li>
-<li>257 - 285 (combined with extra-bits): represent a (size, offset) tuple (or match length) of 3 - 258 bytes</li>
-<li>286, 287: are not used (reserved) and their use is considered illegal although the values are still part of the tree</li>
+<li>257 - 285 (combined with extra-bits): represent a (size, offset) tuple (or
+match length) of 3 - 258 bytes</li>
+<li>286, 287: are not used (reserved) and their use is considered illegal although
+the values are still part of the tree</li>
 </ul>
 <p>This document refers to this Huffman tree as the literals Huffman tree.</p>
 <p>The bits in the encoded bit-stream correspond to values in the literals
@@ -416,6 +420,7 @@ additional (or extra) bits to store the length (or size).</p>
 additional (or extra) bits to store the distance.</p>
 <h5 id="literal-codes"><a class="header" href="#literal-codes">Literal codes</a></h5>
 <p>The literal codes consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -498,8 +503,10 @@ additional (or extra) bits to store the distance.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="deflate_distance_codes"><a class="header" href="#deflate_distance_codes">Distance codes</a></h5>
 <p>The distance codes consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -591,15 +598,17 @@ additional (or extra) bits to store the distance.</p>
 
 <tr><td colspan="3"><em>other</em></td></tr>
 
-<tr><td>30-31</td><td>not used, reserved and illegal but still part of the tree.</td><td></td></tr>
+<tr><td>30-31</td><td>not used, reserved and illegal but still part of the tree</td><td></td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: complete this section</p>
 <h4 id="additional-bits"><a class="header" href="#additional-bits">Additional bits</a></h4>
 <p>The additional bits are stored in big-endian (MSB first) and indicate the index
 into the corresponding array of size values (or base size + additional size).</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -620,10 +629,11 @@ into the corresponding array of size values (or base size + additional size).</p
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: complete this section</p>
 <h4 id="decompression"><a class="header" href="#decompression">Decompression</a></h4>
 <p>The decompression in pseudo code:</p>
-<pre><code>if( block_header.type == HUFFMANN_FIXED )
+<pre><code class="language-text">if block_header.type == HUFFMANN_FIXED:
 {
     initialize the fixed Huffman trees
 }
@@ -670,7 +680,7 @@ while( block_header.last_block_flag == 0 );
 </code></pre>
 <h3 id="adler-32-checksum"><a class="header" href="#adler-32-checksum">Adler-32 checksum</a></h3>
 <p>Zlib provides a highly optimized version of the algorithm provided below.</p>
-<pre><code>uint32_t adler32(
+<pre><code class="language-text">uint32_t adler32(
           uint8_t *buffer,
           size_t buffer_size,
           uint32_t previous_key )

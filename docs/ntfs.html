@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -222,10 +222,8 @@ Another common versioning schema uses the Windows version, e.g. NTFS 5.0 is the
 version of NTFS used on Windows XP which is version 3.1 in schema mentioned
 above.</p>
 </blockquote>
-<blockquote>
-<p>Note Windows does not necessarily uses the latest version, e.g. Windows 10
-(1809) has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
-</blockquote>
+<p>Windows does not necessarily uses the latest format version, e.g. Windows 10 (1809)
+has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
 <h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
 <h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
 <p>NTFS refers to it file system blocks as clusters. Note that these are not the
@@ -249,6 +247,7 @@ will this document.</p>
 directories. The MFT entries reference the different volume and file system
 metadata. There are several predefined metadata files.</p>
 <p>The following metadata files are predefined and use a fixed MFT entry number.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>MFT entry number</th><th>File name</th><th>Description</th></thead>
@@ -321,6 +320,7 @@ metadata. There are several predefined metadata files.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The following metadata files are predefined, however the MFT entry number is
 commonly used but not fixed.</p>
 <div class="table-wrapper">
@@ -339,6 +339,7 @@ file) and contains:</p>
 <li>the BIOS parameter block</li>
 <li>the boot loader</li>
 </ul>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -398,7 +399,7 @@ file) and contains:</p>
 
 <tr><td>80</td><td>4</td><td>0</td><td>Checksum, which is not used by NTFS</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>84</td><td>426</td><td></td><td>Boot code</td></tr>
 
@@ -407,10 +408,11 @@ file) and contains:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="boot-entry-point"><a class="header" href="#boot-entry-point">Boot entry point</a></h3>
 <p>The boot entry point often contains a jump instruction to the boot code at
 offset 84 followed by a no-operation, e.g.</p>
-<pre><code>eb52   jmp 0x52
+<pre><code class="language-text">eb52   jmp 0x52
 90     nop
 </code></pre>
 <h3 id="number-of-sectors-per-cluster-block"><a class="header" href="#number-of-sectors-per-cluster-block">Number of sectors per cluster block</a></h3>
@@ -423,7 +425,7 @@ following:</p>
 </ul>
 <h3 id="cluster-block-size"><a class="header" href="#cluster-block-size">Cluster block size</a></h3>
 <p>The cluster block size can be determined as following:</p>
-<pre><code>cluster block size = bytes per sector x sectors per cluster block
+<pre><code class="language-python">cluster block size = bytes per sector x sectors per cluster block
 </code></pre>
 <p>Different NTFS implementations support different cluster block sizes. Known
 supported cluster block size:</p>
@@ -468,16 +470,16 @@ block size of 128k the partition must 128 KiB aligned. The default partition
 partition alignment appears to be 64 KiB.</p>
 </blockquote>
 <p>mkntfs restricts the cluster size to:</p>
-<pre><code>bytes per sector &gt;= cluster size &gt; 4096 x bytes per sector
+<pre><code class="language-python">bytes_per_sector &gt;= cluster_block_size &gt; 4096 * bytes_per_sector
 </code></pre>
 <h3 id="master-file-table-mft-offset"><a class="header" href="#master-file-table-mft-offset">Master File Table (MFT) offset</a></h3>
 <p>The Master File Table (MFT) offset can be determined as following:</p>
-<pre><code>MFT offset = boot record offset + ( MFT cluster block number x Cluster block size )
+<pre><code class="language-python">mft_offset = boot_record_offset + (mft_cluster_block_number * cluster_block_size)
 </code></pre>
 <p>The lower 32-bit part of the NTFS volume serial number is the Windows API
 (WINAPI) volume serial number. This can be determined by comparing the output
 of:</p>
-<pre><code>fsutil fsinfo volumeinfo C:
+<pre><code class="language-text">fsutil fsinfo volumeinfo C:
 fsutil fsinfo ntfsinfo C:
 </code></pre>
 <p>Often the total number of sectors in the boot record will be smaller than the
@@ -491,7 +493,7 @@ sectors.</p>
 following:</p>
 <ul>
 <li>Values 0 to 127 represent sizes of 0 to 127 cluster blocks.</li>
-<li>Values 128 to 255 represent sizes of <code>2^(256-n)</code> bytes; or <code>2^(-n)</code> if considered as a signed byte.</li>
+<li>Values 128 to 255 represent sizes of 2^(256-n) bytes or 2^(-n) if considered as a signed byte.</li>
 <li>Other values are not considered valid.</li>
 </ul>
 <h3 id="bitlocker-drive-encryption-bde"><a class="header" href="#bitlocker-drive-encryption-bde">BitLocker Drive Encryption (BDE)</a></h3>
@@ -499,10 +501,10 @@ following:</p>
 Where FVE is an abbreviation of Full Volume Encryption.</p>
 <p>The data structures of BDE on Windows Vista and 7 differ.</p>
 <p>A Windows Vista BDE volume starts with:</p>
-<pre><code>eb 52 90 2d 46 56 45 26 46 53 2d
+<pre><code class="language-text">eb 52 90 2d 46 56 45 26 46 53 2d
 </code></pre>
 <p>A Windows 7 BDE volume starts with:</p>
-<pre><code>eb 58 90 2d 46 56 45 26 46 53 2d
+<pre><code class="language-text">eb 58 90 2d 46 56 45 26 46 53 2d
 </code></pre>
 <p>BDE is largely a stand-alone but has some integration with NTFS.</p>
 <p>TODO: link to BDE format documentation</p>
@@ -562,6 +564,7 @@ Windows XP for MFT entry numbers 16 - 23.</p>
 <h4 id="mft-entry-header"><a class="header" href="#mft-entry-header">MFT entry header</a></h4>
 <p>The MFT entry header (FILE_RECORD_SEGMENT_HEADER) is 42 or 48 bytes in size
 and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -569,11 +572,11 @@ and consists of:</p>
 
 <tr><td>0</td><td>4</td><td>"BAAD", "FILE"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the MFT entry.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the MFT entry</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Metadata transaction journal sequence number, which contains a $LogFile Sequence Number (LSN)</td></tr>
 
@@ -608,6 +611,7 @@ and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h5 id="baad-signature"><a class="header" href="#baad-signature">“BAAD” signature</a></h5>
 <p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if
 during chkdsk, when a multi-sector item is found where the multi-sector header
@@ -709,7 +713,7 @@ consists of:</p>
 
 <tr><td>12</td><td>2</td><td></td><td><a href="#mft_attribute_data_flags">Attribute data flags</a></td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data</td></tr>
 
 </table>
 </div>
@@ -757,6 +761,7 @@ set (0). The resident data is 8 bytes in size and consists of:</p>
 <h4 id="non-resident-mft-attribute"><a class="header" href="#non-resident-mft-attribute">Non-resident MFT attribute</a></h4>
 <p>The non-resident MFT attribute data is present when the non-resident flag is
 set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -766,32 +771,30 @@ set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
 
 <tr><td>16</td><td>2</td><td></td><td>Data runs offset (or mappings pairs offset), which contains an offset relative from the start of the MFT attribute</td></tr>
 
-<tr><td>18</td><td>2</td><td></td><td>Compression unit size, which contains the compression unit size as <code>2^(n)</code> number of cluster blocks.</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Compression unit size, which contains the compression unit size as <code>2^(n)</code> number of cluster blocks</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Unknown (Padding)</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Allocated data size (or allocated length), which contains the allocated data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Allocated data size (or allocated length), which contains the allocated data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
-<tr><td>32</td><td>8</td><td></td><td>Data size (or file size), which contains the data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Data size (or file size), which contains the data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
-<tr><td>40</td><td>8</td><td></td><td>Valid data size (or valid data length), which contains the valid data size in number of bytes. This value is not valid if the first VCN is nonzero.</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Valid data size (or valid data length), which contains the valid data size in number of bytes. This value is not valid if the first VCN is nonzero</td></tr>
 
 <tr><td colspan="4"><em>If compression unit size &gt; 0</em></td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Compressed data size.</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Compressed data size</td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
+<p>The total size of the data runs should be larger or equal to the data size.</p>
 <blockquote>
-<p>Note that the total size of the data runs should be larger or equal to the
-data size.</p>
-</blockquote>
-<blockquote>
-<p>Note that Windows will fill data ranges beyond the valid data size with 0-byte
-values. The data size remains unchanged. This applies to compressed and
-uncompressed data. If the first VCN is zero a valid data size of 0 represents
-a file entirely filled with 0-byte values.</p>
+<p>Note that Windows will fill data beyond the valid data size with 0-byte values.
+The data size remains unchanged. This applies to compressed and uncompressed
+data. If the first VCN is zero a valid data size of 0 represents a file
+entirely filled with 0-byte values.</p>
 </blockquote>
 <p>TODO: determine the meaning of a VCN of -1</p>
 <p>For more information about compressed MFT attributes see <a href="#compression">compression</a>.</p>
@@ -855,23 +858,19 @@ value size of 0, without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 <h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
 <p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed
 or not.</p>
-<blockquote>
-<p>Note that Windows supports compressed data runs for NTFS file systems with a
-cluster block size of 4096 bytes or less.</p>
-</blockquote>
-<blockquote>
-<p>Note that Windows 10 supports Windows Overlay Filter (WOF) compressed data,
-which stores the LZXPRESS Huffman or LZX compressed data in alternate data
-stream named WofCompressedData and links it to the default data stream using
-a reparse point.</p>
-</blockquote>
+<p>Windows supports compressed data runs for NTFS file systems with a cluster block
+size of 4096 bytes or less.</p>
+<p>Windows 10 supports Windows Overlay Filter (WOF) compressed data, which stores
+the LZXPRESS Huffman or LZX compressed data in alternate data stream named
+WofCompressedData and links it to the default data stream using a reparse point.</p>
 <p>The data is stored in compression unit blocks. A compression unit typically
 consists of 16 cluster blocks. However the actual value is stored in the
 non-resident MFT attribute.</p>
 <p>Also see <a href="#compression">compression</a>.</p>
 <h2 id="the-attributes"><a class="header" href="#the-attributes">The attributes</a></h2>
 <h3 id="attribute_types"><a class="header" href="#attribute_types">Known attribute types</a></h3>
-<p>The attribute types are stored in the <a href="#attribute_definitions">$AttrDef metadata file</a>.</p>
+<p>The attribute types are stored in the <a href="#attribute_types">$AttrDef metadata file</a>.</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -942,6 +941,7 @@ non-resident MFT attribute.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="attribute_chains"><a class="header" href="#attribute_chains">Attribute chains</a></h3>
 <p>Multiple attributes can be chained to make up a single attribute data stream,
 e.g. the attributes:</p>
@@ -958,6 +958,7 @@ in-order.</p>
 file entry metadata. It is stored as a resident MFT attribute.</p>
 <p>The standard information data (STANDARD_INFORMATION) is either 48 or 72 bytes
 in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -990,6 +991,7 @@ in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that MFT entries have been observed without a $STANDARD_INFORMATION
 attribute, but with other attributes such as $FILE_NAME and an $I30 index.</p>
@@ -1028,7 +1030,7 @@ consists of:</p>
 
 <tr><td>16</td><td>8</td><td></td><td><a href="#file_reference">File reference</a> (or segment reference), which contains a reference to the MFT entry that contains (part of) the attribute data</td></tr>
 
-<tr><td>24</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data.</td></tr>
+<tr><td>24</td><td>2</td><td></td><td>Attribute identifier (or instance), which contains an unique identifier to distinguish between attributes that contain segmented data</td></tr>
 
 <tr><td>26</td><td>...</td><td></td><td>Name, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
 
@@ -1042,6 +1044,7 @@ consists of:</p>
 like the parent file entry, various date and time values and name. It is stored
 as a resident MFT attribute.</p>
 <p>The file name data (FILE_NAME) is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1080,7 +1083,9 @@ as a resident MFT attribute.</p>
 </table>
 </div>
 
-<p>TODO: determine if the allocated file size and file size values contain accurate values when the file name data is stored in a MFT attribute.</p>
+<!-- rumdl-enable MD033 MD056 -->
+<p>TODO: determine if the allocated file size and file size values contain accurate
+values when the file name data is stored in a MFT attribute.</p>
 <p>An MFT attribute can contain multiple file name attributes, e.g. for a separate
 (long) name and short name.</p>
 <p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp;
@@ -1092,13 +1097,13 @@ attributes with the parent file reference of each hard link.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows.</td></tr>
+<tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows</td></tr>
 
-<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space).</td></tr>
+<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space)</td></tr>
 
-<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format.</td></tr>
+<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format</td></tr>
 
-<tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well.</td></tr>
+<tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well</td></tr>
 
 </table>
 </div>
@@ -1122,11 +1127,18 @@ the long name:</p>
 <li><code>[</code> or <code>]</code> are replaced by an underscore (<code>_</code>)</li>
 </ul>
 <p>Make the name unique:</p>
+<!-- rumdl-disable MD013 -->
 <ol>
-<li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its first 3 letters, e.g. “Program Files” becomes “PROGRA~1” or “ ~PLAYMOVIE.REG“ becomes “~PLAYM~1.REG”</li>
-<li>if the name already exists try ~2 up to ~9, e.g. “Program Data”, in the same directory as “Program Files”, becomes “PROGRA~2”</li>
-<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g. “x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4” in a directory with a lot of file names starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
+<li>use the characters 1 to 6 add ~1 and if the long name has an extension add the a dot and its
+first 3 letters, e.g. “Program Files” becomes “PROGRA~1” or “ ~PLAYMOVIE.REG“ becomes
+“~PLAYM~1.REG”</li>
+<li>if the name already exists try ~2 up to ~9, e.g. “Program Data”, in the same directory as
+“Program Files”, becomes “PROGRA~2”</li>
+<li>if the name already exists use a 16-bit hexadecimal value for characters 3 to 6 with ~1, e.g.
+“x86_microsoft-windows-r..ry-editor.resources_31bf3856ad364e35_6.0.6000.16386_en-us_f89a7b0005d42fd4”
+in a directory with a lot of file names starting with “x86_microsoft”, becomes “X8FCA6~1.163”</li>
 </ol>
+<!-- rumdl-enable MD013 -->
 <p>TODO: determine if the behavior is dependent on a setting that can be changed with fsutil</p>
 <h3 id="the-volume-version-attribute"><a class="header" href="#the-volume-version-attribute">The volume version attribute</a></h3>
 <p>The volume version attribute ($VOLUME_VERSION) contains volume version.</p>
@@ -1344,7 +1356,7 @@ $AttrDef does not seem to always define this attribute.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>128</td><td></td><td>Attribute which contains an UCS-2 little-endian string with end-of-string character. Unused bytes are filled with 0-byte values.</td></tr>
+<tr><td>0</td><td>128</td><td></td><td>Attribute which contains an UCS-2 little-endian string with end-of-string character. Unused bytes are filled with 0-byte values</td></tr>
 
 <tr><td>128</td><td>4</td><td></td><td><a href="#attribute_types">Attribute type</a> (or type code)</td></tr>
 
@@ -1475,7 +1487,7 @@ value in the index root header.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>"INDX"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values offset, which contains an offset relative from the start of the index entry header.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values offset, which contains an offset relative from the start of the index entry header</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values</td></tr>
 
@@ -1520,6 +1532,7 @@ size of the fix-up values and the alignment padding following it.</p>
 
 <h3 id="the-index-value"><a class="header" href="#the-index-value">The index value</a></h3>
 <p>The index value is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1544,6 +1557,7 @@ size of the fix-up values and the alignment padding following it.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The index values are stored 8 byte aligned.</p>
 <blockquote>
 <p>Note that some other sources define the index value flags as a 16-bit value
@@ -1597,7 +1611,7 @@ maximum uncompressed data size is always the cluster size (in most case
 data flags is stored uncompressed.</p>
 </blockquote>
 <p>The data runs in the $DATA attribute define cluster block ranges, e.g.</p>
-<pre><code>21 02 35 52
+<pre><code class="language-text">21 02 35 52
 </code></pre>
 <p>This data run defines 2 data blocks starting at block number 21045 followed by
 14 sparse blocks. The total number of blocks in the compression unit is 16.
@@ -1605,7 +1619,7 @@ Compressed data is stored in the first 2 blocks and the 14 sparse blocks are
 only there to make sure the data runs add up to the compression unit size. They
 do not define actual sparse data.</p>
 <p>Another example:</p>
-<pre><code>21 40 37 52
+<pre><code class="language-text">21 40 37 52
 </code></pre>
 <p>This data run defines 64 data blocks starting at block number 21047. Since
 this data run is larger than the compression unit size the data is stored
@@ -1657,6 +1671,7 @@ following attributes:</p>
 <li>a nameless data attribute that is sparse and contains the uncompressed data size</li>
 <li>a data attribute named WofCompressedData that contains LZXPRESS Huffman or LZX compressed data</li>
 </ul>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1671,12 +1686,13 @@ following attributes:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that if the chunk size equals the size of the uncompressed data the chunk
 is stored (as-is) uncompressed.</p>
 </blockquote>
 <p>The size of the chunk offset table is:</p>
-<pre><code>number of chunk offsets = uncompressed size / compression unit size
+<pre><code class="language-python">number of chunk offsets = uncompressed size / compression unit size
 </code></pre>
 <p>The offset of the first compressed data chunk is at the end of the chunk offset
 table and is not stored in the chunk offset table.</p>
@@ -1721,7 +1737,7 @@ stored in the reparse point attribute. The reparse point data
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x1</td><td></td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>0x2</td><td></td><td>Is alias (Name surrogate bit), when this bit is set, the file or directory represents another named entity in the system.</td></tr>
+<tr><td>0x2</td><td></td><td>Is alias (Name surrogate bit), when this bit is set, the file or directory represents another named entity in the system</td></tr>
 
 <tr><td>0x4</td><td></td><td>Is high-latency media (Reserved)</td></tr>
 
@@ -1917,6 +1933,7 @@ stored in the reparse point attribute. The reparse point data
 <p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains
 junction or mount point reparse data. The junction or mount point reparse data
 is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1937,12 +1954,13 @@ is of variable size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that it is currently unclear if the names contain an end-of-string
 character or if they are followed by alignment padding.</p>
 </blockquote>
 <p>TODO: determine what character values like 0x0002 represent in the substitute name</p>
-<pre><code>00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
+<pre><code class="language-text">00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
 00000020: 73 00 65 00 72 00 73 00  5c 00 74 00 65 00 73 00   s.e.r.s. \.t.e.s.
 00000030: 74 00 5c 00 44 00 6f 00  63 00 75 00 6d 00 65 00   t.\.D.o. c.u.m.e.
 00000040: 6e 00 74 00 73 00 00 00                            n.t.s...
@@ -1951,6 +1969,7 @@ character or if they are followed by alignment padding.</p>
 <p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic
 link reparse data. The symbolic link reparse data is of variable size and
 consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1973,11 +1992,12 @@ consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="symbolic-link-flags"><a class="header" href="#symbolic-link-flags">Symbolic link flags</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>SYMLINK_FLAG_RELATIVE</td><td>The substitute name is a path name relative to the directory containing the symbolic link.</td></tr>
+<tr><td>0x00000001</td><td>SYMLINK_FLAG_RELATIVE</td><td>The substitute name is a path name relative to the directory containing the symbolic link</td></tr>
 
 </table>
 </div>
@@ -1986,6 +2006,7 @@ consists of:</p>
 <p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows
 Overlay Filter (WOF) reparse data. The Windows Overlay Filter (WOF) reparse
 data is 16 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2004,6 +2025,7 @@ data is 16 bytes in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="wof_compression_method"><a class="header" href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a></h3>
 <div class="table-wrapper">
 <table>
@@ -2061,6 +2083,7 @@ block, where the LSB is the first bit in a byte.</p>
 
 <h3 id="security-descriptor-hash-sdh-index"><a class="header" href="#security-descriptor-hash-sdh-index">Security descriptor hash ($SDH) index</a></h3>
 <h4 id="security_descriptor_hash_index_value"><a class="header" href="#security_descriptor_hash_index_value">The security descriptor hash index value</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2085,8 +2108,10 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="security-descriptor-identifier-sii-index"><a class="header" href="#security-descriptor-identifier-sii-index">Security descriptor identifier ($SII) index</a></h3>
 <h4 id="security_descriptor_identifier_index_value"><a class="header" href="#security_descriptor_identifier_index_value">The security descriptor identifier index value</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2107,6 +2132,7 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>TODO: describe the hash algorithm</p>
 <h3 id="security-descriptor-sds-data-stream"><a class="header" href="#security-descriptor-sds-data-stream">Security descriptor ($SDS) data stream</a></h3>
 <div class="table-wrapper">
@@ -2130,6 +2156,7 @@ block, where the LSB is the first bit in a byte.</p>
 <p>TODO: link to security descriptor format documentation</p>
 <h2 id="the-object-identifiers"><a class="header" href="#the-object-identifiers">The object identifiers</a></h2>
 <h3 id="objido"><a class="header" href="#objido">$ObjID:$O</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2150,6 +2177,7 @@ block, where the LSB is the first bit in a byte.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h2 id="log_file"><a class="header" href="#log_file">Metadata transaction journal (log file)</a></h2>
 <p>TODO: complete section</p>
 <p>The metadata file $LogFile contains the metadata transaction journal and
@@ -2161,6 +2189,7 @@ consists of:</p>
 <h3 id="log-file-service-restart-page-header"><a class="header" href="#log-file-service-restart-page-header">Log File service restart page header</a></h3>
 <p>The Log File service restart page header (LFS_RESTART_PAGE_HEADER) is 30 bytes
 in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2168,11 +2197,11 @@ in size and consists of:</p>
 
 <tr><td>0</td><td>4</td><td>"CHKD", "RCRD", "RSTR"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the restart page header.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>The fix-up values (or update sequence array) offset, which contain an offset relative from the start of the restart page header</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>The number of fix-up values (or update sequence array size)</td></tr>
 
-<tr><td colspan="4"> </td></tr>
+<tr><td colspan="4"><em>Common</em></td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Checkdisk last LSN</td></tr>
 
@@ -2189,6 +2218,7 @@ in size and consists of:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h4 id="log-file-service-restart-page-versions"><a class="header" href="#log-file-service-restart-page-versions">Log File service restart page versions</a></h4>
 <div class="table-wrapper">
 <table>
@@ -2211,7 +2241,8 @@ Windows (Desktop) Search service.</p>
 <p>The USN change journal consists of:</p>
 <ul>
 <li>the $UsnJrnl:$Max data stream, containing metadata like the maximum size of the journal</li>
-<li>the $UsnJrnl:$J data stream, containing the update (or change) entries. The $UsnJrnl:$J data stream is sparse.</li>
+<li>the $UsnJrnl:$J data stream, containing the update (or change) entries. The $UsnJrnl:$J data
+stream is sparse.</li>
 </ul>
 <h3 id="usn-change-journal-metadata"><a class="header" href="#usn-change-journal-metadata">USN change journal metadata</a></h3>
 <p>The USN change journal metadata is 32 bytes in size and consists of:</p>
@@ -2279,11 +2310,11 @@ of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>USN_REASON_DATA_OVERWRITE</td><td>The data in the file or directory is overwritten.</td></tr>
+<tr><td>0x00000001</td><td>USN_REASON_DATA_OVERWRITE</td><td>The data in the file or directory is overwritten</td></tr>
 
-<tr><td>0x00000002</td><td>USN_REASON_DATA_EXTEND</td><td>The file or directory is extended.</td></tr>
+<tr><td>0x00000002</td><td>USN_REASON_DATA_EXTEND</td><td>The file or directory is extended</td></tr>
 
-<tr><td>0x00000004</td><td>USN_REASON_DATA_TRUNCATION</td><td>The file or directory is truncated.</td></tr>
+<tr><td>0x00000004</td><td>USN_REASON_DATA_TRUNCATION</td><td>The file or directory is truncated</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
@@ -2309,7 +2340,7 @@ of:</p>
 
 <tr><td>0x00004000</td><td>USN_REASON_INDEXABLE_CHANGE</td><td>Content indexed status changed. The file attribute FILE_ATTRIBUTE_NOT_CONTENT_INDEXED was changed</td></tr>
 
-<tr><td>0x00008000</td><td>USN_REASON_BASIC_INFO_CHANGE</td><td>Basic file or directory attributes changed. One or more file or directory attributes were changed e.g. read-only, hidden, system, archive, or sparse attribute, or one or more time stamps.</td></tr>
+<tr><td>0x00008000</td><td>USN_REASON_BASIC_INFO_CHANGE</td><td>Basic file or directory attributes changed. One or more file or directory attributes were changed e.g. read-only, hidden, system, archive, or sparse attribute, or one or more time stamps</td></tr>
 
 <tr><td>0x00010000</td><td>USN_REASON_HARD_LINK_CHANGE</td><td>A hard link was created or deleted</td></tr>
 
@@ -2319,7 +2350,7 @@ of:</p>
 
 <tr><td>0x00080000</td><td>USN_REASON_OBJECT_ID_CHANGE</td><td>The object identifier of a file or directory was changed</td></tr>
 
-<tr><td>0x00100000</td><td>USN_REASON_REPARSE_POINT_CHANGE</td><td>The reparse point that in a file or directory was changed, or a reparse point was added to or deleted from a file or directory.</td></tr>
+<tr><td>0x00100000</td><td>USN_REASON_REPARSE_POINT_CHANGE</td><td>The reparse point that in a file or directory was changed, or a reparse point was added to or deleted from a file or directory</td></tr>
 
 <tr><td>0x00200000</td><td>USN_REASON_STREAM_CHANGE</td><td>A named data stream ($DATA attribute) is added to or removed from a file, or a named stream is renamed</td></tr>
 
@@ -2336,9 +2367,9 @@ of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>USN_SOURCE_DATA_MANAGEMENT</td><td>The operation added a private data stream to a file or directory. The modifications did not change the application data.</td></tr>
+<tr><td>0x00000001</td><td>USN_SOURCE_DATA_MANAGEMENT</td><td>The operation added a private data stream to a file or directory. The modifications did not change the application data</td></tr>
 
-<tr><td>0x00000002</td><td>USN_SOURCE_AUXILIARY_DATA</td><td>The operation was caused by the operating system. Although a write operation is performed on the item, the data was not changed.</td></tr>
+<tr><td>0x00000002</td><td>USN_SOURCE_AUXILIARY_DATA</td><td>The operation was caused by the operating system. Although a write operation is performed on the item, the data was not changed</td></tr>
 
 <tr><td>0x00000004</td><td>USN_SOURCE_REPLICATION_MANAGEMENT</td><td>The operation was caused by file replication</td></tr>
 
@@ -2374,7 +2405,7 @@ Store (SPS).</p>
 <p>TODO: link to Windows Serialized Property Store (SPS) format documentation</p>
 <h3 id="zoneidentifier"><a class="header" href="#zoneidentifier">Zone.Identifier</a></h3>
 <p>The Zone.Identifier alternate data stream contains ASCII text in the form:</p>
-<pre><code>[ZoneTransfer]
+<pre><code class="language-text">[ZoneTransfer]
 ZoneId=3
 </code></pre>
 <p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
@@ -2383,7 +2414,7 @@ of the origin.</p>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
 <p>In TxF the resource manager (RM) keeps track of transactional metadata and log
 files. The TxF related metadata files are stored in the metadata directory:</p>
-<pre><code>$Extend\$RmMetadata
+<pre><code class="language-text">$Extend\$RmMetadata
 </code></pre>
 <h3 id="resource-manager-repair-information"><a class="header" href="#resource-manager-repair-information">Resource manager repair information</a></h3>
 <p>The resource manager repair information metadata file:
@@ -2414,8 +2445,11 @@ used to isolate files for delete or overwrite operations.</p>
 <p>The TxF Old Page Stream (TOPS) file: $Extend$RmMetadata$TxfLog$Tops consists
 of the following data streams:</p>
 <ul>
-<li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID, its CLFS log policy, and the LSN at which recovery should start</li>
-<li>the $T data stream, contains the file data that is partially overwritten by a transaction as opposed to a full overwrite, which would move the file into the Transactional NTFS (TxF) metadata directory</li>
+<li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID,
+its CLFS log policy, and the LSN at which recovery should start</li>
+<li>the $T data stream, contains the file data that is partially overwritten by a transaction as
+opposed to a full overwrite, which would move the file into the Transactional NTFS (TxF) metadata
+directory</li>
 </ul>
 <h4 id="txf-old-page-stream-tops-metadata"><a class="header" href="#txf-old-page-stream-tops-metadata">TxF Old Page Stream (TOPS) metadata</a></h4>
 <p>TODO: complete section</p>
@@ -2456,7 +2490,7 @@ by a transaction. It consists of multiple pending transaction XML-documents.</p>
 <p>TODO: describe start of each sector containing 0x0001</p>
 <p>A pending transaction XML-document starts with an UTF-8 byte-order-mark. Is
 roughly contains the following data:</p>
-<pre><code>&lt;?xml version='1.0' encoding='utf-8'?&gt;
+<pre><code class="language-xml">&lt;?xml version='1.0' encoding='utf-8'?&gt;
 &lt;PendingTransaction Version="2.0" Identifier="..."&gt;
    &lt;Transactions&gt;
       &lt;Transaction TransactionId="..."&gt;
@@ -2515,10 +2549,10 @@ roughly contains the following data:</p>
 stream attribute named $TXF_DATA.</p>
 <p>TODO: link to CLFS format documentation</p>
 <p>The base log file (BLF) of the TxF log store is:</p>
-<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLog.blf
+<pre><code class="language-text">$Extend\$RmMetadata\$TxfLog\TxfLog.blf
 </code></pre>
 <p>Commonly the corresponding container files are:</p>
-<pre><code>$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000001
+<pre><code class="language-text">$Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000001
 $Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000002
 </code></pre>
 <p>TxF uses a multiplexed log store which contains the following streams:</p>
@@ -2585,9 +2619,9 @@ utility stream attributes.</p>
 
 <tr><td>0x00000800</td><td>FILE_ATTRIBUTE_COMPRESSED</td><td>Is compressed</td></tr>
 
-<tr><td>0x00001000</td><td>FILE_ATTRIBUTE_OFFLINE</td><td>Is offline. The data of the file is stored on an offline storage.</td></tr>
+<tr><td>0x00001000</td><td>FILE_ATTRIBUTE_OFFLINE</td><td>Is offline. The data of the file is stored on an offline storage</td></tr>
 
-<tr><td>0x00002000</td><td>FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</td><td>Do not index content. The content of the file or directory should not be indexed by the indexing service.</td></tr>
+<tr><td>0x00002000</td><td>FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</td><td>Do not index content. The content of the file or directory should not be indexed by the indexing service</td></tr>
 
 <tr><td>0x00004000</td><td>FILE_ATTRIBUTE_ENCRYPTED</td><td>Is encrypted</td></tr>
 
@@ -2620,7 +2654,7 @@ only the first $DATA attribute has the compressed data flag set.</p>
 <blockquote>
 <p>Note that it is unclear if this is a corruption scenario or not.</p>
 </blockquote>
-<pre><code>MFT entry: 220 information:
+<pre><code class="language-text">MFT entry: 220 information:
     Is allocated                   : true
     File reference                 : 220-59
     Base record file reference     : Not set (0)
@@ -2668,7 +2702,7 @@ Attribute: 5
 </code></pre>
 <h3 id="directory-entry-with-outdated-file-reference"><a class="header" href="#directory-entry-with-outdated-file-reference">Directory entry with outdated file reference</a></h3>
 <p>The directory entry: \ProgramData\McAfee\Common Framework\Task\5.ini</p>
-<pre><code>File entry:
+<pre><code class="language-text">File entry:
     Path                           : \ProgramData\McAfee\Common Framework\Task\5.ini
     File reference                 : 51106-400
     Name                           : 5.ini
@@ -2683,7 +2717,7 @@ Attribute: 5
        Content should not be indexed (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED)
 </code></pre>
 <p>The corresponding MFT entry:</p>
-<pre><code>MFT entry: 51106 information:
+<pre><code class="language-text">MFT entry: 51106 information:
     Is allocated                   : true
     File reference                 : 51106-496
     Base record file reference     : Not set (0)
@@ -2725,7 +2759,7 @@ Attribute: 3
 <h3 id="lznt1-compressed-block-with-data-size-of-0"><a class="header" href="#lznt1-compressed-block-with-data-size-of-0">LZNT1 compressed block with data size of 0</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
 <p>A compression unit (index 30) consisting of the following data runs:</p>
-<pre><code>reading data run: 60.
+<pre><code class="language-text">reading data run: 60.
 data run:
 00000000: 11 01 01                                           ...
 
@@ -2743,12 +2777,12 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
         Is sparse
 </code></pre>
 <p>Contains the following data:</p>
-<pre><code>a7c27000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+<pre><code class="language-text">a7c27000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 ...
 a7c27ff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 </code></pre>
 <p>This relates to an empty LZNT1 compressed block.</p>
-<pre><code>compressed data offset                    : 0 (0x00000000)
+<pre><code class="language-text">compressed data offset                    : 0 (0x00000000)
 compression chunk header                  : 0x0000
 compressed chunk size                     : 1
 signature value                           : 0
@@ -2760,7 +2794,7 @@ filled with 0-byte values.</p>
 <h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
 <p>A compression unit (index 0) consisting of the following data runs:</p>
-<pre><code>reading data run: 0.
+<pre><code class="language-text">reading data run: 0.
 data run:
 00000000: 31 08 48 d8 01                                     1.H..
 
@@ -2778,7 +2812,7 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
         Is sparse
 </code></pre>
 <p>Contains the following data:</p>
-<pre><code>1d848000  bd b7 50 44 46 50 00 01  00 01 00 40 e0 00 07 0b  |..PDFP.....@....|
+<pre><code class="language-text">1d848000  bd b7 50 44 46 50 00 01  00 01 00 40 e0 00 07 0b  |..PDFP.....@....|
 ...
 1d84c000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
@@ -2786,12 +2820,13 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
 </code></pre>
 <p>This relates to a LZNT1 compressed block that appears to be truncated at offset
 16384 (0x00004000).</p>
-<pre><code>compressed data offset                    : 16384 (0x00004000)
+<pre><code class="language-text">compressed data offset                    : 16384 (0x00004000)
 compression flag byte                     : 0x00
 </code></pre>
 <p>Different behavior was observed in 2 differnt NTFS implementations:</p>
 <ul>
-<li>one implementation fills the compressed block with the uncompressed data it could read and the rest with with 0-byte values</li>
+<li>one implementation fills the compressed block with the uncompressed data it could read and the
+rest with with 0-byte values</li>
 <li>another implementation seems to provide the data that was already in its buffer</li>
 </ul>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>

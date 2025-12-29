@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -202,11 +202,11 @@ Linux.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
-<tr><td>Byte order</td><td>little-endian, with the exception of UUID values that are stored in big-endian.</td></tr>
+<tr><td>Byte order</td><td>little-endian, with the exception of UUID values that are stored in big-endian</td></tr>
 
-<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 (POSIX epoch), disregarding leap seconds. Or number of nanoseconds, when extra precision is enabled. Date and time values are stored in UTC.</td></tr>
+<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 (POSIX epoch), disregarding leap seconds. Or number of nanoseconds, when extra precision is enabled. Date and time values are stored in UTC</td></tr>
 
-<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage.</td></tr>
+<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage</td></tr>
 
 </table>
 </div>
@@ -226,18 +226,15 @@ volume. Backup superblocks are stored at offset 1024 relative from the start of
 the block group if block size &lt;= 1024 or otherwise at offset 0 from the start
 of the block group.</p>
 <p>The group descriptor table is stored in the block after the superblock.</p>
-<p>The ext2 revision 0 stores a copy at the start of every block group, along with
-backups of the group descriptor table. Later revisions can reduce the number of
-backup copies by only putting backups in specific groups (sparse superblock
-feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<p>An ext2 file system with revision 0 stores a copy at the start of every block
+group, along with backups of the group descriptor table. Later revisions reduce
+the number of backup copies by only putting backups in specific groups (sparse
+superblock feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<p>Not all values in a backup superblock and backup group descriptor tables match
+those of the primary superblock and group descriptor table.</p>
 <blockquote>
-<p>Note backup superblocks can be empty (filled with 0-byte values) or contain
-remnant data on an Android ext file system with sparse_super.</p>
-</blockquote>
-<blockquote>
-<p>Note that not all values in a backup superblock and backup group descriptor
-tables always match those of the primary superblock and group descriptor
-table.</p>
+<p>Note that backup superblocks can be empty (filled with 0-byte values) or
+contain remnant data on an Android ext file system with sparse_super.</p>
 </blockquote>
 <h3 id="flex-block-groups"><a class="header" href="#flex-block-groups">Flex block groups</a></h3>
 <p>Flex (or flexible) block groups are a set of block groups that treated as
@@ -257,7 +254,7 @@ the first block group of a meta block group and backups in the second and last
 block groups of the meta block group.</p>
 <h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
 <p>The volume is devided in blocks:</p>
-<pre><code>block offset = block number x block size
+<pre><code class="language-python">block offset = block number * block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
 <blockquote>
@@ -266,6 +263,7 @@ block groups of the meta block group.</p>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
 <h3 id="the-ext2-superblock"><a class="header" href="#the-ext2-superblock">The ext2 superblock</a></h3>
 <p>The ext2 superblock is 208 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -273,7 +271,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
 
@@ -352,8 +350,10 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="the-ext3-superblock"><a class="header" href="#the-ext3-superblock">The ext3 superblock</a></h3>
 <p>The ext3 superblock is 336 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -361,7 +361,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks</td></tr>
 
@@ -445,7 +445,7 @@ block groups of the meta block group.</p>
 
 <tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
 
-<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete</td></tr>
 
 <tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
 
@@ -466,8 +466,10 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="the-ext4-superblock"><a class="header" href="#the-ext4-superblock">The ext4 superblock</a></h3>
 <p>The superblock is 1024 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -475,7 +477,7 @@ block groups of the meta block group.</p>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of blocks, which contains the lower 32-bit of the value</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks, which contains the lower 32-bit of the value. Reserved blocks are used to prevent the file system from filling up.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Number of reserved blocks, which contains the lower 32-bit of the value. Reserved blocks are used to prevent the file system from filling up</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Number of unallocated blocks, which contains the lower 32-bit of the value</td></tr>
 
@@ -559,7 +561,7 @@ block groups of the meta block group.</p>
 
 <tr><td>228</td><td>4</td><td></td><td>Unknown (Journal device)</td></tr>
 
-<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete.</td></tr>
+<tr><td>232</td><td>4</td><td></td><td>Unknown (Head of orphan inode list). The orphan inode list is a list of inodes to delete</td></tr>
 
 <tr><td>236</td><td>4 x 4</td><td></td><td>hash-tree seed</td></tr>
 
@@ -601,7 +603,7 @@ block groups of the meta block group.</p>
 
 <tr><td>372</td><td>1</td><td></td><td>Number of block groups per flex block group, which is stored as: 2 ^ value</td></tr>
 
-<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_type">Checksum type</a></td></tr>
+<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_types">Checksum type</a></td></tr>
 
 <tr><td>374</td><td>1</td><td></td><td>Unknown (encryption level)</td></tr>
 
@@ -688,6 +690,7 @@ block groups of the meta block group.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
 <p>Note that some versions of mkfs.ext set the file system creation time even for
@@ -770,13 +773,13 @@ file system identifier.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>EXT2_COMPAT_PREALLOC</td><td>Pre-allocate directory blocks, which is intended to reduce fragmentation.</td></tr>
+<tr><td>0x00000001</td><td>EXT2_COMPAT_PREALLOC</td><td>Pre-allocate directory blocks, which is intended to reduce fragmentation</td></tr>
 
-<tr><td>0x00000002</td><td>EXT2_FEATURE_COMPAT_IMAGIC_INODES</td><td>Has AFS server inodes.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_COMPAT_IMAGIC_INODES</td><td>Has AFS server inodes</td></tr>
 
-<tr><td>0x00000004</td><td>EXT3_FEATURE_COMPAT_HAS_JOURNAL</td><td>Has a journal.</td></tr>
+<tr><td>0x00000004</td><td>EXT3_FEATURE_COMPAT_HAS_JOURNAL</td><td>Has a journal</td></tr>
 
-<tr><td>0x00000008</td><td>EXT2_FEATURE_COMPAT_EXT_ATTR</td><td>Has extended attributes.</td></tr>
+<tr><td>0x00000008</td><td>EXT2_FEATURE_COMPAT_EXT_ATTR</td><td>Has extended attributes</td></tr>
 
 <tr><td>0x00000010</td><td>EXT2_FEATURE_COMPAT_RESIZE_INO, EXT2_FEATURE_COMPAT_RESIZE_INODE</td><td>Is resizeable, the file system has reserved GDT blocks for expansion, which also requires RO_COMPAT_SPARSE_SUPER</td></tr>
 
@@ -794,7 +797,7 @@ file system identifier.</p>
 
 <tr><td>0x00000800</td><td>EXT4_FEATURE_COMPAT_STABLE_INODES</td><td>Unknown (stable inodes)</td></tr>
 
-<tr><td>0x00001000</td><td>EXT4_FEATURE_COMPAT_ORPHAN_FILE</td><td>Has orphan file.</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_COMPAT_ORPHAN_FILE</td><td>Has orphan file</td></tr>
 
 </table>
 </div>
@@ -827,7 +830,7 @@ COMPAT_ can be used interchangeably.</p>
 
 <tr><td>0x00000200</td><td>EXT4_FEATURE_INCOMPAT_FLEX_BG</td><td>Has flex (or flexible) block groups</td></tr>
 
-<tr><td>0x00000400</td><td>EXT4_FEATURE_INCOMPAT_EA_INODE</td><td>Has large inodes, which are larger than 128 bytes.</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_INCOMPAT_EA_INODE</td><td>Has large inodes, which are larger than 128 bytes</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
@@ -835,11 +838,11 @@ COMPAT_ can be used interchangeably.</p>
 
 <tr><td>0x00002000</td><td>EXT4_FEATURE_INCOMPAT_CSUM_SEED, EXT4_FEATURE_INCOMPAT_BG_USE_META_CSUM</td><td>Initial metadata checksum value (or seed) is stored in the superblock</td></tr>
 
-<tr><td>0x00004000</td><td>EXT4_FEATURE_INCOMPAT_LARGEDIR</td><td>Large directory &gt;2GB or 3-level hash tree (HTree).</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_INCOMPAT_LARGEDIR</td><td>Large directory &gt;2GB or 3-level hash tree (HTree)</td></tr>
 
-<tr><td>0x00008000</td><td>EXT4_FEATURE_INCOMPAT_INLINE_DATA</td><td>Has data stored in inode.</td></tr>
+<tr><td>0x00008000</td><td>EXT4_FEATURE_INCOMPAT_INLINE_DATA</td><td>Has data stored in inode</td></tr>
 
-<tr><td>0x00010000</td><td>EXT4_FEATURE_INCOMPAT_ENCRYPT</td><td>Has encrypted inodes.</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_INCOMPAT_ENCRYPT</td><td>Has encrypted inodes</td></tr>
 
 <tr><td>0x00020000</td><td>EXT4_FEATURE_INCOMPAT_CASEFOLD</td><td>Hash case folding</td></tr>
 
@@ -854,47 +857,45 @@ EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER</td><td>Has sparse superblocks and group descriptor tables. If set a superblock is stored in block groups 0, 1 and those that are powers of 3, 5 and 7. If not set a superblock is stored in every block group.</td></tr>
+<tr><td>0x00000001</td><td>EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER</td><td>Has sparse superblocks and group descriptor tables. If set a superblock is stored in block groups 0, 1 and those that are powers of 3, 5 and 7. If not set a superblock is stored in every block group</td></tr>
 
-<tr><td>0x00000002</td><td>EXT2_FEATURE_RO_COMPAT_LARGE_FILE</td><td>Contains large files.</td></tr>
+<tr><td>0x00000002</td><td>EXT2_FEATURE_RO_COMPAT_LARGE_FILE</td><td>Contains large files</td></tr>
 
 <tr><td>0x00000004</td><td>EXT2_FEATURE_RO_COMPAT_BTREE_DIR</td><td>Intended for hash-tree directory (or directory B-tree), which is not yet implemented</td></tr>
 
-<tr><td>0x00000008</td><td>EXT4_FEATURE_RO_COMPAT_HUGE_FILE</td><td>Has huge file support.</td></tr>
+<tr><td>0x00000008</td><td>EXT4_FEATURE_RO_COMPAT_HUGE_FILE</td><td>Has huge file support</td></tr>
 
-<tr><td>0x00000010</td><td>EXT4_FEATURE_RO_COMPAT_GDT_CSUM</td><td>Has group descriptors with checksums.</td></tr>
+<tr><td>0x00000010</td><td>EXT4_FEATURE_RO_COMPAT_GDT_CSUM</td><td>Has group descriptors with checksums</td></tr>
 
-<tr><td>0x00000020</td><td>EXT4_FEATURE_RO_COMPAT_DIR_NLINK</td><td>The ext3 32000 subdirectory limit does not apply. A directory's number of links will be set to 1 if it is incremented past 64999.</td></tr>
+<tr><td>0x00000020</td><td>EXT4_FEATURE_RO_COMPAT_DIR_NLINK</td><td>The ext3 32000 subdirectory limit does not apply. A directory's number of links will be set to 1 if it is incremented past 64999</td></tr>
 
-<tr><td>0x00000040</td><td>EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE</td><td>Has large inodes. The size of an inode can be larger than 128 bytes.</td></tr>
+<tr><td>0x00000040</td><td>EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE</td><td>Has large inodes. The size of an inode can be larger than 128 bytes</td></tr>
 
 <tr><td>0x00000080</td><td>EXT4_FEATURE_RO_COMPAT_HAS_SNAPSHOT</td><td>Has snapshots, which is not yet implemented and intended for a future file system snapshot feature</td></tr>
 
-<tr><td>0x00000100</td><td>EXT4_FEATURE_RO_COMPAT_QUOTA</td><td>Quota is handled transactionally with the journal.</td></tr>
+<tr><td>0x00000100</td><td>EXT4_FEATURE_RO_COMPAT_QUOTA</td><td>Quota is handled transactionally with the journal</td></tr>
 
-<tr><td>0x00000200</td><td>EXT4_FEATURE_RO_COMPAT_BIGALLOC</td><td>Has big block allocation bitmaps. Block allocation bitmaps are tracked in units of clusters (of blocks) instead of blocks.</td></tr>
+<tr><td>0x00000200</td><td>EXT4_FEATURE_RO_COMPAT_BIGALLOC</td><td>Has big block allocation bitmaps. Block allocation bitmaps are tracked in units of clusters (of blocks) instead of blocks</td></tr>
 
-<tr><td>0x00000400</td><td>EXT4_FEATURE_RO_COMPAT_METADATA_CSUM</td><td>File system metadata has checksums.</td></tr>
+<tr><td>0x00000400</td><td>EXT4_FEATURE_RO_COMPAT_METADATA_CSUM</td><td>File system metadata has checksums</td></tr>
 
-<tr><td>0x00000800</td><td>EXT4_FEATURE_RO_COMPAT_REPLICA</td><td>Supports replicas.</td></tr>
+<tr><td>0x00000800</td><td>EXT4_FEATURE_RO_COMPAT_REPLICA</td><td>Supports replicas</td></tr>
 
-<tr><td>0x00001000</td><td>EXT4_FEATURE_RO_COMPAT_READONLY</td><td>Read-only file system image.</td></tr>
+<tr><td>0x00001000</td><td>EXT4_FEATURE_RO_COMPAT_READONLY</td><td>Read-only file system image</td></tr>
 
-<tr><td>0x00002000</td><td>EXT4_FEATURE_RO_COMPAT_PROJECT</td><td>File system tracks project quotas.</td></tr>
+<tr><td>0x00002000</td><td>EXT4_FEATURE_RO_COMPAT_PROJECT</td><td>File system tracks project quotas</td></tr>
 
-<tr><td>0x00004000</td><td>EXT4_FEATURE_RO_COMPAT_SHARED_BLOCKS</td><td>File system has (read-only) shared blocks.</td></tr>
+<tr><td>0x00004000</td><td>EXT4_FEATURE_RO_COMPAT_SHARED_BLOCKS</td><td>File system has (read-only) shared blocks</td></tr>
 
 <tr><td>0x00008000</td><td>EXT4_FEATURE_RO_COMPAT_VERITY</td><td>Unknown (Verity inodes may be present on the filesystem)</td></tr>
 
-<tr><td>0x00010000</td><td>EXT4_FEATURE_RO_COMPAT_ORPHAN_PRESENT</td><td>Orphan file may be non-empty.</td></tr>
+<tr><td>0x00010000</td><td>EXT4_FEATURE_RO_COMPAT_ORPHAN_PRESENT</td><td>Orphan file may be non-empty</td></tr>
 
 </table>
 </div>
 
-<blockquote>
-<p>Note that EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_,
-EXT4_FEATURE_RO_COMPAT_ and RO_COMPAT_ can be used interchangeably.</p>
-</blockquote>
+<p>EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_, EXT4_FEATURE_RO_COMPAT_ and
+RO_COMPAT_ are used interchangeably.</p>
 <blockquote>
 <p>Note that in some ext file systems used by ChromeOS it has been observed that
 the upper 8-bits of the read-only compatible feature flags are set as in
@@ -946,6 +947,7 @@ a value in the padding. It is currently assumed that this value contains
 </blockquote>
 <h3 id="the-ext4-group-descriptor"><a class="header" href="#the-ext4-group-descriptor">The ext4 group descriptor</a></h3>
 <p>The ext4 group descriptor is 68 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1000,6 +1002,7 @@ a value in the padding. It is currently assumed that this value contains
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as the lower 16-bits of
 0xffffffff - CRC-32C, otherwise the checksum is stored as a CRC-16.</p>
 <h3 id="checksum-calculation-1"><a class="header" href="#checksum-calculation-1">Checksum calculation</a></h3>
@@ -1070,9 +1073,9 @@ descriptors.</p>
 
 <tr><td>4</td><td>2</td><td></td><td>Maximum number of entries</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes.</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4.</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4</td></tr>
 
 </table>
 </div>
@@ -1096,13 +1099,11 @@ descriptors.</p>
 <p>If number of blocks &gt; 32768 the extent is considered “uninitialized” which is
 (as far as currently known) comparable to extent being sparse. The number of
 blocks of the sparse extent can be determined as following:</p>
-<pre><code>sparse_number_of_blocks = number_of_blocks - 32768
+<pre><code class="language-python">sparse_number_of_blocks = number_of_blocks - 32768
 </code></pre>
-<blockquote>
-<p>Note that sparse extents can exist between the extent descriptors. In such a
-case the logical block number will not align with the information from the
-previous extent descriptors.</p>
-</blockquote>
+<p>Sparse extents can exist between the extent descriptors. In such a case the
+logical block number will not align with the information from the previous
+extent descriptors.</p>
 <blockquote>
 <p>Note that the native Linux ext implementation expects the extents to be stored
 in order of logical block number.</p>
@@ -1134,13 +1135,12 @@ in order of logical block number.</p>
 </div>
 
 <h2 id="the-inode"><a class="header" href="#the-inode">The inode</a></h2>
+<p>The size of the inode is defined in the superblock when dynamic inode
+information is present.</p>
 <blockquote>
-<p>Note that the size of the inode is defined in the superblock when dynamic
-inode information is present.</p>
-</blockquote>
-<blockquote>
-<p>Note that an ext4 inode can be used on ext2 formatted file system. Seen in
-combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.</p>
+<p>Note that the ext4 inode format can be used on ext2 formatted file system.
+This was observed in combination with format revision 1 and inode size &gt; 128
+created by mkfs.ext2.</p>
 </blockquote>
 <h3 id="the-ext2-inode"><a class="header" href="#the-ext2-inode">The ext2 inode</a></h3>
 <p>The ext2 inode is 128 bytes in size and consists of:</p>
@@ -1206,12 +1206,11 @@ combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
 </blockquote>
-<blockquote>
-<p>Note that if the inode size is larger than 128 bytes, the additional data can
-be stored using an ext4 inode extension.</p>
-</blockquote>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored
+using an ext4 inode extension.</p>
 <h3 id="the-ext3-inode"><a class="header" href="#the-ext3-inode">The ext3 inode</a></h3>
 <p>The ext3 inode is 132 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1276,16 +1275,16 @@ be stored using an ext4 inode extension.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
 </blockquote>
-<blockquote>
-<p>Note that if the inode size is larger than 128 bytes, the additional data can
-be stored using an ext4 inode extension.</p>
-</blockquote>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored
+using an ext4 inode extension.</p>
 <h3 id="the-ext4-inode"><a class="header" href="#the-ext4-inode">The ext4 inode</a></h3>
 <p>The ext4 inode is 160 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1343,7 +1342,7 @@ be stored using an ext4 inode extension.</p>
 
 <tr><td colspan="4"><em>If EXT4_EXTENTS_FL is set</em></td></tr>
 
-<tr><td>40</td><td>12</td><td></td><td><a href="#xt4_extents_header">Extents header</a></td></tr>
+<tr><td>40</td><td>12</td><td></td><td><a href="#ext4_extents_header">Extents header</a></td></tr>
 
 <tr><td>52</td><td>4 x 12</td><td></td><td><a href="#ext4_extent_descriptor">extent descriptors</a> or <a href="#ext4_extent_index">extents indexes</a></td></tr>
 
@@ -1375,7 +1374,7 @@ be stored using an ext4 inode extension.</p>
 
 <tr><td colspan="4"><em>Extension (if inode size &gt; 128)</em></td></tr>
 
-<tr><td>128</td><td>2</td><td></td><td>Extended inode size</td></tr>
+<tr><td>128</td><td>2</td><td></td><td>Extended inode size, which can vary, values of 4, 28 and 32 have been observed</td></tr>
 
 <tr><td>130</td><td>2</td><td></td><td>Upper 16-bits of checksum</td></tr>
 
@@ -1396,13 +1395,11 @@ be stored using an ext4 inode extension.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
 <p>Note that for a character and block device the first 2 bytes of the array of
 direct block numbers contain the minor and major device number respectively.</p>
-</blockquote>
-<blockquote>
-<p>Note that extended inode size can vary, seen 4, 28 and 32.</p>
 </blockquote>
 <h4 id="checksum-calculation-2"><a class="header" href="#checksum-calculation-2">Checksum calculation</a></h4>
 <p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
@@ -1429,7 +1426,7 @@ checksum.</p>
 
 <p>The 34 bits extra precision timestamp (in number of seconds) can be calculated as
 following:</p>
-<pre><code>extra_precision_timestamp = ( extra_epoch_value x 0x100000000 ) + timestamp
+<pre><code class="language-python">extra_precision_timestamp = (extra_epoch_value * 0x100000000) + timestamp
 </code></pre>
 <h4 id="notes"><a class="header" href="#notes">Notes</a></h4>
 <p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification
@@ -1443,6 +1440,7 @@ referenced by multiple inodes) to verify that the EA inode is the correct
 one being accessed.</p>
 </blockquote>
 <h3 id="file_mode"><a class="header" href="#file_mode">File mode</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1497,7 +1495,9 @@ one being accessed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode_flags"><a class="header" href="#inode_flags">Inode flags</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1533,11 +1533,11 @@ one being accessed.</p>
 
 <tr><td colspan="3"><em>Common</em></td></tr>
 
-<tr><td>0x00001000</td><td>EXT2_BTREE_FL, EXT2_INDEX_FL, EXT3_INDEX_FL, EXT4_INDEX_FL, EXT4_INODE_INDEX</td><td>Hash-indexed directory (previously referred to as B-tree format).</td></tr>
+<tr><td>0x00001000</td><td>EXT2_BTREE_FL, EXT2_INDEX_FL, EXT3_INDEX_FL, EXT4_INDEX_FL, EXT4_INODE_INDEX</td><td>Hash-indexed directory (previously referred to as B-tree format)</td></tr>
 
 <tr><td>0x00002000</td><td>EXT2_IMAGIC_FL, EXT3_IMAGIC_FL, EXT4_IMAGIC_FL, EXT4_INODE_IMAGIC</td><td>AFS directory</td></tr>
 
-<tr><td>0x00004000</td><td>EXT2_JOURNAL_DATA_FL, EXT3_JOURNAL_DATA_FL, EXT4_JOURNAL_DATA_FL, EXT4_INODE_JOURNAL_DATA</td><td>File data must be written using the journal.</td></tr>
+<tr><td>0x00004000</td><td>EXT2_JOURNAL_DATA_FL, EXT3_JOURNAL_DATA_FL, EXT4_JOURNAL_DATA_FL, EXT4_INODE_JOURNAL_DATA</td><td>File data must be written using the journal</td></tr>
 
 <tr><td>0x00008000</td><td>EXT2_NOTAIL_FL, EXT3_NOTAIL_FL, EXT4_NOTAIL_FL, EXT4_INODE_NOTAIL</td><td>File tail should not be merged, which is not used by ext4</td></tr>
 
@@ -1578,6 +1578,7 @@ one being accessed.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h3 id="reserved-inode-numbers"><a class="header" href="#reserved-inode-numbers">Reserved inode numbers</a></h3>
 <div class="table-wrapper">
 <table>
@@ -1633,7 +1634,7 @@ directory entries can be stored in multiple ways:</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td>Inode number</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>Directory entry size, which must be a multitude of 4.</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Directory entry size, which must be a multitude of 4</td></tr>
 
 <tr><td>6</td><td>1</td><td></td><td>Name size, which contains the size of the name without the end-of-string character and has a maximum of 255</td></tr>
 
@@ -1722,7 +1723,7 @@ with the <a href="#directory_entry">linear directory entry</a>.</p>
 
 <h4 id="dx_entry"><a class="header" href="#dx_entry">dx_entry</a></h4>
 <p>TODO: complete section</p>
-<pre><code>struct dx_entry
+<pre><code class="language-text">struct dx_entry
 {
         __le32 hash;
         __le32 block;
@@ -1819,7 +1820,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 
 <tr><td>12</td><td>4</td><td></td><td>Unknown (Attribute hash)</td></tr>
 
-<tr><td>16</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+<tr><td>16</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character and can be empty, for example in combination with a prefix or with an encrypted file</td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>32-bit alignment padding</td></tr>
 
@@ -1830,11 +1831,7 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 and is used as a terminator.</p>
 <blockquote>
 <p>Note that some implementations of older Android versions of ext appear to
-only set the first 4 bytes to 0.</p>
-</blockquote>
-<blockquote>
-<p>Note that the name can be empty, for example in combination with a prefix or
-with an encrypted file.</p>
+only set the first 4 bytes to 0 for the terminator.</p>
 </blockquote>
 <h3 id="the-extended-attribute-name-index"><a class="header" href="#the-extended-attribute-name-index">The extended attribute name index</a></h3>
 <p>The name index indicates the prefix of the extended attribute name.</p>

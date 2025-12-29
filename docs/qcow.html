@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -259,7 +259,7 @@ sector are 512.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>1</td><td>Format version</td></tr>
 
@@ -285,23 +285,19 @@ sector are 512.</p>
 </div>
 
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level2_table_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = cluster block size * ( 1 &lt;&lt; number of level 2 table bits )
+<pre><code class="language-python">level1_table_entry_size = cluster_block_size * (1 &lt;&lt; number_of_level2_table_bits)
 
-if( media size % level 1 table size != 0 )
-{
-    level 1 table size = ( media size / level 1 table size ) + 1
-}
-else
-{
-    level 1 table size = media size / level 1 table size
-}
-level 1 table size *= 8
+level1_table_size = media_size / level1_table_entry_size
+if media_size % level1_table_entry_size != 0:
+    level1_table_size += 1
+
+level1_table_size *= 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
@@ -310,7 +306,7 @@ after the file header.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>2</td><td>Format version</td></tr>
 
@@ -340,25 +336,26 @@ after the file header.</p>
 </div>
 
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
 <p>The number of level 2 table bits is calculated as:</p>
-<pre><code>number of level 2 table bits = number of cluster block bits - 3
+<pre><code class="language-python">number_of_level2_table_bits = number_of_cluster_block_bits - 3
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level_table2_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = number of level 1 table references * 8
+<pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
 <h3 id="file-header--version-3"><a class="header" href="#file-header--version-3">File header – version 3</a></h3>
 <p>The file header - version 3 is 104 or 112 bytes in size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature (or magic identifier)</td></tr>
+<tr><td>0</td><td>4</td><td>"QFI\xfb" or "\x51\x46\x49\xfb"</td><td>The signature</td></tr>
 
 <tr><td>4</td><td>4</td><td>3</td><td>Format version</td></tr>
 
@@ -403,17 +400,18 @@ after the file header.</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <p>The cluster block size is calculated as:</p>
-<pre><code>cluster block size = 1 &lt;&lt; number of cluster block bits
+<pre><code class="language-python">cluster_block_size = 1 &lt;&lt; number_of_cluster_block_bits
 </code></pre>
 <p>The number of level 2 table bits is calculated as:</p>
-<pre><code>number of level 2 table bits = number of cluster block bits - 3
+<pre><code class="language-python">number_of_level2_table_bits = number_of_cluster_block_bits - 3
 </code></pre>
-<p>The level table 2 size is calculated as:</p>
-<pre><code>level table 2 size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<p>The level 2 table size is calculated as:</p>
+<pre><code class="language-python">level_table2_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>The level 1 table size is calculated as:</p>
-<pre><code>level 1 table size = number of level 1 table references * 8
+<pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
 <p>The backing file name is set in snapshot image files and is normally stored
 after the file header.</p>
@@ -584,7 +582,7 @@ level 2 table is exactly one.</p>
 <h2 id="level-2-table"><a class="header" href="#level-2-table">Level 2 table</a></h2>
 <p>The level 2 table contains cluster block references.</p>
 <p>The level 2 table size is calculated as:</p>
-<pre><code>level 2 table size = ( 1 &lt;&lt; number of level 2 table bits ) * 8
+<pre><code class="language-python">level2_table_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
 <p>A reference value of 0 represents unused or unallocated and is considered as
 sparse or stored in a corresponding backing file.</p>
@@ -623,7 +621,7 @@ cluster block is exactly one.</p>
 contains the number of blocks (or reference count table clusters).</p>
 <p>TODO: complete section</p>
 <h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
-<pre><code>reference count cluster block offset = cluster data block offset /
+<pre><code class="language-text">reference count cluster block offset = cluster data block offset /
 reference count table offset = cluster data block /
 
 In order to obtain the reference count of a given cluster, you split the
@@ -642,31 +640,31 @@ for any snapshots referencing it.
 <h2 id="cluster-data-block"><a class="header" href="#cluster-data-block">Cluster data block</a></h2>
 <p>To retrieve a cluster data block corresponding a certain storage media offset:</p>
 <p>Determine the level 1 table index from the offset:</p>
-<pre><code>level 1 table index bit shift = number of cluster block bits + number of level 2 table bits
+<pre><code class="language-python">level1_table_index_bit_shift = number_of_cluster_block_bits + number_of_level2_table_bits
 </code></pre>
 <p>For version 1:</p>
-<pre><code>level 1 table index = ( offset &amp; 0x7fffffffffffffffULL ) &gt;&gt; level 1 table index bit shift
+<pre><code class="language-python">level1_table_index = (offset &amp; 0x7fffffffffffffff) &gt;&gt; level1_table_index_bit_shift
 </code></pre>
 <p>For version 2 and 3:</p>
-<pre><code>level 1 table index = ( offset &amp; 0x3fffffffffffffffULL ) &gt;&gt; level 1 table index bit shift
+<pre><code class="language-python">level1_table_index = (offset &amp; 0x3fffffffffffffff) &gt;&gt; level1_table_index_bit_shift
 </code></pre>
-<p>Retrieve the level 2 table offset from the level 1 table. If the level table 2
+<p>Retrieve the level 2 table offset from the level 1 table. If the level 2 table
 offset is 0 and the image has a backing file the cluster data block is stored
 in the backing file otherwise the cluster block is considered sparse.</p>
 <p>Read the corresponding level 2 table.</p>
 <p>Determine the level 2 table index from the offset:</p>
-<pre><code>level 2 table index bit mask = ~( 0xffffffffffffffffULL &lt;&lt; number of level 2 table bits )
+<pre><code class="language-python">level2_table_index_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_level2_table_bits)
 </code></pre>
-<pre><code>level 2 table index = ( offset &gt;&gt; number of cluster block bits ) &gt;&gt; level 2 table index bit mask
+<pre><code class="language-python">level2_table_index = (offset &gt;&gt; number_of_cluster_block_bits) &gt;&gt; level2_table_index_bit_mask
 </code></pre>
 <p>Retrieve the cluster block offset from the level 2 table. If the cluster block
 offset is 0 and the image has a backing file the cluster data block is stored
 in the backing file otherwise the cluster block is considered sparse.</p>
 <h3 id="uncompressed-cluster-data-block"><a class="header" href="#uncompressed-cluster-data-block">Uncompressed cluster data block</a></h3>
 <p>If the is compressed flag (QCOW_OFLAG_COMPRESSED) is not set:</p>
-<pre><code>cluster block bit mask = ~( 0xffffffffffffffffULL &lt;&lt; number of cluster block bits )
+<pre><code class="language-python">cluster_block_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_cluster_block_bits)
 </code></pre>
-<pre><code>cluster block data offset = ( offset &amp; cluster block bit mask ) + cluster block offset
+<pre><code class="language-python">cluster_block_data_offset = (offset &amp; cluster_block_bit_mask) + cluster_block_offset
 </code></pre>
 <p>Note that in version 2 or 3 the last cluster block in the file can be smaller than
 the cluster block size defined by the number of cluster block bits in the file
@@ -679,25 +677,27 @@ default.</p>
 sizes. The compressed cluster data blocks are sector (512 bytes) aligned.</p>
 <p>The compressed data uses a DEFLATE (inflate) window bits value of -12</p>
 <h4 id="compressed-chunk-data-block--version-1"><a class="header" href="#compressed-chunk-data-block--version-1">Compressed chunk data block – version 1</a></h4>
-<pre><code>compressed size bit shift = 63 - number of cluster block bits
+<pre><code class="language-python">compressed_size_bit_shift = 63 - number_of_cluster_block_bits
 </code></pre>
-<pre><code>compressed block size = ( ( cluster block offset &amp; 0x7fffffffffffffffULL ) &gt;&gt; compressed size bit shift
+<pre><code class="language-python">compressed_block_size = (
+    (cluster_block_offset &amp; 0x7fffffffffffffff) &gt;&gt; compressed_size_bit_shift)
 </code></pre>
-<pre><code>compressed block offset &amp;= ~( 0xffffffffffffffffULL &lt;&lt; compressed size bit shift )
+<pre><code class="language-python">compressed_block_offset &amp;= ~(0xffffffffffffffff &lt;&lt; compressed_size_bit_shift)
 </code></pre>
 <h4 id="compressed-chunk-data-block--version-2-or-3"><a class="header" href="#compressed-chunk-data-block--version-2-or-3">Compressed chunk data block – version 2 or 3</a></h4>
-<pre><code>compressed size bit shift = 62 - ( number of cluster block bits – 8 )
+<pre><code class="language-python">compressed_size_bit_shift = 62 - (number_of_cluster_block_bits – 8)
 </code></pre>
 <p>According to “the QCOW2 Image Format” the compressed block size is calculated
 as following:</p>
-<pre><code>compressed block size = ( ( ( cluster block offset &amp; 0x3fffffffffffffffULL ) &gt;&gt; compressed size bit shift ) + 1 ) * 512
+<pre><code class="language-python">compressed_block_size = (
+    (((cluster_block_offset &amp; 0x3fffffffffffffff) &gt;&gt; compressed_size_bit_shift) + 1) * 512)
 </code></pre>
 <p>Since the compressed block size is stored in 512 byte sectors this value does
 not contain the exact byte size of the compressed cluster block data. It
 sometimes lacks the size of the last partially filled sector and one sector
 should be added if possible within the bounds of the cluster blocks size and
 the file size.</p>
-<pre><code>cluster block offset &amp;= ~( 0xffffffffffffffffULL &lt;&lt; compressed size bit shift )
+<pre><code class="language-python">cluster_block_offset &amp;= ~(0xffffffffffffffff &lt;&lt; compressed_size_bit_shift)
 </code></pre>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>As of version 1 QCOW can use the backing file name in the file header to point

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e82fe897.js";
+            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4e057007.js"></script>
@@ -176,8 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="master-boot-record-mbr-partition-table-format"><a class="header" href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) partition table format</a></h1>
-<p>The Master Boot Record (MBR) partition table is mainly used on the family of
-Intel x86 based computers.</p>
+<p>The Master Boot Record (MBR) partition table is mainly used on the family of Intel x86 based
+computers.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A MBR partition table consists of:</p>
 <ul>
@@ -201,19 +201,18 @@ Intel x86 based computers.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
-<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media.</td></tr>
+<tr><td>Physical block</td><td>A fixed location on the storage media defined by the storage media</td></tr>
 
-<tr><td>Logical block</td><td>An abstract location on the storage media defined by software.</td></tr>
+<tr><td>Logical block</td><td>An abstract location on the storage media defined by software</td></tr>
 
 </table>
 </div>
 
 <h3 id="sector-sizes"><a class="header" href="#sector-sizes">Sector size(s)</a></h3>
-<p>Traditionally the size of sector is 512 bytes, but modern hard disk drives use
-4096 bytes. The linux fdisk utility supports sector sizes of: 512, 1024, 2048
-and 4096.</p>
-<p>The location of of the “boot signature” of the MBR does not indicate the sector
-size. Methods to derive the sector size from the data:</p>
+<p>Traditionally the size of sector is 512 bytes, but modern hard disk drives use 4096 bytes. The
+linux fdisk utility supports sector sizes of: 512, 1024, 2048 and 4096.</p>
+<p>The location of of the “boot signature” of the MBR does not indicate the sector size. Methods to
+derive the sector size from the data:</p>
 <ul>
 <li>check the “boot signature” of the first EPR, if present</li>
 <li>check the content of well known partition types</li>
@@ -232,16 +231,15 @@ size. Methods to derive the sector size from the data:</p>
 </table>
 </div>
 
-<p>The logical block address (LBA) can be determined from the CHS with the
-following calculation:</p>
-<pre><code>LBA = ( ( ( cylinder * heads per cylinder ) + head ) * sectors per track ) + sector - 1
+<p>The logical block address (LBA) can be determined from the CHS with the following calculation:</p>
+<pre><code class="language-python">lba = (((cylinder * heads_per_cylinder) + head) * sectors_per_track) + sector - 1
 </code></pre>
 <h2 id="the-master-boot-record-mbr"><a class="header" href="#the-master-boot-record-mbr">The Master Boot Record (MBR)</a></h2>
-<p>The Master Boot Record (MBR) is a data structure that describes the properties
-of the storage medium and its partitions.</p>
-<p>The classical MBR can only contain 4 partition table entries. Additional
-partition entries must be stored using extended partition records (EPR). The
-classical MBR has evolved into different variants like:</p>
+<p>The Master Boot Record (MBR) is a data structure that describes the properties of the storage
+medium and its partitions.</p>
+<p>The classical MBR can only contain 4 partition table entries. Additional partition entries must be
+stored using extended partition records (EPR). The classical MBR has evolved into different
+variants like:</p>
 <ul>
 <li>The modern MBR</li>
 <li>The Advanced Active Partitions (AAP) MBR</li>
@@ -271,6 +269,7 @@ classical MBR has evolved into different variants like:</p>
 
 <h3 id="the-modern-mbr"><a class="header" href="#the-modern-mbr">The modern MBR</a></h3>
 <p>The modern MBR is 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -315,11 +314,11 @@ classical MBR has evolved into different variants like:</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <h2 id="the-extended-partition-record"><a class="header" href="#the-extended-partition-record">The extended partition record</a></h2>
-<p>The extended partition record (EPR) (also referred to as extended boot record
-(EBR)) starts with a 64 byte (extended) partition record (EPR) like the MBR.
-This partition table contains information about the logical partition (volume)
-and additional extended partition tables.</p>
+<p>The extended partition record (EPR) (also referred to as extended boot record (EBR)) starts with a
+64 byte (extended) partition record (EPR) like the MBR. This partition table contains information
+about the logical partition (volume) and additional extended partition tables.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -338,12 +337,10 @@ and additional extended partition tables.</p>
 </table>
 </div>
 
-<p>The second partition entry contains an extended partition which points to the
-next EPR. The LBA addresses in the EPR are relative to the start of the first
-EPR.</p>
-<p>The first EPR typically has a <a href="#partition_types">partition type</a> of 0x05 but
-certain version of Windows are known to use a partition type 0x0f, such as
-Windows 98.</p>
+<p>The second partition entry contains an extended partition which points to the next EPR. The LBA
+addresses in the EPR are relative to the start of the first EPR.</p>
+<p>The first EPR typically has a <a href="#partition_types">partition type</a> of 0x05 but certain version of
+Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 <h2 id="the-partition-table-entry"><a class="header" href="#the-partition-table-entry">The partition table entry</a></h2>
 <p>The partition table entry is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
