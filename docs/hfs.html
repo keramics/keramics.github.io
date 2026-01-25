@@ -1,0 +1,2677 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Hierarchical File System (HFS) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-cb967a59.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-dc2c8d7c.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="hierarchical-file-system-hfs-format"><a class="header" href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS) format</a></h1>
+<p>The Hierarchical File System (HFS) was the default file system for Mac OS after
+<a href="mfs.html">Macintosh File System (MFS)</a> and before <a href="apfs.html">Apple File System (APFS)</a>.</p>
+<blockquote>
+<p>Note that this document uses Mac OS to refer to the Macintosh Operating System in general,
+instead of specific versions like Mac OS X or macOS. Mac OS X is used to refer to version of Mac
+OS 10.0 or later.</p>
+</blockquote>
+<p>There are multiple known variants or derivatives of HFS, such as:</p>
+<ul>
+<li>HFS</li>
+<li>HFS+ 8.10, used by Mac OS 8.1 to 9.2.2</li>
+<li>HFS+ 10.0, introduced in Mac OS 10.0</li>
+<li>HFSX, introduced in Mac OS 10.3</li>
+</ul>
+<blockquote>
+<p>Note that HFS can be referred to as “HFS Standard” and HFS+ or HFSX as “HFS Extended”.</p>
+</blockquote>
+<p>HFSX (or HFS/X) is an extension to HFS+ to allow additional features that are incompatible with
+HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
+case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
+volume.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<div class="table-wrapper">
+<table>
+<thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
+<tr><td>Maximum file size</td><td>231 (2 GiB)</td><td>263 (8 EiB)</td></tr>
+
+<tr><td>Maximum file name size</td><td>31 characters</td><td>255 characters</td></tr>
+
+<tr><td>Maximum number of blocks</td><td>216 (65535 bytes)</td><td>232 (4294967296 bytes)</td></tr>
+
+<tr><td>Character set</td><td>narrow character with codepage</td><td>Unicode UTF-16 big-endian</td></tr>
+
+<tr><td>Time stamps</td><td>In local time</td><td>In UTC</td></tr>
+
+<tr><td>Catalog B-tree file node size</td><td>512 bytes</td><td>4096 bytes</td></tr>
+
+<tr><td>File attributes</td><td>none</td><td>Basic and extended</td></tr>
+
+</table>
+</div>
+
+<h3 id="hfs"><a class="header" href="#hfs">HFS</a></h3>
+<p>A HFS file system consists of:</p>
+<ul>
+<li>optional <a href="mfs.html#boot_block">MFS boot block</a></li>
+<li><a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
+<li><a href="#hfs_volume_bitmap">volume bitmap</a></li>
+<li>extents overflow file</li>
+<li><a href="#catalog_file">catalog file</a></li>
+<li>optional backup (or alternate) <a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
+</ul>
+<p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
+<h4 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td><a href="#hfs_timestamp">HFS timestamp</a> in local time</td></tr>
+
+<tr><td>Character strings</td><td>Narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage</td></tr>
+
+</table>
+</div>
+
+<h3 id="hfs-and-hfsx"><a class="header" href="#hfs-and-hfsx">HFS+ and HFSX</a></h3>
+<p>A HFS+ or HFSX file system consists of:</p>
+<ul>
+<li>reserved (or unused) blocks</li>
+<li><a href="#hfs_plus_volume_header">volume header</a></li>
+<li>allocation file</li>
+<li>extents overflow file</li>
+<li><a href="#catalog_file">catalog file</a></li>
+<li>optional attributes file</li>
+<li>optional startup file</li>
+<li>optional backup (or alternate) <a href="#hfs_plus_volume_header">volume header</a></li>
+</ul>
+<p>The backup volume header, is stored in the last 1024 bytes of the volume.</p>
+<h4 id="characteristics-1"><a class="header" href="#characteristics-1">Characteristics</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td><a href="#hfs_timestamp">HFS timestamp</a> in UTC</td></tr>
+
+<tr><td>Character strings</td><td>UTF-16 big-endian</td></tr>
+
+</table>
+</div>
+
+<h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Term</th><th>Description</th></thead>
+<tr><td>Clump size</td><td>Size of the group of (allocation) blocks (or clump), in bytes, to avoid fragmentation</td></tr>
+
+</table>
+</div>
+
+<h3 id="unicode-strings"><a class="header" href="#unicode-strings">Unicode strings</a></h3>
+<p>Unicode strings are stored as UTF-16 big-endian in Normalization Form Canonical Decomposition (NFD)
+based on Unicode 3.2, with exclusions. Unicode values in the ranges U+2000 - U+2FFF, U+F900 - U+FAFF
+and U+2F800 - U+2FAFF are not decomposed.</p>
+<p>On Mac OS 8.1 through 10.2.x decomposition was based on Unicode 2.1.</p>
+<p>TODO: determine what the impact of the different Unicode versions is.</p>
+<blockquote>
+<p>Note that based on observations on Mac OS 10.15.7 on HFS+ the range U+1D000 - U+1D1FF is excluded
+from decomposition and U+2400 is replaced by U+0.</p>
+</blockquote>
+<h3 id="hfs_timestamp"><a class="header" href="#hfs_timestamp">HFS timestamp</a></h3>
+<p>Date and time values are stored as an unsigned 32-bit integer containing the number of seconds
+since January 1, 1904 at 00:00:00 (midnight), where:</p>
+<ul>
+<li>MFS and HFS use local time;</li>
+<li>HFS+ and HFSX use Coordinated Universal Time (UTC).</li>
+</ul>
+<p>This document will refer to both forms as HFS timestamp.</p>
+<p>The maximum representable date is February 6, 2040 at 06:28:15 UTC.</p>
+<p>The HFS timestamp does not account for leap seconds. It includes a leap day in every year that is
+evenly divisible by 4. This is sufficient given that the range of representable dates does not
+contain 1900 or 2100, neither of which have leap days.</p>
+<h3 id="file-names"><a class="header" href="#file-names">File names</a></h3>
+<p>TN1150 states that HFS file names are compared in case-insensitive assuming a MacRoman encoding.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Upper case</th><th>Lower case</th></thead>
+<tr><td>0x41 - 0x5a (A - Z)</td><td>0x61 - 0x7a (a - z)</td></tr>
+
+<tr><td>0x80 (Ä)</td><td>0x8a (ä)</td></tr>
+
+<tr><td>0x81 (Å)</td><td>0x8c (å)</td></tr>
+
+<tr><td>0x82 (Ç)</td><td>0x8d (ç)</td></tr>
+
+<tr><td>0x83 (É)</td><td>0x8e (é)</td></tr>
+
+<tr><td>0x84 (Ñ)</td><td>0x96 (ñ)</td></tr>
+
+<tr><td>0x85 (Ö)</td><td>0x9a (ö)</td></tr>
+
+<tr><td>0x86 (Ü)</td><td>0x9f (ü)</td></tr>
+
+<tr><td>0xae (Æ)</td><td>0xbe (æ)</td></tr>
+
+<tr><td>0xaf (Ø)</td><td>0xbf (ø)</td></tr>
+
+<tr><td>0xcb (À)</td><td>0x88 (à)</td></tr>
+
+<tr><td>0xcc (Ã)</td><td>0x8b (ã)</td></tr>
+
+<tr><td>0xcd (Õ)</td><td>0x9b (õ)</td></tr>
+
+<tr><td>0xce (Œ)</td><td>0xcf (œ)</td></tr>
+
+<tr><td>0xd9 (Ÿ)</td><td>0xd8 (ÿ)</td></tr>
+
+<tr><td>0xe5 (Â)</td><td>0x89 (â)</td></tr>
+
+<tr><td>0xe6 (Ê)</td><td>0x90 (ê)</td></tr>
+
+<tr><td>0xe7 (Á)</td><td>0x87 (á)</td></tr>
+
+<tr><td>0xe8 (Ë)</td><td>0x91 (ë)</td></tr>
+
+<tr><td>0xe9 (È)</td><td>0x8f (è)</td></tr>
+
+<tr><td>0xea (Í)</td><td>0x92 (í)</td></tr>
+
+<tr><td>0xeb (Î)</td><td>0x94 (î)</td></tr>
+
+<tr><td>0xec (Ï)</td><td>0x95 (ï)</td></tr>
+
+<tr><td>0xed (Ì)</td><td>0x93 (ì)</td></tr>
+
+<tr><td>0xee (Ó)</td><td>0x97 (ó)</td></tr>
+
+<tr><td>0xef (Ô)</td><td>0x99 (ô)</td></tr>
+
+<tr><td>0xf1 (Ò)</td><td>0x98 (ò)</td></tr>
+
+<tr><td>0xf2 (Ú)</td><td>0x9c (ú)</td></tr>
+
+<tr><td>0xf3 (Û)</td><td>0x9e (û)</td></tr>
+
+<tr><td>0xf4 (Ù)</td><td>0x9d (ù)</td></tr>
+
+</table>
+</div>
+
+<p>HFS+ allows for the “/” character in file names. On Mac OS, Finder this will be represented as a
+“/” but in Terminal it is replaced by “:” since the same character is used as path segment
+separator. A file name with a “:” created in Terminal will be shown as “/” in Finder. Finder does
+not allow the creation of a file containing “:” in the name. A symbolic link created in Terminal to
+a file with a “:” in name will not convert the “:” character in the link target data. The Linux
+HFS+ implementation appears to apply a similar conversion logic as Terminal.</p>
+<h2 id="btree_files"><a class="header" href="#btree_files">B-tree files</a></h2>
+<p>HFS, HFS+ and HFSX use multiple B-trees files.</p>
+<p>A B-tree file consists of fixed sized nodes:</p>
+<ul>
+<li>header node</li>
+<li>map nodes</li>
+<li>index (root and branch) nodes</li>
+<li>leaf nodes</li>
+</ul>
+<blockquote>
+<p>Note that only the data fork of a B-tree file is used. The resource fork should be unused.</p>
+</blockquote>
+<p>The size of a B-tree file can be calculated in the following manner:</p>
+<pre><code class="language-python">size = number_of_nodes * node_size
+</code></pre>
+<h3 id="node-size"><a class="header" href="#node-size">Node size</a></h3>
+<p>The node size is determined when the B-tree file is created.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
+<tr><td>Node size</td><td>512 bytes</td><td>where the value must be a power of 2 in the range 512 - 32768</td></tr>
+
+</table>
+</div>
+
+<p>In a HFS+ the B-tree node size is stored in the header node.</p>
+<p>Default node sizes:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
+<tr><td>catalog file</td><td>512</td><td>4 KiB (8 KiB in Mac OS X)</td></tr>
+
+<tr><td>extents overflow file</td><td>512</td><td>1 KiB (4 KiB in Mac OS X)</td></tr>
+
+<tr><td>attributes file</td><td>N/A</td><td>4 KiB</td></tr>
+
+</table>
+</div>
+
+<h3 id="b-tree-file-node"><a class="header" href="#b-tree-file-node">B-tree (file) node</a></h3>
+<p>A B-tree file node consists of:</p>
+<ul>
+<li>node descriptor</li>
+<li>node records</li>
+<li>node record offsets</li>
+</ul>
+<p>The first node in the file is referenced by node number 0.</p>
+<p>The node offset relative to the start of the file and can be calculated in the following manner:</p>
+<pre><code class="language-python">node_offset = node_number * node_size
+</code></pre>
+<h4 id="b-tree-node-descriptor"><a class="header" href="#b-tree-node-descriptor">B-tree node descriptor</a></h4>
+<p>The B-tree node descriptor (BTNodeDescriptor) is 14 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Next tree node number (forward link), which contains 0 if empty</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Previous tree node number (backward link), which contains 0 if empty</td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td><a href="#btree_node_types">Node type</a>, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>9</td><td>1</td><td></td><td>Node level, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Number of records</td></tr>
+
+<tr><td>12</td><td>2</td><td>0</td><td>Unknown (Reserved), should contain 0</td></tr>
+
+</table>
+</div>
+
+<p>The root node level is 0, with a maximum depth of 8.</p>
+<h5 id="btree_node_types"><a class="header" href="#btree_node_types">B-tree node types</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>-1</td><td>kBTLeafNode</td><td>leaf node</td></tr>
+
+<tr><td>0</td><td>kBTIndexNode</td><td>index node</td></tr>
+
+<tr><td>1</td><td>kBTHeaderNode</td><td>header node</td></tr>
+
+<tr><td>2</td><td>kBTMapNode</td><td>map node</td></tr>
+
+</table>
+</div>
+
+<h4 id="b-tree-node-record"><a class="header" href="#b-tree-node-record">B-tree node record</a></h4>
+<p>The B-tree node record contains (leaf) data or a reference to an index node and consists of:</p>
+<ul>
+<li>a key</li>
+<li>value data</li>
+</ul>
+<h4 id="b-tree-record-offsets"><a class="header" href="#b-tree-record-offsets">B-tree record offsets</a></h4>
+<p>The B-tree record offsets are an array of 16-bit integers relative from the start of the B-tree
+node descriptor. The first record offset is found at node size - 2, e.g. 512 - 2 = 510, the
+second 2 bytes before that, e.g. 508, etc.</p>
+<p>An additional record offset is added at the end to signify the start of the free space.</p>
+<blockquote>
+<p>Note that the record offsets are not necessarily stored in linear order.</p>
+</blockquote>
+<h3 id="b-tree-header-node"><a class="header" href="#b-tree-header-node">B-tree header node</a></h3>
+<p>The B-tree header node is stored in the first node of the B-tree file and contains 3 records:</p>
+<ul>
+<li>the B-tree header record;</li>
+<li>the user data record, which consist of 128 bytes (reserved within HFS);</li>
+<li>the B-tree map record.</li>
+</ul>
+<blockquote>
+<p>Note that the records in the B-tree header node do not have keys.</p>
+</blockquote>
+<h4 id="btree_header_record"><a class="header" href="#btree_header_record">B-tree header record</a></h4>
+<p>The B-tree header record (BTHeaderRec) is 106 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Depth of the tree</td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>Root node number</td></tr>
+
+<tr><td>6</td><td>4</td><td></td><td>Number of data records contained in leaf nodes</td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>First leaf node number</td></tr>
+
+<tr><td>14</td><td>4</td><td></td><td>Last leaf node number</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Node size, in bytes, where the value must be a power of 2 in the range 512 - 32768</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Maximum key size, in bytes</td></tr>
+
+<tr><td>22</td><td>4</td><td></td><td>Number of nodes</td></tr>
+
+<tr><td>26</td><td>4</td><td></td><td>Number of unused nodes</td></tr>
+
+<tr><td colspan="4"><em>HFS</em></td></tr>
+
+<tr><td>30</td><td>76</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td colspan="4"><em>HFS+/HFSX</em></td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
+
+<tr><td>36</td><td>1</td><td></td><td><a href="#btree_header_record_file_types">B-tree file type</a></td></tr>
+
+<tr><td>37</td><td>1</td><td></td><td><a href="#btree_header_record_key_comparion_method">Key comparision method</a></td></tr>
+
+<tr><td>38</td><td>4</td><td></td><td><a href="#btree_header_record_flags">Flags</a> (or attributes)</td></tr>
+
+<tr><td>42</td><td>16 x 4 = 64</td><td></td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<p>TODO: does the number of data records equal the number of leaf nodes?</p>
+<h5 id="btree_header_record_file_types"><a class="header" href="#btree_header_record_file_types">File type</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00</td><td></td><td>Control file</td></tr>
+
+<tr><td>0x80</td><td></td><td>First user B-tree type</td></tr>
+
+<tr><td>0xff</td><td></td><td>Reserved B-tree type</td></tr>
+
+</table>
+</div>
+
+<h5 id="btree_header_record_key_comparion_method"><a class="header" href="#btree_header_record_key_comparion_method">Key comparision methodtype</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0xbc</td><td></td><td>Binary compare (case-sensitive)</td></tr>
+
+<tr><td>0xcf</td><td></td><td>Unicode case folding (case-insensitive)</td></tr>
+
+</table>
+</div>
+
+<h5 id="btree_header_record_flags"><a class="header" href="#btree_header_record_flags">Flags</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>kBTBadCloseMask</td><td>Bad close, which indicates that the B-tree was not closed properly and should be checked for consistency (Not used by HFS+ and HFSX)</td></tr>
+
+<tr><td>0x00000002</td><td>kBTBigKeysMask</td><td>Big keys, which indicates the key data size value of the keys in index and leaf nodes is 16-bit integer, otherwise, it is an 8-bit integer (Must be set for HFS+ and HFSX)</td></tr>
+
+<tr><td>0x00000004</td><td>kBTVariableIndexKeysMask</td><td>Variable-size (index) keys, which indicates that the keys in index nodes occupy the number of bytes indicated by their key size; otherwise, the keys in index nodes always occupy maximum key size (must be set for the HFS+ and HFSX Catalog B-tree, and cleared for the HFS+ and HFSX Extents overflow B-tree)</td></tr>
+
+</table>
+</div>
+
+<h4 id="b-tree-map-record"><a class="header" href="#b-tree-map-record">B-tree map record</a></h4>
+<p>The B-tree map record contains of a bitmap that indicates which nodes in the B-tree file are used
+and which are not. If a bit is set, then the corresponding node in the B-tree file is in use.</p>
+<p>The bitmap is 256 bytes in size and can represent a maximum of 2048 nodes. If more nodes are needed
+a <a href="#btree_map_node">map node</a> is used to store additional mappings.</p>
+<h3 id="btree_map_node"><a class="header" href="#btree_map_node">The map node</a></h3>
+<p>If a B-tree file contains more than 2048 nodes, which are enough for about 8000 files, a map node
+is used to store additional node-mapping information.</p>
+<p>The next tree node value in the B-tree node descriptor of the header node is used to refer to the
+first map node.</p>
+<p>A map node consists of a B-tree node descriptor and one B-tree map record. The map record is 494
+bytes in size 512 - (14 + 2) and can therefore contain mapping information for 3952 nodes.</p>
+<p>If a B-tree contains more than 6000 nodes (enough for about 25000 files) a second map node is
+needed. The next tree node value in the B-tree node descriptor of the first map node is used to
+refer to the second.</p>
+<p>If more map nodes are required, each additional map node is similarly linked to the previous one.</p>
+<h3 id="the-root-node"><a class="header" href="#the-root-node">The root node</a></h3>
+<p>The root node is the start of the B-tree structure; usually the root node is an index node, but it
+might be a leaf node if there are no index nodes.</p>
+<p>The root node number is stored in the <a href="#btree_header_record">B-tree header record</a> and is 0 if the
+B-tree is empty.</p>
+<h3 id="the-index-node"><a class="header" href="#the-index-node">The index node</a></h3>
+<p>The records stored in an index node are called pointer records. A pointer record consists of a key
+followed by the node number of the corresponding node. The size of the key varies according to the
+type of B-tree file.</p>
+<ul>
+<li>In a catalog file, the search key is a combination of the file or directory name and the parent
+identifier of that file or directory.</li>
+<li>In an extents overflow file, the search key is a combination of that file’s type, its file
+identifier and the index of the first block in the extent.</li>
+</ul>
+<p>The immediate descendants of an index node are called the children of the index node. An index node
+can have from 1 to 15 children, depending on the size of the pointer records that the index node
+contains.</p>
+<h3 id="the-leaf-node"><a class="header" href="#the-leaf-node">The leaf node</a></h3>
+<p>The leaf nodes contain data records. The structure of the leaf node data records varies according
+to the type of B-tree.</p>
+<ul>
+<li>In an extents overflow file, the leaf node data records consist of a key and an extent record.</li>
+<li>In a catalog file, the leaf node data records can be any one of four kinds of records.</li>
+</ul>
+<h2 id="hfs_master_directory_block"><a class="header" href="#hfs_master_directory_block">HFS Master Directory Block (MDB)</a></h2>
+<p>The primary Master Directory Block (MDB) (or volume information block (VIB)) is located at offset
+1024 of the volume.</p>
+<p>The MDB is 162 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>"BD" (or "\x42\x44")</td><td>Volume signature</td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>6</td><td>4</td><td></td><td>(last) modification time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td><a href="#volume_attribute_flags">Volume attribute flags</a></td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of files in the root directory</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Volume bitmap block number, contains a block number relative from the start of the volume, where 0 is the first block number, typically 3</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td><a href="#next_allocation_search">Next allocation search</a> block number</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Number of blocks, where a volume can contain at most 65535 blocks</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Block size, in bytes, must be a multitude of 512</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
+
+<tr><td>28</td><td>2</td><td></td><td>Data area block number, contains a block number relative from the start of the volume, where 0 is the first block number</td></tr>
+
+<tr><td>30</td><td>4</td><td></td><td>Next available catalog node identifier (CNID), which can be a directory or file record identifier</td></tr>
+
+<tr><td>34</td><td>2</td><td></td><td>Number of unused blocks</td></tr>
+
+<tr><td>36</td><td>1</td><td></td><td>Volume label size, with a maximum of 27</td></tr>
+
+<tr><td>37</td><td>27</td><td></td><td>Volume label</td></tr>
+
+<tr><td>64</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>68</td><td>2</td><td></td><td>Backup sequence number</td></tr>
+
+<tr><td>70</td><td>4</td><td></td><td>Volume write count, which contains the number of times the volume has been written to</td></tr>
+
+<tr><td>74</td><td>4</td><td></td><td>Extents overflow file clump size, in bytes</td></tr>
+
+<tr><td>78</td><td>4</td><td></td><td>Catalog file clump size, in bytes</td></tr>
+
+<tr><td>82</td><td>2</td><td></td><td>Number of sub directories in the root directory</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Total number of files, which does not include file system metadata files</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td>Total number of directories (folders), which does not include the root folder</td></tr>
+
+<tr><td>92</td><td>32</td><td></td><td><a href="#finder_information">Finder information</a></td></tr>
+
+<tr><td>124</td><td>2</td><td></td><td>Embedded volume signature (drVCSize)</td></tr>
+
+<tr><td>126</td><td>4</td><td></td><td>Embedded volume <a href="#hfs_extents_descriptor">extent descriptor</a> (drVBMCSize and drCtlCSize)</td></tr>
+
+<tr><td>130</td><td>4</td><td></td><td>Extents overflow file size</td></tr>
+
+<tr><td>134</td><td>12</td><td></td><td>Extents overflow file <a href="#hfs_extents_record">extents record</a></td></tr>
+
+<tr><td>146</td><td>4</td><td></td><td>Catalog file size</td></tr>
+
+<tr><td>150</td><td>12</td><td></td><td>Catalog file <a href="#hfs_extents_record">extents record</a></td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the volume modification time is not necessarily the data and time when the volume was
+last flushed.</p>
+</blockquote>
+<h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
+<p>TODO: check</p>
+<ul>
+<li>drVCSize =&gt; Volume cache block size (16-bit)</li>
+<li>drVBMCSize =&gt; Volume bitmap cache block size (16-bit)</li>
+<li>drCtlCSize =&gt; Common volume cache block size (16-bit)</li>
+</ul>
+<h2 id="hfs_volume_bitmap"><a class="header" href="#hfs_volume_bitmap">HFS Volume Bitmap</a></h2>
+<p>The volume bitmap is used to keep track of block allocation. The bitmap contains one bit for each
+block in the volume.</p>
+<ul>
+<li>If a bit is set, the corresponding block is currently in use by some file.</li>
+<li>If a bit is clear, the corresponding block is not currently in use by any file and is available.</li>
+</ul>
+<p>The volume bitmap does not indicate which files occupy which blocks. The actual file-mapping
+information in maintained in two locations:</p>
+<ul>
+<li>in the corresponding catalog entry;</li>
+<li>in the corresponding extents overflow file entry.</li>
+</ul>
+<p>The size of the volume bitmap depends on the number of blocks in the volume.</p>
+<p>A 800 KiB floppy disk with a block size of 512 bytes has a volume bitmap size of:</p>
+<pre><code class="language-python">((800 * 1024) / (512 * 8)) = 1600 bits (200 bytes).
+</code></pre>
+<p>A 32 MiB volume containing 32 MiB with a block size of 512 bytes has a volume bitmap size of:</p>
+<pre><code class="language-python">((32 * 1024 * 1024) / (512 * 8)) = 65536 bits (8192 bytes).
+</code></pre>
+<p>The number of blocks in the volume in the MDB consists of a 16-bit integer, so no more than 65535
+blocks can be addressed. The volume bitmap is never larger than 8192 bytes (or 16 physical blocks).
+For volumes containing more than 32 MiB of space, the block size must be increased.</p>
+<p>A volume containing 40 MiB of space must have an block size that is at least 2 x 512 bytes.</p>
+<p>A volume containing 80 MiB of space must have an block size that is at least 3 x 512 bytes.</p>
+<h2 id="hfs_plus_volume_header"><a class="header" href="#hfs_plus_volume_header">HFS+ and HFSX Volume Header</a></h2>
+<p>The volume header (HFSPlusVolumeHeader) replaces the master directory block (MDB). The volume
+header starts at offset 1024 of the volume.</p>
+<p>The block containing the first 1536 bytes (reserved space plus volume header) are marked as used in
+the allocation file.</p>
+<p>The volume header is 512 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>"H+" (or "\x48\x2b") or "HX" (or "\x48\x58")</td><td>Volume signature, where "H+" (kHFSPlusSigWord) is used for HFS+ and "HX" (kHFSXSigWord) for HFSX</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Format version, where 4 (kHFSPlusVersion) is used for HFS+ and 5 (kHFSXVersion) for HFSX</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td><a href="#volume_attribute_flags">Volume attribute flags</a></td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td><a href="#last_mounted_version">Last mounted version</a></td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td><a href="#hfs_plus_journal_information_block">Journal information block</a> number, contains a block number relative from the start of the volume</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>(last) content modification time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Checked time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Total number of files, which does not include file system metadata files</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Total number of directories (folders), which does not include the root folder</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Block size, in bytes</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Total number of blocks</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Number of unused blocks</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td><a href="#next_allocation_search">Next allocation search</a> block number (nextAllocation)</td></tr>
+
+<tr><td>56</td><td>4</td><td></td><td>Clump size, in bytes, of a resource fork</td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Clump size, in bytes, of a data fork</td></tr>
+
+<tr><td>64</td><td>4</td><td></td><td>Next available catalog node identifier (CNID), which can be a directory or file record identifier</td></tr>
+
+<tr><td>68</td><td>4</td><td></td><td>Volume write count, which contains the number of times the volume has been written to</td></tr>
+
+<tr><td>72</td><td>8</td><td></td><td>Encodings bitmap</td></tr>
+
+<tr><td>80</td><td>32</td><td></td><td><a href="#finder_information">Finder information</a></td></tr>
+
+<tr><td>112</td><td>80</td><td></td><td>Allocation file <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+<tr><td>192</td><td>80</td><td></td><td>Extents overflow file <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+<tr><td>272</td><td>80</td><td></td><td>Catalog file <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+<tr><td>352</td><td>80</td><td></td><td>Attributes file <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+<tr><td>432</td><td>80</td><td></td><td>Startup file <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+</table>
+</div>
+
+<h3 id="total-number-of-blocks"><a class="header" href="#total-number-of-blocks">Total number of blocks</a></h3>
+<p>For a disk whose size is an even multiple of the block size, all areas on the disk are included in
+an block, including the volume header and backup volume header. For a disk whose size is not an
+even multiple of the block size, only the blocks that will fit entirely on the disk are counted
+here. The remaining space at the end of the disk is not used by the volume format (except for
+storing the backup volume header, as described above).</p>
+<h3 id="volume_attribute_flags"><a class="header" href="#volume_attribute_flags">Volume attribute flags</a></h3>
+<p>The volume attributes flags are specified as following.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000080</td><td>kHFSVolumeHardwareLockBit</td><td>Volume hardware lock, set if the volume is write-protected due to a hardware setting</td></tr>
+
+<tr><td>0x00000100</td><td>kHFSVolumeUnmountedBit</td><td>Volume unmounted, set if the volume was correctly flushed before being unmounted or ejected</td></tr>
+
+<tr><td>0x00000200</td><td>kHFSVolumeSparedBlocksBit</td><td>Volume spared blocks, set if there are any records in the extents overflow file for bad blocks</td></tr>
+
+<tr><td>0x00000400</td><td>kHFSVolumeNoCacheRequiredBit</td><td>Volume no cache required, set if the blocks from this volume should not be cached</td></tr>
+
+<tr><td>0x00000800</td><td>kHFSBootVolumeInconsistentBit</td><td>Boot volume inconsistent, set if the volume was mounted for writing</td></tr>
+
+<tr><td>0x00001000</td><td>kHFSCatalogNodeIDsReusedBit</td><td>Catalog node identifiers reused, set when the next catalog identifier value overflows 32 bits, forcing smaller catalog node identifiers to be reused</td></tr>
+
+<tr><td>0x00002000</td><td>kHFSVolumeJournaledBit</td><td>Journaled, set if the file system uses a journal</td></tr>
+
+<tr><td>0x00004000</td><td>kHFSVolumeInconsistentBit</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>0x00008000</td><td>kHFSVolumeSoftwareLockBit</td><td>Volume software lock, set if the volume is write-protected due to a software setting</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x40000000</td><td>kHFSContentProtectionBit</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>0x80000000</td><td>kHFSUnusedNodeFixBit</td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<h3 id="last_mounted_version"><a class="header" href="#last_mounted_version">Last mounted version</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>"8.10"</td><td></td><td>used by Mac OS 8.1 to 9.2.2</td></tr>
+
+<tr><td>"10.0"</td><td>kHFSPlusMountVersion</td><td>used by Mac OS X</td></tr>
+
+<tr><td>"FSK!" or "fsck"</td><td></td><td>used by fsck_hfs on Mac OS X</td></tr>
+
+<tr><td>"HFSJ"</td><td>kHFSJMountVersion</td><td>used by journaled HFS+ or HFSX</td></tr>
+
+</table>
+</div>
+
+<h3 id="links"><a class="header" href="#links">Links</a></h3>
+<p>TODO: add text about HFS standard</p>
+<p>HFS+ supports both hard links and symbolic links.</p>
+<p>Hard links to directories are not supported (allowed).</p>
+<h4 id="hard-links"><a class="header" href="#hard-links">Hard Links</a></h4>
+<p>Hard links in HFS+/HFSX are represented by multiple different types of file records:</p>
+<ul>
+<li>one indirect node file record, named “iNode#”, where # is the link reference. This file contains
+the content of the file shared by the hard links.</li>
+<li>one or more hard link file records, that reference the indirect node file record.</li>
+</ul>
+<p>Indirect node files are stored in a file system metadata directory referred to as the metadata
+directory with the name “/\u{2400}\u{2400}\u{2400}\u{2400}HFS+ Private Data”.</p>
+<p>The link reference corresponds to the catalog node identifier (CNID) of the indirect node file,
+where 0 is not a valid link reference.</p>
+<blockquote>
+<p>Note that TN1150 states that a new link reference randomly chosen from the range 100
+to 1073741923. However link references that fall outside of this range have been observed such
+as “iNode20”.</p>
+</blockquote>
+<p>The special permission data of the hard link file records contains the link reference if:</p>
+<ul>
+<li>the catalog file record flag kHFSHasLinkChainMask is set;</li>
+<li>and the first 8 bytes of the file information contains “hlnkhfs+”</li>
+</ul>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>"hlnk"</td><td>kHardLinkFileType</td><td>Hard link file type</td></tr>
+
+<tr><td>"hfs+"</td><td>kHFSPlusCreator</td><td>Hard link file creator</td></tr>
+
+</table>
+</div>
+
+<p>The hard link file’s creation date should be set to the creation date of the metadata directory,
+but the creation date may also be set to the creation date of the volume’s root directory though
+this is deprecated.</p>
+<h4 id="device-identifier"><a class="header" href="#device-identifier">Device identifier</a></h4>
+<p>The <a href="#hfs_plus_file_special_permission_data">Special permission data</a> contains the device
+identifier. The device identifier can be stored in different formats, such as: “native”, “386bsd”,
+“4bsd”, “bsdos”, “freebsd”, “hpux”, “isc”, “linux”, “netbsd”, “osf1”, “sco”, “solaris”, “sunos”,
+“svr3”, “svr4” and “ultrix”.</p>
+<p>The “native” and “hpux” device identifier is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Major device number</td></tr>
+
+<tr><td>1</td><td>2</td><td>0</td><td>Unknown</td></tr>
+
+<tr><td>3</td><td>1</td><td></td><td>Minor device number</td></tr>
+
+</table>
+</div>
+
+<p>The “386bsd”, “4bsd”, “freebsd”, “isc”, “linux”, “netbsd”, “sco”, “sunos”, “svr3” and “ultrix”
+device identifier is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0</td><td>Unknown</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td>Major device number</td></tr>
+
+<tr><td>3</td><td>1</td><td></td><td>Minor device number</td></tr>
+
+</table>
+</div>
+
+<p>The “solaris” and “svr4” device identifier is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>18 bits</td><td></td><td>Minor device number</td></tr>
+
+<tr><td>2.2</td><td>14 bits</td><td></td><td>Major device number</td></tr>
+
+</table>
+</div>
+
+<p>The “bsdos” and “osf1” device identifier is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>20 bits</td><td></td><td>Minor device number</td></tr>
+
+<tr><td>2.4</td><td>12 bits</td><td></td><td>Major device number</td></tr>
+
+</table>
+</div>
+
+<p>The “bsdos” alternative device identifier is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>8 bits</td><td></td><td>Sub unit number</td></tr>
+
+<tr><td>1.0</td><td>12 bits</td><td></td><td>Unit number</td></tr>
+
+<tr><td>2.4</td><td>12 bits</td><td></td><td>Major device number</td></tr>
+
+</table>
+</div>
+
+<h4 id="symbolic-links"><a class="header" href="#symbolic-links">Symbolic Links</a></h4>
+<p>The data fork of a symbolic link contains the path of the directory or file it refers to.</p>
+<p>On HFS+/HFSX the symbolic link target contains a POSIX pathname, as used by the Mac OS BSD and Cocoa
+programming interfaces; not a traditional Mac OS or Carbon, path.</p>
+<p>The path is stored as an UTF-8 encoded string without an end-of-string character. The length of the
+path should be 1024 bytes or less. The path may be full or partial, with or without a leading
+forward slash.</p>
+<p>The first 8 bytes of the file information should contain “slnkrhap”.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>"slnk"</td><td>kSymLinkFileType</td><td>Symbolic link file type</td></tr>
+
+<tr><td>"rhap"</td><td>kSymLinkCreator</td><td>Symbolic link file creator</td></tr>
+
+</table>
+</div>
+
+<p>The resource fork of a symbolic link is reserved and should be 0 bytes in size.</p>
+<h2 id="catalog_file"><a class="header" href="#catalog_file">The catalog file</a></h2>
+<p>The catalog file is a B-tree file used to maintain information about the hierarchy of files and
+directories of a volume.</p>
+<p>The block number of the first file extent of the catalog file (the header node) is stored in the
+master directory block (HFS) or the volume header (HFS+). The B-tree structure is described in
+section: <a href="#btree_files">B-tree files</a>.</p>
+<p>Each node in the catalog file is assigned a unique catalog node identifier (CNID). The CNID is used
+for both directory and file identifiers. For any given file or directory the parent identifier is
+the CNID of the parent directory. The first 16 CNIDs are reserved for use by Apple and include the
+following standard assignments:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>CNID</th><th>Identifier</th><th>Assignment</th></thead>
+<tr><td>0</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>1</td><td>kHFSRootParentID</td><td>Parent identifier of the root directory (folder)</td></tr>
+
+<tr><td>2</td><td>kHFSRootFolderID</td><td>Directory identifier of the root directory (folder)</td></tr>
+
+<tr><td>3</td><td>kHFSExtentsFileID</td><td>Extents overflow file</td></tr>
+
+<tr><td>4</td><td>kHFSCatalogFileID</td><td>Catalog file</td></tr>
+
+<tr><td>5</td><td>kHFSBadBlockFileID</td><td>Bad allocation block file</td></tr>
+
+<tr><td>6</td><td>kHFSAllocationFileID</td><td>Allocation file (HFS+)</td></tr>
+
+<tr><td>7</td><td>kHFSStartupFileID</td><td>Startup file (HFS+)</td></tr>
+
+<tr><td>8</td><td>kHFSAttributesFileID</td><td>Attributes file (HFS+)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>14</td><td>kHFSRepairCatalogFileID</td><td>Used temporarily by fsck_hfs when rebuilding the catalog file</td></tr>
+
+<tr><td>15</td><td>kHFSBogusExtentFileID</td><td>Bogus extent file, which is used temporarily during exchange files operations</td></tr>
+
+<tr><td>16</td><td>kHFSFirstUserCatalogNodeID</td><td>First available CNID for user's files and folders</td></tr>
+
+</table>
+</div>
+
+<h3 id="catalog-file-keys"><a class="header" href="#catalog-file-keys">Catalog file keys</a></h3>
+<p>In a catalog file a key consists of:</p>
+<ul>
+<li>parent directory identifier</li>
+<li>(optional) file or directory name</li>
+</ul>
+<p>The volume reference number is not included in the search key.</p>
+<h3 id="text_encoding_hint"><a class="header" href="#text_encoding_hint">Text encoding hint</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Encoding type</th><th>Value</th><th>Encodings bitmap number</th></thead>
+<tr><td>MacRoman</td><td>0</td><td>0</td></tr>
+
+<tr><td>MacJapanese</td><td>1</td><td>1</td></tr>
+
+<tr><td>MacChineseTrad</td><td>2</td><td>2</td></tr>
+
+<tr><td>MacKorean</td><td>3</td><td>3</td></tr>
+
+<tr><td>MacArabic</td><td>4</td><td>4</td></tr>
+
+<tr><td>MacHebrew</td><td>5</td><td>5</td></tr>
+
+<tr><td>MacGreek</td><td>6</td><td>6</td></tr>
+
+<tr><td>MacCyrillic</td><td>7</td><td>7</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>MacDevanagari</td><td>9</td><td>9</td></tr>
+
+<tr><td>MacGurmukhi</td><td>10</td><td>10</td></tr>
+
+<tr><td>MacGujarati</td><td>11</td><td>11</td></tr>
+
+<tr><td>MacOriya</td><td>12</td><td>12</td></tr>
+
+<tr><td>MacBengali</td><td>13</td><td>13</td></tr>
+
+<tr><td>MacTamil</td><td>14</td><td>14</td></tr>
+
+<tr><td>MacTelugu</td><td>15</td><td>15</td></tr>
+
+<tr><td>MacKannada</td><td>16</td><td>16</td></tr>
+
+<tr><td>MacMalayalam</td><td>17</td><td>17</td></tr>
+
+<tr><td>MacSinhalese</td><td>18</td><td>18</td></tr>
+
+<tr><td>MacBurmese</td><td>19</td><td>19</td></tr>
+
+<tr><td>MacKhmer</td><td>20</td><td>20</td></tr>
+
+<tr><td>MacThai</td><td>21</td><td>21</td></tr>
+
+<tr><td>MacLaotian</td><td>22</td><td>22</td></tr>
+
+<tr><td>MacGeorgian</td><td>23</td><td>23</td></tr>
+
+<tr><td>MacArmenian</td><td>24</td><td>24</td></tr>
+
+<tr><td>MacChineseSimp</td><td>25</td><td>25</td></tr>
+
+<tr><td>MacTibetan</td><td>26</td><td>26</td></tr>
+
+<tr><td>MacMongolian</td><td>27</td><td>27</td></tr>
+
+<tr><td>MacEthiopic</td><td>28</td><td>28</td></tr>
+
+<tr><td>MacCentralEurRoman</td><td>29</td><td>29</td></tr>
+
+<tr><td>MacVietnamese</td><td>30</td><td>30</td></tr>
+
+<tr><td>MacExtArabic</td><td>31</td><td>31</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>MacSymbol</td><td>33</td><td>33</td></tr>
+
+<tr><td>MacDingbats</td><td>34</td><td>34</td></tr>
+
+<tr><td>MacTurkish</td><td>35</td><td>35</td></tr>
+
+<tr><td>MacCroatian</td><td>36</td><td>36</td></tr>
+
+<tr><td>MacIcelandic</td><td>37</td><td>37</td></tr>
+
+<tr><td>MacRomanian</td><td>38</td><td>38</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>MacFarsi</td><td>140</td><td>49</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>MacUkrainian</td><td>152</td><td>48</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs-catalog-key"><a class="header" href="#hfs-catalog-key">HFS catalog key</a></h4>
+<p>The HFS catalog key is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Key data size, in bytes, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td colspan="4"><em>If key data size &gt;= 6</em></td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>Parent identifier (CNID)</td></tr>
+
+<tr><td>6</td><td>1</td><td></td><td>Name size without the end-of-string character</td></tr>
+
+<tr><td>7</td><td>...</td><td></td><td>Name string, which contains a narrow character string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (Alignment padding)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that a key data size of 0 indicates a records that is no longer in use.</p>
+</blockquote>
+<p>The catalog node name always is stored as 32 bytes and therefore the maximum key size within an
+index node should be 37. In a leaf node the catalog node name varies in size.</p>
+<p>Keys in a leaf node must be stored 16-bit aligned within the node data. The size of the alignment
+padding is not included in the key data size.</p>
+<h4 id="hfs-and-hfsx-catalog-key"><a class="header" href="#hfs-and-hfsx-catalog-key">HFS+ and HFSX catalog key</a></h4>
+<p>The HFS+ and HFSX catalog key is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Key data size, in bytes</td></tr>
+
+<tr><td colspan="4"><em>If key data size &gt;= 4</em></td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>Parent identifier, which conatains a CNID</td></tr>
+
+<tr><td colspan="4"><em>If key data size &gt;= 6</em></td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Number of characters in the name string</td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Name string, which contains an UTF-16 big-endian string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the characters ‘:’ and U+2400 are stored as ‘/’ and U+0 respectively
+and must be converted before comparision.</p>
+</blockquote>
+<h3 id="the-catalog-data"><a class="header" href="#the-catalog-data">The catalog data</a></h3>
+<p>A catalog leaf node can contain four different types of records:</p>
+<ul>
+<li>a folder record, which contains information about a single directory.</li>
+<li>a file record, which contains information about a single file.</li>
+<li>a folder thread record, which provides a link between a directory and its parent directory.</li>
+<li>a file thread record, which provides a link between a file and its parent directory.</li>
+</ul>
+<p>The thread records are used to find the name and directory identifier of the parent of a given file
+or directory.</p>
+<p>Each catalog data record consists of:</p>
+<ul>
+<li>the catalog data record header;</li>
+<li>the catalog data record data.</li>
+</ul>
+<h4 id="the-catalog-data-record-header"><a class="header" href="#the-catalog-data-record-header">The catalog data record header</a></h4>
+<h5 id="hfs-catalog-data-record-header"><a class="header" href="#hfs-catalog-data-record-header">HFS catalog data record header</a></h5>
+<p>The HFS catalog data record header is 2 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td><a href="#catalog_file_data_record_types">Record type</a>, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>1</td><td>1</td><td>0x00</td><td>Unknown (Reserved), which consists of a signed 8-bit integer</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that to distinguish between HFS and HFS+ record types, record type should be treated as a
+16-bit big-endian value.</p>
+</blockquote>
+<h5 id="hfs-and-hfsx-catalog-data-record-header"><a class="header" href="#hfs-and-hfsx-catalog-data-record-header">HFS+ and HFSX catalog data record header</a></h5>
+<p>The HFS+ and HFSX catalog data record header is 2 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+</table>
+</div>
+
+<h5 id="catalog_file_data_record_types"><a class="header" href="#catalog_file_data_record_types">The catalog data record types</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td>kHFSPlusFolderRecord</td><td>HFS+/HFSX Folder record</td></tr>
+
+<tr><td>0x0002</td><td>kHFSPlusFileRecord</td><td>HFS+/HFSX File record</td></tr>
+
+<tr><td>0x0003</td><td>kHFSPlusFolderThreadRecord</td><td>HFS+/HFSX Folder thread record</td></tr>
+
+<tr><td>0x0004</td><td>kHFSPlusFileThreadRecord</td><td>HFS+/HFSX File thread record</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0100</td><td>kHFSFolderRecord (or cdrDirRec)</td><td>HFS Folder record</td></tr>
+
+<tr><td>0x0200</td><td>kHFSFileRecord (or cdrFilRec)</td><td>HFS File record</td></tr>
+
+<tr><td>0x0300</td><td>kHFSFolderThreadRecord (or cdrThdRec)</td><td>HFS Folder thread record</td></tr>
+
+<tr><td>0x0400</td><td>kHFSFileThreadRecord (or cdrFThdRec)</td><td>HFS File thread record</td></tr>
+
+</table>
+</div>
+
+<h4 id="the-catalog-folder-record"><a class="header" href="#the-catalog-folder-record">The catalog folder record</a></h4>
+<h5 id="hfs-catalog-folder-record"><a class="header" href="#hfs-catalog-folder-record">HFS catalog folder record</a></h5>
+<p>The HFS catalog folder record (cdrDirRec, kHFSFolderRecord) is 70 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0100</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#hfs_catalog_folder_record_flags">Folder flags</a></td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Number of directory entries (valence)</td></tr>
+
+<tr><td>6</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>14</td><td>4</td><td></td><td>(last) content modification time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>18</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>22</td><td>16</td><td></td><td><a href="#hfs_folder_information">Folder information</a></td></tr>
+
+<tr><td>38</td><td>16</td><td></td><td><a href="#hfs_extended_folder_information">Extended folder information</a></td></tr>
+
+<tr><td>54</td><td>4 x 4 = 16</td><td></td><td>Unknown (Reserved), which consists of an array of 32-bit integer values</td></tr>
+
+</table>
+</div>
+
+<h6 id="hfs_catalog_folder_record_flags"><a class="header" href="#hfs_catalog_folder_record_flags">HFS catalog folder record flags</a></h6>
+<p>Not defined. The HFS catalog folder record appears to always have a corresponding folder thread
+record.</p>
+<h5 id="hfs-and-hfsx-catalog-folder-record"><a class="header" href="#hfs-and-hfsx-catalog-folder-record">HFS+ and HFSX catalog folder record</a></h5>
+<p>The HFS+ and HFSX catalog folder record (HFSPlusCatalogFolder) is 88 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0001</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#hfs_plus_catalog_file_record_flags">Flags</a></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of directory entries (valence)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>(last) content modification time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>(last) record (or attribute) modification (or change) time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>(last) access time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td colspan="4"><em>Permissions</em></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Owner identifier</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Group identifier</td></tr>
+
+<tr><td>40</td><td>1</td><td></td><td><a href="#administration_flags">Administration flags</a></td></tr>
+
+<tr><td>41</td><td>1</td><td></td><td><a href="#owner_flags">Owner flags</a></td></tr>
+
+<tr><td>42</td><td>2</td><td></td><td><a href="#file_mode">File mode</a></td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td><a href="#hfs_plus_file_special_permission_data">Special permission data</a></td></tr>
+
+<tr><td colspan="4"><em>Folder information</em></td></tr>
+
+<tr><td>48</td><td>16</td><td></td><td><a href="#hfs_plus_folder_information">Folder information</a></td></tr>
+
+<tr><td colspan="4"><em>Extended folder information</em></td></tr>
+
+<tr><td>64</td><td>16</td><td></td><td><a href="#hfs_plus_extended_folder_information">Extended folder information</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>80</td><td>4</td><td></td><td><a href="#text_encoding_hint">Text encoding hint</a></td></tr>
+
+<tr><td>84</td><td>4</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h4 id="catalog_file_record"><a class="header" href="#catalog_file_record">The catalog file record</a></h4>
+<h5 id="hfs-catalog-file-record"><a class="header" href="#hfs-catalog-file-record">HFS catalog file record</a></h5>
+<p>The HFS catalog file record (cdrFilRec, kHFSFileRecord) is 102 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0200</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td><a href="#hfs_catalog_file_record_flags">Flags</a>, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>3</td><td>1</td><td>0x00</td><td>File type, which consists of a signed 8-bit integer and should contain 0</td></tr>
+
+<tr><td>4</td><td>16</td><td></td><td><a href="#hfs_file_information">File information</a></td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Data fork block number</td></tr>
+
+<tr><td>26</td><td>4</td><td></td><td>Data fork size</td></tr>
+
+<tr><td>30</td><td>4</td><td></td><td>Data fork allocated size</td></tr>
+
+<tr><td>34</td><td>2</td><td></td><td>Resource fork block number</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Resource fork size</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Resource fork allocated size</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>(last) content modification time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in local time</td></tr>
+
+<tr><td>56</td><td>16</td><td></td><td><a href="#hfs_extended_file_information">Extended file information</a></td></tr>
+
+<tr><td>72</td><td>2</td><td></td><td>Clump size</td></tr>
+
+<tr><td>74</td><td>12</td><td></td><td>Data fork <a href="#hfs_extents_record">extents record</a></td></tr>
+
+<tr><td>86</td><td>12</td><td></td><td>Resource fork <a href="#hfs_extents_record">extents record</a></td></tr>
+
+<tr><td>98</td><td>4</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<p>TODO: determine if the data and resource fork block number values are used</p>
+<h6 id="hfs_catalog_file_record_flags"><a class="header" href="#hfs_catalog_file_record_flags">HFS catalog file record flags</a></h6>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td></td><td>File is locked and cannot be written to</td></tr>
+
+<tr><td>0x0002</td><td></td><td>Has thread record</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0080</td><td>kHFSHasDateAddedMask</td><td>Had added time</td></tr>
+
+</table>
+</div>
+
+<h5 id="hfs-and-hfsx-catalog-file-record"><a class="header" href="#hfs-and-hfsx-catalog-file-record">HFS+ and HFSX catalog file record</a></h5>
+<p>The HFS+ and HFSX catalog file record (kHFSPlusFileRecord) is 248 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0002</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#hfs_plus_catalog_file_record_flags">Flags</a></td></tr>
+
+<tr><td>4</td><td>4</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Creation time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>(last) content  modification time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>(last) record (or attribute) modification time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>(last) access time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>(last) backup time, which contains a HFS timestamp in UTC</td></tr>
+
+<tr><td colspan="4"><em>Permissions</em></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Owner identifier</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Group identifier</td></tr>
+
+<tr><td>40</td><td>1</td><td></td><td><a href="#administration_flags">Administration flags</a></td></tr>
+
+<tr><td>41</td><td>1</td><td></td><td><a href="#owner_flags">Owner flags</a></td></tr>
+
+<tr><td>42</td><td>2</td><td></td><td><a href="#file_mode">File mode</a></td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td><a href="#hfs_plus_file_special_permission_data">Special permission data</a></td></tr>
+
+<tr><td colspan="4"><em>File information</em></td></tr>
+
+<tr><td>48</td><td>16</td><td></td><td><a href="#hfs_plus_file_information">File information (or user information)</a></td></tr>
+
+<tr><td colspan="4"><em>Extended file information</em></td></tr>
+
+<tr><td>64</td><td>16</td><td></td><td><a href="#hfs_plus_extended_file_information">Extended file information (or finder information)</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>80</td><td>4</td><td></td><td><a href="#text_encoding_hint">Text encoding hint</a></td></tr>
+
+<tr><td>84</td><td>4</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>88</td><td>80</td><td></td><td>Data <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+<tr><td>168</td><td>80</td><td></td><td>Resource <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h6 id="hfs_plus_catalog_file_record_flags"><a class="header" href="#hfs_plus_catalog_file_record_flags">HFS+ catalog file record flags</a></h6>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td>kHFSFileLockedMask</td><td>File is locked and cannot be written to</td></tr>
+
+<tr><td>0x0002</td><td>kHFSThreadExistsMask</td><td>Has thread record, which should be always set for a file record on HFS+/HSFX</td></tr>
+
+<tr><td>0x0004</td><td>kHFSHasAttributesMask</td><td>Has extended attributes</td></tr>
+
+<tr><td>0x0008</td><td>kHFSHasSecurityMask</td><td>Has ACLs</td></tr>
+
+<tr><td>0x0010</td><td>kHFSHasFolderCountMask</td><td>Has number of sub-folder</td></tr>
+
+<tr><td>0x0020</td><td>kHFSHasLinkChainMask</td><td>Has a hard link target (link chain), where the CNID of the hard link target is stored in the special permission data</td></tr>
+
+<tr><td>0x0040</td><td>kHFSHasChildLinkMask</td><td>Has a child that is a directory link</td></tr>
+
+<tr><td>0x0080</td><td>kHFSHasDateAddedMask</td><td>Had added time, where the extended folder of file information contains the time the folder or file was added (date_added)</td></tr>
+
+<tr><td>0x0100</td><td>kHFSFastDevPinnedMask</td><td>Unknown</td></tr>
+
+<tr><td>0x0200</td><td>kHFSDoNotFastDevPinMask</td><td>Unknown</td></tr>
+
+<tr><td>0x0400</td><td>kHFSFastDevCandidateMask</td><td>Unknown</td></tr>
+
+<tr><td>0x0800</td><td>kHFSAutoCandidateMask</td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="the-catalog-thread-record"><a class="header" href="#the-catalog-thread-record">The catalog thread record</a></h4>
+<p>The file thread record is similar to the folder thread record except that it refers to a file,
+instead of a directory.</p>
+<h5 id="hfs-catalog-file-thread-record"><a class="header" href="#hfs-catalog-file-thread-record">HFS catalog file thread record</a></h5>
+<p>The HFS catalog thread record (kHFSFolderThreadRecord (or cdrThdRec), kHFSFileThreadRecord (or
+cdrFThdRec)) is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0300 or 0x0400</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>2 x 4 = 8</td><td>0x00</td><td>Unknown (Reserved), which consists of an array of 32-bit integer values</td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Parent identifier (CNID)</td></tr>
+
+<tr><td>14</td><td>1</td><td></td><td>Number of characters in the name string, with a maximum of 31</td></tr>
+
+<tr><td>15</td><td>...</td><td></td><td>Name string, which contains a narrow character string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<h5 id="hfs-and-hfsx-catalog-file-thread-record"><a class="header" href="#hfs-and-hfsx-catalog-file-thread-record">HFS+ and HFSX catalog file thread record</a></h5>
+<p>The HFS+ and HFSX catalog thread record (kHFSPlusFolderThreadRecord, kHFSPlusFileThreadRecord) is of
+variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x0003 or 0x0004</td><td><a href="#catalog_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>2</td><td>2</td><td>0x00</td><td>Unknown (Reserved), which consists of a unsigned 16-bit integer</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Parent identifier (CNID)</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Number of characters in the name string, with a maximum of 255</td></tr>
+
+<tr><td>10</td><td>...</td><td></td><td>Name string, which contains an UTF-16 big-endian string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<h3 id="permissions"><a class="header" href="#permissions">Permissions</a></h3>
+<p>For each file and folder HFS+ maintains basic access permissions record for each file and folder.
+These are similar to basic Unix file permissions.</p>
+<p>TODO: add note about permissions on HFS</p>
+<h4 id="owner-and-group-identifier"><a class="header" href="#owner-and-group-identifier">Owner and group identifier</a></h4>
+<p>The Mac OS X user ID of the owner of the file or folder. Mac OS X versions prior to 10.3 treats
+user ID 99 as if it was the user ID of the user currently logged in to the console. If no user is
+logged in to the console, user ID 99 is treated as user ID 0 (root). Mac OS X version 10.3 treats
+user ID 99 as if it was the user ID of the process making the call (in effect, making it owned by
+everyone simultaneously). These substitutions happen at run-time. The actual user ID on disk is not
+changed.</p>
+<p>The Mac OS X group ID of the group associated with the file or folder. Mac OS X typically maps
+group ID 99 to the group named “unknown.” There is no run-time substitution of group IDs in Mac OS
+X.</p>
+<h4 id="administration_flags"><a class="header" href="#administration_flags">Administration flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x01</td><td>SF_ARCHIVED</td><td>File has been archived</td></tr>
+
+<tr><td>0x02</td><td>SF_IMMUTABLE</td><td>File is immutable and may not be changed</td></tr>
+
+<tr><td>0x04</td><td>SF_APPEND</td><td>Writes to file may only append</td></tr>
+
+</table>
+</div>
+
+<h4 id="owner_flags"><a class="header" href="#owner_flags">Owner flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x01</td><td>UF_NODUMP</td><td>Do not backup (dump) this file</td></tr>
+
+<tr><td>0x02</td><td>UF_IMMUTABLE</td><td>File is immutable and may not be changed</td></tr>
+
+<tr><td>0x04</td><td>UF_APPEND</td><td>Writes to file may only append</td></tr>
+
+<tr><td>0x08</td><td>UF_OPAQUE</td><td>Directory is opaque</td></tr>
+
+</table>
+</div>
+
+<h4 id="file_mode"><a class="header" href="#file_mode">File mode</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0xf000 (0170000)</td><td>S_IFMT</td><td>File type bitmask</td></tr>
+
+<tr><td>0x1000 (0010000)</td><td>S_IFIFO</td><td>Named pipe</td></tr>
+
+<tr><td>0x2000 (0020000)</td><td>S_IFCHR</td><td>Character-special file (Character device)</td></tr>
+
+<tr><td>0x4000 (0040000)</td><td>S_IFDIR</td><td>Directory</td></tr>
+
+<tr><td>0x6000 (0060000)</td><td>S_IFBLK</td><td>Block-special file (Block device)</td></tr>
+
+<tr><td>0x8000 (0100000)</td><td>S_IFREG</td><td>Regular file</td></tr>
+
+<tr><td>0xa000 (0120000)</td><td>S_IFLNK</td><td>Symbolic link</td></tr>
+
+<tr><td>0xc000 (0140000)</td><td>S_IFSOCK</td><td>Socket</td></tr>
+
+<tr><td>0xe000 (0160000)</td><td>S_IFWHT</td><td>Whiteout, which is a file entry that covers up all entries of a particular name from lower branches</td></tr>
+
+</table>
+</div>
+
+<p>HFS+ uses the BSD file type and mode bits. Note that the constants from the header shown below are
+in octal (base eight), not hexadecimal.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Octal value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0004000</td><td>S_ISUID</td><td>Set user identifier on execution</td></tr>
+
+<tr><td>0002000</td><td>S_ISGID</td><td>Set group identifier on execution</td></tr>
+
+<tr><td>0001000</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0000700</td><td>S_IRWXU</td><td>Read, write and execute access for owner</td></tr>
+
+<tr><td>0000400</td><td>S_IRUSR</td><td>Read access for owner</td></tr>
+
+<tr><td>0000200</td><td>S_IWUSR</td><td>Write access for owner</td></tr>
+
+<tr><td>0000100</td><td>S_IXUSR</td><td>Execute access for owner</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0000070</td><td>S_IRWXG</td><td>Read, write and execute access for group</td></tr>
+
+<tr><td>0000040</td><td>S_IRGRP</td><td>Read access for group</td></tr>
+
+<tr><td>0000020</td><td>S_IWGRP</td><td>Write access for group</td></tr>
+
+<tr><td>0000010</td><td>S_IXGRP</td><td>Execute access for group</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0000007</td><td>S_IRWXO</td><td>Read, write and execute access for other</td></tr>
+
+<tr><td>0000004</td><td>S_IROTH</td><td>Read access for other</td></tr>
+
+<tr><td>0000002</td><td>S_IWOTH</td><td>Write access for other</td></tr>
+
+<tr><td>0000001</td><td>S_IXOTH</td><td>Execute access for other</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that if the sticky bit is set for a directory, then Mac OS restricts movement, deletion, and
+renaming of files in that directory. Files may be removed or renamed only if the user has write
+access to the directory; and is the owner of the file or the directory, or is the super-user.</p>
+</blockquote>
+<h4 id="hfs_plus_file_special_permission_data"><a class="header" href="#hfs_plus_file_special_permission_data">HFS+ file special permission data</a></h4>
+<p>The special permission data is used to store the following information:</p>
+<ul>
+<li>hard link reference (iNodeNum)</li>
+<li>number of (hard) links (linkCount) in indirect node files</li>
+<li>device numbers of block (S_IFBLK) and character (S_IFCHR) devices files</li>
+</ul>
+<h3 id="file-system-hierarchy"><a class="header" href="#file-system-hierarchy">File system hierarchy</a></h3>
+<p>File and folder records have a search key with a non-empty name string. In thread records the name
+string in the search key is empty. E.g. to list the file entries in a directory:</p>
+<ul>
+<li>find all the file or folder records given the parent CNID</li>
+</ul>
+<p>Finding a file or directory by its CNID is a two-step process:</p>
+<ol>
+<li>use the CNID to look up the thread record for the file or directory</li>
+<li>use the thread record to look up the file or folder record</li>
+</ol>
+<h3 id="file-forks"><a class="header" href="#file-forks">File forks</a></h3>
+<p>Forks in HFS and HFS+ can be compared to data streams in NTFS. In HFS+ the fork
+values are grouped in a separate fork descriptor structure. HFS+ also defines
+extended attributes (named forks). These are not stored in the catalog file but
+in the attributes file.</p>
+<h4 id="hfs_plus_fork_descriptor_structure"><a class="header" href="#hfs_plus_fork_descriptor_structure">HFS+ fork descriptor structure</a></h4>
+<p>HFS+ maintains information about file contents using the HFS+ fork descriptor structure
+(HFSPlusForkData).</p>
+<p>The fork descriptor structure is 80 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Size, in bytes</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+<tr><td>16</td><td>64</td><td></td><td>Data <a href="#hfs_plus_extents_record">extents record</a></td></tr>
+
+</table>
+</div>
+
+<h2 id="the-extents-overflow-file"><a class="header" href="#the-extents-overflow-file">The extents overflow file</a></h2>
+<p>In HFS and HFS+ extents (contiguous ranges of blocks) are used to track which blocks belong to a
+file. The first three (HFS) and eight (HFS+) are stored in the catalog file. Additional extents are
+stored in the extents overflow file.</p>
+<p>The structure of an extents overflow file is relatively simple compared to that of a catalog
+file. The function of the extents overflow file is to store those file extents that are not
+contained in the master directory block (MDB) or volume header and the catalog file</p>
+<blockquote>
+<p>Note that the file system B-tree files can have additional extents in the extents overflow
+file. This has been observed with the attributes file. It is currently unknown if the extents
+(overflow) file itself can have overflow extents.</p>
+</blockquote>
+<h3 id="the-extents-overflow-key-record"><a class="header" href="#the-extents-overflow-key-record">The extents overflow key (record)</a></h3>
+<p>Disks initialized using the enhanced Disk Initialization Manager introduced in system software
+version might contain extent records for some blocks that do not belong to any actual file in the
+file system. These extent records have been marked as a bad block (CNID 5). See the chapter “Disk
+Initialization Manager” in this book for details on bad block sparing.</p>
+<p>The key has been selected so that the extent records for a particular fork are grouped together in
+the B-tree, right next to all the extent records for the other fork of the file. The fork offset of
+the preceding extent record is needed to determine the key of the next extent record</p>
+<p>In an extents overflow file the search key consists of:</p>
+<ul>
+<li>fork type</li>
+<li>file identifier</li>
+<li>first block in the extent</li>
+</ul>
+<h4 id="hfs-extents-overflow-key-record"><a class="header" href="#hfs-extents-overflow-key-record">HFS extents overflow key (record)</a></h4>
+<p>The HFS extents overflow key (record) is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td>7</td><td>Key data size, in bytes, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td><a href="#hfs_fork_types">Fork type</a>, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>File identifier (CNID)</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Logical block number</td></tr>
+
+</table>
+</div>
+
+<p>The first 8 extents in a fork are held in its catalog file record. So the number of extent records
+for a fork is:</p>
+<pre><code class="language-python">(number_of_extents - 3 + 2) / 4
+</code></pre>
+<h4 id="hfs-and-hfsx-extents-overflow-key-record"><a class="header" href="#hfs-and-hfsx-extents-overflow-key-record">HFS+ and HFSX extents overflow key (record)</a></h4>
+<p>The HFS+ and HFSX extents overflow key (record) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>10</td><td>Key data size, in bytes, which consists of an unsigned 16-bit integer</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td><a href="#hfs_fork_types">Fork type</a>, which consists of a signed 8-bit integer</td></tr>
+
+<tr><td>3</td><td>1</td><td>0x00</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>File identifier (CNID)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
+
+</table>
+</div>
+
+<p>The first 8 extents in a fork are held in its catalog file record. So the number of extent records
+for a fork is:</p>
+<pre><code class="language-python">(number_of_extents - 8 + 7) / 8
+</code></pre>
+<h4 id="hfs_fork_types"><a class="header" href="#hfs_fork_types">HFS fork types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>-1 (0xff)</td><td></td><td>Resource fork</td></tr>
+
+<tr><td>0 (0x00)</td><td></td><td>Data fork</td></tr>
+
+</table>
+</div>
+
+<h3 id="the-extent-data-record"><a class="header" href="#the-extent-data-record">The extent (data) record</a></h3>
+<p>An extent is a contiguous range of blocks that have been allocated to an individual file. An extent
+is represented by an extent descriptor.</p>
+<h4 id="hfs_extents_record"><a class="header" href="#hfs_extents_record">HFS extents record</a></h4>
+<p>The HFS extents record (HFSExtentRecord) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>3 x 4 = 12</td><td></td><td>Array of <a href="#hfs_extents_descriptor">HFS extent descriptors</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_extents_descriptor"><a class="header" href="#hfs_extents_descriptor">HFS extent descriptor</a></h4>
+<p>The HFS extents descriptor (HFSExtentDescriptor) is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Physical block number, which contains a block number relative from the start of the data area</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Number of blocks</td></tr>
+
+</table>
+</div>
+
+<pre><code class="language-python">extent_offset = (data_area_block_number + extent_block_number) * block_size
+</code></pre>
+<p>An unused extent descriptor should have both the block number and number of blocks set to 0.</p>
+<h4 id="hfs_plus_extents_record"><a class="header" href="#hfs_plus_extents_record">HFS+ and HFSX extents record</a></h4>
+<p>The HFS+ and HFSX extents record (HFSPlusExtentRecord) is 64 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8 x 8 = 64</td><td></td><td>Array of <a href="#hfs_plus_extents_descriptor">HFS+ extent descriptors</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_plus_extents_descriptor"><a class="header" href="#hfs_plus_extents_descriptor">HFS+ and HFSX extent descriptor</a></h4>
+<p>The HFS+ and HFSX extents descriptor (HFSPlusExtentDescriptor) is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Physical block number, which contains a block number relative from the start of the volume</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+</table>
+</div>
+
+<pre><code class="language-python">extent_offset = extent_block_number * block_size
+</code></pre>
+<p>An unused extent descriptor should have both the block number and number of blocks set to 0.</p>
+<h3 id="bad-block-file"><a class="header" href="#bad-block-file">Bad Block File</a></h3>
+<p>The extents overflow file is also used to hold information about the bad blocks; refered to as the
+bad block file. The bad block file is used to mark areas on the disk as bad, unable to be used for
+storing data; typically to map out bad sectors on the storage medium.</p>
+<p>Typically, blocks are larger than sectors. If a single sector is found to be bad, the entire block
+is unusable. The bad block file is sometimes used to mark blocks as unusable when they are not bad,
+e.g. in the <a href="#hfs_wrapper">HFS wrapper</a>.</p>
+<p>Bad block extent records are always assumed to reference the data fork (fork type of 0).</p>
+<h2 id="allocation-bitmap-file"><a class="header" href="#allocation-bitmap-file">Allocation (bitmap) file</a></h2>
+<p>The allocation file is uzed to keep track of whether each block in a volume is currently allocated
+to some file system structure or not. The contents of the allocation file is a bitmap. The bitmap
+contains one bit for each block in the volume.</p>
+<ul>
+<li>If a bit is set, the corresponding block is currently in use by some file system structure.</li>
+<li>If a bit is clear, the corresponding block is not currently in use, and is available for
+allocation.</li>
+</ul>
+<p>The size of the allocation file depends on the number of blocks in the volume, which in turn
+depends both on the size of the disk and on the size of the volume’s blocks. For example, a volume
+on a 1 GB disk and having an block size of 4 KB needs an allocation file size of 256 Kbits (32 KiB,
+or 8 blocks). Since the allocation file itself is allocated using blocks, it always occupies an
+integral number of blocks (its size may be rounded up).</p>
+<p>The allocation file may be larger than the minimum number of bits required for the given volume
+size. Any unused bits in the bitmap must be set to 0.</p>
+<p>Each byte in the allocation file holds the state of eight blocks. The byte at offset X into the
+file contains the allocation state of allocations blocks (N x 8) through (N x 8 + 7). Within each
+byte, the most significant bit holds information about the block with the lowest number, the least
+significant bit holds information about the block with the highest number. Listing 1 shows how you
+would test whether an block is in use, assuming that you’ve read the entire allocation file into
+memory.</p>
+<pre><code class="language-text">Determining whether a block is in use.
+
+static Boolean IsAllocationBlockUsed(UInt32 thisAllocationBlock,
+                                     UInt8 *allocationFileContents)
+{
+    UInt8 thisByte;
+
+    thisByte = allocationFileContents[thisAllocationBlock / 8];
+    return (thisByte &amp; (1 &lt;&lt; (7 - (thisAllocationBlock % 8)))) != 0;
+}
+</code></pre>
+<h2 id="hfs_plus_attributes_file"><a class="header" href="#hfs_plus_attributes_file">Attributes file</a></h2>
+<p>The attributes file is a B-tree file used to store extended attributes.</p>
+<p>The location of the attributes file can be found in the HFS+ and HFSX volume header.</p>
+<h3 id="attributes-file-keys"><a class="header" href="#attributes-file-keys">Attributes file keys</a></h3>
+<p>An attributes file key is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Key data size, in bytes</td></tr>
+
+<tr><td colspan="4"><em>If key data size &gt;= 12</em></td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of characters in the name string</td></tr>
+
+<tr><td>14</td><td>...</td><td></td><td>Name string, which contains an UTF-16 big-endian string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the name of an extended attribute appears to be case senstive even on a case insensitive
+file system.</p>
+</blockquote>
+<h3 id="the-attributes-file-data"><a class="header" href="#the-attributes-file-data">The attributes file data</a></h3>
+<p>The attributes file defines two types of attributes:</p>
+<ol>
+<li>Fork data attributes, which are used for attributes whose data is large. The attribute’s data is
+stored in extents on the volume and the attribute merely contains a reference to those extents.</li>
+<li>Extension attributes, which are used to augment fork descriptor structure, allowing a forks to
+have more than eight extents.</li>
+</ol>
+<h4 id="attributes-file-data-record-header"><a class="header" href="#attributes-file-data-record-header">Attributes file data record header</a></h4>
+<p>Each attributes file data record starts with a type value, which describes the type of attribute
+data record.</p>
+<p>The attributes file data record header is 4 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
+
+</table>
+</div>
+
+<h5 id="attributes_file_data_record_types"><a class="header" href="#attributes_file_data_record_types">The attributes data record types</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000010</td><td>kHFSPlusAttrInlineData</td><td>Attribute record with inline data</td></tr>
+
+<tr><td>0x00000020</td><td>kHFSPlusAttrForkData</td><td>Attribute record with fork descriptor</td></tr>
+
+<tr><td>0x00000030</td><td>kHFSPlusAttrExtents</td><td>Attribute record with extents overflow</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that at the moment it is unclear when an attribute record of type
+kHFSPlusAttrExtents is created and how it should be handled.</p>
+</blockquote>
+<h4 id="the-inline-data-attribute-record"><a class="header" href="#the-inline-data-attribute-record">The inline data attribute record</a></h4>
+<p>The inline data attribute record is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>0x00000010</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Attribute data size</td></tr>
+
+<tr><td>16</td><td>...</td><td></td><td>Attribute data</td></tr>
+
+</table>
+</div>
+
+<h4 id="the-fork-descriptor-attribute-record"><a class="header" href="#the-fork-descriptor-attribute-record">The fork descriptor attribute record</a></h4>
+<p>The fork descriptor attribute record is 88 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>0x00000020</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>8</td><td>80</td><td></td><td>Attribute <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="the-extents-attribute-record"><a class="header" href="#the-extents-attribute-record">The extents attribute record</a></h4>
+<p>The extents attribute record is 72 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>0x00000030</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
+
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>8</td><td>64</td><td></td><td>Attribute <a href="#hfs_plus_extents_record">extents record</a></td></tr>
+
+</table>
+</div>
+
+<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
+<p>The compressed extended attribute is named “com.apple.decmpfs” and consists of:</p>
+<ul>
+<li>compressed data header</li>
+<li>optional compressed data</li>
+</ul>
+<h4 id="compressed_data_header"><a class="header" href="#compressed_data_header">Compressed data header</a></h4>
+<p>The compressed data header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
+</blockquote>
+<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td>CMP_Type1</td><td>Unknown (uncompressed extended attribute data)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
+
+<tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
+
+<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-disable MD028 -->
+<blockquote>
+<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
+after the first compressed data byte.</p>
+</blockquote>
+<blockquote>
+<p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
+uncompressed after the first compressed data byte.</p>
+</blockquote>
+<!-- rumdl-enable MD028 -->
+<h2 id="startup-file"><a class="header" href="#startup-file">Startup file</a></h2>
+<p>The startup file is a file system metadata file intended to hold information needed when
+booting a system that does not have built-in (ROM) support for HFS+ (or HFSX). A boot loader can
+find the startup file without full knowledge of the format using the first eight extents of the
+startup file located in the volume header.</p>
+<p>Format wise it is valid for the startup file to contain more than eight extents, but in doing so
+the purpose of the startup file is defeated.</p>
+<h2 id="next_allocation_search"><a class="header" href="#next_allocation_search">Next allocation search</a></h2>
+<p>The next block number is used by Mac OS as a hint for where to start searching for available blocks
+when allocating space for a file.</p>
+<h2 id="metadata-zone-and-hot-files"><a class="header" href="#metadata-zone-and-hot-files">Metadata zone and hot files</a></h2>
+<p>In Mac OS X 10.3 a metadata zone was instroduced to store certain file system metadata, such as
+allocation bitmap file, extents overflow file, and the catalog file, the journal file and
+frequently used small files (also referred to as “hot files”) near each other to reduces seek time
+for typical accesses.</p>
+<h3 id="hot-file-b-tree"><a class="header" href="#hot-file-b-tree">Hot File B-tree</a></h3>
+<p>The hot file B-tree is a file named “.hotfiles.btree” stored the root directory.</p>
+<h2 id="journal"><a class="header" href="#journal">Journal</a></h2>
+<p>A HFS+ (or HFSX) volume may have an optional journal to speed recovery when mounting a volume that
+was not unmounted safely. The purpose of the journal is to ensure that when a group of related
+changes are being made, that either all of those changes are actually made, or none of them are
+made. The journal makes it quick and easy to restore the volume structures to a consistent state,
+without having to scan all of the structures. The journal is used only for the volume structures
+and metadata; it does not protect the contents of a fork.</p>
+<p>The volume header specifies if journalling is activated.</p>
+<p>The journal data stuctures consist of:</p>
+<ul>
+<li>a journal information block, contains the location and size of the journal header and journal
+buffer;</li>
+<li>a journal header, describes which part of the journal buffer is active and contains transactions
+waiting to be committed;</li>
+<li>a journal buffer, a cyclic buffer to hold the file system meta data transactions.</li>
+</ul>
+<p>On HFS+ volumes, the journal information block is stored as a file. The name of that file is
+“.journal_info_block” and it is stored in the volume’s root directory.</p>
+<p>The journal header and journal buffer are stored together in a different file named “.journal”,
+also in the volume’s root directory. Each of these files are contiguous on disk, they occupy
+exactly one extent.</p>
+<p>The volume header contains the extent of the journal information block file. The journal
+information block contains the location of the journal file.</p>
+<h3 id="hfs_plus_journal_information_block"><a class="header" href="#hfs_plus_journal_information_block">Journal information block</a></h3>
+<p>The journal information block describes where the journal header and journal buffer are stored. The
+journal information block is stored at the start of the block referred to by the volume header.</p>
+<p>The journal information block is 44 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#hfs_plus_journal_flags">Journal flags</a></td></tr>
+
+<tr><td>4</td><td>8 x 4 = 32</td><td></td><td>Device signature</td></tr>
+
+<tr><td>36</td><td>8</td><td></td><td>Journal header offset</td></tr>
+
+<tr><td>44</td><td>8</td><td></td><td>Journal size, in bytes, which includes the size of the journal header and the journal buffer, but not the journal information block</td></tr>
+
+<tr><td>52</td><td>32 x 4 = 128</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_plus_journal_flags"><a class="header" href="#hfs_plus_journal_flags">Journal flags</a></h4>
+<p>The journal flags consist of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value(s)</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>On volume, where the journal header offset is relative to the start of the volume</td></tr>
+
+<tr><td>0x00000002</td><td>On other device, where the device signature identifies the device containing the journal and the journal header offset is relative to the start of the device</td></tr>
+
+<tr><td>0x00000004</td><td>Needs initialization, to indicate that there are no valid transactions in the journal and needs to be initialized</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that according to TN1150 journals stored on a separate device are not supported.</p>
+</blockquote>
+<h3 id="the-journal-header"><a class="header" href="#the-journal-header">The journal header</a></h3>
+<p>The journal header is 44 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"\x4a\x4e\x4c\x78"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td>"\x12\x34\x56\x78"</td><td>Byte order (or endian) signature</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>First transaction start offset</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Next transaction start offset</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Journal size, in bytes, which includes the size of the journal header and buffer</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Journal block header size, in bytes, typically ranges from 4096 to 16384</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td><a href="#journal_checksum">checksum</a></td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Journal header size, in bytes, typically the size of one sector</td></tr>
+
+</table>
+</div>
+
+<h4 id="first-and-next-transaction-offset"><a class="header" href="#first-and-next-transaction-offset">First and next transaction offset</a></h4>
+<p>The first transaction offset contains the offset in bytes from the start of the journal header to
+the start of the first (oldest) transaction.</p>
+<p>The next transaction offset contains the offset in bytes from the start of the journal header to
+the end of the last (newest) transaction. Note that this field may be less than the start field,
+indicating that the transactions wrap around the end of the journal’s circular buffer. If end
+equals start, then the journal is empty, and there are no transactions that need to be replayed.</p>
+<h3 id="journal-transactions"><a class="header" href="#journal-transactions">Journal transactions</a></h3>
+<p>A single transaction is stored in the journal as several blocks. These blocks include both the data
+to be written and the location where that data is to be written. This is represented on storage
+medium by a block list header, which describes the number and sizes of the blocks, immediately
+followed by the contents of those blocks.</p>
+<p>Since block list headers are of limited size, a single transaction may consist of several block
+list headers and their associated block contents. If the next value in the first block information
+structure is non-zero, then the next block list header is a continuation of the same transaction.</p>
+<p>The journal buffer is treated as a circular buffer. When reading or writing the journal buffer, the
+I/O operation must stop at the end of the journal buffer and resume (wrap around) immediately
+following the journal header. Block list headers or the contents of blocks may wrap around in this
+way. Only a portion of the journal buffer is active at any given time; this portion is indicated by
+the start and end fields of the journal header. The part of the journal buffer that is not active
+contains no meaningful data, and must be ignored.</p>
+<p>To prevent ambiguity when start equals end, the journal is never allowed to be perfectly full (all
+of the journal buffer used by block lists and blocks). If the journal was perfectly full, and start
+was not equal to jhdr_size, then end would be equal to start. You would then be unable to
+differentiate between an empty and full journal.</p>
+<p>When the journal is not empty (contains transactions), it must be replayed to be sure the volume is
+consistent. That is, the data from each of the transactions must be written to the correct blocks
+on disk.</p>
+<h3 id="the-journal-block-list-header"><a class="header" href="#the-journal-block-list-header">The journal block list header</a></h3>
+<p>The block list header describes a list of blocks included in a transaction. A transaction may
+include several block lists if it modifies more blocks than can be represented in a single block
+list.</p>
+<p>The journal block list header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Maximum number of journal blocks</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Number of journal blocks following the journal block header, typically 1</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Block list size, in bytes, which includess the size of the header and blocks</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td><a href="#journal_checksum">Checksum</a></td></tr>
+
+<tr><td>12</td><td>4</td><td>0x00</td><td>Unknown (Alignment padding)</td></tr>
+
+<tr><td>16</td><td>...</td><td></td><td>Journal block information array</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the number of journal blocks includes the first journal block, The first journal block
+is reserved to be used when multiple blocks need to be chained, therefore the number of journal
+blocks actually containing data is minus one (-1).</p>
+</blockquote>
+<h3 id="journal-block-information"><a class="header" href="#journal-block-information">Journal block information</a></h3>
+<p>The journal block information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Block sector number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Block size, in bytes</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Next journal block</td></tr>
+
+</table>
+</div>
+
+<h3 id="journal_checksum"><a class="header" href="#journal_checksum">Journal checksum</a></h3>
+<p>The journal header and block list header both contain checksum values. The checksums are verified
+as part of a basic consistency check of these journal data structures. To verify the checksum,
+temporarily set the checksum field to 0 and then call the hfs_plus_calculate_checksum routine as
+specified below.</p>
+<pre><code class="language-text">uint32_t hfs_plus_calculate_checksum(
+          uint8_t *buffer,
+          size_t buffer_size )
+{
+    size_t buffer_offset = 0;
+    uint32_t checksum    = 0;
+
+    for( buffer_offset = 0;
+         buffer_offset &lt; buffer_size;
+         buffer_offset++)
+    {
+        checksum = ( checksum &lt;&lt; 8 ) ^ ( checksum + buffer[ buffer_offset ] );
+    }
+    return( ~checksum );
+}
+</code></pre>
+<h2 id="application-specific-data-structures"><a class="header" href="#application-specific-data-structures">Application specific data structures</a></h2>
+<p>HFS, HFS+ and HFSX contain application specific data structures.</p>
+<h3 id="finder_information"><a class="header" href="#finder_information">Finder information</a></h3>
+<p>The finder information in the master directory block (MDB) and volume header consists of an array
+of 32-bit values. This array contains information used by the Mac OS Finder and the system software
+boot process.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Array entry</th><th>Description</th></thead>
+<tr><td>0</td><td>Bootable system directory identifier (CNID), i.e. "System Folder" in Mac OS 8 or 9, or "/System/Library/CoreServices" in Mac OS X. Typically 3 or 5, is 0 if the volume is not bootable</td></tr>
+
+<tr><td>1</td><td>Startup application parent identifier (CNID), i.e. "Finder". Is 0 if the volume is not bootable</td></tr>
+
+<tr><td>2</td><td>Directory identifier (CNID) to display in Finder on mount, or 0 if none</td></tr>
+
+<tr><td>3</td><td>Directory identifier (CNID) of a bootable Mac OS 8 or 9 System Folder, or 0 if none</td></tr>
+
+<tr><td>4</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>5</td><td>Directory identifier (CNID) of a bootable Mac OS X system, the "/System/Library/CoreServices" directory, or 0 if none</td></tr>
+
+<tr><td>6 and 7</td><td>Mac OS X volume identifier, consist of a 64-bit integer</td></tr>
+
+</table>
+</div>
+
+<h3 id="file-information"><a class="header" href="#file-information">File information</a></h3>
+<h4 id="hfs_file_information"><a class="header" href="#hfs_file_information">HFS file information</a></h4>
+<p>The HFS file information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x 1 = 4</td><td></td><td>File type, which consists of an array of unsigned 8-bit integers</td></tr>
+
+<tr><td>4</td><td>4 x 1 = 4</td><td></td><td>File creator, which consists of an array of unsigned 8-bit integers</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#finder_flags">Finder flags</a></td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Location within the parent, which contains x and y-coordinate values. If set to {0, 0}, the Finder will place the item automatically</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>File icon window, which contains the window in which the file's icon appears</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_extended_file_information"><a class="header" href="#hfs_extended_file_information">HFS extended file information</a></h4>
+<p>The HFS extended file information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Finder icon identifier</td></tr>
+
+<tr><td>2</td><td>3 x 2 = 6</td><td></td><td>Unknown (Reserved), which consists of an array of signed 16-bit integers</td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td>Extended finder script code flags</td></tr>
+
+<tr><td>9</td><td>1</td><td></td><td><a href="#extended_finder_flags">Extended finder flags</a></td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Finder comment identifier, which consists of a signed 16-bit integer</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Put away folder identifier (CNID)</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_plus_file_information"><a class="header" href="#hfs_plus_file_information">HFS+ and HFSX file information</a></h4>
+<p>The HFS+ and HFSX file information (FileInfo) is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x 1 = 4</td><td></td><td>File type, which consists of an array of unsigned 8-bit integers</td></tr>
+
+<tr><td>4</td><td>4 x 1 = 4</td><td></td><td>File creator, which consists of an array of unsigned 8-bit integers</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#finder_flags">Finder flags</a></td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Location within the parent, which contains x and y-coordinate values. If set to {0, 0}, the Finder will place the item automatically</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_plus_extended_file_information"><a class="header" href="#hfs_plus_extended_file_information">HFS+ and HFSX extended file information</a></h4>
+<p>The HFS+ and HFSX extended file information (ExtendedFileInfo) is 16 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td colspan="4"><em>If kHFSHasDateAddedMask is not set</em></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td colspan="4"><em>If kHFSHasDateAddedMask is set</em></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Added time, which contains a POSIX timestamp in UTC</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#extended_finder_flags">Extended finder flags</a></td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Unknown (Reserved), which consists of a signed 16-bit integer</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Put away folder identifier (CNID)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="folder-information"><a class="header" href="#folder-information">Folder information</a></h3>
+<h4 id="hfs_folder_information"><a class="header" href="#hfs_folder_information">HFS folder information</a></h4>
+<p>The HFS folder information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Window position and dimension (boundaries), which contains the top, left, bottom, right-coordinate values</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#finder_flags">Finder flags</a></td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Location within the parent, which contains x and y-coordinate values. If set to {0, 0}, the Finder will place the item automatically</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Folder view</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_extended_folder_information"><a class="header" href="#hfs_extended_folder_information">HFS extended folder information</a></h4>
+<p>The HFS extended folder information is 16 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Scroll position for icon view, which contains x and y-coordinate values</td></tr>
+
+<tr><td colspan="4"><em>If kHFSHasDateAddedMask is not set</em></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Open folder identifier chain, which consists of a signed 32-bit integer</td></tr>
+
+<tr><td colspan="4"><em>If kHFSHasDateAddedMask is set</em></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Added time, which contains a POSIX timestamp in UTC</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td>Extended finder script code flags</td></tr>
+
+<tr><td>9</td><td>1</td><td></td><td><a href="#extended_finder_flags">Extended finder flags</a></td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Finder comment identifier, which consists of a signed 16-bit integer</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Put away folder identifier (CNID)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h4 id="hfs_plus_folder_information"><a class="header" href="#hfs_plus_folder_information">HFS+ and HFSX folder information</a></h4>
+<p>The HFS+ and HFSX folder information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Window position and dimension (boundaries), which contains the top, left, bottom, right-coordinate values</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#finder_flags">Finder flags</a></td></tr>
+
+<tr><td>10</td><td>4</td><td></td><td>Location within the parent, which contains x and y-coordinate values. If set to {0, 0}, the Finder will place the item automatically</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Unknown (Reserved)</td></tr>
+
+</table>
+</div>
+
+<h4 id="hfs_plus_extended_folder_information"><a class="header" href="#hfs_plus_extended_folder_information">HFS+ and HFSX extended folder information</a></h4>
+<p>The HFS+ and HFSX extended folder information is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Scroll position for icon view, which contains x and y-coordinate values</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown (Reserved), which consists of a signed 32-bit integer</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td><a href="#extended_finder_flags">Extended finder flags</a></td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Unknown (Reserved), which consists of a signed 16-bit integer</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Put away folder identifier (CNID)</td></tr>
+
+</table>
+</div>
+
+<h3 id="finder_flags"><a class="header" href="#finder_flags">Finder flags</a></h3>
+<p>The finder flags consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value(s)</th><th>Applies to</th><th>Description</th></thead>
+<tr><td>0x0001</td><td>Files and folders</td><td>Is on desktop</td></tr>
+
+<tr><td>0x000e</td><td>Files and folders</td><td>Color</td></tr>
+
+<tr><td>0x0040</td><td>Files</td><td>Is shared</td></tr>
+
+<tr><td>0x0080</td><td>Files</td><td>Has no INITs</td></tr>
+
+<tr><td>0x0100</td><td>Files</td><td>Has been inited</td></tr>
+
+<tr><td>0x0400</td><td>Files and folders</td><td>Has custom icon</td></tr>
+
+<tr><td>0x0800</td><td>Files</td><td>Is stationary</td></tr>
+
+<tr><td>0x1000</td><td>Files and folders</td><td>Name locked</td></tr>
+
+<tr><td>0x2000</td><td>Files</td><td>Has bundle</td></tr>
+
+<tr><td>0x4000</td><td>Files and folders</td><td>Is invisible</td></tr>
+
+<tr><td>0x8000</td><td>Files</td><td>Is alias</td></tr>
+
+</table>
+</div>
+
+<h3 id="extended_finder_flags"><a class="header" href="#extended_finder_flags">Extended finder flags</a></h3>
+<p>The extended finder flags consists of the following values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value(s)</th><th>Description</th></thead>
+<tr><td>0x0004</td><td>Has routing information</td></tr>
+
+<tr><td>0x0100</td><td>Has custom badge resource</td></tr>
+
+<tr><td>0x8000</td><td>Extended flags are invalid, which indicates that set the other extended flags should be ignored</td></tr>
+
+</table>
+</div>
+
+<h4 id="notes-1"><a class="header" href="#notes-1">Notes</a></h4>
+<pre><code class="language-text">struct Point {
+  SInt16              v;
+  SInt16              h;
+};
+typedef struct Point  Point;
+
+struct Rect {
+  SInt16              top;
+  SInt16              left;
+  SInt16              bottom;
+  SInt16              right;
+};
+typedef struct Rect   Rect;
+
+/* OSType is a 32-bit value made by packing four 1-byte characters
+   together. */
+typedef UInt32        FourCharCode;
+typedef FourCharCode  OSType;
+</code></pre>
+<h2 id="file-content"><a class="header" href="#file-content">File content</a></h2>
+<p>HFS supports multiple ways to store file content:</p>
+<ul>
+<li>Data fork</li>
+<li>Compressed data extended attribute</li>
+<li>Compressed data extended attribute with resource fork</li>
+<li>Resource fork</li>
+<li>Extended attribute (named fork)</li>
+</ul>
+<h3 id="data-fork"><a class="header" href="#data-fork">Data fork</a></h3>
+<p>The file content size is stored in the data fork descriptor of the
+<a href="#catalog_file_record">catalog file record</a>.</p>
+<p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
+<h3 id="compressed-data-extended-attribute-1"><a class="header" href="#compressed-data-extended-attribute-1">Compressed data extended attribute</a></h3>
+<p><a href="#compression_methods">Compression method</a> should be 3, 5 or 7.</p>
+<p>The file content size is stored in the compressed data header of a
+“com.apple.decmpfs” extended attribute.</p>
+<p>For compression method 3 or 7 the file content data is stored in a
+“com.apple.decmpfs” extended attribute after the <a href="#compressed_data_header">compressed data header</a>.</p>
+<p>For compression method 5 the file content data contains 0-byte values. There
+are 12 bytes stored after the <a href="#compressed_data_header">compressed data header</a>
+that contain:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (Seen: 1)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (Seen: 0)</td></tr>
+
+</table>
+</div>
+
+<h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
+<p><a href="#compression_methods">Compression method</a> should be 4 or 8.</p>
+<p>The file content size is stored in the compressed data header of a “com.apple.decmpfs” extended
+attribute.</p>
+<p>The file content data is stored in a “com.apple.ResourceFork” extended attribute.</p>
+<p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
+<h4 id="zlib-deflate-compressed-data"><a class="header" href="#zlib-deflate-compressed-data">ZLIB (DEFLATE) compressed data</a></h4>
+<ul>
+<li>ZLIB (DEFLATE) compressed header</li>
+<li>Unknown (empty values)</li>
+<li>ZLIB (DEFLATE) compressed data block offsets and sizes</li>
+<li>ZLIB (DEFLATE) compressed data blocks</li>
+<li>ZLIB (DEFLATE) compressed footer</li>
+</ul>
+<h5 id="zlib-deflate-compressed-header"><a class="header" href="#zlib-deflate-compressed-header">ZLIB (DEFLATE) compressed header</a></h5>
+<p>The ZLIB (DEFLATE) compressed header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the ZLIB (DEFLATE) compressed header are stored in big-endian.</p>
+</blockquote>
+<h5 id="zlib-deflate-compressed-data-block-descriptors"><a class="header" href="#zlib-deflate-compressed-data-block-descriptors">ZLIB (DEFLATE) compressed data block descriptors</a></h5>
+<p>The ZLIB (DEFLATE) compressed data block descriptors are of variable size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
+
+<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
+
+</table>
+</div>
+
+<h5 id="zlib-deflate-compressed-data-block-descriptor"><a class="header" href="#zlib-deflate-compressed-data-block-descriptor">ZLIB (DEFLATE) compressed data block descriptor</a></h5>
+<p>The ZLIB (DEFLATE) compressed data block descriptor is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data + 20</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
+
+</table>
+</div>
+
+<h5 id="zlib-deflate-compressed-footer"><a class="header" href="#zlib-deflate-compressed-footer">ZLIB (DEFLATE) compressed footer</a></h5>
+<p>The ZLIB (DEFLATE) compressed footer is 50 bytes size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the ZLIB (DEFLATE) compressed footer are stored in big-endian.</p>
+</blockquote>
+<h4 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the compressed data block contains a maximum of 65536 bytes of data. The compressed
+data block therefore should not exceed 65537 bytes in size.</p>
+</blockquote>
+<h3 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h3>
+<p>The file content size is stored in the resource fork descriptor of the
+<a href="#catalog_file_record">catalog file record</a>.</p>
+<p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
+<h3 id="extended-attribute-named-fork"><a class="header" href="#extended-attribute-named-fork">Extended attribute (named fork)</a></h3>
+<p>Extended attributes, also referred to as named forks, are stored in the
+<a href="#hfs_plus_attributes_file">HFS+ attributes file</a>.</p>
+<h2 id="hfs_wrapper"><a class="header" href="#hfs_wrapper">HFS wrapper</a></h2>
+<p>TODO: complete section</p>
+<p>A HFSX volume cannot be wrapped in a HFS volume.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://github.com/apple-oss-distributions/hfs/blob/main/core/hfs_format.h">hfs_format.h</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/mac/Files/Files-99.html">Data Organization on Volumes</a>, by Apple Inc.</li>
+<li><a href="https://developer.apple.com/library/archive/technotes/tn/tn1150.html">Technical Note TN1150: HFS plus volume format</a>, by Apple Inc.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="fat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="mfs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="fat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="mfs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
+            window.path_to_searchindex_js = "searchindex-cb967a59.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4e057007.js"></script>
+        <script src="toc-dc2c8d7c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1155,9 +1155,9 @@ created by mkfs.ext2.</p>
 
 <tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change (or modification) time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) content modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Deletion time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
@@ -1222,9 +1222,9 @@ using an ext4 inode extension.</p>
 
 <tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change (or modification) time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) content modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Deletion time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
@@ -1298,9 +1298,9 @@ using an ext4 inode extension.</p>
 
 <tr><td>8</td><td>4</td><td></td><td>(last) access time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>(last) inode change time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>(last) inode change (or modification) time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>(last) modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>(last) content modification time, which contains the number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch)</td></tr>
 
 <tr><td colspan="4"><em>If EXT4_EA_INODE_FL is set</em></td></tr>
 
@@ -1378,9 +1378,9 @@ using an ext4 inode extension.</p>
 
 <tr><td>130</td><td>2</td><td></td><td>Upper 16-bits of checksum</td></tr>
 
-<tr><td>132</td><td>4</td><td></td><td>(last) inode change time extra precision</td></tr>
+<tr><td>132</td><td>4</td><td></td><td>(last) inode change (or modification) time extra precision</td></tr>
 
-<tr><td>136</td><td>4</td><td></td><td>(last) modification time extra precision</td></tr>
+<tr><td>136</td><td>4</td><td></td><td>(last) content modification time extra precision</td></tr>
 
 <tr><td>140</td><td>4</td><td></td><td>(last) access time extra precision</td></tr>
 
@@ -1880,7 +1880,7 @@ accessible.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="file_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="apfs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -1894,7 +1894,7 @@ accessible.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="file_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="apfs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

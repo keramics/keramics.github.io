@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e5aa9cb6.js";
+            window.path_to_searchindex_js = "searchindex-cb967a59.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4e057007.js"></script>
+        <script src="toc-dc2c8d7c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -996,6 +996,9 @@ in size and consists of:</p>
 <p>Note that MFT entries have been observed without a $STANDARD_INFORMATION
 attribute, but with other attributes such as $FILE_NAME and an $I30 index.</p>
 </blockquote>
+<p>Recent version of NTFS support case-sentive file names. If a directory is case-sensitive the
+corresponding $STANDARD_INFORMATION attribute will have a maximum number of versions of 0 and a
+version number of 1.</p>
 <h3 id="the-attribute-list-attribute"><a class="header" href="#the-attribute-list-attribute">The attribute list attribute</a></h3>
 <p>The attribute list attribute ($ATTRIBUTE_LIST) is used to store MFT attributes
 outside the MFT entry, e.g. when the MFT entry is too small to store all the
@@ -1097,11 +1100,11 @@ attributes with the parent file reference of each hard link.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>POSIX</td><td>Case sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows</td></tr>
+<tr><td>0</td><td>POSIX</td><td>Case-sensitive character set that consists of all Unicode characters except for: "\0" (zero character), "/" (forward slash). The ":" (colon) is valid for NTFS but not for Windows</td></tr>
 
-<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space)</td></tr>
+<tr><td>1</td><td>FILE_NAME_NTFS, WINDOWS</td><td>Case-insensitive sub set of the POSIX character set that consists of all Unicode characters except for: <code>" * / : &lt; &gt; ? \ | +</code>. Note that names cannot end with a "." (dot) or " " (space)</td></tr>
 
-<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format</td></tr>
+<tr><td>2</td><td>FILE_NAME_DOS, DOS</td><td>Case-insensitive sub set of the WINDOWS character set that consists of all upper case ASCII characters except for: <code>" * + , / : ; &lt; = &gt; ? \</code>. Note that the name must follow the 8.3 format</td></tr>
 
 <tr><td>3</td><td>DOS_WINDOWS</td><td>Both the DOS and WINDOWS names are identical, which is the same as the DOS character set, with the exception that lower case is used as well</td></tr>
 
@@ -1109,7 +1112,7 @@ attributes with the parent file reference of each hard link.</p>
 </div>
 
 <blockquote>
-<p>Note that the Windows API function CreateFile allows to create case sensitive
+<p>Note that the Windows API function CreateFile allows to create case-sensitive
 file names when the flag FILE_FLAG_POSIX_SEMANTICS is set.</p>
 </blockquote>
 <h4 id="long-to-short-name-conversion"><a class="header" href="#long-to-short-name-conversion">Long to short name conversion</a></h4>
@@ -2854,7 +2857,7 @@ rest with with 0-byte values</li>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="fat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="mfs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -2868,7 +2871,7 @@ rest with with 0-byte values</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="fat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="mfs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
