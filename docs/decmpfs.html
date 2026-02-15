@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>File system formats - Keramics data format specifications</title>
+        <title>Apple File System Compression (decmpfs) - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -175,43 +175,101 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
-<p>A file system format is used to manage the storage of files.</p>
-<h2 id="terminology"><a class="header" href="#terminology">Terminology</a></h2>
+                        <h1 id="apple-file-system-compression-decmpfs"><a class="header" href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a></h1>
+<p><a href="hfs.html">Hierarchical File System (HFS)</a> and <a href="apfs.html">Apple File System (APFS)</a> use Apple File
+System Compression (decmpfs) to compress file contents.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
-<li><strong>File entry (file system entry)</strong>: an object that represent an element within
-the file system, such as a file or directory. A file system typically stores
-metadata of a file entry, such as the name, size, permissions, date and time
-values, and location of the content.</li>
-<li><strong>Data fork (or data stream)</strong>: a file system object that represents the
-content of a file entry. NTFS and HFS support multiple data forks (or data
-streams) for an individual file entry.</li>
-<li><strong>Extended attribute</strong>: A file system object that represents additional (or
-extended) metadata of an individual file entry.</li>
-<li><strong>Reparse point</strong>: a file system object that redirects to another location or
-implementation (filter driver), such as Windows Overlay Filter (WOF)
-compression. NTFS and ReFS support reparse points.</li>
+<li>an extended attribute named “com.apple.decmpfs”</li>
 </ul>
-<h2 id="formats"><a class="header" href="#formats">Formats</a></h2>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+</table>
+</div>
+
+<h2 id="decmpfs-extended-attribute"><a class="header" href="#decmpfs-extended-attribute">decmpfs extended attribute</a></h2>
+<p>The decmpfs extended attribute consists of:</p>
 <ul>
-<li><a href="apfs.html">Apple File System (APFS)</a></li>
-<li><a href="ext.html">Extended File System (ext)</a></li>
-<li><a href="exfat.html">Extensible File Allocation Table (exFAT)</a></li>
-<li><a href="fat.html">File Allocation Table (FAT)</a></li>
-<li><a href="hfs.html">Hierarchical File System (HFS)</a></li>
-<li><a href="mfs.html">Macintosh File System (MFS)</a></li>
-<li><a href="ntfs.html">New Technologies File System (NTFS)</a></li>
+<li>decmpfs header</li>
+<li>optional compressed data</li>
 </ul>
+<h4 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h4>
+<p>The decmpfs header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
+</blockquote>
+<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td>CMP_Type1</td><td>Unknown (uncompressed extended attribute data)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
+
+<tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
+
+<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-disable MD028 -->
+<blockquote>
+<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
+after the first compressed data byte.</p>
+</blockquote>
+<blockquote>
+<p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
+uncompressed after the first compressed data byte.</p>
+</blockquote>
+<!-- rumdl-enable MD028 -->
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="mbr.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="apfs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="apfs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="ext.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -221,11 +279,11 @@ compression. NTFS and ReFS support reparse points.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="mbr.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="apfs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="apfs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="ext.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

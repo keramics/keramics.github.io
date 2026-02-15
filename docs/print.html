@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cdb3af8f.js";
+            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-dc2c8d7c.js"></script>
+        <script src="toc-22017638.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -7405,6 +7405,92 @@ compression. NTFS and ReFS support reparse points.</li>
 <h1 id="apple-file-system-apfs"><a class="header" href="#apple-file-system-apfs">Apple File System (APFS)</a></h1>
 <p>TODO: add description</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="apple-file-system-compression-decmpfs"><a class="header" href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a></h1>
+<p><a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a> use Apple File
+System Compression (decmpfs) to compress file contents.</p>
+<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
+<ul>
+<li>an extended attribute named “com.apple.decmpfs”</li>
+</ul>
+<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+</table>
+</div>
+
+<h2 id="decmpfs-extended-attribute"><a class="header" href="#decmpfs-extended-attribute">decmpfs extended attribute</a></h2>
+<p>The decmpfs extended attribute consists of:</p>
+<ul>
+<li>decmpfs header</li>
+<li>optional compressed data</li>
+</ul>
+<h4 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h4>
+<p>The decmpfs header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
+</blockquote>
+<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td>CMP_Type1</td><td>Unknown (uncompressed extended attribute data)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
+
+<tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
+
+<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-disable MD028 -->
+<blockquote>
+<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
+after the first compressed data byte.</p>
+</blockquote>
+<blockquote>
+<p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
+uncompressed after the first compressed data byte.</p>
+</blockquote>
+<!-- rumdl-enable MD028 -->
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="extended-file-system-ext-format"><a class="header" href="#extended-file-system-ext-format">Extended File System (ext) format</a></h1>
 <p>The Extended File System (ext) is one of the more common file system used in
 Linux.</p>
@@ -7423,12 +7509,12 @@ Linux.</p>
 </table>
 </div>
 
-<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
 <p>An Extended File System (ext) consists of:</p>
 <ul>
 <li>one or more block groups</li>
 </ul>
-<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
+<h3 id="characteristics-12"><a class="header" href="#characteristics-12">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -9109,7 +9195,7 @@ accessible.</p>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
 <p>The Extensible File Allocation Table (exFAT) file system format is a successor
 of the <a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a> file system format.</p>
-<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
+<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -9120,7 +9206,7 @@ of the <a href="#file-allocation-table-fat-file-system-format">File Allocation T
 <li>One or more cluster block allocation tables</li>
 <li>File and directory data</li>
 </ul>
-<h3 id="characteristics-12"><a class="header" href="#characteristics-12">Characteristics</a></h3>
+<h3 id="characteristics-13"><a class="header" href="#characteristics-13">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -9528,7 +9614,7 @@ the default file system for DOS and Windows.</p>
 <li>FAT-32</li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">exFAT</a></li>
 </ul>
-<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
+<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
 <p>A FAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -9545,7 +9631,7 @@ the default file system for DOS and Windows.</p>
 <p>Note that FAT-32 stores the root directory as part of the file and directory
 data.</p>
 </blockquote>
-<h3 id="characteristics-13"><a class="header" href="#characteristics-13">Characteristics</a></h3>
+<h3 id="characteristics-14"><a class="header" href="#characteristics-14">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -10170,7 +10256,7 @@ OS 10.0 or later.</p>
 HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
 case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
 volume.</p>
-<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
+<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
@@ -10202,7 +10288,7 @@ volume.</p>
 <li>optional backup (or alternate) <a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h4 id="characteristics-14"><a class="header" href="#characteristics-14">Characteristics</a></h4>
+<h4 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -11113,7 +11199,7 @@ padding is not included in the key data size.</p>
 
 <tr><td colspan="4"><em>If key data size &gt;= 4</em></td></tr>
 
-<tr><td>2</td><td>4</td><td></td><td>Parent identifier, which conatains a CNID</td></tr>
+<tr><td>2</td><td>4</td><td></td><td>Parent identifier, which contains a CNID</td></tr>
 
 <tr><td colspan="4"><em>If key data size &gt;= 6</em></td></tr>
 
@@ -11923,74 +12009,6 @@ kHFSPlusAttrExtents is created and how it should be handled.</p>
 </table>
 </div>
 
-<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
-<p>The compressed extended attribute is named “com.apple.decmpfs” and consists of:</p>
-<ul>
-<li>compressed data header</li>
-<li>optional compressed data</li>
-</ul>
-<h4 id="compressed_data_header"><a class="header" href="#compressed_data_header">Compressed data header</a></h4>
-<p>The compressed data header is 16 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
-
-<tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
-</blockquote>
-<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>1</td><td>CMP_Type1</td><td>Unknown (uncompressed extended attribute data)</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
-
-<tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
-
-<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
-
-<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
-
-</table>
-</div>
-
-<!-- rumdl-disable MD028 -->
-<blockquote>
-<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
-after the first compressed data byte.</p>
-</blockquote>
-<blockquote>
-<p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
-uncompressed after the first compressed data byte.</p>
-</blockquote>
-<!-- rumdl-enable MD028 -->
 <h2 id="startup-file"><a class="header" href="#startup-file">Startup file</a></h2>
 <p>The startup file is a file system metadata file intended to hold information needed when
 booting a system that does not have built-in (ROM) support for HFS+ (or HFSX). A boot loader can
@@ -12452,15 +12470,14 @@ typedef FourCharCode  OSType;
 <p>The file content size is stored in the data fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
-<h3 id="compressed-data-extended-attribute-1"><a class="header" href="#compressed-data-extended-attribute-1">Compressed data extended attribute</a></h3>
-<p><a href="#compression_methods">Compression method</a> should be 3, 5 or 7.</p>
-<p>The file content size is stored in the compressed data header of a
-“com.apple.decmpfs” extended attribute.</p>
-<p>For compression method 3 or 7 the file content data is stored in a
-“com.apple.decmpfs” extended attribute after the <a href="#compressed_data_header">compressed data header</a>.</p>
-<p>For compression method 5 the file content data contains 0-byte values. There
-are 12 bytes stored after the <a href="#compressed_data_header">compressed data header</a>
-that contain:</p>
+<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
+<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
+<a href="#compression_methods">compression method</a> 3, 5 or 7.</p>
+<p>The file content size is stored in the compressed data header of the extended attribute.</p>
+<p>For compression method 3 or 7 the file content data is stored in the extended attribute after the
+decmpfs compressed data header.</p>
+<p>For compression method 5 the file content data contains 0-byte values. There are 12 bytes stored
+after the decmpfs compressed data header that consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -12474,9 +12491,9 @@ that contain:</p>
 </div>
 
 <h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
-<p><a href="#compression_methods">Compression method</a> should be 4 or 8.</p>
-<p>The file content size is stored in the compressed data header of a “com.apple.decmpfs” extended
-attribute.</p>
+<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
+<a href="#compression_methods">compression method</a> 4 or 8.</p>
+<p>The file content size is stored in the compressed data header of the extended attribute.</p>
 <p>The file content data is stored in a “com.apple.ResourceFork” extended attribute.</p>
 <p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
 <h4 id="zlib-deflate-compressed-data"><a class="header" href="#zlib-deflate-compressed-data">ZLIB (DEFLATE) compressed data</a></h4>
@@ -12596,7 +12613,7 @@ data block therefore should not exceed 65537 bytes in size.</p>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
 <p>The Macintosh File System (MFS) is the first file system created for Mac OS, intended for 400 KiB
 floppy disks.</p>
-<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
+<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
 <p>A MFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">boot block</a></li>
@@ -12606,7 +12623,7 @@ floppy disks.</p>
 <li>optional backup (or alternate) <a href="#master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h3 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h3>
+<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12854,7 +12871,7 @@ multiple blocks</li>
 <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for
 Microsoft Windows versions that are based on Windows NT.</p>
-<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -12862,7 +12879,7 @@ Microsoft Windows versions that are based on Windows NT.</p>
 <li>Master File Table (MFT)</li>
 <li>Mirror Master File Table (MFT)</li>
 </ul>
-<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
+<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -13763,8 +13780,6 @@ as a resident MFT attribute.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<p>TODO: determine if the allocated file size and file size values contain accurate
-values when the file name data is stored in a MFT attribute.</p>
 <p>An MFT attribute can contain multiple file name attributes, e.g. for a separate
 (long) name and short name.</p>
 <p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp;
@@ -15539,7 +15554,7 @@ rest with with 0-byte values</li>
 <p>The property list (plist) formats are used to store various kinds of data, for
 example configuration data. The format is know to be used stand-alone as well
 as embedded in other data formats.</p>
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -15761,14 +15776,14 @@ consists of:</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data
 format, as defined in RFC1950, allows for multiple techniques but only the
 Deflate compression method, a variation of LZ77, is used.</p>
-<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
+<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
+<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>

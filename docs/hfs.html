@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cdb3af8f.js";
+            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-dc2c8d7c.js"></script>
+        <script src="toc-22017638.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1140,7 +1140,7 @@ padding is not included in the key data size.</p>
 
 <tr><td colspan="4"><em>If key data size &gt;= 4</em></td></tr>
 
-<tr><td>2</td><td>4</td><td></td><td>Parent identifier, which conatains a CNID</td></tr>
+<tr><td>2</td><td>4</td><td></td><td>Parent identifier, which contains a CNID</td></tr>
 
 <tr><td colspan="4"><em>If key data size &gt;= 6</em></td></tr>
 
@@ -1950,74 +1950,6 @@ kHFSPlusAttrExtents is created and how it should be handled.</p>
 </table>
 </div>
 
-<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
-<p>The compressed extended attribute is named “com.apple.decmpfs” and consists of:</p>
-<ul>
-<li>compressed data header</li>
-<li>optional compressed data</li>
-</ul>
-<h4 id="compressed_data_header"><a class="header" href="#compressed_data_header">Compressed data header</a></h4>
-<p>The compressed data header is 16 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
-
-<tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
-</blockquote>
-<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>1</td><td>CMP_Type1</td><td>Unknown (uncompressed extended attribute data)</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
-
-<tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
-
-<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
-
-<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
-
-<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
-
-</table>
-</div>
-
-<!-- rumdl-disable MD028 -->
-<blockquote>
-<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
-after the first compressed data byte.</p>
-</blockquote>
-<blockquote>
-<p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
-uncompressed after the first compressed data byte.</p>
-</blockquote>
-<!-- rumdl-enable MD028 -->
 <h2 id="startup-file"><a class="header" href="#startup-file">Startup file</a></h2>
 <p>The startup file is a file system metadata file intended to hold information needed when
 booting a system that does not have built-in (ROM) support for HFS+ (or HFSX). A boot loader can
@@ -2479,15 +2411,14 @@ typedef FourCharCode  OSType;
 <p>The file content size is stored in the data fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
-<h3 id="compressed-data-extended-attribute-1"><a class="header" href="#compressed-data-extended-attribute-1">Compressed data extended attribute</a></h3>
-<p><a href="#compression_methods">Compression method</a> should be 3, 5 or 7.</p>
-<p>The file content size is stored in the compressed data header of a
-“com.apple.decmpfs” extended attribute.</p>
-<p>For compression method 3 or 7 the file content data is stored in a
-“com.apple.decmpfs” extended attribute after the <a href="#compressed_data_header">compressed data header</a>.</p>
-<p>For compression method 5 the file content data contains 0-byte values. There
-are 12 bytes stored after the <a href="#compressed_data_header">compressed data header</a>
-that contain:</p>
+<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
+<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
+<a href="decmpfs.html#compression_methods">compression method</a> 3, 5 or 7.</p>
+<p>The file content size is stored in the compressed data header of the extended attribute.</p>
+<p>For compression method 3 or 7 the file content data is stored in the extended attribute after the
+decmpfs compressed data header.</p>
+<p>For compression method 5 the file content data contains 0-byte values. There are 12 bytes stored
+after the decmpfs compressed data header that consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2501,9 +2432,9 @@ that contain:</p>
 </div>
 
 <h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
-<p><a href="#compression_methods">Compression method</a> should be 4 or 8.</p>
-<p>The file content size is stored in the compressed data header of a “com.apple.decmpfs” extended
-attribute.</p>
+<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
+<a href="decmpfs.html#compression_methods">compression method</a> 4 or 8.</p>
+<p>The file content size is stored in the compressed data header of the extended attribute.</p>
 <p>The file content data is stored in a “com.apple.ResourceFork” extended attribute.</p>
 <p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
 <h4 id="zlib-deflate-compressed-data"><a class="header" href="#zlib-deflate-compressed-data">ZLIB (DEFLATE) compressed data</a></h4>
