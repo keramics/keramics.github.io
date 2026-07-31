@@ -16,8 +16,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
+            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-22017638.js"></script>
+        <script src="toc-66965ffe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -206,9 +206,9 @@ such as a hard disk, a floppy or optical disk like CD-ROM or DVD.</p>
 <h1 id="expert-witness-compression-format-ewf"><a class="header" href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></h1>
 <p>EWF is short for Expert Witness Compression Format. It is a file type used to store storage media
 images for digital forensic purposes. It is currently widely used in the field of computer
-forensics in proprietary tooling like EnCase en FTK. The
-<a href="http://www.asrdata.com/whitepaper-html">original specification</a> of the format was provided by ASR
-Data for the SMART application.</p>
+forensics in proprietary tooling like EnCase en FTK.</p>
+<p>The <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> is the earliest
+known specification of the format was provided by ASR Data for the SMART application.</p>
 <p>The EWF format was succeeded by the <a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
@@ -407,8 +407,10 @@ values but data, probably the memory is not filled with 0-byte values.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
+<!-- rumdl-disable MD013 -->
 <p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 defines the following:</p>
+<!-- rumdl-enable MD013 -->
 <ul>
 <li>Header section</li>
 <li>Volume section</li>
@@ -449,7 +451,7 @@ section are:</p>
 </table>
 </div>
 
-<p>The information about the acquired media consists of <a href="#zlib-compressed-data">zlib compressed data</a>. It contains
+<p>The information about the acquired media consists of <a href="#zlib-compressed-data-1">zlib compressed data</a>. It contains
 text in UTF16 format specifying information about the acquired media. The text multiple lines
 separated by an end of line character(s).</p>
 <p>The first 2 bytes of the UTF16 string are the byte order mark (BOM):</p>
@@ -479,7 +481,8 @@ information as the <a href="#header_section">header section</a>.</p>
 
 <p>The end of line character(s) is a newline (0x0a).</p>
 <blockquote>
-<p>Note this end of line character differs from the one used in the <a href="#header_section">header section</a>.</p>
+<p>Note this end of line character differs from the one used in the
+<a href="#header_section">header section</a>.</p>
 </blockquote>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
 <div class="table-wrapper">
@@ -764,7 +767,7 @@ Dossier generated EWF-E01 files.</li>
 </table>
 </div>
 
-<p>The information about the acquired media consists of <a href="#zlib-compressed-data">zlib compressed data</a>. It contains
+<p>The information about the acquired media consists of <a href="#zlib-compressed-data-1">zlib compressed data</a>. It contains
 text in ASCII format specifying information about the acquired media. The text multiple lines
 separated by an end of line character(s).</p>
 <p>In the next paragraphs the various variants of the header section are described. In all cases the
@@ -1288,7 +1291,9 @@ SMART (EWF-S01)</li>
 </ul>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
 <h4 id="ewf-specification"><a class="header" href="#ewf-specification">EWF specification</a></h4>
+<!-- rumdl-disable MD013 -->
 <p>The specification according to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</p>
+<!-- rumdl-enable MD013 -->
 <p>The volume section data is 94 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1525,7 +1530,7 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="optical-disc-images"><a class="header" href="#optical-disc-images">Optical disc images</a></h4>
 <p>For a MODE-1 CD-ROM optical disc image EnCase only seems to support 2048 bytes per sector (the
@@ -1617,7 +1622,7 @@ The resulting size of the “compressed” chunk can therefore be larger than th
 <blockquote>
 <p>Note that this was deducted from the behavior of FTK Imager for SMART (EWF-S01).</p>
 </blockquote>
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="smart-ewf-s01-3"><a class="header" href="#smart-ewf-s01-3">SMART (EWF-S01)</a></h4>
 <p>The table section in the SMART (EWF-S01) format is equivalent to that of the EWF specification.</p>
@@ -1692,7 +1697,7 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01">FTK Imager and EnCase 2 to 5 and linen 5 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
@@ -3029,7 +3034,7 @@ EWF-X is not the same as version 2 of EWF.</p>
 <li>xhash</li>
 </ul>
 <h4 id="xheader"><a class="header" href="#xheader">Xheader</a></h4>
-<p>The xheader section contains <a href="#zlib-compressed-data">zlib compressed data</a> containing XML
+<p>The xheader section contains <a href="#zlib-compressed-data-1">zlib compressed data</a> containing XML
 data containing the header values.</p>
 <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xheader&gt;
@@ -3045,7 +3050,7 @@ data containing the header values.</p>
 &lt;/xheader&gt;
 </code></pre>
 <h4 id="xhash"><a class="header" href="#xhash">Xhash</a></h4>
-<p>The xhash section contains <a href="#zlib-compressed-data">zlib compressed data</a> containing XML data
+<p>The xhash section contains <a href="#zlib-compressed-data-1">zlib compressed data</a> containing XML data
 containing the hash values.</p>
 <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xhash&gt;
@@ -3065,7 +3070,7 @@ containing the hash values.</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
 <p>In this corruption scenarion the copy of uncompressed data size value of the
-<a href="#zlib-compressed-data">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s
+<a href="#zlib-compressed-data-1">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s
 complement of the uncompressed data size.</p>
 <p>Libewf currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
@@ -3133,10 +3138,12 @@ uses the EWF extensions the file actually is a AES-256 encrypted container. The
 EWF can be encrypted using a pass-phrase or a certificate.</p>
 <p>TODO: link to format definition</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
+<!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
 <li><a href="http://www.ietf.org/rfc/rfc4122.txt">RFC4122 - A Universally Unique Identifier (UUID) URN Namespace</a></li>
 </ul>
+<!-- rumdl-enable MD013 -->
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="expert-witness-compression-format-version-2-ewf2"><a class="header" href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2 (EWF2)</a></h1>
 <p>TODO: add description</p>
@@ -4143,8 +4150,10 @@ referenced by the L1 table.</p>
 <p>TODO: complete section</p>
 <h2 id="references-1"><a class="header" href="#references-1">References</a></h2>
 <ul>
-<li><a href="https://web.archive.org/web/20201006212750/https://people.gnome.org/~markmc/qcow-image-format-version-1.html">The QCOW Image Format</a>, by Mark McLoughlin</li>
-<li><a href="https://web.archive.org/web/20121004073848/http://people.gnome.org/~markmc/qcow-image-format.html">The QCOW2 Image Format</a>, by Mark McLoughlin</li>
+<li><a href="https://web.archive.org/web/20201006212750/https://people.gnome.org/~markmc/qcow-image-format-version-1.html">The QCOW Image Format</a>,
+by Mark McLoughlin</li>
+<li><a href="https://web.archive.org/web/20121004073848/http://people.gnome.org/~markmc/qcow-image-format.html">The QCOW2 Image Format</a>,
+by Mark McLoughlin</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="universal-disk-image-format-udif"><a class="header" href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a></h1>
@@ -5260,7 +5269,8 @@ circular (ring) buffer that contains log entries.</p>
 <p>TODO: complete section</p>
 <h2 id="references-3"><a class="header" href="#references-3">References</a></h2>
 <ul>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477">MS-VHDX: Virtual Hard Disk v2 (VHDX) File Format</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-vhdx/83e061f8-f6e2-4de1-91bd-5d518a43d477">MS-VHDX: Virtual Hard Disk v2 (VHDX) File Format</a>,
+by Microsoft</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vmware-virtual-disk-vmdk-format"><a class="header" href="#vmware-virtual-disk-vmdk-format">VMware Virtual Disk (VMDK) format</a></h1>
@@ -6005,7 +6015,7 @@ stored compressed.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="#zlib-compressed-data">zlib compressed data</a></td></tr>
+<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="#zlib-compressed-data-1">zlib compressed data</a></td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>Unknown (Padding)</td></tr>
 
@@ -6167,7 +6177,8 @@ extent data file if the stream has been truncated, but not that this can be
 very expensive process IO-wise.</p>
 <h2 id="references-4"><a class="header" href="#references-4">References</a></h2>
 <ul>
-<li><a href="https://web.archive.org/web/20120302211605/http://www.vmware.com/support/developer/vddk/vmdk_50_technote.pdf">Virtual Disk Format 5.0</a>, by VMWare</li>
+<li><a href="https://web.archive.org/web/20120302211605/http://www.vmware.com/support/developer/vddk/vmdk_50_technote.pdf">Virtual Disk Format 5.0</a>,
+by VMWare</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="volume-system-formats"><a class="header" href="#volume-system-formats">Volume system formats</a></h1>
@@ -6441,6 +6452,9 @@ therefore the first entry in the partition map describes the partition map itsel
 <li>A backup GPT partition table header (typically stored in the last block (LBA) -1)</li>
 </ul>
 <p>The GPT partition table header signature can be used to determine the block (LBA) (or sector) size.</p>
+<blockquote>
+<p>Note that the maximum number of partitions is typically 128, but can be 256 as well.</p>
+</blockquote>
 <h3 id="characteristics-9"><a class="header" href="#characteristics-9">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
@@ -7378,22 +7392,21 @@ Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 <p>A file system format is used to manage the storage of files.</p>
 <h2 id="terminology-3"><a class="header" href="#terminology-3">Terminology</a></h2>
 <ul>
-<li><strong>File entry (file system entry)</strong>: an object that represent an element within
-the file system, such as a file or directory. A file system typically stores
-metadata of a file entry, such as the name, size, permissions, date and time
-values, and location of the content.</li>
-<li><strong>Data fork (or data stream)</strong>: a file system object that represents the
-content of a file entry. NTFS and HFS support multiple data forks (or data
-streams) for an individual file entry.</li>
-<li><strong>Extended attribute</strong>: A file system object that represents additional (or
-extended) metadata of an individual file entry.</li>
-<li><strong>Reparse point</strong>: a file system object that redirects to another location or
-implementation (filter driver), such as Windows Overlay Filter (WOF)
-compression. NTFS and ReFS support reparse points.</li>
+<li><strong>File entry (file system entry)</strong>: an object that represent an element within the file system,
+such as a file or directory. A file system typically stores metadata of a file entry, such as the
+name, size, permissions, date and time values, and location of the content.</li>
+<li><strong>Data fork (or data stream)</strong>: a file system object that represents the content of a file entry.
+NTFS and HFS support multiple data forks (or data streams) for an individual file entry.</li>
+<li><strong>Extended attribute</strong>: A file system object that represents additional (or extended) metadata of
+an individual file entry.</li>
+<li><strong>Reparse point</strong>: a file system object that redirects to another location or implementation
+(filter driver), such as Windows Overlay Filter (WOF) compression. NTFS and ReFS support reparse
+points.</li>
 </ul>
 <h2 id="formats-2"><a class="header" href="#formats-2">Formats</a></h2>
 <ul>
 <li><a href="#apple-file-system-apfs">Apple File System (APFS)</a></li>
+<li><a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a></li>
 <li><a href="#extended-file-system-ext-format">Extended File System (ext)</a></li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT)</a></li>
 <li><a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a></li>
@@ -7412,6 +7425,7 @@ System Compression (decmpfs) to compress file contents.</p>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
+<li>compressed file content data</li>
 </ul>
 <h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
 <div class="table-wrapper">
@@ -7428,7 +7442,7 @@ System Compression (decmpfs) to compress file contents.</p>
 <li>decmpfs header</li>
 <li>optional compressed data</li>
 </ul>
-<h4 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h4>
+<h3 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h3>
 <p>The decmpfs header is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -7453,9 +7467,9 @@ System Compression (decmpfs) to compress file contents.</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+<tr><td>3</td><td></td><td>zlib compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
 
-<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+<tr><td>4</td><td></td><td>64k chunked zlib compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
 
 <tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
 
@@ -7480,16 +7494,141 @@ System Compression (decmpfs) to compress file contents.</p>
 </table>
 </div>
 
-<!-- rumdl-disable MD028 -->
+<h2 id="compressed-file-content-data"><a class="header" href="#compressed-file-content-data">Compressed file content data</a></h2>
+<p>The location of the compressed file content data depends on the compression method:</p>
+<ul>
+<li>sparse data</li>
+<li>compressed data stored in extended attribute</li>
+<li>compressed data stored in resource fork</li>
+</ul>
+<h3 id="sparse-data"><a class="header" href="#sparse-data">Sparse data</a></h3>
+<p><a href="#compression_methods">Compression method</a> 5 has been observed to be used for sparse data,
+the file content data contains 0-byte values.</p>
+<p>There are 12 bytes stored after the decmpfs compressed data header that consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (Seen: 1)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (Seen: 0)</td></tr>
+
+</table>
+</div>
+
+<h3 id="compressed-data-stored-in-extended-attribute"><a class="header" href="#compressed-data-stored-in-extended-attribute">Compressed data stored in extended attribute</a></h3>
+<p><a href="#compression_methods">Compression method</a> 3 and 7 store the compressed file content data
+in the extended attribute after the decmpfs compressed data header.</p>
+<p>The compressed data consist of 1 compressed data block.</p>
+<h3 id="compressed-data-stored-in-resource-fork"><a class="header" href="#compressed-data-stored-in-resource-fork">Compressed data stored in resource fork</a></h3>
+<p><a href="#compression_methods">Compression method</a> 4 and 8 store the compressed file content data
+in the resource fork of the file.</p>
+<p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
+<h2 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">zlib compressed data</a></h2>
+<ul>
+<li>zlib compressed header</li>
+<li>Unknown (empty values)</li>
+<li>zlib compressed data block offsets and sizes</li>
+<li>zlib compressed data blocks</li>
+<li>zlib compressed footer</li>
+</ul>
 <blockquote>
-<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
-after the first compressed data byte.</p>
+<p>Note that if the zlib compressed data starts with 0xff the data is stored uncompressed after the
+first compressed data byte.</p>
 </blockquote>
+<h3 id="zlib-compressed-header"><a class="header" href="#zlib-compressed-header">zlib compressed header</a></h3>
+<p>The zlib compressed header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed header are stored in big-endian.</p>
+</blockquote>
+<h3 id="zlib-compressed-data-block-descriptors"><a class="header" href="#zlib-compressed-data-block-descriptors">zlib compressed data block descriptors</a></h3>
+<p>The zlib compressed data block descriptors are of variable size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
+
+<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
+
+</table>
+</div>
+
+<h3 id="zlib-compressed-data-block-descriptor"><a class="header" href="#zlib-compressed-data-block-descriptor">zlib compressed data block descriptor</a></h3>
+<p>The zlib compressed data block descriptor is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the zlib compressed data + 20</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
+
+</table>
+</div>
+
+<h3 id="zlib-compressed-footer"><a class="header" href="#zlib-compressed-footer">zlib compressed footer</a></h3>
+<p>The zlib compressed footer is 50 bytes size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed footer are stored in big-endian.</p>
+</blockquote>
+<h2 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h2>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
+
+</table>
+</div>
+
 <blockquote>
 <p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
-uncompressed after the first compressed data byte.</p>
+uncompressed after the first compressed data byte. The compressed data block contains a maximum
+of 65536 bytes of data. The compressed data block therefore should not exceed 65537 bytes in size.</p>
 </blockquote>
-<!-- rumdl-enable MD028 -->
+<h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
+<p>TODO: complete this section</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="extended-file-system-ext-format"><a class="header" href="#extended-file-system-ext-format">Extended File System (ext) format</a></h1>
 <p>The Extended File System (ext) is one of the more common file system used in
@@ -8747,13 +8886,14 @@ following:</p>
 <h4 id="notes-5"><a class="header" href="#notes-5">Notes</a></h4>
 <p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification
 time can contain a valid timestamp.</p>
+<!-- rumdl-disable MD013 -->
 <p>According to <a href="https://docs.kernel.org/filesystems/ext4/overview.html#large-extended-attribute-values">The Linux Kernel documentation</a></p>
+<!-- rumdl-enable MD013 -->
 <blockquote>
-<p>For backward compatibility with older versions of this feature, the
-i_mtime/i_generation may store a back-reference to the inode number and
-i_generation of the one owning inode (in cases where the EA inode is not
-referenced by multiple inodes) to verify that the EA inode is the correct
-one being accessed.</p>
+<p>For backward compatibility with older versions of this feature, the i_mtime/i_generation may
+store a back-reference to the inode number and i_generation of the one owning inode (in cases
+where the EA inode is not referenced by multiple inodes) to verify that the EA inode is the
+correct one being accessed.</p>
 </blockquote>
 <h3 id="file_mode"><a class="header" href="#file_mode">File mode</a></h3>
 <!-- rumdl-disable MD033 MD056 -->
@@ -9189,7 +9329,8 @@ only set the first 4 bytes to 0 for the terminator.</p>
 accessible.</p>
 <h2 id="references-5"><a class="header" href="#references-5">References</a></h2>
 <ul>
-<li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux kernel documentation</li>
+<li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux
+kernel documentation</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
@@ -9599,7 +9740,8 @@ and/or second directory entry of the root directory.</p>
 
 <h2 id="references-6"><a class="header" href="#references-6">References</a></h2>
 <ul>
-<li><a href="https://learn.microsoft.com/en-gb/windows/win32/fileio/exfat-specification">exFAT file system specification</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-gb/windows/win32/fileio/exfat-specification">exFAT file system specification</a>,
+by Microsoft</li>
 <li><a href="https://en.wikipedia.org/wiki/ExFAT">exFAT</a>, by Wikipedia</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -10116,8 +10258,7 @@ of:</p>
 </div>
 
 <blockquote>
-<p>Note that other characters such as plus sign (‘+’) have been observed in FAT
-short file names.</p>
+<p>Note that other characters such as plus sign (‘+’) have been observed in FAT short file names.</p>
 </blockquote>
 <h4 id="short_name_first_character"><a class="header" href="#short_name_first_character">First character</a></h4>
 <div class="table-wrapper">
@@ -10229,8 +10370,10 @@ end-of-string character (0x0000) are padded with 0xffff.</p>
 
 <h2 id="references-7"><a class="header" href="#references-7">References</a></h2>
 <ul>
-<li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>, by Microsoft</li>
-<li><a href="https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system">Design of the FAT file system</a>, by Wikipedia</li>
+<li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>,
+by Microsoft</li>
+<li><a href="https://en.wikipedia.org/wiki/Design_of_the_FAT_file_system">Design of the FAT file system</a>, by
+Wikipedia</li>
 <li><a href="https://en.wikipedia.org/wiki/File_Allocation_Table">File Allocation Table</a>, by Wikipedia</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -10277,7 +10420,7 @@ volume.</p>
 </table>
 </div>
 
-<h3 id="hfs"><a class="header" href="#hfs">HFS</a></h3>
+<h3 id="hfs_volume"><a class="header" href="#hfs_volume">HFS</a></h3>
 <p>A HFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">MFS boot block</a></li>
@@ -10692,11 +10835,11 @@ to the type of B-tree.</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Number of blocks, where a volume can contain at most 65535 blocks</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Block size, in bytes, must be a multitude of 512</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Block size (drAlBlkSiz), in bytes, must be a multitude of 512</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
 
-<tr><td>28</td><td>2</td><td></td><td>Data area block number, contains a block number relative from the start of the volume, where 0 is the first block number</td></tr>
+<tr><td>28</td><td>2</td><td></td><td>Data area start sector (drAlBlSt), contains a sector number relative from the start of the volume, where 0 is the first sector number and bytes per sector is 512</td></tr>
 
 <tr><td>30</td><td>4</td><td></td><td>Next available catalog node identifier (CNID), which can be a directory or file record identifier</td></tr>
 
@@ -10724,9 +10867,9 @@ to the type of B-tree.</p>
 
 <tr><td>92</td><td>32</td><td></td><td><a href="#finder_information">Finder information</a></td></tr>
 
-<tr><td>124</td><td>2</td><td></td><td>Embedded volume signature (drVCSize)</td></tr>
+<tr><td>124</td><td>2</td><td></td><td>Embedded volume signature (drEmbedSigWord, previously used for drVCSize)</td></tr>
 
-<tr><td>126</td><td>4</td><td></td><td>Embedded volume <a href="#hfs_extents_descriptor">extent descriptor</a> (drVBMCSize and drCtlCSize)</td></tr>
+<tr><td>126</td><td>4</td><td></td><td>Embedded volume <a href="#hfs_extents_descriptor">extent descriptor</a> (drEmbedExtent, previously used for drVBMCSize and drCtlCSize)</td></tr>
 
 <tr><td>130</td><td>4</td><td></td><td>Extents overflow file size</td></tr>
 
@@ -10903,6 +11046,9 @@ storing the backup volume header, as described above).</p>
 the content of the file shared by the hard links.</li>
 <li>one or more hard link file records, that reference the indirect node file record.</li>
 </ul>
+<blockquote>
+<p>Note that indirect node records named “dir_#” and “temp#” also have been observed.</p>
+</blockquote>
 <p>Indirect node files are stored in a file system metadata directory referred to as the metadata
 directory with the name “/\u{2400}\u{2400}\u{2400}\u{2400}HFS+ Private Data”.</p>
 <p>The link reference corresponds to the catalog node identifier (CNID) of the indirect node file,
@@ -12222,11 +12368,30 @@ boot process.</p>
 
 <tr><td>5</td><td>Directory identifier (CNID) of a bootable Mac OS X system, the "/System/Library/CoreServices" directory, or 0 if none</td></tr>
 
-<tr><td>6 and 7</td><td>Mac OS X volume identifier, consist of a 64-bit integer</td></tr>
+<tr><td>6 and 7</td><td>Mac OS X Volume Status Database (VSDB) volume identifier</td></tr>
 
 </table>
 </div>
 
+<p>To convert the VSDB volume identifier into a UUID:</p>
+<ul>
+<li>Append the volume identifier to HFS_UUID_NAMESPACE_ID (B3E20F39-F292-11D6-97A4-00306543ECAC)</li>
+<li>Calculate the MD5 digest hash of the byte sequence</li>
+<li>Convert the MD5 digest hash into the UUID, see below</li>
+</ul>
+<pre><code class="language-python">data = bytes.fromhex("b3e20f39f29211d697a400306543ecac") + volume_identifier
+hash = hashlib.md5(data).hexdigest()
+part1 = hash[0:8]
+part2 = hash[8:12]
+part3 = "".join(["3", hash[13:16]])
+digit = (int(hash[16], 16) &amp; 3) | 8
+part4 = "".join([f"{digit:x}", hash[17:20])
+part5 = hash[20:]
+uuid = "-".join([part1, part2, part3, part4, part5])
+</code></pre>
+<blockquote>
+<p>Note that on Mac OS the finder information can be viewed using <code>bless --info volume_mount_path</code>.</p>
+</blockquote>
 <h3 id="file-information"><a class="header" href="#file-information">File information</a></h3>
 <h4 id="hfs_file_information"><a class="header" href="#hfs_file_information">HFS file information</a></h4>
 <p>The HFS file information is 16 bytes in size and consists of:</p>
@@ -12461,153 +12626,52 @@ typedef FourCharCode  OSType;
 <p>HFS supports multiple ways to store file content:</p>
 <ul>
 <li>Data fork</li>
-<li>Compressed data extended attribute</li>
-<li>Compressed data extended attribute with resource fork</li>
 <li>Resource fork</li>
 <li>Extended attribute (named fork)</li>
+<li>Apple File System Compression (decmpfs)</li>
 </ul>
 <h3 id="data-fork"><a class="header" href="#data-fork">Data fork</a></h3>
 <p>The file content size is stored in the data fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
-<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
-<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
-<a href="#compression_methods">compression method</a> 3, 5 or 7.</p>
-<p>The file content size is stored in the compressed data header of the extended attribute.</p>
-<p>For compression method 3 or 7 the file content data is stored in the extended attribute after the
-decmpfs compressed data header.</p>
-<p>For compression method 5 the file content data contains 0-byte values. There are 12 bytes stored
-after the decmpfs compressed data header that consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Unknown (Seen: 1)</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Unknown (Seen: 0)</td></tr>
-
-</table>
-</div>
-
-<h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
-<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
-<a href="#compression_methods">compression method</a> 4 or 8.</p>
-<p>The file content size is stored in the compressed data header of the extended attribute.</p>
-<p>The file content data is stored in a “com.apple.ResourceFork” extended attribute.</p>
-<p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
-<h4 id="zlib-deflate-compressed-data"><a class="header" href="#zlib-deflate-compressed-data">ZLIB (DEFLATE) compressed data</a></h4>
-<ul>
-<li>ZLIB (DEFLATE) compressed header</li>
-<li>Unknown (empty values)</li>
-<li>ZLIB (DEFLATE) compressed data block offsets and sizes</li>
-<li>ZLIB (DEFLATE) compressed data blocks</li>
-<li>ZLIB (DEFLATE) compressed footer</li>
-</ul>
-<h5 id="zlib-deflate-compressed-header"><a class="header" href="#zlib-deflate-compressed-header">ZLIB (DEFLATE) compressed header</a></h5>
-<p>The ZLIB (DEFLATE) compressed header is 16 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
-
-<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the values in the ZLIB (DEFLATE) compressed header are stored in big-endian.</p>
-</blockquote>
-<h5 id="zlib-deflate-compressed-data-block-descriptors"><a class="header" href="#zlib-deflate-compressed-data-block-descriptors">ZLIB (DEFLATE) compressed data block descriptors</a></h5>
-<p>The ZLIB (DEFLATE) compressed data block descriptors are of variable size and consist of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
-
-<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
-
-</table>
-</div>
-
-<h5 id="zlib-deflate-compressed-data-block-descriptor"><a class="header" href="#zlib-deflate-compressed-data-block-descriptor">ZLIB (DEFLATE) compressed data block descriptor</a></h5>
-<p>The ZLIB (DEFLATE) compressed data block descriptor is 8 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data + 20</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
-
-</table>
-</div>
-
-<h5 id="zlib-deflate-compressed-footer"><a class="header" href="#zlib-deflate-compressed-footer">ZLIB (DEFLATE) compressed footer</a></h5>
-<p>The ZLIB (DEFLATE) compressed footer is 50 bytes size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
-
-<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
-
-<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the values in the ZLIB (DEFLATE) compressed footer are stored in big-endian.</p>
-</blockquote>
-<h4 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h4>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
-
-<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the compressed data block contains a maximum of 65536 bytes of data. The compressed
-data block therefore should not exceed 65537 bytes in size.</p>
-</blockquote>
 <h3 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h3>
 <p>The file content size is stored in the resource fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
+<blockquote>
+<p>Note that the resource fork is sometimes represented as an extended attribute with the name:
+“com.apple.ResourceFork”.</p>
+</blockquote>
 <h3 id="extended-attribute-named-fork"><a class="header" href="#extended-attribute-named-fork">Extended attribute (named fork)</a></h3>
 <p>Extended attributes, also referred to as named forks, are stored in the
 <a href="#hfs_plus_attributes_file">HFS+ attributes file</a>.</p>
+<h3 id="apple-file-system-compression-decmpfs-1"><a class="header" href="#apple-file-system-compression-decmpfs-1">Apple File System Compression (decmpfs)</a></h3>
+<p>The file has an extended attribute named “com.apple.decmpfs” and the content is stored using
+<a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>.</p>
 <h2 id="hfs_wrapper"><a class="header" href="#hfs_wrapper">HFS wrapper</a></h2>
-<p>TODO: complete section</p>
-<p>A HFSX volume cannot be wrapped in a HFS volume.</p>
+<p>A HFS wrapped HFS+ file system consists of a <a href="#hfs_volume">HFS file system</a> where the
+<a href="#hfs_master_directory_block">master directory block (MDB)</a> contains:</p>
+<ul>
+<li>an embedded volume signature of “H+”;</li>
+<li>an embedded volume extent descriptor that describes the blocks in which the embedded volume is
+stored;</li>
+<li>the embedded volume extent is marked in the bad block file.</li>
+</ul>
+<blockquote>
+<p>Note that Mac OS supports a HFS+ to be wrapped in a HFS volume, but not HFSX.</p>
+</blockquote>
+<pre><code class="language-python">embedded volume offset = (
+    (data area start sector * 512) + (embedded volume block number * block size)
+)
+</code></pre>
 <h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
+<!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://github.com/apple-oss-distributions/hfs/blob/main/core/hfs_format.h">hfs_format.h</a></li>
-<li><a href="https://developer.apple.com/library/archive/documentation/mac/Files/Files-99.html">Data Organization on Volumes</a>, by Apple Inc.</li>
-<li><a href="https://developer.apple.com/library/archive/technotes/tn/tn1150.html">Technical Note TN1150: HFS plus volume format</a>, by Apple Inc.</li>
+<li><a href="https://developer.apple.com/library/archive/documentation/mac/Files/Files-99.html">Data Organization on Volumes</a>,
+by Apple Inc.</li>
+<li><a href="https://developer.apple.com/library/archive/technotes/tn/tn1150.html">Technical Note TN1150: HFS plus volume format</a>,
+by Apple Inc.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
@@ -13306,16 +13370,17 @@ and consists of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="baad-signature"><a class="header" href="#baad-signature">“BAAD” signature</a></h5>
-<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if
-during chkdsk, when a multi-sector item is found where the multi-sector header
-does not match the values at the end of the sector, it marks the item as “BAAD”
-and fill it with 0-byte values except for a fix-up value at the end of the first
-sector of the item. The “BAAD” signature has been seen to be used on Windows NT4
-and XP.</p>
+<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if during chkdsk,
+when a multi-sector item is found where the multi-sector header does not match the values at the
+end of the sector, it marks the item as “BAAD” and fill it with 0-byte values except for a fix-up
+value at the end of the first sector of the item. The “BAAD” signature has been seen to be used on
+Windows NT4 and XP.</p>
 <h5 id="sequence-number"><a class="header" href="#sequence-number">Sequence number</a></h5>
+<!-- rumdl-disable MD013 -->
 <p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>
-the sequence number is incremented each time that a file record segment is
-freed; it is 0 if the segment is not used.</p>
+the sequence number is incremented each time that a file record segment is freed; it is 0 if the
+segment is not used.</p>
+<!-- rumdl-enable MD013 -->
 <h5 id="base-record-file-reference"><a class="header" href="#base-record-file-reference">Base record file reference</a></h5>
 <p>The base record file reference is used to store additional attributes for
 another MFT entry, e.g. for attribute lists.</p>
@@ -13346,21 +13411,19 @@ another MFT entry, e.g. for attribute lists.</p>
 </table>
 </div>
 
-<p>On disk the last 2 bytes for each 512 byte block is replaced by the fix-up
-placeholder value. The original value is stored in the corresponding fix-up
-(original) value array entry.</p>
+<p>On disk the last 2 bytes for each 512 byte block is replaced by the fix-up placeholder value. The
+original value is stored in the corresponding fix-up (original) value array entry.</p>
 <blockquote>
-<p>Note that there can be more fix-up values than the number of 512 byte blocks
-in the data.</p>
+<p>Note that there can be more fix-up values than the number of 512 byte blocks in the data.</p>
 </blockquote>
+<!-- rumdl-disable MD013 -->
 <p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>
-the update sequence array must end before the last USHORT value in the first
-sector. It also states that the update sequence array size value contains the
-number of bytes, but based on analysis of data samples it seems to be more
-likely to the number of words.</p>
-<p>In NT4 (version 1.2) the MFT entry is 42 bytes in size and the fix-up values
-are stored at offset 42. This is likely where the name wfixupPattern originates
-from.</p>
+the update sequence array must end before the last USHORT value in the first sector. It also states
+that the update sequence array size value contains the number of bytes, but based on analysis of
+data samples it seems to be more likely to the number of words.</p>
+<!-- rumdl-enable MD013 -->
+<p>In NT4 (version 1.2) the MFT entry is 42 bytes in size and the fix-up values are stored at
+offset 42. This is likely where the name wfixupPattern originates from.</p>
 <p>TODO: provide examples on applying the fix-up values.</p>
 <h3 id="file_reference"><a class="header" href="#file_reference">The file reference</a></h3>
 <p>The file reference (FILE_REFERENCE or MFT_SEGMENT_REFERENCE) is 8 bytes in size
@@ -14287,51 +14350,47 @@ It appears to only to be used by the $Secure metadata file.</p>
 <h4 id="security-descriptor-identifier-index-value"><a class="header" href="#security-descriptor-identifier-index-value">Security descriptor identifier index value</a></h4>
 <p>The MFT attribute name of the security descriptor identifier index is: $SII.
 It appears to only to be used by the $Secure metadata file.</p>
+<!-- rumdl-disable MD013 -->
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
+<!-- rumdl-enable MD013 -->
 <h2 id="compression"><a class="header" href="#compression">Compression</a></h2>
 <h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
-<p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster
-blocks also named a compression unit, which is either “compressed” or
-uncompressed.</p>
-<p>The term compressed is quoted here because the group of cluster blocks can also
-contain uncompressed data. A group of cluster blocks is “compressed” when it is
-compressed size is smaller than its uncompressed data size. Within a group of
-cluster blocks each of the 16 blocks is “compressed” individually.</p>
-<p>The compression unit size is stored in the non-resident MFT attribute. The
-maximum uncompressed data size is always the cluster size (in most case
-4096).</p>
+<p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster blocks also named a
+compression unit, which is either “compressed” or uncompressed.</p>
+<p>The term compressed is quoted here because the group of cluster blocks can also contain
+uncompressed data. A group of cluster blocks is “compressed” when it is compressed size is smaller
+than its uncompressed data size. Within a group of cluster blocks each of the 16 blocks is
+“compressed” individually.</p>
+<p>The compression unit size is stored in the non-resident MFT attribute. The maximum uncompressed
+data size is always the cluster size (in most case 4096).</p>
 <blockquote>
-<p>Note that a resident $DATA attribute with the compression type in the
-data flags is stored uncompressed.</p>
+<p>Note that a resident $DATA attribute with the compression type in the data flags is stored
+uncompressed.</p>
 </blockquote>
 <p>The data runs in the $DATA attribute define cluster block ranges, e.g.</p>
 <pre><code class="language-text">21 02 35 52
 </code></pre>
-<p>This data run defines 2 data blocks starting at block number 21045 followed by
-14 sparse blocks. The total number of blocks in the compression unit is 16.
-Compressed data is stored in the first 2 blocks and the 14 sparse blocks are
-only there to make sure the data runs add up to the compression unit size. They
-do not define actual sparse data.</p>
+<p>This data run defines 2 data blocks starting at block number 21045 followed by 14 sparse blocks.
+The total number of blocks in the compression unit is 16. Compressed data is stored in the first 2
+blocks and the 14 sparse blocks are only there to make sure the data runs add up to the compression
+unit size. They do not define actual sparse data.</p>
 <p>Another example:</p>
 <pre><code class="language-text">21 40 37 52
 </code></pre>
-<p>This data run defines 64 data blocks starting at block number 21047. Since
-this data run is larger than the compression unit size the data is stored
-uncompressed.</p>
-<p>If the data run was e.g. 60 data blocks followed by 4 sparse blocks the first 3
-compression units (blocks 1 to 48) would be uncompressed and the last
-compression unit (blocks 49 to 64) would be compressed.</p>
-<p>Also “sparse data” and “sparse compression unit” data runs can be mixed. If in
-the previous example the 60 data blocks would be followed by 20 sparse blocks
-the last compression unit (blocks 65 to 80) would be sparse.</p>
-<p>A compression unit can consists of multiple compressed data runs, e.g. 1 data
-block followed by 4 data blocks followed by 11 sparse blocks. Data runs have
-been observed where the last data run size does not align with the compression
-unit size.</p>
-<p>The sparse blocks data run can be stored in a subsequent attribute in an
-attribute chain and can be stored in multiple data runs.</p>
-<p>NTFS compression stores the “compressed” data in blocks. Each block has a 2
-byte block header.</p>
+<p>This data run defines 64 data blocks starting at block number 21047. Since this data run is larger
+than the compression unit size the data is stored uncompressed.</p>
+<p>If the data run was e.g. 60 data blocks followed by 4 sparse blocks the first 3 compression units
+(blocks 1 to 48) would be uncompressed and the last compression unit (blocks 49 to 64) would be
+compressed.</p>
+<p>Also “sparse data” and “sparse compression unit” data runs can be mixed. If in the previous example
+the 60 data blocks would be followed by 20 sparse blocks the last compression unit (blocks 65
+to 80) would be sparse.</p>
+<p>A compression unit can consists of multiple compressed data runs, e.g. 1 data block followed by 4
+data blocks followed by 11 sparse blocks. Data runs have been observed where the last data run size
+does not align with the compression unit size.</p>
+<p>The sparse blocks data run can be stored in a subsequent attribute in an attribute chain and can be
+stored in multiple data runs.</p>
+<p>NTFS compression stores the “compressed” data in blocks. Each block has a 2 byte block header.</p>
 <p>The block is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -15102,8 +15161,10 @@ Store (SPS).</p>
 <pre><code class="language-text">[ZoneTransfer]
 ZoneId=3
 </code></pre>
+<!-- rumdl-disable MD013 -->
 <p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
 of the origin.</p>
+<!-- rumdl-enable MD013 -->
 <h2 id="transactional_ntfs"><a class="header" href="#transactional_ntfs">Transactional NTFS (TxF)</a></h2>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
 <p>In TxF the resource manager (RM) keeps track of transactional metadata and log
@@ -15526,28 +15587,42 @@ rest with with 0-byte values</li>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
 <h2 id="references-9"><a class="header" href="#references-9">References</a></h2>
 <ul>
-<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/a82e9105-2405-4e37-b2c3-28c773902d85">NTFS Attribute Types</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants">File Attribute Constants</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c8e77b37-3909-4fe6-a4ea-2b9d423b1ee4">Reparse Tags</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/a82e9105-2405-4e37-b2c3-28c773902d85">NTFS Attribute Types</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants">File Attribute Constants</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c8e77b37-3909-4fe6-a4ea-2b9d423b1ee4">Reparse Tags</a>,
+by Microsoft</li>
 <li><a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a>, by Richard Russon</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-list-entry">ATTRIBUTE_LIST_ENTRY structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-record-header">ATTRIBUTE_RECORD_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer">REPARSE_DATA_BUFFER structure (ntifs.h)</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer_ex">REPARSE_DATA_BUFFER_EX structure (ntifs.h)</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-usn_record_v2">USN_RECORD_V2</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8">Zone.Identifier Stream Name</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">the Internet Explorer URL security zone</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-list-entry">ATTRIBUTE_LIST_ENTRY structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-record-header">ATTRIBUTE_RECORD_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer">REPARSE_DATA_BUFFER structure (ntifs.h)</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer_ex">REPARSE_DATA_BUFFER_EX structure (ntifs.h)</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-usn_record_v2">USN_RECORD_V2</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8">Zone.Identifier Stream Name</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">the Internet Explorer URL security zone</a>,
+by Microsoft</li>
 <li><a href="https://ultradefrag.net/doc/man/ntfs/ntfs_layout.h.html">ntfs_layout.h</a>, by Anton Altaparmakov</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="assorted-formats"><a class="header" href="#assorted-formats">Assorted formats</a></h1>
 <ul>
 <li><a href="#property-list-plist-format">Property list (plist)</a></li>
-<li><a href="#zlib-compressed-data">Zlib compressed data</a></li>
+<li><a href="#zlib-compressed-data-1">Zlib compressed data</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="property-list-plist-format"><a class="header" href="#property-list-plist-format">Property list (plist) format</a></h1>
@@ -15772,7 +15847,7 @@ consists of:</p>
 &lt;/plist&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">Zlib compressed data</a></h1>
+<h1 id="zlib-compressed-data-1"><a class="header" href="#zlib-compressed-data-1">Zlib compressed data</a></h1>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data
 format, as defined in RFC1950, allows for multiple techniques but only the
 Deflate compression method, a variation of LZ77, is used.</p>
@@ -16342,11 +16417,11 @@ while( block_header.last_block_flag == 0 );
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

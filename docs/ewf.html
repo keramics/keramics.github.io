@@ -15,8 +15,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
+            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-22017638.js"></script>
+        <script src="toc-66965ffe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -178,9 +178,9 @@
                         <h1 id="expert-witness-compression-format-ewf"><a class="header" href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></h1>
 <p>EWF is short for Expert Witness Compression Format. It is a file type used to store storage media
 images for digital forensic purposes. It is currently widely used in the field of computer
-forensics in proprietary tooling like EnCase en FTK. The
-<a href="http://www.asrdata.com/whitepaper-html">original specification</a> of the format was provided by ASR
-Data for the SMART application.</p>
+forensics in proprietary tooling like EnCase en FTK.</p>
+<p>The <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> is the earliest
+known specification of the format was provided by ASR Data for the SMART application.</p>
 <p>The EWF format was succeeded by the <a href="ewf2.html">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
@@ -379,8 +379,10 @@ values but data, probably the memory is not filled with 0-byte values.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
+<!-- rumdl-disable MD013 -->
 <p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
 defines the following:</p>
+<!-- rumdl-enable MD013 -->
 <ul>
 <li>Header section</li>
 <li>Volume section</li>
@@ -451,7 +453,8 @@ information as the <a href="#header_section">header section</a>.</p>
 
 <p>The end of line character(s) is a newline (0x0a).</p>
 <blockquote>
-<p>Note this end of line character differs from the one used in the <a href="#header_section">header section</a>.</p>
+<p>Note this end of line character differs from the one used in the
+<a href="#header_section">header section</a>.</p>
 </blockquote>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values.</p>
 <div class="table-wrapper">
@@ -1260,7 +1263,9 @@ SMART (EWF-S01)</li>
 </ul>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
 <h4 id="ewf-specification"><a class="header" href="#ewf-specification">EWF specification</a></h4>
+<!-- rumdl-disable MD013 -->
 <p>The specification according to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</p>
+<!-- rumdl-enable MD013 -->
 <p>The volume section data is 94 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -3105,10 +3110,12 @@ uses the EWF extensions the file actually is a AES-256 encrypted container. The
 EWF can be encrypted using a pass-phrase or a certificate.</p>
 <p>TODO: link to format definition</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
+<!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
 <li><a href="http://www.ietf.org/rfc/rfc4122.txt">RFC4122 - A Universally Unique Identifier (UUID) URN Namespace</a></li>
 </ul>
+<!-- rumdl-enable MD013 -->
 
                     </main>
 
@@ -3154,11 +3161,11 @@ EWF can be encrypted using a pass-phrase or a certificate.</p>
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

@@ -15,8 +15,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
+            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-22017638.js"></script>
+        <script src="toc-66965ffe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -182,6 +182,7 @@ System Compression (decmpfs) to compress file contents.</p>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
+<li>compressed file content data</li>
 </ul>
 <h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
@@ -198,7 +199,7 @@ System Compression (decmpfs) to compress file contents.</p>
 <li>decmpfs header</li>
 <li>optional compressed data</li>
 </ul>
-<h4 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h4>
+<h3 id="decmpfs-header"><a class="header" href="#decmpfs-header">decmpfs header</a></h3>
 <p>The decmpfs header is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -223,9 +224,9 @@ System Compression (decmpfs) to compress file contents.</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>3</td><td></td><td>ZLIB (DEFLATE) compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+<tr><td>3</td><td></td><td>zlib compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
 
-<tr><td>4</td><td></td><td>64k chunked ZLIB (DEFLATE) compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+<tr><td>4</td><td></td><td>64k chunked zlib compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
 
 <tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
 
@@ -250,16 +251,141 @@ System Compression (decmpfs) to compress file contents.</p>
 </table>
 </div>
 
-<!-- rumdl-disable MD028 -->
+<h2 id="compressed-file-content-data"><a class="header" href="#compressed-file-content-data">Compressed file content data</a></h2>
+<p>The location of the compressed file content data depends on the compression method:</p>
+<ul>
+<li>sparse data</li>
+<li>compressed data stored in extended attribute</li>
+<li>compressed data stored in resource fork</li>
+</ul>
+<h3 id="sparse-data"><a class="header" href="#sparse-data">Sparse data</a></h3>
+<p><a href="decmpfs.html#compression_methods">Compression method</a> 5 has been observed to be used for sparse data,
+the file content data contains 0-byte values.</p>
+<p>There are 12 bytes stored after the decmpfs compressed data header that consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (Seen: 1)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (Seen: 0)</td></tr>
+
+</table>
+</div>
+
+<h3 id="compressed-data-stored-in-extended-attribute"><a class="header" href="#compressed-data-stored-in-extended-attribute">Compressed data stored in extended attribute</a></h3>
+<p><a href="decmpfs.html#compression_methods">Compression method</a> 3 and 7 store the compressed file content data
+in the extended attribute after the decmpfs compressed data header.</p>
+<p>The compressed data consist of 1 compressed data block.</p>
+<h3 id="compressed-data-stored-in-resource-fork"><a class="header" href="#compressed-data-stored-in-resource-fork">Compressed data stored in resource fork</a></h3>
+<p><a href="decmpfs.html#compression_methods">Compression method</a> 4 and 8 store the compressed file content data
+in the resource fork of the file.</p>
+<p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
+<h2 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">zlib compressed data</a></h2>
+<ul>
+<li>zlib compressed header</li>
+<li>Unknown (empty values)</li>
+<li>zlib compressed data block offsets and sizes</li>
+<li>zlib compressed data blocks</li>
+<li>zlib compressed footer</li>
+</ul>
 <blockquote>
-<p>Note that if the ZLIB (DEFLATE) compressed data starts with 0xff the data is stored uncompressed
-after the first compressed data byte.</p>
+<p>Note that if the zlib compressed data starts with 0xff the data is stored uncompressed after the
+first compressed data byte.</p>
 </blockquote>
+<h3 id="zlib-compressed-header"><a class="header" href="#zlib-compressed-header">zlib compressed header</a></h3>
+<p>The zlib compressed header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed header are stored in big-endian.</p>
+</blockquote>
+<h3 id="zlib-compressed-data-block-descriptors"><a class="header" href="#zlib-compressed-data-block-descriptors">zlib compressed data block descriptors</a></h3>
+<p>The zlib compressed data block descriptors are of variable size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
+
+<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
+
+</table>
+</div>
+
+<h3 id="zlib-compressed-data-block-descriptor"><a class="header" href="#zlib-compressed-data-block-descriptor">zlib compressed data block descriptor</a></h3>
+<p>The zlib compressed data block descriptor is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the zlib compressed data + 20</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
+
+</table>
+</div>
+
+<h3 id="zlib-compressed-footer"><a class="header" href="#zlib-compressed-footer">zlib compressed footer</a></h3>
+<p>The zlib compressed footer is 50 bytes size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed footer are stored in big-endian.</p>
+</blockquote>
+<h2 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h2>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
+
+</table>
+</div>
+
 <blockquote>
 <p>Note that if the LZVN compressed data starts with 0x06 (end of stream oppcode) the data is stored
-uncompressed after the first compressed data byte.</p>
+uncompressed after the first compressed data byte. The compressed data block contains a maximum
+of 65536 bytes of data. The compressed data block therefore should not exceed 65537 bytes in size.</p>
 </blockquote>
-<!-- rumdl-enable MD028 -->
+<h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
+<p>TODO: complete this section</p>
 
                     </main>
 
@@ -305,11 +431,11 @@ uncompressed after the first compressed data byte.</p>
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

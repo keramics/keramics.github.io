@@ -15,8 +15,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
+            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-22017638.js"></script>
+        <script src="toc-66965ffe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -613,16 +613,17 @@ and consists of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="baad-signature"><a class="header" href="#baad-signature">“BAAD” signature</a></h5>
-<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if
-during chkdsk, when a multi-sector item is found where the multi-sector header
-does not match the values at the end of the sector, it marks the item as “BAAD”
-and fill it with 0-byte values except for a fix-up value at the end of the first
-sector of the item. The “BAAD” signature has been seen to be used on Windows NT4
-and XP.</p>
+<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> if during chkdsk,
+when a multi-sector item is found where the multi-sector header does not match the values at the
+end of the sector, it marks the item as “BAAD” and fill it with 0-byte values except for a fix-up
+value at the end of the first sector of the item. The “BAAD” signature has been seen to be used on
+Windows NT4 and XP.</p>
 <h5 id="sequence-number"><a class="header" href="#sequence-number">Sequence number</a></h5>
+<!-- rumdl-disable MD013 -->
 <p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>
-the sequence number is incremented each time that a file record segment is
-freed; it is 0 if the segment is not used.</p>
+the sequence number is incremented each time that a file record segment is freed; it is 0 if the
+segment is not used.</p>
+<!-- rumdl-enable MD013 -->
 <h5 id="base-record-file-reference"><a class="header" href="#base-record-file-reference">Base record file reference</a></h5>
 <p>The base record file reference is used to store additional attributes for
 another MFT entry, e.g. for attribute lists.</p>
@@ -653,21 +654,19 @@ another MFT entry, e.g. for attribute lists.</p>
 </table>
 </div>
 
-<p>On disk the last 2 bytes for each 512 byte block is replaced by the fix-up
-placeholder value. The original value is stored in the corresponding fix-up
-(original) value array entry.</p>
+<p>On disk the last 2 bytes for each 512 byte block is replaced by the fix-up placeholder value. The
+original value is stored in the corresponding fix-up (original) value array entry.</p>
 <blockquote>
-<p>Note that there can be more fix-up values than the number of 512 byte blocks
-in the data.</p>
+<p>Note that there can be more fix-up values than the number of 512 byte blocks in the data.</p>
 </blockquote>
+<!-- rumdl-disable MD013 -->
 <p>According to <a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>
-the update sequence array must end before the last USHORT value in the first
-sector. It also states that the update sequence array size value contains the
-number of bytes, but based on analysis of data samples it seems to be more
-likely to the number of words.</p>
-<p>In NT4 (version 1.2) the MFT entry is 42 bytes in size and the fix-up values
-are stored at offset 42. This is likely where the name wfixupPattern originates
-from.</p>
+the update sequence array must end before the last USHORT value in the first sector. It also states
+that the update sequence array size value contains the number of bytes, but based on analysis of
+data samples it seems to be more likely to the number of words.</p>
+<!-- rumdl-enable MD013 -->
+<p>In NT4 (version 1.2) the MFT entry is 42 bytes in size and the fix-up values are stored at
+offset 42. This is likely where the name wfixupPattern originates from.</p>
 <p>TODO: provide examples on applying the fix-up values.</p>
 <h3 id="file_reference"><a class="header" href="#file_reference">The file reference</a></h3>
 <p>The file reference (FILE_REFERENCE or MFT_SEGMENT_REFERENCE) is 8 bytes in size
@@ -1594,51 +1593,47 @@ It appears to only to be used by the $Secure metadata file.</p>
 <h4 id="security-descriptor-identifier-index-value"><a class="header" href="#security-descriptor-identifier-index-value">Security descriptor identifier index value</a></h4>
 <p>The MFT attribute name of the security descriptor identifier index is: $SII.
 It appears to only to be used by the $Secure metadata file.</p>
+<!-- rumdl-disable MD013 -->
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
+<!-- rumdl-enable MD013 -->
 <h2 id="compression"><a class="header" href="#compression">Compression</a></h2>
 <h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
-<p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster
-blocks also named a compression unit, which is either “compressed” or
-uncompressed.</p>
-<p>The term compressed is quoted here because the group of cluster blocks can also
-contain uncompressed data. A group of cluster blocks is “compressed” when it is
-compressed size is smaller than its uncompressed data size. Within a group of
-cluster blocks each of the 16 blocks is “compressed” individually.</p>
-<p>The compression unit size is stored in the non-resident MFT attribute. The
-maximum uncompressed data size is always the cluster size (in most case
-4096).</p>
+<p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster blocks also named a
+compression unit, which is either “compressed” or uncompressed.</p>
+<p>The term compressed is quoted here because the group of cluster blocks can also contain
+uncompressed data. A group of cluster blocks is “compressed” when it is compressed size is smaller
+than its uncompressed data size. Within a group of cluster blocks each of the 16 blocks is
+“compressed” individually.</p>
+<p>The compression unit size is stored in the non-resident MFT attribute. The maximum uncompressed
+data size is always the cluster size (in most case 4096).</p>
 <blockquote>
-<p>Note that a resident $DATA attribute with the compression type in the
-data flags is stored uncompressed.</p>
+<p>Note that a resident $DATA attribute with the compression type in the data flags is stored
+uncompressed.</p>
 </blockquote>
 <p>The data runs in the $DATA attribute define cluster block ranges, e.g.</p>
 <pre><code class="language-text">21 02 35 52
 </code></pre>
-<p>This data run defines 2 data blocks starting at block number 21045 followed by
-14 sparse blocks. The total number of blocks in the compression unit is 16.
-Compressed data is stored in the first 2 blocks and the 14 sparse blocks are
-only there to make sure the data runs add up to the compression unit size. They
-do not define actual sparse data.</p>
+<p>This data run defines 2 data blocks starting at block number 21045 followed by 14 sparse blocks.
+The total number of blocks in the compression unit is 16. Compressed data is stored in the first 2
+blocks and the 14 sparse blocks are only there to make sure the data runs add up to the compression
+unit size. They do not define actual sparse data.</p>
 <p>Another example:</p>
 <pre><code class="language-text">21 40 37 52
 </code></pre>
-<p>This data run defines 64 data blocks starting at block number 21047. Since
-this data run is larger than the compression unit size the data is stored
-uncompressed.</p>
-<p>If the data run was e.g. 60 data blocks followed by 4 sparse blocks the first 3
-compression units (blocks 1 to 48) would be uncompressed and the last
-compression unit (blocks 49 to 64) would be compressed.</p>
-<p>Also “sparse data” and “sparse compression unit” data runs can be mixed. If in
-the previous example the 60 data blocks would be followed by 20 sparse blocks
-the last compression unit (blocks 65 to 80) would be sparse.</p>
-<p>A compression unit can consists of multiple compressed data runs, e.g. 1 data
-block followed by 4 data blocks followed by 11 sparse blocks. Data runs have
-been observed where the last data run size does not align with the compression
-unit size.</p>
-<p>The sparse blocks data run can be stored in a subsequent attribute in an
-attribute chain and can be stored in multiple data runs.</p>
-<p>NTFS compression stores the “compressed” data in blocks. Each block has a 2
-byte block header.</p>
+<p>This data run defines 64 data blocks starting at block number 21047. Since this data run is larger
+than the compression unit size the data is stored uncompressed.</p>
+<p>If the data run was e.g. 60 data blocks followed by 4 sparse blocks the first 3 compression units
+(blocks 1 to 48) would be uncompressed and the last compression unit (blocks 49 to 64) would be
+compressed.</p>
+<p>Also “sparse data” and “sparse compression unit” data runs can be mixed. If in the previous example
+the 60 data blocks would be followed by 20 sparse blocks the last compression unit (blocks 65
+to 80) would be sparse.</p>
+<p>A compression unit can consists of multiple compressed data runs, e.g. 1 data block followed by 4
+data blocks followed by 11 sparse blocks. Data runs have been observed where the last data run size
+does not align with the compression unit size.</p>
+<p>The sparse blocks data run can be stored in a subsequent attribute in an attribute chain and can be
+stored in multiple data runs.</p>
+<p>NTFS compression stores the “compressed” data in blocks. Each block has a 2 byte block header.</p>
 <p>The block is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -2409,8 +2404,10 @@ Store (SPS).</p>
 <pre><code class="language-text">[ZoneTransfer]
 ZoneId=3
 </code></pre>
+<!-- rumdl-disable MD013 -->
 <p>Where ZoneId refers to the <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">Internet Explorer URL security zone</a>
 of the origin.</p>
+<!-- rumdl-enable MD013 -->
 <h2 id="transactional_ntfs"><a class="header" href="#transactional_ntfs">Transactional NTFS (TxF)</a></h2>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
 <p>In TxF the resource manager (RM) keeps track of transactional metadata and log
@@ -2833,21 +2830,35 @@ rest with with 0-byte values</li>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <ul>
-<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/a82e9105-2405-4e37-b2c3-28c773902d85">NTFS Attribute Types</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants">File Attribute Constants</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c8e77b37-3909-4fe6-a4ea-2b9d423b1ee4">Reparse Tags</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/master-file-table">Master File Table</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/a82e9105-2405-4e37-b2c3-28c773902d85">NTFS Attribute Types</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants">File Attribute Constants</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/c8e77b37-3909-4fe6-a4ea-2b9d423b1ee4">Reparse Tags</a>,
+by Microsoft</li>
 <li><a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a>, by Richard Russon</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-list-entry">ATTRIBUTE_LIST_ENTRY structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-record-header">ATTRIBUTE_RECORD_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer">REPARSE_DATA_BUFFER structure (ntifs.h)</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer_ex">REPARSE_DATA_BUFFER_EX structure (ntifs.h)</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-usn_record_v2">USN_RECORD_V2</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8">Zone.Identifier Stream Name</a>, by Microsoft</li>
-<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">the Internet Explorer URL security zone</a>, by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-list-entry">ATTRIBUTE_LIST_ENTRY structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/attribute-record-header">ATTRIBUTE_RECORD_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/file-record-segment-header">FILE_RECORD_SEGMENT_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/devnotes/multi-sector-header">MULTI_SECTOR_HEADER structure</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer">REPARSE_DATA_BUFFER structure (ntifs.h)</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_reparse_data_buffer_ex">REPARSE_DATA_BUFFER_EX structure (ntifs.h)</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ns-winioctl-usn_record_v2">USN_RECORD_V2</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8">Zone.Identifier Stream Name</a>,
+by Microsoft</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)">the Internet Explorer URL security zone</a>,
+by Microsoft</li>
 <li><a href="https://ultradefrag.net/doc/man/ntfs/ntfs_layout.h.html">ntfs_layout.h</a>, by Anton Altaparmakov</li>
 </ul>
 
@@ -2895,11 +2906,11 @@ rest with with 0-byte values</li>
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

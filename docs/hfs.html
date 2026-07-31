@@ -15,8 +15,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4b5ccf71.js";
+            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-22017638.js"></script>
+        <script src="toc-66965ffe.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -218,7 +218,7 @@ volume.</p>
 </table>
 </div>
 
-<h3 id="hfs"><a class="header" href="#hfs">HFS</a></h3>
+<h3 id="hfs_volume"><a class="header" href="#hfs_volume">HFS</a></h3>
 <p>A HFS file system consists of:</p>
 <ul>
 <li>optional <a href="mfs.html#boot_block">MFS boot block</a></li>
@@ -633,11 +633,11 @@ to the type of B-tree.</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Number of blocks, where a volume can contain at most 65535 blocks</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Block size, in bytes, must be a multitude of 512</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Block size (drAlBlkSiz), in bytes, must be a multitude of 512</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
 
-<tr><td>28</td><td>2</td><td></td><td>Data area block number, contains a block number relative from the start of the volume, where 0 is the first block number</td></tr>
+<tr><td>28</td><td>2</td><td></td><td>Data area start sector (drAlBlSt), contains a sector number relative from the start of the volume, where 0 is the first sector number and bytes per sector is 512</td></tr>
 
 <tr><td>30</td><td>4</td><td></td><td>Next available catalog node identifier (CNID), which can be a directory or file record identifier</td></tr>
 
@@ -665,9 +665,9 @@ to the type of B-tree.</p>
 
 <tr><td>92</td><td>32</td><td></td><td><a href="#finder_information">Finder information</a></td></tr>
 
-<tr><td>124</td><td>2</td><td></td><td>Embedded volume signature (drVCSize)</td></tr>
+<tr><td>124</td><td>2</td><td></td><td>Embedded volume signature (drEmbedSigWord, previously used for drVCSize)</td></tr>
 
-<tr><td>126</td><td>4</td><td></td><td>Embedded volume <a href="#hfs_extents_descriptor">extent descriptor</a> (drVBMCSize and drCtlCSize)</td></tr>
+<tr><td>126</td><td>4</td><td></td><td>Embedded volume <a href="#hfs_extents_descriptor">extent descriptor</a> (drEmbedExtent, previously used for drVBMCSize and drCtlCSize)</td></tr>
 
 <tr><td>130</td><td>4</td><td></td><td>Extents overflow file size</td></tr>
 
@@ -844,6 +844,9 @@ storing the backup volume header, as described above).</p>
 the content of the file shared by the hard links.</li>
 <li>one or more hard link file records, that reference the indirect node file record.</li>
 </ul>
+<blockquote>
+<p>Note that indirect node records named “dir_#” and “temp#” also have been observed.</p>
+</blockquote>
 <p>Indirect node files are stored in a file system metadata directory referred to as the metadata
 directory with the name “/\u{2400}\u{2400}\u{2400}\u{2400}HFS+ Private Data”.</p>
 <p>The link reference corresponds to the catalog node identifier (CNID) of the indirect node file,
@@ -2163,11 +2166,30 @@ boot process.</p>
 
 <tr><td>5</td><td>Directory identifier (CNID) of a bootable Mac OS X system, the "/System/Library/CoreServices" directory, or 0 if none</td></tr>
 
-<tr><td>6 and 7</td><td>Mac OS X volume identifier, consist of a 64-bit integer</td></tr>
+<tr><td>6 and 7</td><td>Mac OS X Volume Status Database (VSDB) volume identifier</td></tr>
 
 </table>
 </div>
 
+<p>To convert the VSDB volume identifier into a UUID:</p>
+<ul>
+<li>Append the volume identifier to HFS_UUID_NAMESPACE_ID (B3E20F39-F292-11D6-97A4-00306543ECAC)</li>
+<li>Calculate the MD5 digest hash of the byte sequence</li>
+<li>Convert the MD5 digest hash into the UUID, see below</li>
+</ul>
+<pre><code class="language-python">data = bytes.fromhex("b3e20f39f29211d697a400306543ecac") + volume_identifier
+hash = hashlib.md5(data).hexdigest()
+part1 = hash[0:8]
+part2 = hash[8:12]
+part3 = "".join(["3", hash[13:16]])
+digit = (int(hash[16], 16) &amp; 3) | 8
+part4 = "".join([f"{digit:x}", hash[17:20])
+part5 = hash[20:]
+uuid = "-".join([part1, part2, part3, part4, part5])
+</code></pre>
+<blockquote>
+<p>Note that on Mac OS the finder information can be viewed using <code>bless --info volume_mount_path</code>.</p>
+</blockquote>
 <h3 id="file-information"><a class="header" href="#file-information">File information</a></h3>
 <h4 id="hfs_file_information"><a class="header" href="#hfs_file_information">HFS file information</a></h4>
 <p>The HFS file information is 16 bytes in size and consists of:</p>
@@ -2402,153 +2424,52 @@ typedef FourCharCode  OSType;
 <p>HFS supports multiple ways to store file content:</p>
 <ul>
 <li>Data fork</li>
-<li>Compressed data extended attribute</li>
-<li>Compressed data extended attribute with resource fork</li>
 <li>Resource fork</li>
 <li>Extended attribute (named fork)</li>
+<li>Apple File System Compression (decmpfs)</li>
 </ul>
 <h3 id="data-fork"><a class="header" href="#data-fork">Data fork</a></h3>
 <p>The file content size is stored in the data fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
-<h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
-<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
-<a href="decmpfs.html#compression_methods">compression method</a> 3, 5 or 7.</p>
-<p>The file content size is stored in the compressed data header of the extended attribute.</p>
-<p>For compression method 3 or 7 the file content data is stored in the extended attribute after the
-decmpfs compressed data header.</p>
-<p>For compression method 5 the file content data contains 0-byte values. There are 12 bytes stored
-after the decmpfs compressed data header that consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Unknown (Seen: 1)</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Unknown (Seen: 0)</td></tr>
-
-</table>
-</div>
-
-<h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
-<p>The file has an attribute record with inline data named “com.apple.decmpfs” with
-<a href="decmpfs.html#compression_methods">compression method</a> 4 or 8.</p>
-<p>The file content size is stored in the compressed data header of the extended attribute.</p>
-<p>The file content data is stored in a “com.apple.ResourceFork” extended attribute.</p>
-<p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
-<h4 id="zlib-deflate-compressed-data"><a class="header" href="#zlib-deflate-compressed-data">ZLIB (DEFLATE) compressed data</a></h4>
-<ul>
-<li>ZLIB (DEFLATE) compressed header</li>
-<li>Unknown (empty values)</li>
-<li>ZLIB (DEFLATE) compressed data block offsets and sizes</li>
-<li>ZLIB (DEFLATE) compressed data blocks</li>
-<li>ZLIB (DEFLATE) compressed footer</li>
-</ul>
-<h5 id="zlib-deflate-compressed-header"><a class="header" href="#zlib-deflate-compressed-header">ZLIB (DEFLATE) compressed header</a></h5>
-<p>The ZLIB (DEFLATE) compressed header is 16 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
-
-<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the values in the ZLIB (DEFLATE) compressed header are stored in big-endian.</p>
-</blockquote>
-<h5 id="zlib-deflate-compressed-data-block-descriptors"><a class="header" href="#zlib-deflate-compressed-data-block-descriptors">ZLIB (DEFLATE) compressed data block descriptors</a></h5>
-<p>The ZLIB (DEFLATE) compressed data block descriptors are of variable size and consist of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
-
-<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
-
-</table>
-</div>
-
-<h5 id="zlib-deflate-compressed-data-block-descriptor"><a class="header" href="#zlib-deflate-compressed-data-block-descriptor">ZLIB (DEFLATE) compressed data block descriptor</a></h5>
-<p>The ZLIB (DEFLATE) compressed data block descriptor is 8 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the ZLIB (DEFLATE) compressed data + 20</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
-
-</table>
-</div>
-
-<h5 id="zlib-deflate-compressed-footer"><a class="header" href="#zlib-deflate-compressed-footer">ZLIB (DEFLATE) compressed footer</a></h5>
-<p>The ZLIB (DEFLATE) compressed footer is 50 bytes size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
-
-<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
-
-<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the values in the ZLIB (DEFLATE) compressed footer are stored in big-endian.</p>
-</blockquote>
-<h4 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h4>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
-
-<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the compressed data block contains a maximum of 65536 bytes of data. The compressed
-data block therefore should not exceed 65537 bytes in size.</p>
-</blockquote>
 <h3 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h3>
 <p>The file content size is stored in the resource fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
+<blockquote>
+<p>Note that the resource fork is sometimes represented as an extended attribute with the name:
+“com.apple.ResourceFork”.</p>
+</blockquote>
 <h3 id="extended-attribute-named-fork"><a class="header" href="#extended-attribute-named-fork">Extended attribute (named fork)</a></h3>
 <p>Extended attributes, also referred to as named forks, are stored in the
 <a href="#hfs_plus_attributes_file">HFS+ attributes file</a>.</p>
+<h3 id="apple-file-system-compression-decmpfs"><a class="header" href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a></h3>
+<p>The file has an extended attribute named “com.apple.decmpfs” and the content is stored using
+<a href="decmpfs.html">Apple File System Compression (decmpfs)</a>.</p>
 <h2 id="hfs_wrapper"><a class="header" href="#hfs_wrapper">HFS wrapper</a></h2>
-<p>TODO: complete section</p>
-<p>A HFSX volume cannot be wrapped in a HFS volume.</p>
+<p>A HFS wrapped HFS+ file system consists of a <a href="#hfs_volume">HFS file system</a> where the
+<a href="#hfs_master_directory_block">master directory block (MDB)</a> contains:</p>
+<ul>
+<li>an embedded volume signature of “H+”;</li>
+<li>an embedded volume extent descriptor that describes the blocks in which the embedded volume is
+stored;</li>
+<li>the embedded volume extent is marked in the bad block file.</li>
+</ul>
+<blockquote>
+<p>Note that Mac OS supports a HFS+ to be wrapped in a HFS volume, but not HFSX.</p>
+</blockquote>
+<pre><code class="language-python">embedded volume offset = (
+    (data area start sector * 512) + (embedded volume block number * block size)
+)
+</code></pre>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
+<!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://github.com/apple-oss-distributions/hfs/blob/main/core/hfs_format.h">hfs_format.h</a></li>
-<li><a href="https://developer.apple.com/library/archive/documentation/mac/Files/Files-99.html">Data Organization on Volumes</a>, by Apple Inc.</li>
-<li><a href="https://developer.apple.com/library/archive/technotes/tn/tn1150.html">Technical Note TN1150: HFS plus volume format</a>, by Apple Inc.</li>
+<li><a href="https://developer.apple.com/library/archive/documentation/mac/Files/Files-99.html">Data Organization on Volumes</a>,
+by Apple Inc.</li>
+<li><a href="https://developer.apple.com/library/archive/technotes/tn/tn1150.html">Technical Note TN1150: HFS plus volume format</a>,
+by Apple Inc.</li>
 </ul>
 
                     </main>
@@ -2595,11 +2516,11 @@ data block therefore should not exceed 65537 bytes in size.</p>
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 
