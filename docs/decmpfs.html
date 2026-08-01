@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4fcfef61.js";
+            window.path_to_searchindex_js = "searchindex-503c0708.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-66965ffe.js"></script>
@@ -282,92 +282,17 @@ in the extended attribute after the decmpfs compressed data header.</p>
 <p><a href="decmpfs.html#compression_methods">Compression method</a> 4 and 8 store the compressed file content data
 in the resource fork of the file.</p>
 <p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
-<h2 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">zlib compressed data</a></h2>
-<ul>
-<li>zlib compressed header</li>
-<li>Unknown (empty values)</li>
-<li>zlib compressed data block offsets and sizes</li>
-<li>zlib compressed data blocks</li>
-<li>zlib compressed footer</li>
-</ul>
-<blockquote>
-<p>Note that if the zlib compressed data starts with 0xff the data is stored uncompressed after the
-first compressed data byte.</p>
-</blockquote>
-<h3 id="zlib-compressed-header"><a class="header" href="#zlib-compressed-header">zlib compressed header</a></h3>
-<p>The zlib compressed header is 16 bytes in size and consists of:</p>
+<h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data block descriptors offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZFSE compressed data</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the zlib compressed data</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Compressed data block descriptors and data size</td></tr>
-
-<tr><td>12</td><td>4</td><td></td><td>Compressed footer size</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>LZFSE compressed data blocks</td></tr>
 
 </table>
 </div>
 
-<blockquote>
-<p>Note that the values in the zlib compressed header are stored in big-endian.</p>
-</blockquote>
-<h3 id="zlib-compressed-data-block-descriptors"><a class="header" href="#zlib-compressed-data-block-descriptors">zlib compressed data block descriptors</a></h3>
-<p>The zlib compressed data block descriptors are of variable size and consist of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed data size</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Number of compressed data block offset and size tuples</td></tr>
-
-<tr><td>8</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
-
-</table>
-</div>
-
-<h3 id="zlib-compressed-data-block-descriptor"><a class="header" href="#zlib-compressed-data-block-descriptor">zlib compressed data block descriptor</a></h3>
-<p>The zlib compressed data block descriptor is 8 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the zlib compressed data + 20</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
-
-</table>
-</div>
-
-<h3 id="zlib-compressed-footer"><a class="header" href="#zlib-compressed-footer">zlib compressed footer</a></h3>
-<p>The zlib compressed footer is 50 bytes size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
-
-<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>26</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>30</td><td>2</td><td></td><td>Unknown</td></tr>
-
-<tr><td>32</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
-
-<tr><td>36</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
-
-<tr><td>44</td><td>6</td><td></td><td>Unknown (empty values)</td></tr>
-
-</table>
-</div>
-
-<blockquote>
-<p>Note that the values in the zlib compressed footer are stored in big-endian.</p>
-</blockquote>
 <h2 id="lzvn-compressed-data"><a class="header" href="#lzvn-compressed-data">LZVN compressed data</a></h2>
 <div class="table-wrapper">
 <table>
@@ -384,8 +309,105 @@ first compressed data byte.</p>
 uncompressed after the first compressed data byte. The compressed data block contains a maximum
 of 65536 bytes of data. The compressed data block therefore should not exceed 65537 bytes in size.</p>
 </blockquote>
-<h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
-<p>TODO: complete this section</p>
+<h2 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">zlib compressed data</a></h2>
+<ul>
+<li>zlib compressed header</li>
+<li>Unknown (empty values)</li>
+<li>zlib compressed data block descriptors</li>
+<li>zlib compressed data blocks</li>
+<li>zlib compressed footer</li>
+</ul>
+<blockquote>
+<p>Note that if the zlib compressed data starts with 0xff the data is stored uncompressed after the
+first compressed data byte.</p>
+</blockquote>
+<h3 id="zlib-compressed-header"><a class="header" href="#zlib-compressed-header">zlib compressed header</a></h3>
+<p>The zlib compressed header is 260 bytes size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>256</td><td>Unknown (header size or offset?)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed footer offset, where the offset is relative from the start of the zlib compressed data</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (total size - header size?)</td></tr>
+
+<tr><td>12</td><td>4</td><td>50</td><td>Compressed footer size</td></tr>
+
+<tr><td>16</td><td>240</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>256</td><td>4</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed header are stored in big-endian.</p>
+</blockquote>
+<h3 id="zlib-compressed-data-block-descriptors"><a class="header" href="#zlib-compressed-data-block-descriptors">zlib compressed data block descriptors</a></h3>
+<p>The zlib compressed data block descriptors are variable size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of block descriptors (offset and size tuples)</td></tr>
+
+<tr><td>4</td><td>8 x ...</td><td></td><td>Array of compressed data block descriptors</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed data block descriptors are store in little-endian.</p>
+</blockquote>
+<h4 id="zlib-compressed-data-block-descriptor"><a class="header" href="#zlib-compressed-data-block-descriptor">zlib compressed data block descriptor</a></h4>
+<p>The zlib compressed data block descriptor is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Compressed block offset, where the offset is relative from the start of the zlib compressed data block descriptors</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Compressed block size</td></tr>
+
+</table>
+</div>
+
+<h3 id="zlib-compressed-footer"><a class="header" href="#zlib-compressed-footer">zlib compressed footer</a></h3>
+<p>The zlib compressed footer is 50 bytes size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>24</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Unknown (signature offset?)</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Unknown (footer size?)</td></tr>
+
+<tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>30</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
+
+<tr><td>34</td><td>2</td><td></td><td>Unknown (empty values?)</td></tr>
+
+<tr><td>36</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>38</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>2</td><td></td><td>Unknown (uncompressed block size?)</td></tr>
+
+<tr><td>42</td><td>8</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the values in the zlib compressed header are stored in big-endian.</p>
+</blockquote>
+<h3 id="zlib-compressed-data-block"><a class="header" href="#zlib-compressed-data-block">zlib compressed data block</a></h3>
+<p>If the first byte in the zlib compressed data block is:</p>
+<ul>
+<li>0x78, the block contains <a href="zlib.html">zlib compressed data</a>;</li>
+<li>0xff, the block contains uncompressed data.</li>
+</ul>
 
                     </main>
 
