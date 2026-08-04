@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cc0788d9.js";
+            window.path_to_searchindex_js = "searchindex-a317e4d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-66965ffe.js"></script>
+        <script src="toc-2f6c543e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -178,6 +178,8 @@
                         <h1 id="apple-file-system-compression-decmpfs"><a class="header" href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a></h1>
 <p><a href="hfs.html">Hierarchical File System (HFS)</a> and <a href="apfs.html">Apple File System (APFS)</a> use Apple File
 System Compression (decmpfs) to compress file contents.</p>
+<p>decmpfs is sometimes referred to as AFSC (Apple File System Compression) or HFS/HFS+ compression
+and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
@@ -217,6 +219,7 @@ System Compression (decmpfs) to compress file contents.</p>
 <p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
 </blockquote>
 <h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -224,37 +227,54 @@ System Compression (decmpfs) to compress file contents.</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>3</td><td></td><td>zlib compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+<tr><td>3</td><td>kAFSCTypeZLibChunk</td><td>zlib compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
 
-<tr><td>4</td><td></td><td>64k chunked zlib compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+<tr><td>4</td><td>kAFSCTypeZLib</td><td>64k chunked zlib compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
 
-<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values</td></tr>
+<tr><td>5</td><td></td><td>Unknown (sparse compressed extended attribute data), where the uncompressed data contains 0-byte values. According to <a href="https://github.com/apple-oss-distributions/copyfile/blob/main/copyfile.c">copyfile.c</a> specifies de-dup within the generation store.</td></tr>
 
 <tr><td>6</td><td></td><td>Unknown (unused)</td></tr>
 
-<tr><td>7</td><td></td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+<tr><td colspan="3"><em>Added in Mac OS X Yosemite (10.10)</em></td></tr>
 
-<tr><td>8</td><td></td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+<tr><td>7</td><td>kAFSCTypeLZVNChunk</td><td>LZVN compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
 
-<tr><td>9</td><td></td><td>Unknown (uncompressed extended attribute data, different than CMP_Type1)</td></tr>
+<tr><td>8</td><td>kAFSCTypeLZVN</td><td>64k chunked LZVN compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
 
-<tr><td>10</td><td></td><td>Unknown (64k chunked uncompressed data resource fork), where the compressed data is stored in the resource fork</td></tr>
+<tr><td>9</td><td>kAFSCTypeRawChunk</td><td>Uncompressed (raw) extended attribute data</td></tr>
 
-<tr><td>11</td><td></td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+<tr><td>10</td><td>kAFSCTypeRaw</td><td>64k chunked uncompressed (raw) data resource fork, where the compressed data is stored in the resource fork</td></tr>
 
-<tr><td>12</td><td></td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+<tr><td colspan="3"><em>Added in Mac OS X El Capitan (10.11)</em></td></tr>
 
-<tr><td>13</td><td></td><td>Unknown (LZBITMAP compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header)</td></tr>
+<tr><td>11</td><td>kAFSCTypeLZFSEChunk</td><td>LZFSE compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
 
-<tr><td>14</td><td></td><td>Unknown (LZBITMAP compressed resource fork, where the compressed data is stored in the resource fork)</td></tr>
+<tr><td>12</td><td>kAFSCTypeLZFSE</td><td>64k chunked LZFSE compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
+
+<tr><td colspan="3"><em>Added in macOS Ventura (13.0)</em></td></tr>
+
+<tr><td>13</td><td>kAFSCTypeLZBitmapChunk</td><td>LZBITMAP compressed extended attribute data, where the compressed data is stored in the extended attribute after the compressed data header</td></tr>
+
+<tr><td>14</td><td>kAFSCTypeLZBitmap</td><td>LZBITMAP compressed resource fork, where the compressed data is stored in the resource fork</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x80000001</td><td></td><td>Unknown (faulting file)</td></tr>
+<tr><td>255</td><td>CMP_MAX</td><td>Maximum supported compression method</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x80000001</td><td>DATALESS_CMPFS_TYPE</td><td>Unknown (faulting file or dataless file or directory)</td></tr>
+
+<tr><td>0x80000002</td><td>DATALESS_PKG_CMPFS_TYPE</td><td>Unknown (dataless package)</td></tr>
 
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that <a href="https://github.com/apple-oss-distributions/copyfile/blob/main/copyfile.c">copyfile.c</a>
+indicates faulting files are deprecated since Mac OS X Yosemite (10.10).</p>
+</blockquote>
 <h2 id="compressed-file-content-data"><a class="header" href="#compressed-file-content-data">Compressed file content data</a></h2>
 <p>The location of the compressed file content data depends on the compression method:</p>
 <ul>
@@ -279,12 +299,12 @@ the file content data contains 0-byte values.</p>
 </div>
 
 <h3 id="compressed-data-stored-in-extended-attribute"><a class="header" href="#compressed-data-stored-in-extended-attribute">Compressed data stored in extended attribute</a></h3>
-<p><a href="decmpfs.html#compression_methods">Compression method</a> 3, 5, 7 and 11 store the compressed file
+<p><a href="decmpfs.html#compression_methods">Compression method</a> 3, 5, 7, 9 and 11 store the compressed file
 content data in the extended attribute after the decmpfs compressed data header.</p>
 <p>The compressed data consist of 1 compressed data block.</p>
 <h3 id="compressed-data-stored-in-resource-fork"><a class="header" href="#compressed-data-stored-in-resource-fork">Compressed data stored in resource fork</a></h3>
-<p><a href="decmpfs.html#compression_methods">Compression method</a> 4, 8 and 12 store the compressed file content
-data in the resource fork of the file.</p>
+<p><a href="decmpfs.html#compression_methods">Compression method</a> 4, 8, 10 and 12 store the compressed file
+content data in the resource fork of the file.</p>
 <p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
 <h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
 <div class="table-wrapper">
@@ -316,10 +336,23 @@ otherwise the block should start with a LZFSE block marker.</p>
 contains uncompressed data.</p>
 <p>A compressed data block can contains a maximum of 65536 bytes of data. The compressed data block
 therefore should not exceed 65537 bytes in size.</p>
+<h2 id="raw-compressed-data"><a class="header" href="#raw-compressed-data">Raw compressed data</a></h2>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the raw compressed data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>raw compressed data blocks</td></tr>
+
+</table>
+</div>
+
+<h3 id="raw-compressed-data-block"><a class="header" href="#raw-compressed-data-block">Raw compressed data block</a></h3>
+<p>If the first byte in the raw compressed data block is 0xcc, the block contains uncompressed data.</p>
+<p>The behavior of other byte values is unknown, it has been observed that Mac OS returns no data.</p>
 <h2 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">zlib compressed data</a></h2>
 <ul>
 <li>zlib compressed header</li>
-<li>Unknown (empty values)</li>
 <li>zlib compressed data block descriptors</li>
 <li>zlib compressed data blocks</li>
 <li>zlib compressed footer</li>
@@ -387,7 +420,7 @@ therefore should not exceed 65537 bytes in size.</p>
 
 <tr><td>28</td><td>2</td><td></td><td>Unknown</td></tr>
 
-<tr><td>30</td><td>4</td><td>"cmpf"</td><td>Unknown (signature)</td></tr>
+<tr><td>30</td><td>4</td><td>"cmpf"</td><td>signature (DECMPFS_MAGIC)</td></tr>
 
 <tr><td>34</td><td>2</td><td></td><td>Unknown (empty values?)</td></tr>
 
