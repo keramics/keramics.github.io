@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a317e4d5.js";
+            window.path_to_searchindex_js = "searchindex-8f836a8c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f6c543e.js"></script>
@@ -7915,15 +7915,21 @@ the container.</p>
 <ul>
 <li>current container superblock</li>
 <li>stored in the container checkpoint descriptor area:
-** current checkpoint map
-** previous checkpoint map(s)
-** previous container superblock(s)</li>
+<ul>
+<li>current checkpoint map</li>
+<li>previous checkpoint map(s)</li>
+<li>previous container superblock(s)</li>
+</ul>
+</li>
 <li>stored in the container:
-** space manager
-** container object map
-** reaper
-** crypto key
-** zero or more volumes</li>
+<ul>
+<li>space manager</li>
+<li>container object map</li>
+<li>reaper</li>
+<li>crypto key</li>
+<li>zero or more volumes</li>
+</ul>
+</li>
 <li>Unknown: backup of current container superblock?</li>
 </ul>
 <h3 id="container_superblock"><a class="header" href="#container_superblock">Container superblock</a></h3>
@@ -8972,7 +8978,7 @@ directly read.</p>
 
 <tr><td>88</td><td>8</td><td></td><td>Number of allocated blocks (apfs_fs_alloc_count)</td></tr>
 
-<tr><td>96</td><td>20</td><td></td><td><a href="#encryption_state-1">Encryption state</a> (apfs_meta_crypto)</td></tr>
+<tr><td>96</td><td>20</td><td></td><td><a href="#encryption_state">Encryption state</a> (apfs_meta_crypto)</td></tr>
 
 <tr><td>116</td><td>4</td><td></td><td>File system root tree <a href="#object_types">object type</a> (apfs_root_tree_type)</td></tr>
 
@@ -9018,7 +9024,7 @@ directly read.</p>
 
 <tr><td>320</td><td>8 x 48 = 384</td><td></td><td>8 most recent modification <a href="#change_information">change information</a> (apfs_modified_by)</td></tr>
 
-<tr><td>704</td><td>256</td><td></td><td>Volume name (apfs_volname)</td></tr>
+<tr><td>704</td><td>256</td><td></td><td>Volume label (or name) (apfs_volname)</td></tr>
 
 <tr><td>960</td><td>4</td><td></td><td>Next (available) document identifier (apfs_next_doc_id)</td></tr>
 
@@ -9056,7 +9062,7 @@ directly read.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<h3 id="encryption_state"><a class="header" href="#encryption_state-1">Encryption state</a></h3>
+<h3 id="encryption_state"><a class="header" href="#encryption_state">Encryption state</a></h3>
 <p>The encryption state (wrapped_meta_crypto_state_t) is 20 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -9214,7 +9220,7 @@ File System object identifiers (FSOIDs) to contrast other object identifiers (OI
 
 <tr><td>0x6</td><td>APFS_TYPE_DSTREAM_ID</td><td><a href="#data_stream_identifier">Data stream identifier</a></td></tr>
 
-<tr><td>0x7</td><td>APFS_TYPE_CRYPTO_STATE</td><td><a href="#encryption_state-1">Encryption state</a></td></tr>
+<tr><td>0x7</td><td>APFS_TYPE_CRYPTO_STATE</td><td><a href="#encryption_state">Encryption state</a></td></tr>
 
 <tr><td>0x8</td><td>APFS_TYPE_FILE_EXTENT</td><td><a href="#file_extent">File extent</a></td></tr>
 
@@ -9675,8 +9681,6 @@ XATTR_DATA_EMBEDDED is set.</p>
 </table>
 </div>
 
-<h3 id="encryption_state-1"><a class="header" href="#encryption_state-1">Encryption state</a></h3>
-<p>TODO: complete this section.</p>
 <h3 id="file_extent"><a class="header" href="#file_extent">File extent</a></h3>
 <h4 id="file-extent-key-data"><a class="header" href="#file-extent-key-data">File extent key data</a></h4>
 <p>The file extent key data (j_file_extent_key_t) is 16 bytes in size and consists of:</p>

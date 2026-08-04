@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a317e4d5.js";
+            window.path_to_searchindex_js = "searchindex-8f836a8c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f6c543e.js"></script>
@@ -669,15 +669,21 @@ the container.</p>
 <ul>
 <li>current container superblock</li>
 <li>stored in the container checkpoint descriptor area:
-** current checkpoint map
-** previous checkpoint map(s)
-** previous container superblock(s)</li>
+<ul>
+<li>current checkpoint map</li>
+<li>previous checkpoint map(s)</li>
+<li>previous container superblock(s)</li>
+</ul>
+</li>
 <li>stored in the container:
-** space manager
-** container object map
-** reaper
-** crypto key
-** zero or more volumes</li>
+<ul>
+<li>space manager</li>
+<li>container object map</li>
+<li>reaper</li>
+<li>crypto key</li>
+<li>zero or more volumes</li>
+</ul>
+</li>
 <li>Unknown: backup of current container superblock?</li>
 </ul>
 <h3 id="container_superblock"><a class="header" href="#container_superblock">Container superblock</a></h3>
@@ -1772,7 +1778,7 @@ directly read.</p>
 
 <tr><td>320</td><td>8 x 48 = 384</td><td></td><td>8 most recent modification <a href="#change_information">change information</a> (apfs_modified_by)</td></tr>
 
-<tr><td>704</td><td>256</td><td></td><td>Volume name (apfs_volname)</td></tr>
+<tr><td>704</td><td>256</td><td></td><td>Volume label (or name) (apfs_volname)</td></tr>
 
 <tr><td>960</td><td>4</td><td></td><td>Next (available) document identifier (apfs_next_doc_id)</td></tr>
 
@@ -2429,8 +2435,6 @@ XATTR_DATA_EMBEDDED is set.</p>
 </table>
 </div>
 
-<h3 id="encryption_state"><a class="header" href="#encryption_state">Encryption state</a></h3>
-<p>TODO: complete this section.</p>
 <h3 id="file_extent"><a class="header" href="#file_extent">File extent</a></h3>
 <h4 id="file-extent-key-data"><a class="header" href="#file-extent-key-data">File extent key data</a></h4>
 <p>The file extent key data (j_file_extent_key_t) is 16 bytes in size and consists of:</p>
