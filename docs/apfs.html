@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8f836a8c.js";
+            window.path_to_searchindex_js = "searchindex-6f1a40b2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f6c543e.js"></script>
@@ -177,7 +177,7 @@
                     <main>
                         <h1 id="apple-file-system-apfs"><a class="header" href="#apple-file-system-apfs">Apple File System (APFS)</a></h1>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
-iOS. APFS succeeds the <a href="hfs.html">Hierarchical File System (HFS)</a> and was introduced in macOS High
+iOS. APFS supersedes the <a href="hfs.html">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>APFS consists of:</p>
@@ -736,13 +736,13 @@ the container.</p>
 
 <tr><td>132</td><td>4</td><td></td><td>Next available index in the checkpoint data area (nx_xp_data_next)</td></tr>
 
-<tr><td>136</td><td>4</td><td></td><td>Start index in the checkpoint descriptor area used by the superblock (nx_xp_desc_index)</td></tr>
+<tr><td>136</td><td>4</td><td></td><td>Index of the checkpoint in the checkpoint descriptor area (nx_xp_desc_index)</td></tr>
 
-<tr><td>140</td><td>4</td><td></td><td>Number of blocks in the checkpoint descriptor area used by the superblock (nx_xp_desc_len)</td></tr>
+<tr><td>140</td><td>4</td><td></td><td>Size of the checkpoint in the checkpoint descriptor area, in number of blocks (nx_xp_desc_len)</td></tr>
 
-<tr><td>144</td><td>4</td><td></td><td>Start index in the checkpoint data area used by the superblock (nx_xp_data_index)</td></tr>
+<tr><td>144</td><td>4</td><td></td><td>Index of the checkpoint in the checkpoint data area (nx_xp_data_index)</td></tr>
 
-<tr><td>148</td><td>4</td><td></td><td>Number of blocks in the checkpoint data area used by the superblock (nx_xp_data_len)</td></tr>
+<tr><td>148</td><td>4</td><td></td><td>Size of the checkpoint in the checkpoint data area, in number of blocks (nx_xp_data_len)</td></tr>
 
 <tr><td>152</td><td>8</td><td></td><td>Space manager object identifier (nx_spaceman_oid), where the object identifier can be resolved in the <a href="#checkpoint_map">checkpoint map</a></td></tr>
 
@@ -750,7 +750,7 @@ the container.</p>
 
 <tr><td>168</td><td>8</td><td></td><td>Reaper object identifier (nx_reaper_oid), where the object identifier can be resolved in the <a href="#checkpoint_map">checkpoint map</a></td></tr>
 
-<tr><td>176</td><td>4</td><td></td><td>Unknown (nx_test_type)</td></tr>
+<tr><td>176</td><td>4</td><td></td><td>Unknown (reserved for testing) (nx_test_type)</td></tr>
 
 <tr><td>180</td><td>4</td><td></td><td>Maximum number of volumes (nx_max_file_systems) supported by the container</td></tr>
 
@@ -766,7 +766,7 @@ the container.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1256</td><td>8</td><td></td><td>Unknown (nx_evict_mapping_tree_oid)</td></tr>
+<tr><td>1256</td><td>8</td><td></td><td>Eviction tree (physical) object identifier (nx_evict_mapping_tree_oid)</td></tr>
 
 <tr><td>1264</td><td>8</td><td></td><td><a href="#container_flags">Container flags</a> (nx_flags)</td></tr>
 
@@ -778,13 +778,13 @@ the container.</p>
 
 <tr><td>1296</td><td>8</td><td></td><td>Container key bag area block number (nx_keybag_base), which contains a block number relative to the start of the container</td></tr>
 
-<tr><td>1304</td><td>8</td><td></td><td>Contaner key bag area number of blocks (nx_keybag_blocks)</td></tr>
+<tr><td>1304</td><td>8</td><td></td><td>Container key bag area number of blocks (nx_keybag_blocks)</td></tr>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1312</td><td>4 x 8 = 32</td><td></td><td>Unknown (nx_ephemeral_info)</td></tr>
+<tr><td>1312</td><td>4 x 8 = 32</td><td></td><td>Ephemeral information (nx_ephemeral_info)</td></tr>
 
-<tr><td>1344</td><td>8</td><td></td><td>Unknown (Test object identifier) (nx_test_oid)</td></tr>
+<tr><td>1344</td><td>8</td><td></td><td>Unknown (reserved for testing) (nx_test_oid)</td></tr>
 
 <tr><td>1352</td><td>8</td><td></td><td><a href="#fusion_middle_tree">Fusion middle tree</a> block number (nx_fusion_mt_oid), which contains a block number relative to the start of the container</td></tr>
 
@@ -798,9 +798,15 @@ the container.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1384</td><td>8</td><td></td><td>Unknown (nx_newest_mounted_version)</td></tr>
+<tr><td>1384</td><td>8</td><td></td><td>Newest version of software that mounted the container (nx_newest_mounted_version)</td></tr>
 
-<tr><td>1392</td><td>16</td><td></td><td>Unknown (nx_mkb_locker)</td></tr>
+<tr><td colspan="4"><em>Media key area (nx_mkb_locker)</em></td></tr>
+
+<tr><td>1392</td><td>8</td><td></td><td>Media key area block number, which contains a block number relative to the start of the container</td></tr>
+
+<tr><td>1400</td><td>8</td><td></td><td>Media key area number of blocks</td></tr>
+
+<tr><td colspan="4"> </td></tr>
 
 <tr><td>1408</td><td>2688</td><td></td><td>Unknown (empty values)</td></tr>
 
@@ -1572,7 +1578,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>3</td><td></td><td>Volume key, which contains a <a href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></td></tr>
 
-<tr><td>4</td><td></td><td>Password Hint, which contains a string without end-of-string character</td></tr>
+<tr><td>4</td><td></td><td>Password hint, which contains a string without end-of-string character</td></tr>
 
 </table>
 </div>
@@ -1612,12 +1618,12 @@ value tags:</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0xa3</td><td></td><td><a href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encrypted Key (KEK) packed object</a></td></tr>
+<tr><td>0xa3</td><td></td><td><a href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encryption Key (KEK) packed object</a></td></tr>
 
 </table>
 </div>
 
-<h5 id="key_bag_wrapped_kek_packed_object"><a class="header" href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encrypted Key (KEK) packed object</a></h5>
+<h5 id="key_bag_wrapped_kek_packed_object"><a class="header" href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encryption Key (KEK) packed object</a></h5>
 <p>The packed object value tag of a wrapped kek encrypted key is 0xa3 and contains the following
 attribute value tags:</p>
 <div class="table-wrapper">
@@ -1627,19 +1633,19 @@ attribute value tags:</p>
 
 <tr><td>0x81</td><td></td><td>Volume identifer, which contains a big-endian UUID</td></tr>
 
-<tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encrypted Key (KEK) metadata</a></td></tr>
+<tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></td></tr>
 
-<tr><td>0x83</td><td></td><td>Wrapped Key Encrypted Key (KEK) data</td></tr>
+<tr><td>0x83</td><td></td><td>Wrapped Key Encryption Key (KEK) data</td></tr>
 
-<tr><td>0x84</td><td></td><td>Number of iterations</td></tr>
+<tr><td>0x84</td><td></td><td>Number of iterations for the PBKDF2 algorithm</td></tr>
 
 <tr><td>0x85</td><td></td><td>Salt for the PBKDF2 algorithm</td></tr>
 
 </table>
 </div>
 
-<h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encrypted Key (KEK) metadata</a></h4>
-<p>The Wrapped Key Encrypted Key (KEK) metadata is 8 bytes in size and consists of:</p>
+<h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></h4>
+<p>The Wrapped Key Encryption Key (KEK) metadata is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1716,7 +1722,7 @@ directly read.</p>
 
 <tr><td>32</td><td>4</td><td>"APSB"</td><td>Signature (apfs_magic)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Unknown (apfs_fs_index)</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>File system index (apfs_fs_index)</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td><a href="#volume_feature_flags">Volume feature flags</a> (apfs_features)</td></tr>
 
@@ -1748,9 +1754,9 @@ directly read.</p>
 
 <tr><td>152</td><td>8</td><td></td><td><a href="#snapshot_metadata_tree">Snapshot metadata tree</a> block number (apfs_snap_meta_tree_oid)</td></tr>
 
-<tr><td>160</td><td>8</td><td></td><td>Unknown (apfs_revert_to_xid)</td></tr>
+<tr><td>160</td><td>8</td><td></td><td>Rollback transaction identifier (apfs_revert_to_xid)</td></tr>
 
-<tr><td>168</td><td>8</td><td></td><td>Unknown (apfs_revert_to_sblock_oid)</td></tr>
+<tr><td>168</td><td>8</td><td></td><td>Rollback (physical) object identifier (apfs_revert_to_sblock_oid)</td></tr>
 
 <tr><td>176</td><td>8</td><td></td><td>Next (available) file system object identifier (apfs_next_obj_id), where the upper 32-bit can contain 0xffffffff</td></tr>
 
@@ -1782,27 +1788,27 @@ directly read.</p>
 
 <tr><td>960</td><td>4</td><td></td><td>Next (available) document identifier (apfs_next_doc_id)</td></tr>
 
-<tr><td>964</td><td>2</td><td></td><td>Unknown (apfs_role)</td></tr>
+<tr><td>964</td><td>2</td><td></td><td><a href="#volume_role_flags">Volume role flags</a> (apfs_role)</td></tr>
 
 <tr><td>966</td><td>2</td><td></td><td>Unknown (reserved)</td></tr>
 
-<tr><td>968</td><td>8</td><td></td><td>Unknown (apfs_root_to_xid)</td></tr>
+<tr><td>968</td><td>8</td><td></td><td>Active snapshot transaction identifier (apfs_root_to_xid)</td></tr>
 
-<tr><td>976</td><td>8</td><td></td><td>Unknown (apfs_er_state_oid)</td></tr>
+<tr><td>976</td><td>8</td><td></td><td>Encryption progress state (apfs_er_state_oid)</td></tr>
 
-<tr><td>984</td><td>8</td><td></td><td>Unknown (apfs_cloneinfo_id_epoch)</td></tr>
+<tr><td>984</td><td>8</td><td></td><td>Largest clone object identifier (apfs_cloneinfo_id_epoch)</td></tr>
 
-<tr><td>992</td><td>8</td><td></td><td>Unknown (apfs_cloneinfo_xid)</td></tr>
+<tr><td>992</td><td>8</td><td></td><td>Largest clone transaction identifier (apfs_cloneinfo_xid)</td></tr>
 
-<tr><td>1000</td><td>8</td><td></td><td>Unknown (apfs_snap_meta_ext_oid)</td></tr>
+<tr><td>1000</td><td>8</td><td></td><td>Extended snapsnot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
 
 <tr><td>1008</td><td>16</td><td></td><td>Volume group identifier (apfs_volume_group_id), which contains a big-endian UUID</td></tr>
 
-<tr><td>1024</td><td>8</td><td></td><td>Unknown (apfs_integrity_meta_oid)</td></tr>
+<tr><td>1024</td><td>8</td><td></td><td>Integrity metadata (virtual) object identifier (apfs_integrity_meta_oid)</td></tr>
 
-<tr><td>1032</td><td>8</td><td></td><td>Unknown (apfs_fext_tree_oid)</td></tr>
+<tr><td>1032</td><td>8</td><td></td><td>Extent tree (virtual) object identifier (apfs_fext_tree_oid)</td></tr>
 
-<tr><td>1040</td><td>4</td><td></td><td>Unknown (apfs_fext_tree_type)</td></tr>
+<tr><td>1040</td><td>4</td><td></td><td>Extent tree <a href="#object_types">object type</a> (apfs_fext_tree_type)</td></tr>
 
 <tr><td>1044</td><td>4</td><td></td><td>Unknown (reserved_type)</td></tr>
 
@@ -1915,6 +1921,27 @@ directly read.</p>
 <tr><td>0x0000000000000020</td><td>APFS_INCOMPAT_SEALED_VOLUME</td><td>Unknown</td></tr>
 
 <tr><td>0x0000000000000040</td><td>APFS_INCOMPAT_RESERVED_40</td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="volume_role_flags"><a class="header" href="#volume_role_flags">Volume role flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td>APFS_VOL_ROLE_NONE</td><td>None</td></tr>
+
+<tr><td>0x0001</td><td>APFS_VOL_ROLE_SYSTEM</td><td>System</td></tr>
+
+<tr><td>0x0002</td><td>APFS_VOL_ROLE_USER</td><td>User</td></tr>
+
+<tr><td>0x0004</td><td>APFS_VOL_ROLE_RECOVERY</td><td>Recovery</td></tr>
+
+<tr><td>0x0008</td><td>APFS_VOL_ROLE_VM</td><td>VM</td></tr>
+
+<tr><td>0x0010</td><td>APFS_VOL_ROLE_PREBOOT</td><td>Preboot</td></tr>
+
+<tr><td>0x0020</td><td>APFS_VOL_ROLE_INSTALLER</td><td>Installer</td></tr>
 
 </table>
 </div>
@@ -3065,7 +3092,7 @@ container.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios">Corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios"><a class="header" href="#format-edge-cases-and-corruption-scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted"><a class="header" href="#container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted">Container key bag is hardware encrypted but volume is not encrypted</a></h3>
 <p>Seen in APFS containers created by certain digital forensics tools. The container key bag is either
 hardware encrypted or contains random data but the volume is not encrypted.</p>

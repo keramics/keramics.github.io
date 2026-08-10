@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8f836a8c.js";
+            window.path_to_searchindex_js = "searchindex-6f1a40b2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f6c543e.js"></script>
@@ -209,7 +209,7 @@ images for digital forensic purposes. It is currently widely used in the field o
 forensics in proprietary tooling like EnCase en FTK.</p>
 <p>The <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> is the earliest
 known specification of the format was provided by ASR Data for the SMART application.</p>
-<p>The EWF format was succeeded by the <a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2</a> in
+<p>The EWF format was superseded by the <a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -3060,7 +3060,7 @@ containing the hash values.</p>
 </code></pre>
 <h3 id="guid"><a class="header" href="#guid">GUID</a></h3>
 <p>EWF-X uses a random based version of the GUID</p>
-<h2 id="corruption-scenarios"><a class="header" href="#corruption-scenarios">Corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios"><a class="header" href="#format-edge-cases-and-corruption-scenarios">Format edge cases and corruption scenarios</a></h2>
 <p>This chapter contains several corruption scenarios that have been encountered
 “in the wild”.</p>
 <h3 id="corrupt-uncompressed-chunk"><a class="header" href="#corrupt-uncompressed-chunk">Corrupt uncompressed chunk</a></h3>
@@ -4157,8 +4157,19 @@ by Mark McLoughlin</li>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="universal-disk-image-format-udif"><a class="header" href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a></h1>
 <p>The Universal Disk Image Format (UDIF) (.dmg) is one of the disk image formats supported natively
-by Mac OS.</p>
+by Mac OS. UDIF supersedes the New Disk Image Format (NDIF) format and was introduced in Max OS
+X 10.0 (Cheetah).</p>
 <h2 id="overview-5"><a class="header" href="#overview-5">Overview</a></h2>
+<p>An UDIF image can consists of one or more segment files, where:</p>
+<ul>
+<li>the first segment file is named: “image.dmg”</li>
+<li>successive segment files are named: “image.###.dmgpart”, where “###” represents a numeric value
+starting with 2 with 0 padding, e.g. “image.002.dmgpart”. Segment files after 999 are assumed to
+be named without the 0 padding, e.g. “image.1234.dmgpart”.</li>
+</ul>
+<p>The data forks of the segment files are used as a contiguous data stream. A compressed block can
+be stored across multiple segment files.</p>
+<p>Only the first segment file contains a resource fork or XML plist.</p>
 <p>Known UDIF image types are:</p>
 <div class="table-wrapper">
 <table>
@@ -4182,24 +4193,49 @@ by Mac OS.</p>
 </table>
 </div>
 
-<p>UDIF images are either uncompressed or compressed.</p>
+<p>An UDIF image can also be encrypted.</p>
+<h3 id="terminology-1"><a class="header" href="#terminology-1">Terminology</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Term</th><th>Description</th></thead>
+<tr><td>Flattened image</td><td>The disk image is a self-contained, a resource fork is stored within the image</td></tr>
+
+<tr><td>Unflattened image</td><td>The disk image uses the file system to store a resource fork</td></tr>
+
+</table>
+</div>
+
 <h3 id="uncompressed-image-format"><a class="header" href="#uncompressed-image-format">Uncompressed image format</a></h3>
-<p>An uncompressed UDIF image consist of:</p>
+<p>An uncompressed UDIF segment file consist of:</p>
 <ul>
-<li>data</li>
-<li>optional file footer</li>
+<li>Image data</li>
+<li><a href="#file_footer">File footer</a> at the end of the file</li>
 </ul>
 <blockquote>
 <p>Note that an uncompressed UDIF image without file footer is equivalent to a RAW storage media
 image (CRawDiskImage).</p>
 </blockquote>
 <h3 id="compressed-image-format"><a class="header" href="#compressed-image-format">Compressed image format</a></h3>
-<p>A compressed UDIF image consist of:</p>
+<p>A compressed UDIF segment file consist of:</p>
 <ul>
-<li>Data fork</li>
-<li>Optional resource fork</li>
-<li>Optional XML plist</li>
-<li>File footer the end of the image file</li>
+<li>Data fork, containing the image data</li>
+<li>Optional resource fork or XML plist</li>
+<li><a href="#file_footer">File footer</a> at the end of the file</li>
+</ul>
+<h3 id="encrypted-image-format"><a class="header" href="#encrypted-image-format">Encrypted image format</a></h3>
+<h4 id="encrypted-image-format-version-1"><a class="header" href="#encrypted-image-format-version-1">Encrypted image format version 1</a></h4>
+<p>A version 1 encrypted segment file consist of:</p>
+<ul>
+<li>Data fork, containing encyrypted UDIF data</li>
+<li><a href="#encypted_file_footer">Encrypted file footer</a> at the end of the file</li>
+</ul>
+<h4 id="encrypted-image-format-version-2"><a class="header" href="#encrypted-image-format-version-2">Encrypted image format version 2</a></h4>
+<p>A version 2 encrypted segment file consist of:</p>
+<ul>
+<li><a href="#encypted_file_header">Encrypted file header</a> at the start of the file</li>
+<li>Key protectors</li>
+<li>Unknown (empty values), probably reserved for the key protectors</li>
+<li>Data fork, containing encyrypted UDIF data</li>
 </ul>
 <h3 id="characteristics-4"><a class="header" href="#characteristics-4">Characteristics</a></h3>
 <div class="table-wrapper">
@@ -4215,8 +4251,10 @@ image (CRawDiskImage).</p>
 </div>
 
 <p>The number of bytes per sector is 512.</p>
-<h2 id="file-footer"><a class="header" href="#file-footer">File footer</a></h2>
-<p>The file footer (also known as resource file or metadata) is 512 bytes in size and consists of:</p>
+<h2 id="file_footer"><a class="header" href="#file_footer">File footer</a></h2>
+<p>The file footer (also known as resource file or metadata) (UDIFResourceFile) is 512 bytes in size
+and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -4224,31 +4262,33 @@ image (CRawDiskImage).</p>
 
 <tr><td>4</td><td>4</td><td>4</td><td>Format version</td></tr>
 
-<tr><td>8</td><td>4</td><td>512</td><td>File footer size in bytes</td></tr>
+<tr><td>8</td><td>4</td><td>512</td><td>File footer size, in number of bytes</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td><a href="#image_flags">Image flags</a></td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Unknown (RunningDataForkOffset)</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Segment logical offset</td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Data fork offset, where the offset is relative from the start of the image file</td></tr>
 
-<tr><td>32</td><td>8</td><td></td><td>Data fork size</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Data fork size, in number of bytes</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Resource fork offset, where the offset is relative from the start of the image file</td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Resource fork size</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Resource fork size, in number of bytes</td></tr>
 
-<tr><td>56</td><td>4</td><td></td><td>Unknown (SegmentNumber)</td></tr>
+<tr><td>56</td><td>4</td><td></td><td>Segment number, where 1 represents the first segment and contains 0 if not set</td></tr>
 
 <tr><td>60</td><td>4</td><td></td><td>Number of segments, which contains 0 if not set</td></tr>
 
-<tr><td>64</td><td>16</td><td></td><td>Segment identifier, which contains an UUID</td></tr>
+<tr><td>64</td><td>16</td><td></td><td>Segment set identifier, which contains an UUID</td></tr>
 
-<tr><td>80</td><td>4</td><td></td><td>Data checksum type</td></tr>
+<tr><td>80</td><td>4</td><td></td><td>Data <a href="#checksum_types">checksum type</a></td></tr>
 
-<tr><td>84</td><td>4</td><td></td><td>Data checksum size, as number of bits</td></tr>
+<tr><td>84</td><td>4</td><td></td><td>Data checksum size, in number of bits</td></tr>
 
 <tr><td>88</td><td>128</td><td></td><td>Data checksum</td></tr>
+
+<tr><td colspan="4"><em>Introduced in Mac OS 10.2</em></td></tr>
 
 <tr><td>216</td><td>8</td><td></td><td>XML plist offset, where the offset is relative from the start of the image file</td></tr>
 
@@ -4256,15 +4296,15 @@ image (CRawDiskImage).</p>
 
 <tr><td>232</td><td>120</td><td></td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>352</td><td>4</td><td></td><td>Master checksum type</td></tr>
+<tr><td>352</td><td>4</td><td></td><td>Master <a href="#checksum_types">checksum type</a></td></tr>
 
-<tr><td>356</td><td>4</td><td></td><td>Master checksum size, as number of bits</td></tr>
+<tr><td>356</td><td>4</td><td></td><td>Master checksum size, in number of bits</td></tr>
 
 <tr><td>360</td><td>128</td><td></td><td>Master checksum</td></tr>
 
 <tr><td>488</td><td>4</td><td></td><td><a href="#image_types">Image type</a> (or variant)</td></tr>
 
-<tr><td>492</td><td>8</td><td></td><td>Number of sectors</td></tr>
+<tr><td>492</td><td>8</td><td></td><td>Media size, in number of sectors, which contains the total number of sectors in the (uncompressed) image</td></tr>
 
 <tr><td>500</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
 
@@ -4275,6 +4315,7 @@ image (CRawDiskImage).</p>
 </table>
 </div>
 
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the XML plist size can be 0, such as in an UDIF stub (UDxx) image.</p>
 </blockquote>
@@ -4282,11 +4323,26 @@ image (CRawDiskImage).</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>kUDIFFlagsFlattened</td><td>Unknown (flattened?)</td></tr>
+<tr><td>0x00000001</td><td>kUDIFFlagsFlattened</td><td>Flattened image (set by <code>hdiutil flatten/unflatten</code>)</td></tr>
+
+<tr><td>0x00000002</td><td>kUDIFFlagsInPlace</td><td></td></tr>
+
+<tr><td>0x00000004</td><td>kUDIFFlagsInternetEnabled</td><td>Internet enabled (set by <code>hdiutil internet-enable</code>)</td></tr>
+
+<tr><td>0x00000008</td><td>kUDIFFlagsIsEncrypted</td><td></td></tr>
+
+</table>
+</div>
+
+<h3 id="checksum_types"><a class="header" href="#checksum_types">Checksum types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>2</td><td></td><td>CRC-32</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x00000004</td><td>kUDIFFlagsInternetEnabled</td><td>Unknown (internet enabled?)</td></tr>
+<tr><td>4</td><td></td><td>MD5</td></tr>
 
 </table>
 </div>
@@ -4302,8 +4358,129 @@ image (CRawDiskImage).</p>
 </table>
 </div>
 
+<h2 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h2>
+<p>In older UDIF images the resource fork contains the image metadata, such as the
+<a href="#udif_block_table">block table</a>. The resource fork consists of:</p>
+<ul>
+<li>Resource fork header</li>
+<li>Resource data</li>
+<li>Resource map</li>
+</ul>
+<h3 id="resource-fork-header"><a class="header" href="#resource-fork-header">Resource fork header</a></h3>
+<p>The resource fork header is 16 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Resource data offset, which contains the byte offset relative to the start of the resource fork</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Resource map offset, which contains the byte offset relative to the start of the resource fork</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Resource data size, in number of bytes</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Resource map size, in number of bytes</td></tr>
+
+</table>
+</div>
+
+<h3 id="resource_data"><a class="header" href="#resource_data">Resource data</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Size, in number of bytes</td></tr>
+
+<tr><td>4</td><td>...</td><td></td><td>Data</td></tr>
+
+</table>
+</div>
+
+<h3 id="resource-map"><a class="header" href="#resource-map">Resource map</a></h3>
+<p>The resource map consists of:</p>
+<ul>
+<li>Resource map header</li>
+<li>Entries list</li>
+<li>Names</li>
+</ul>
+<h4 id="resource-map-header"><a class="header" href="#resource-map-header">Resource map header</a></h4>
+<p>The resource map header is 28 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Unknown (reserved)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Unknown (next resource map)</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Unknown (file reference number)</td></tr>
+
+<tr><td>22</td><td>2</td><td></td><td>Unknown (resource file attribute flags)</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Entries list offset, which contains the byte offset relative to the start of the resource map</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Names list offset, which contains the byte offset relative to the start of the resource map</td></tr>
+
+</table>
+</div>
+
+<h4 id="resource-map-entries-list"><a class="header" href="#resource-map-entries-list">Resource map entries list</a></h4>
+<p>The entries (or type) list is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Number of entries, stored as <code>value - 1</code></td></tr>
+
+<tr><td>2</td><td>...</td><td></td><td>Array of <a href="#resource_map_entry">entries</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="resource_map_entry"><a class="header" href="#resource_map_entry">Resource map entry</a></h4>
+<p>The resource map entry is 8 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Type indicator (or signature)</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Number of resource descriptors, stored as <code>value - 1</code></td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Resource descriptors offset, which contains the byte offset relative to the start of the entries list</td></tr>
+
+</table>
+</div>
+
+<p>A resource map entry is comparable to an item in the
+<a href="#xml_plist_resource_fork_dictionary">XML plist resource-fork dictionary</a> such as the “blkx”
+item.</p>
+<h4 id="resource-descriptor"><a class="header" href="#resource-descriptor">Resource descriptor</a></h4>
+<p>The resource descriptor (or reference list) is 12 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Resource identifier. Corresponds to the "ID" value in the XML plist.</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#resource_name">Resource name</a> offset, which contains the byte offset relative to the start of the names list where 0xffff indicates the resource has no name. Corresponds to the "Name" value in the XML plist.</td></tr>
+
+<tr><td>4</td><td>1</td><td></td><td>Resource flags (0x20: Purgeable, 0x40: Protected). Corresponds to the "Attributes" value in the XML plist.</td></tr>
+
+<tr><td>5</td><td>3</td><td></td><td><a href="#resource_data">Resource data</a> offset, which contains the byte offset relative to the start of the resource data</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+
+</table>
+</div>
+
+<h4 id="resource_name"><a class="header" href="#resource_name">Resource name</a></h4>
+<p>The resource name is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Name size</td></tr>
+
+<tr><td>2</td><td>...</td><td></td><td>Name string, without an end-of-string character</td></tr>
+
+</table>
+</div>
+
 <h2 id="xml-plist"><a class="header" href="#xml-plist">XML plist</a></h2>
-<p>TODO: complete section</p>
+<p>The XML plist contains image metadata such as the <a href="#udif_block_table">block table</a>.</p>
 <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
 &lt;plist version="1.0"&gt;
@@ -4395,20 +4572,26 @@ image (CRawDiskImage).</p>
 </table>
 </div>
 
-<h3 id="xml-plist-resource-fork-dictionary"><a class="header" href="#xml-plist-resource-fork-dictionary">XML plist resource-fork dictionary</a></h3>
+<h3 id="xml_plist_resource_fork_dictionary"><a class="header" href="#xml_plist_resource_fork_dictionary">XML plist resource-fork dictionary</a></h3>
 <p>The resource-fork dictionary contains the following key-value pairs:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
-<tr><td>blkx</td><td>array of dictionaries</td></tr>
+<tr><td>blkx</td><td>array of dictionaries, which contains <a href="#udif_block_table">Block table</a> (or block extents) values</td></tr>
 
-<tr><td>plst</td><td>array of dictionaries</td></tr>
+<tr><td>LPic</td><td>optional array of dictionaries, which contains values related to license information</td></tr>
+
+<tr><td>plst</td><td>array of dictionaries, which contains values related to image properties</td></tr>
+
+<tr><td>STR#</td><td>optional array of dictionaries, which contains values related to license information</td></tr>
+
+<tr><td>TEXT</td><td>optional array of dictionaries, which contains values related to license information</td></tr>
 
 </table>
 </div>
 
-<h3 id="xml-plist-blkx-array-entry"><a class="header" href="#xml-plist-blkx-array-entry">XML plist blkx array entry</a></h3>
-<p>A blkx array entry contains the following key-value pairs:</p>
+<h3 id="xml-plist-array-entry"><a class="header" href="#xml-plist-array-entry">XML plist array entry</a></h3>
+<p>An array entry contains the following key-value pairs:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
@@ -4416,7 +4599,7 @@ image (CRawDiskImage).</p>
 
 <tr><td>CFName</td><td>string</td></tr>
 
-<tr><td>Data</td><td>string that contains base-64 encoded data of a <a href="#udif_block_table">block table</a></td></tr>
+<tr><td>Data</td><td>string that contains base-64 encoded data</td></tr>
 
 <tr><td>ID</td><td>string that contains a decimal formatted integer value</td></tr>
 
@@ -4425,6 +4608,9 @@ image (CRawDiskImage).</p>
 </table>
 </div>
 
+<blockquote>
+<p>Note the the blkx array appears the only one that uses CFName.</p>
+</blockquote>
 <h2 id="udif_block_table"><a class="header" href="#udif_block_table">Block table</a></h2>
 <p>The block table (BLKXTable) is of variable size and consists of:</p>
 <ul>
@@ -4448,19 +4634,9 @@ image (CRawDiskImage).</p>
 
 <tr><td>32</td><td>4</td><td></td><td>Unknown (BuffersNeeded)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Unknown (BlockDescriptors). Does this value correspond to the number of block table entries?</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Unknown (BlockDescriptors)</td></tr>
 
-<tr><td>40</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
-
-<tr><td>44</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
-
-<tr><td>48</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
-
-<tr><td>52</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
-
-<tr><td>56</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
-
-<tr><td>60</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
+<tr><td>40</td><td>6 x 4 = 24</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>64</td><td>4</td><td></td><td>Checksum type</td></tr>
 
@@ -4480,13 +4656,13 @@ image (CRawDiskImage).</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td><a href="#udif_block_table_entry_types">Entry type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Unknown (comment)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (comment?)</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Start sector, which contains the sector number relative to the start of the start sector of the block table</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the start of the UDIF image file</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the start of the segment data stream</td></tr>
 
 <tr><td>32</td><td>8</td><td></td><td>Data size, which contain the number of bytes of data stored, which is 0 for sparse data</td></tr>
 
@@ -4528,13 +4704,592 @@ image (CRawDiskImage).</p>
 
 <h2 id="udif-comment"><a class="header" href="#udif-comment">UDIF comment</a></h2>
 <p>TODO: complete section</p>
-<h2 id="udif-data-fork"><a class="header" href="#udif-data-fork">UDIF data fork</a></h2>
-<p>TODO: complete section</p>
-<h2 id="udif-resource-fork"><a class="header" href="#udif-resource-fork">UDIF resource fork</a></h2>
-<p>TODO: complete section</p>
 <h2 id="notes-3"><a class="header" href="#notes-3">Notes</a></h2>
 <p>Is the maximum compressed chunk size 2048 sectors?</p>
 <p>Comment seems to reference compressed data but has no size or number of sectors value.</p>
+<h2 id="encrypted-file"><a class="header" href="#encrypted-file">Encrypted file</a></h2>
+<h3 id="encypted_file_footer"><a class="header" href="#encypted_file_footer">Encrypted file footer</a></h3>
+<p>The encrypted file footer is 1276 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Identifier (UUID), used in Mac OS keychain as account identifier</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Block size, in number of bytes</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Key protector <a href="#algorithm_identifiers">encryption method</a></td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Key protector <a href="#padding_types">padding type</a></td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Key protector <a href="#encryption_modes">encryption mode</a></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Key protector key size, in number of bits</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Key protector initialization vector size</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td><a href="#algorithm_identifiers">Key derivation method</a></td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Key derivation number of iterations</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Key derivation salt size, in number of bytes</td></tr>
+
+<tr><td>56</td><td>32</td><td></td><td>Key derivation salt</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td>Block initialization vector size</td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Block <a href="#encryption_modes">encryption mode</a></td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Data (or block) <a href="#algorithm_identifiers">encryption method</a></td></tr>
+
+<tr><td>100</td><td>4</td><td></td><td>Block key size, in number of bits</td></tr>
+
+<tr><td>104</td><td>32</td><td></td><td>Block initialization vector</td></tr>
+
+<tr><td>136</td><td>4</td><td></td><td>Wrapped AES key size</td></tr>
+
+<tr><td>140</td><td>256</td><td></td><td>Wrapped AES key</td></tr>
+
+<tr><td>396</td><td>4</td><td></td><td><a href="#algorithm_identifiers">HMAC method</a></td></tr>
+
+<tr><td>400</td><td>4</td><td></td><td>Unknown (HMAC number of bits?)</td></tr>
+
+<tr><td>404</td><td>32</td><td></td><td>HMAC initialization vector</td></tr>
+
+<tr><td>436</td><td>4</td><td></td><td>Wrapped HMAC key size</td></tr>
+
+<tr><td>440</td><td>256</td><td></td><td>Wrapped HMAC key</td></tr>
+
+<tr><td>696</td><td>4</td><td></td><td>Integrity <a href="#algorithm_identifiers">encryption method</a></td></tr>
+
+<tr><td>700</td><td>4</td><td></td><td>Unknown (Integrity number of bits?)</td></tr>
+
+<tr><td>704</td><td>32</td><td></td><td>Integrity initialization vector</td></tr>
+
+<tr><td>736</td><td>4</td><td></td><td>Wrapped integrity key size</td></tr>
+
+<tr><td>740</td><td>256</td><td></td><td>Wrapped integrity key</td></tr>
+
+<tr><td>996</td><td>4</td><td></td><td>Unknown (data size)</td></tr>
+
+<tr><td>1000</td><td>256</td><td></td><td>Unknown (data)</td></tr>
+
+<tr><td>1256</td><td>4</td><td></td><td>Data fork offset, where the offset is relative from the start of the image file</td></tr>
+
+<tr><td>1260</td><td>4</td><td></td><td>Data fork size, in number of bytes</td></tr>
+
+<tr><td>1264</td><td>4</td><td>1</td><td>Encrypted file format version</td></tr>
+
+<tr><td>1268</td><td>8</td><td>"cdsaencr"</td><td>Signature</td></tr>
+
+</table>
+</div>
+
+<h3 id="encypted_file_header"><a class="header" href="#encypted_file_header">Encrypted file header</a></h3>
+<p>The encrypted file header is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"encrcdsa"</td><td>Signature</td></tr>
+
+<tr><td>8</td><td>4</td><td>2</td><td>Encrypted file format version</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Block initialization vector size, in number of bytes</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Block <a href="#encryption_modes">encryption mode</a></td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Data (or block) <a href="#algorithm_identifiers">encryption method</a></td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Block key size, in number of bits</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Initialization vector <a href="#algorithm_identifiers">HMAC method</a></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Initialization vector HMAC key size, in number of bits</td></tr>
+
+<tr><td>36</td><td>16</td><td></td><td>Identifier (UUID), used in Mac OS keychain as account identifier</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Block size, in number of bytes</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Data fork size, in number of bytes</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Data fork offset, where the offset is relative from the start of the image file</td></tr>
+
+<tr><td>72</td><td>4</td><td></td><td>Number of key protector descriptors</td></tr>
+
+<tr><td>76</td><td>...</td><td></td><td>Array of <a href="#encrypted_key_protector_descriptor">key protector descriptors</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="encrypted_key_protector_descriptor"><a class="header" href="#encrypted_key_protector_descriptor">Key protector descriptor</a></h4>
+<p>The key protector descriptor is 20 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#encrypted_unlock_types">Unlock type</a></td></tr>
+
+<tr><td>4</td><td>8</td><td></td><td>Data offset, where the offset is relative from the start of the image file</td></tr>
+
+<tr><td>12</td><td>8</td><td></td><td>Data size</td></tr>
+
+</table>
+</div>
+
+<h4 id="encrypted_unlock_types"><a class="header" href="#encrypted_unlock_types">Unlock types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td>CSSM_APPLE_UNLOCK_TYPE_KEY_DIRECT</td><td>Master key wrapped by passphrase, stored as <a href="#passphrase_wrapped_key">passphrase wrapped key</a></td></tr>
+
+<tr><td>2</td><td>CSSM_APPLE_UNLOCK_TYPE_WRAPPED_PRIVATE</td><td>Master key wrapped by a public key, stored as <a href="#public_key_wrapped_key">public key wrapped key</a></td></tr>
+
+<tr><td>3</td><td>CSSM_APPLE_UNLOCK_TYPE_KEYBAG</td><td>Master key wrapped by keybag</td></tr>
+
+</table>
+</div>
+
+<h4 id="passphrase_wrapped_key"><a class="header" href="#passphrase_wrapped_key">Passphrase wrapped key</a></h4>
+<p>The passphrase wrapped key is 616 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#algorithm_identifiers">Key derivation method</a></td></tr>
+
+<tr><td>4</td><td>8</td><td></td><td>Key derivation number of iterations</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Key derivation salt size, in number of bytes</td></tr>
+
+<tr><td>16</td><td>32</td><td></td><td>Key derivation salt</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Encryption initialization vector size, in number of bytes</td></tr>
+
+<tr><td>52</td><td>32</td><td></td><td>Encryption initialization vector</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Encryption key size, in number of bits</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td><a href="#algorithm_identifiers">Encryption method</a></td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td><a href="#padding_types">Padding type</a></td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td><a href="#encryption_modes">Encryption mode</a></td></tr>
+
+<tr><td>100</td><td>4</td><td></td><td>Encrypted data size</td></tr>
+
+<tr><td>104</td><td>64</td><td></td><td>Encrypted data</td></tr>
+
+<tr><td>168</td><td>448</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<p>The encrypted data can be decrypted using the following approach:</p>
+<ul>
+<li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
+determine the key encryption key (KEK) based on a passphrase.</li>
+<li>Pad the initialization vector with 0-byte values if necessesary, e.g. if initialization vector
+is 8 bytes but the encryption method (AES) requires an initialization vector of 16 bytes.</li>
+<li>Decrypt the encrypted data using the encryption method and mode, e.g. AES-CBC, with the number
+of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
+<li>Remove the padding, specified by the padding type.</li>
+</ul>
+<p>The decypted data is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>...</td><td></td><td>Master data encryption key (DEK)</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>HMAC key</td></tr>
+
+<tr><td>...</td><td>5</td><td>"CKIE\x00"</td><td>Signature</td></tr>
+
+</table>
+</div>
+
+<h4 id="public_key_wrapped_key"><a class="header" href="#public_key_wrapped_key">Public key wrapped key</a></h4>
+<p>TODO: complete section</p>
+<p>The public key wrapped key is 564 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Public key hash size</td></tr>
+
+<tr><td>4</td><td>20</td><td></td><td>Public key hash</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown (encryption method?)</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Unknown (size)</td></tr>
+
+<tr><td>52</td><td>256</td><td></td><td>Unknown</td></tr>
+
+<tr><td>308</td><td>256</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h4 id="keybag_wrapped_key"><a class="header" href="#keybag_wrapped_key">Keybag wrapped key</a></h4>
+<p>TODO: complete section</p>
+<h3 id="algorithm_identifiers"><a class="header" href="#algorithm_identifiers">Algorithm identifiers</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>CSSM_ALGID_NONE</td><td>None</td></tr>
+
+<tr><td>1</td><td>CSSM_ALGID_CUSTOM</td><td></td></tr>
+
+<tr><td>2</td><td>CSSM_ALGID_DH</td><td>Diffie Hellman key exchange</td></tr>
+
+<tr><td>3</td><td>CSSM_ALGID_PH</td><td>Pohlig Hellman key exchange</td></tr>
+
+<tr><td>4</td><td>CSSM_ALGID_KEA</td><td>Key Exchange Algorithm</td></tr>
+
+<tr><td>5</td><td>CSSM_ALGID_MD2</td><td>MD2</td></tr>
+
+<tr><td>6</td><td>CSSM_ALGID_MD4</td><td>MD4</td></tr>
+
+<tr><td>7</td><td>CSSM_ALGID_MD5</td><td>MD5</td></tr>
+
+<tr><td>8</td><td>CSSM_ALGID_SHA1</td><td>SHA-1</td></tr>
+
+<tr><td>9</td><td>CSSM_ALGID_NHASH</td><td>N-Hash</td></tr>
+
+<tr><td>10</td><td>CSSM_ALGID_HAVAL</td><td>HAVAL</td></tr>
+
+<tr><td>11</td><td>CSSM_ALGID_RIPEMD</td><td>RIPE-MD</td></tr>
+
+<tr><td>12</td><td>CSSM_ALGID_IBCHASH</td><td>IBC-Hash</td></tr>
+
+<tr><td>13</td><td>CSSM_ALGID_RIPEMAC</td><td>RIPE-MAC</td></tr>
+
+<tr><td>14</td><td>CSSM_ALGID_DES</td><td>DES</td></tr>
+
+<tr><td>15</td><td>CSSM_ALGID_DESX</td><td>DESX</td></tr>
+
+<tr><td>16</td><td>CSSM_ALGID_RDES</td><td>RDES</td></tr>
+
+<tr><td>17</td><td>CSSM_ALGID_3DES_3KEY_EDE (or CSSM_ALGID_3DES_3KEY)</td><td>Triple-DES with 3 keys applied encrypt, decrypt, encrypt (EDE)</td></tr>
+
+<tr><td>18</td><td>CSSM_ALGID_3DES_2KEY_EDE (or CSSM_ALGID_3DES_2KEY)</td><td>Triple-DES with 2 keys applied encrypt, decrypt, encrypt (EDE), with the first key used for the first and last operation</td></tr>
+
+<tr><td>19</td><td>CSSM_ALGID_3DES_1KEY_EEE</td><td>Triple-DES with 1 keys applied encrypt, encrypt, encrypt (EEE), with the first key used for all operation</td></tr>
+
+<tr><td>20</td><td>CSSM_ALGID_3DES_3KEY_EEE</td><td>Triple-DES with 3 keys applied encrypt, encrypt, encrypt (EEE)</td></tr>
+
+<tr><td>21</td><td>CSSM_ALGID_3DES_2KEY_EEE</td><td>Triple-DES with 2 keys applied encrypt, encrypt, encrypt (EEE), with the first key used for the first and last operation</td></tr>
+
+<tr><td>22</td><td>CSSM_ALGID_IDEA</td><td>IDEA</td></tr>
+
+<tr><td>23</td><td>CSSM_ALGID_RC2</td><td>RC2</td></tr>
+
+<tr><td>24</td><td>CSSM_ALGID_RC5</td><td>RC5</td></tr>
+
+<tr><td>25</td><td>CSSM_ALGID_RC4</td><td>RC4</td></tr>
+
+<tr><td>26</td><td>CSSM_ALGID_SEAL</td><td>SEAL</td></tr>
+
+<tr><td>27</td><td>CSSM_ALGID_CAST</td><td>CAST</td></tr>
+
+<tr><td>28</td><td>CSSM_ALGID_BLOWFISH</td><td>Blowfish</td></tr>
+
+<tr><td>29</td><td>CSSM_ALGID_SKIPJACK</td><td>Skipjac</td></tr>
+
+<tr><td>30</td><td>CSSM_ALGID_LUCIFER</td><td>Lucifer</td></tr>
+
+<tr><td>31</td><td>CSSM_ALGID_MADRYGA</td><td>Madryga</td></tr>
+
+<tr><td>32</td><td>CSSM_ALGID_FEAL</td><td>FEAL</td></tr>
+
+<tr><td>33</td><td>CSSM_ALGID_REDOC</td><td>RECOD 2</td></tr>
+
+<tr><td>34</td><td>CSSM_ALGID_REDOC3</td><td>RECOD 3</td></tr>
+
+<tr><td>35</td><td>CSSM_ALGID_LOKI</td><td>LOKI</td></tr>
+
+<tr><td>36</td><td>CSSM_ALGID_KHUFU</td><td>KHUFU</td></tr>
+
+<tr><td>37</td><td>CSSM_ALGID_KHAFRE</td><td>KHAFRE</td></tr>
+
+<tr><td>38</td><td>CSSM_ALGID_MMB</td><td>MMB</td></tr>
+
+<tr><td>39</td><td>CSSM_ALGID_GOST</td><td>GOST</td></tr>
+
+<tr><td>40</td><td>CSSM_ALGID_SAFER</td><td>SAFER (K-40, K-64, K-128)</td></tr>
+
+<tr><td>41</td><td>CSSM_ALGID_CRAB</td><td>CRAB</td></tr>
+
+<tr><td>42</td><td>CSSM_ALGID_RSA</td><td>RSA</td></tr>
+
+<tr><td>43</td><td>CSSM_ALGID_DSA</td><td>DSA</td></tr>
+
+<tr><td>44</td><td>CSSM_ALGID_MD5WithRSA</td><td>MD5/RSA</td></tr>
+
+<tr><td>45</td><td>CSSM_ALGID_MD2WithRSA</td><td>MD2/RSA</td></tr>
+
+<tr><td>46</td><td>CSSM_ALGID_ElGamal</td><td>ElGamal</td></tr>
+
+<tr><td>47</td><td>CSSM_ALGID_MD2Random</td><td>MD2-based random numbers</td></tr>
+
+<tr><td>48</td><td>CSSM_ALGID_MD5Random</td><td>MD5-based random numbers</td></tr>
+
+<tr><td>49</td><td>CSSM_ALGID_SHARandom</td><td>SHA-based random numbers</td></tr>
+
+<tr><td>50</td><td>CSSM_ALGID_DESRandom</td><td>DES-based random numbers</td></tr>
+
+<tr><td>51</td><td>CSSM_ALGID_SHA1WithRSA</td><td>SHA-1/RSA</td></tr>
+
+<tr><td>52</td><td>CSSM_ALGID_CDMF</td><td>CDMF</td></tr>
+
+<tr><td>53</td><td>CSSM_ALGID_CAST3</td><td>CAST3</td></tr>
+
+<tr><td>54</td><td>CSSM_ALGID_CAST5</td><td>CAST5</td></tr>
+
+<tr><td>55</td><td>CSSM_ALGID_GenericSecret</td><td></td></tr>
+
+<tr><td>56</td><td>CSSM_ALGID_ConcatBaseAndKey</td><td></td></tr>
+
+<tr><td>57</td><td>CSSM_ALGID_ConcatKeyAndBase</td><td></td></tr>
+
+<tr><td>58</td><td>CSSM_ALGID_ConcatBaseAndData</td><td></td></tr>
+
+<tr><td>59</td><td>CSSM_ALGID_ConcatDataAndBase</td><td></td></tr>
+
+<tr><td>60</td><td>CSSM_ALGID_XORBaseAndData</td><td></td></tr>
+
+<tr><td>61</td><td>CSSM_ALGID_ExtractFromKey</td><td></td></tr>
+
+<tr><td>62</td><td>CSSM_ALGID_SSL3PreMasterGen</td><td></td></tr>
+
+<tr><td>63</td><td>CSSM_ALGID_SSL3MasterDerive</td><td></td></tr>
+
+<tr><td>64</td><td>CSSM_ALGID_SSL3KeyAndMacDerive</td><td></td></tr>
+
+<tr><td>65</td><td>CSSM_ALGID_SSL3MD5_MAC</td><td></td></tr>
+
+<tr><td>66</td><td>CSSM_ALGID_SSL3SHA1_MAC</td><td></td></tr>
+
+<tr><td>67</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD5</td><td></td></tr>
+
+<tr><td>68</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD2</td><td></td></tr>
+
+<tr><td>69</td><td>CSSM_ALGID_PKCS5_PBKDF1_SHA1</td><td></td></tr>
+
+<tr><td>70</td><td>CSSM_ALGID_WrapLynks</td><td></td></tr>
+
+<tr><td>71</td><td>CSSM_ALGID_WrapSET_OAEP</td><td></td></tr>
+
+<tr><td>72</td><td>CSSM_ALGID_BATON</td><td></td></tr>
+
+<tr><td>73</td><td>CSSM_ALGID_ECDSA</td><td></td></tr>
+
+<tr><td>74</td><td>CSSM_ALGID_MAYFLY</td><td></td></tr>
+
+<tr><td>75</td><td>CSSM_ALGID_JUNIPER</td><td></td></tr>
+
+<tr><td>76</td><td>CSSM_ALGID_FASTHASH</td><td></td></tr>
+
+<tr><td>77</td><td>CSSM_ALGID_3DES</td><td></td></tr>
+
+<tr><td>78</td><td>CSSM_ALGID_SSL3MD5</td><td></td></tr>
+
+<tr><td>79</td><td>CSSM_ALGID_SSL3SHA1</td><td></td></tr>
+
+<tr><td>80</td><td>CSSM_ALGID_FortezzaTimestamp</td><td></td></tr>
+
+<tr><td>81</td><td>CSSM_ALGID_SHA1WithDSA</td><td></td></tr>
+
+<tr><td>82</td><td>CSSM_ALGID_SHA1WithECDSA</td><td></td></tr>
+
+<tr><td>83</td><td>CSSM_ALGID_DSA_BSAFE</td><td></td></tr>
+
+<tr><td>84</td><td>CSSM_ALGID_ECDH</td><td></td></tr>
+
+<tr><td>85</td><td>CSSM_ALGID_ECMQV</td><td></td></tr>
+
+<tr><td>86</td><td>CSSM_ALGID_PKCS12_SHA1_PBE</td><td></td></tr>
+
+<tr><td>87</td><td>CSSM_ALGID_ECNRA</td><td></td></tr>
+
+<tr><td>88</td><td>CSSM_ALGID_SHA1WithECNRA</td><td></td></tr>
+
+<tr><td>89</td><td>CSSM_ALGID_ECES</td><td></td></tr>
+
+<tr><td>90</td><td>CSSM_ALGID_ECAES</td><td></td></tr>
+
+<tr><td>91</td><td>CSSM_ALGID_SHA1HMAC</td><td></td></tr>
+
+<tr><td>92</td><td>CSSM_ALGID_FIPS186Random</td><td></td></tr>
+
+<tr><td>93</td><td>CSSM_ALGID_ECC</td><td></td></tr>
+
+<tr><td>94</td><td>CSSM_ALGID_MQV</td><td></td></tr>
+
+<tr><td>95</td><td>CSSM_ALGID_NRA</td><td></td></tr>
+
+<tr><td>96</td><td>CSSM_ALGID_IntelPlatformRandom</td><td></td></tr>
+
+<tr><td>97</td><td>CSSM_ALGID_UTC</td><td></td></tr>
+
+<tr><td>98</td><td>CSSM_ALGID_HAVAL3</td><td></td></tr>
+
+<tr><td>99</td><td>CSSM_ALGID_HAVAL4</td><td></td></tr>
+
+<tr><td>100</td><td>CSSM_ALGID_HAVAL5</td><td></td></tr>
+
+<tr><td>101</td><td>CSSM_ALGID_TIGER</td><td></td></tr>
+
+<tr><td>102</td><td>CSSM_ALGID_MD5HMAC</td><td></td></tr>
+
+<tr><td>103</td><td>CSSM_ALGID_PKCS5_PBKDF2</td><td>PBKDF2-HMAC-SHA1</td></tr>
+
+<tr><td>104</td><td>CSSM_ALGID_RUNNING_COUNTER</td><td></td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x80000000</td><td>CSSM_ALGID_VENDOR_DEFINED</td><td></td></tr>
+
+<tr><td>0x80000001</td><td>CSSM_ALGID_AES</td><td></td></tr>
+
+</table>
+</div>
+
+<h3 id="padding_types"><a class="header" href="#padding_types">Padding types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>CSSM_PADDING_NONE</td><td>No padding</td></tr>
+
+<tr><td>1</td><td>CSSM_PADDING_CUSTOM</td><td></td></tr>
+
+<tr><td>2</td><td>CSSM_PADDING_ZERO</td><td>Pad with 0</td></tr>
+
+<tr><td>3</td><td>CSSM_PADDING_ONE</td><td>Pad with 1</td></tr>
+
+<tr><td>4</td><td>CSSM_PADDING_ALTERNATE</td><td></td></tr>
+
+<tr><td>5</td><td>CSSM_PADDING_FF</td><td></td></tr>
+
+<tr><td>6</td><td>CSSM_PADDING_PKCS5</td><td>Pad using Public-Key Cryptography Standard (PKCS) 5 (RFC 2898)</td></tr>
+
+<tr><td>7</td><td>CSSM_PADDING_PKCS7</td><td>Pad using Public-Key Cryptography Standard (PKCS) 7 (RFC 2315)</td></tr>
+
+<tr><td>8</td><td>CSSM_PADDING_CIPHERSTEALING</td><td></td></tr>
+
+<tr><td>9</td><td>CSSM_PADDING_RANDOM</td><td></td></tr>
+
+<tr><td>10</td><td>CSSM_PADDING_PKCS1</td><td>Pad using Public-Key Cryptography Standard (PKCS) 1</td></tr>
+
+</table>
+</div>
+
+<h3 id="encryption_modes"><a class="header" href="#encryption_modes">Encryption modes</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>CSSM_ALGMODE_NONE</td><td></td></tr>
+
+<tr><td>1</td><td>CSSM_ALGMODE_CUSTOM</td><td></td></tr>
+
+<tr><td>2</td><td>CSSM_ALGMODE_ECB</td><td>Electronic CodeBook (ECB) mode</td></tr>
+
+<tr><td>3</td><td>CSSM_ALGMODE_ECBPad</td><td></td></tr>
+
+<tr><td>4</td><td>CSSM_ALGMODE_CBC</td><td>Cipher Block Chaining (CBC) mode, without padding</td></tr>
+
+<tr><td>5</td><td>CSSM_ALGMODE_CBC_IV8</td><td>Cipher Block Chaining (CBC) mode with 8 byte initialization vector, without padding</td></tr>
+
+<tr><td>6</td><td>CSSM_ALGMODE_CBCPadIV8</td><td>Cipher Block Chaining (CBC) mode with 8 byte initialization vector, with padding</td></tr>
+
+<tr><td>7</td><td>CSSM_ALGMODE_CFB</td><td></td></tr>
+
+<tr><td>8</td><td>CSSM_ALGMODE_CFB_IV8</td><td></td></tr>
+
+<tr><td>9</td><td>CSSM_ALGMODE_CFBPadIV8</td><td></td></tr>
+
+<tr><td>10</td><td>CSSM_ALGMODE_OFB</td><td></td></tr>
+
+<tr><td>11</td><td>CSSM_ALGMODE_OFB_IV8</td><td></td></tr>
+
+<tr><td>12</td><td>CSSM_ALGMODE_OFBPadIV8</td><td></td></tr>
+
+<tr><td>13</td><td>CSSM_ALGMODE_COUNTER</td><td></td></tr>
+
+<tr><td>14</td><td>CSSM_ALGMODE_BC</td><td></td></tr>
+
+<tr><td>15</td><td>CSSM_ALGMODE_PCBC</td><td></td></tr>
+
+<tr><td>16</td><td>CSSM_ALGMODE_CBCC</td><td></td></tr>
+
+<tr><td>17</td><td>CSSM_ALGMODE_OFBNLF</td><td></td></tr>
+
+<tr><td>18</td><td>CSSM_ALGMODE_PBC</td><td></td></tr>
+
+<tr><td>19</td><td>CSSM_ALGMODE_PFB</td><td></td></tr>
+
+<tr><td>20</td><td>CSSM_ALGMODE_CBCPD</td><td></td></tr>
+
+<tr><td>21</td><td>CSSM_ALGMODE_PUBLIC_KEY</td><td></td></tr>
+
+<tr><td>22</td><td>CSSM_ALGMODE_PRIVATE_KEY</td><td></td></tr>
+
+<tr><td>23</td><td>CSSM_ALGMODE_SHUFFLE</td><td></td></tr>
+
+<tr><td>24</td><td>CSSM_ALGMODE_ECB64</td><td></td></tr>
+
+<tr><td>25</td><td>CSSM_ALGMODE_CBC64</td><td></td></tr>
+
+<tr><td>26</td><td>CSSM_ALGMODE_OFB64</td><td></td></tr>
+
+<tr><td>28</td><td>CSSM_ALGMODE_CFB32</td><td></td></tr>
+
+<tr><td>29</td><td>CSSM_ALGMODE_CFB16</td><td></td></tr>
+
+<tr><td>30</td><td>CSSM_ALGMODE_CFB8</td><td></td></tr>
+
+<tr><td>31</td><td>CSSM_ALGMODE_WRAP</td><td></td></tr>
+
+<tr><td>32</td><td>CSSM_ALGMODE_PRIVATE_WRAP</td><td></td></tr>
+
+<tr><td>33</td><td>CSSM_ALGMODE_RELAYX</td><td></td></tr>
+
+<tr><td>34</td><td>CSSM_ALGMODE_ECB128</td><td></td></tr>
+
+<tr><td>35</td><td>CSSM_ALGMODE_ECB96</td><td></td></tr>
+
+<tr><td>36</td><td>CSSM_ALGMODE_CBC128</td><td></td></tr>
+
+<tr><td>37</td><td>CSSM_ALGMODE_OAEP_HASH</td><td></td></tr>
+
+<tr><td>38</td><td>CSSM_ALGMODE_PKCS1_EME_V15</td><td></td></tr>
+
+<tr><td>39</td><td>CSSM_ALGMODE_PKCS1_EME_OAEP</td><td></td></tr>
+
+<tr><td>40</td><td>CSSM_ALGMODE_PKCS1_EMSA_V15</td><td></td></tr>
+
+<tr><td>41</td><td>CSSM_ALGMODE_ISO_9796</td><td></td></tr>
+
+<tr><td>42</td><td>CSSM_ALGMODE_X9_31</td><td></td></tr>
+
+</table>
+</div>
+
+<h2 id="format-edge-cases-and-corruption-scenarios-1"><a class="header" href="#format-edge-cases-and-corruption-scenarios-1">Format edge cases and corruption scenarios</a></h2>
+<h3 id="non-sequential-segment-files"><a class="header" href="#non-sequential-segment-files">Non-sequential segment files</a></h3>
+<p>It is currently unknown if non-sequential segment files are supported.</p>
+<h3 id="xml-plist-and-resource-fork-both-in-use"><a class="header" href="#xml-plist-and-resource-fork-both-in-use">XML plist and resource fork both in use</a></h3>
+<p>The XML plist and resource fork could be used simultaneously, allowing for a single UDIF to
+contain multiple images.</p>
+<h3 id="xml-plist-andor-resource-fork-in-non-first-segment-files"><a class="header" href="#xml-plist-andor-resource-fork-in-non-first-segment-files">XML plist and/or resource fork in non-first segment files</a></h3>
+<p>The XML plist and/or resource fork could be used in non-first segment files.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="virtual-hard-disk-vhd-image-format"><a class="header" href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD) image format</a></h1>
 <p>The Virtual Hard Disk (VHD) format is used by Microsoft vitualization products
@@ -4596,7 +5351,7 @@ a differential hard disk image in files named something similar like:</p>
 </code></pre>
 <p>Where the date and time seems to be stored in UTC and &lt;name&gt; represents the
 name of the parent image.</p>
-<h2 id="file-footer-1"><a class="header" href="#file-footer-1">File footer</a></h2>
+<h2 id="file-footer"><a class="header" href="#file-footer">File footer</a></h2>
 <p>The file footer is 512 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -6166,7 +6921,7 @@ are set to 0.</p>
 </table>
 </div>
 
-<h2 id="corruption-scenarios-1"><a class="header" href="#corruption-scenarios-1">Corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios-2"><a class="header" href="#format-edge-cases-and-corruption-scenarios-2">Format edge cases and corruption scenarios</a></h2>
 <p>The total size specified by the number of grain table entries is lager than
 size specified by the maximum number of sectors. Seen in VMDK images generated
 by qemu-img.</p>
@@ -6215,7 +6970,7 @@ Macintosh computers the <a href="#guid-partition-table-gpt-format">GUID Partitio
 </table>
 </div>
 
-<h3 id="terminology-1"><a class="header" href="#terminology-1">Terminology</a></h3>
+<h3 id="terminology-2"><a class="header" href="#terminology-2">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -6942,7 +7697,7 @@ computers.</p>
 </table>
 </div>
 
-<h3 id="terminology-2"><a class="header" href="#terminology-2">Terminology</a></h3>
+<h3 id="terminology-3"><a class="header" href="#terminology-3">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -7394,7 +8149,7 @@ Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
 <p>A file system format is used to manage the storage of files.</p>
-<h2 id="terminology-3"><a class="header" href="#terminology-3">Terminology</a></h2>
+<h2 id="terminology-4"><a class="header" href="#terminology-4">Terminology</a></h2>
 <ul>
 <li><strong>File entry (file system entry)</strong>: an object that represent an element within the file system,
 such as a file or directory. A file system typically stores metadata of a file entry, such as the
@@ -7423,7 +8178,7 @@ sectors. Can be compressed, encrypted or sparse.</li>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="apple-file-system-apfs"><a class="header" href="#apple-file-system-apfs">Apple File System (APFS)</a></h1>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
-iOS. APFS succeeds the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
+iOS. APFS supersedes the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
 <h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
 <p>APFS consists of:</p>
@@ -7458,7 +8213,7 @@ System Reference documentation.</p>
 recent Unicode versions has been observed.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
-<h3 id="terminology-4"><a class="header" href="#terminology-4">Terminology</a></h3>
+<h3 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -7982,13 +8737,13 @@ the container.</p>
 
 <tr><td>132</td><td>4</td><td></td><td>Next available index in the checkpoint data area (nx_xp_data_next)</td></tr>
 
-<tr><td>136</td><td>4</td><td></td><td>Start index in the checkpoint descriptor area used by the superblock (nx_xp_desc_index)</td></tr>
+<tr><td>136</td><td>4</td><td></td><td>Index of the checkpoint in the checkpoint descriptor area (nx_xp_desc_index)</td></tr>
 
-<tr><td>140</td><td>4</td><td></td><td>Number of blocks in the checkpoint descriptor area used by the superblock (nx_xp_desc_len)</td></tr>
+<tr><td>140</td><td>4</td><td></td><td>Size of the checkpoint in the checkpoint descriptor area, in number of blocks (nx_xp_desc_len)</td></tr>
 
-<tr><td>144</td><td>4</td><td></td><td>Start index in the checkpoint data area used by the superblock (nx_xp_data_index)</td></tr>
+<tr><td>144</td><td>4</td><td></td><td>Index of the checkpoint in the checkpoint data area (nx_xp_data_index)</td></tr>
 
-<tr><td>148</td><td>4</td><td></td><td>Number of blocks in the checkpoint data area used by the superblock (nx_xp_data_len)</td></tr>
+<tr><td>148</td><td>4</td><td></td><td>Size of the checkpoint in the checkpoint data area, in number of blocks (nx_xp_data_len)</td></tr>
 
 <tr><td>152</td><td>8</td><td></td><td>Space manager object identifier (nx_spaceman_oid), where the object identifier can be resolved in the <a href="#checkpoint_map">checkpoint map</a></td></tr>
 
@@ -7996,7 +8751,7 @@ the container.</p>
 
 <tr><td>168</td><td>8</td><td></td><td>Reaper object identifier (nx_reaper_oid), where the object identifier can be resolved in the <a href="#checkpoint_map">checkpoint map</a></td></tr>
 
-<tr><td>176</td><td>4</td><td></td><td>Unknown (nx_test_type)</td></tr>
+<tr><td>176</td><td>4</td><td></td><td>Unknown (reserved for testing) (nx_test_type)</td></tr>
 
 <tr><td>180</td><td>4</td><td></td><td>Maximum number of volumes (nx_max_file_systems) supported by the container</td></tr>
 
@@ -8012,7 +8767,7 @@ the container.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1256</td><td>8</td><td></td><td>Unknown (nx_evict_mapping_tree_oid)</td></tr>
+<tr><td>1256</td><td>8</td><td></td><td>Eviction tree (physical) object identifier (nx_evict_mapping_tree_oid)</td></tr>
 
 <tr><td>1264</td><td>8</td><td></td><td><a href="#container_flags">Container flags</a> (nx_flags)</td></tr>
 
@@ -8024,13 +8779,13 @@ the container.</p>
 
 <tr><td>1296</td><td>8</td><td></td><td>Container key bag area block number (nx_keybag_base), which contains a block number relative to the start of the container</td></tr>
 
-<tr><td>1304</td><td>8</td><td></td><td>Contaner key bag area number of blocks (nx_keybag_blocks)</td></tr>
+<tr><td>1304</td><td>8</td><td></td><td>Container key bag area number of blocks (nx_keybag_blocks)</td></tr>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1312</td><td>4 x 8 = 32</td><td></td><td>Unknown (nx_ephemeral_info)</td></tr>
+<tr><td>1312</td><td>4 x 8 = 32</td><td></td><td>Ephemeral information (nx_ephemeral_info)</td></tr>
 
-<tr><td>1344</td><td>8</td><td></td><td>Unknown (Test object identifier) (nx_test_oid)</td></tr>
+<tr><td>1344</td><td>8</td><td></td><td>Unknown (reserved for testing) (nx_test_oid)</td></tr>
 
 <tr><td>1352</td><td>8</td><td></td><td><a href="#fusion_middle_tree">Fusion middle tree</a> block number (nx_fusion_mt_oid), which contains a block number relative to the start of the container</td></tr>
 
@@ -8044,9 +8799,15 @@ the container.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>1384</td><td>8</td><td></td><td>Unknown (nx_newest_mounted_version)</td></tr>
+<tr><td>1384</td><td>8</td><td></td><td>Newest version of software that mounted the container (nx_newest_mounted_version)</td></tr>
 
-<tr><td>1392</td><td>16</td><td></td><td>Unknown (nx_mkb_locker)</td></tr>
+<tr><td colspan="4"><em>Media key area (nx_mkb_locker)</em></td></tr>
+
+<tr><td>1392</td><td>8</td><td></td><td>Media key area block number, which contains a block number relative to the start of the container</td></tr>
+
+<tr><td>1400</td><td>8</td><td></td><td>Media key area number of blocks</td></tr>
+
+<tr><td colspan="4"> </td></tr>
 
 <tr><td>1408</td><td>2688</td><td></td><td>Unknown (empty values)</td></tr>
 
@@ -8818,7 +9579,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>3</td><td></td><td>Volume key, which contains a <a href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></td></tr>
 
-<tr><td>4</td><td></td><td>Password Hint, which contains a string without end-of-string character</td></tr>
+<tr><td>4</td><td></td><td>Password hint, which contains a string without end-of-string character</td></tr>
 
 </table>
 </div>
@@ -8858,12 +9619,12 @@ value tags:</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0xa3</td><td></td><td><a href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encrypted Key (KEK) packed object</a></td></tr>
+<tr><td>0xa3</td><td></td><td><a href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encryption Key (KEK) packed object</a></td></tr>
 
 </table>
 </div>
 
-<h5 id="key_bag_wrapped_kek_packed_object"><a class="header" href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encrypted Key (KEK) packed object</a></h5>
+<h5 id="key_bag_wrapped_kek_packed_object"><a class="header" href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encryption Key (KEK) packed object</a></h5>
 <p>The packed object value tag of a wrapped kek encrypted key is 0xa3 and contains the following
 attribute value tags:</p>
 <div class="table-wrapper">
@@ -8873,19 +9634,19 @@ attribute value tags:</p>
 
 <tr><td>0x81</td><td></td><td>Volume identifer, which contains a big-endian UUID</td></tr>
 
-<tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encrypted Key (KEK) metadata</a></td></tr>
+<tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></td></tr>
 
-<tr><td>0x83</td><td></td><td>Wrapped Key Encrypted Key (KEK) data</td></tr>
+<tr><td>0x83</td><td></td><td>Wrapped Key Encryption Key (KEK) data</td></tr>
 
-<tr><td>0x84</td><td></td><td>Number of iterations</td></tr>
+<tr><td>0x84</td><td></td><td>Number of iterations for the PBKDF2 algorithm</td></tr>
 
 <tr><td>0x85</td><td></td><td>Salt for the PBKDF2 algorithm</td></tr>
 
 </table>
 </div>
 
-<h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encrypted Key (KEK) metadata</a></h4>
-<p>The Wrapped Key Encrypted Key (KEK) metadata is 8 bytes in size and consists of:</p>
+<h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></h4>
+<p>The Wrapped Key Encryption Key (KEK) metadata is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8962,7 +9723,7 @@ directly read.</p>
 
 <tr><td>32</td><td>4</td><td>"APSB"</td><td>Signature (apfs_magic)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Unknown (apfs_fs_index)</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>File system index (apfs_fs_index)</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td><a href="#volume_feature_flags">Volume feature flags</a> (apfs_features)</td></tr>
 
@@ -8994,9 +9755,9 @@ directly read.</p>
 
 <tr><td>152</td><td>8</td><td></td><td><a href="#snapshot_metadata_tree">Snapshot metadata tree</a> block number (apfs_snap_meta_tree_oid)</td></tr>
 
-<tr><td>160</td><td>8</td><td></td><td>Unknown (apfs_revert_to_xid)</td></tr>
+<tr><td>160</td><td>8</td><td></td><td>Rollback transaction identifier (apfs_revert_to_xid)</td></tr>
 
-<tr><td>168</td><td>8</td><td></td><td>Unknown (apfs_revert_to_sblock_oid)</td></tr>
+<tr><td>168</td><td>8</td><td></td><td>Rollback (physical) object identifier (apfs_revert_to_sblock_oid)</td></tr>
 
 <tr><td>176</td><td>8</td><td></td><td>Next (available) file system object identifier (apfs_next_obj_id), where the upper 32-bit can contain 0xffffffff</td></tr>
 
@@ -9028,27 +9789,27 @@ directly read.</p>
 
 <tr><td>960</td><td>4</td><td></td><td>Next (available) document identifier (apfs_next_doc_id)</td></tr>
 
-<tr><td>964</td><td>2</td><td></td><td>Unknown (apfs_role)</td></tr>
+<tr><td>964</td><td>2</td><td></td><td><a href="#volume_role_flags">Volume role flags</a> (apfs_role)</td></tr>
 
 <tr><td>966</td><td>2</td><td></td><td>Unknown (reserved)</td></tr>
 
-<tr><td>968</td><td>8</td><td></td><td>Unknown (apfs_root_to_xid)</td></tr>
+<tr><td>968</td><td>8</td><td></td><td>Active snapshot transaction identifier (apfs_root_to_xid)</td></tr>
 
-<tr><td>976</td><td>8</td><td></td><td>Unknown (apfs_er_state_oid)</td></tr>
+<tr><td>976</td><td>8</td><td></td><td>Encryption progress state (apfs_er_state_oid)</td></tr>
 
-<tr><td>984</td><td>8</td><td></td><td>Unknown (apfs_cloneinfo_id_epoch)</td></tr>
+<tr><td>984</td><td>8</td><td></td><td>Largest clone object identifier (apfs_cloneinfo_id_epoch)</td></tr>
 
-<tr><td>992</td><td>8</td><td></td><td>Unknown (apfs_cloneinfo_xid)</td></tr>
+<tr><td>992</td><td>8</td><td></td><td>Largest clone transaction identifier (apfs_cloneinfo_xid)</td></tr>
 
-<tr><td>1000</td><td>8</td><td></td><td>Unknown (apfs_snap_meta_ext_oid)</td></tr>
+<tr><td>1000</td><td>8</td><td></td><td>Extended snapsnot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
 
 <tr><td>1008</td><td>16</td><td></td><td>Volume group identifier (apfs_volume_group_id), which contains a big-endian UUID</td></tr>
 
-<tr><td>1024</td><td>8</td><td></td><td>Unknown (apfs_integrity_meta_oid)</td></tr>
+<tr><td>1024</td><td>8</td><td></td><td>Integrity metadata (virtual) object identifier (apfs_integrity_meta_oid)</td></tr>
 
-<tr><td>1032</td><td>8</td><td></td><td>Unknown (apfs_fext_tree_oid)</td></tr>
+<tr><td>1032</td><td>8</td><td></td><td>Extent tree (virtual) object identifier (apfs_fext_tree_oid)</td></tr>
 
-<tr><td>1040</td><td>4</td><td></td><td>Unknown (apfs_fext_tree_type)</td></tr>
+<tr><td>1040</td><td>4</td><td></td><td>Extent tree <a href="#object_types">object type</a> (apfs_fext_tree_type)</td></tr>
 
 <tr><td>1044</td><td>4</td><td></td><td>Unknown (reserved_type)</td></tr>
 
@@ -9161,6 +9922,27 @@ directly read.</p>
 <tr><td>0x0000000000000020</td><td>APFS_INCOMPAT_SEALED_VOLUME</td><td>Unknown</td></tr>
 
 <tr><td>0x0000000000000040</td><td>APFS_INCOMPAT_RESERVED_40</td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="volume_role_flags"><a class="header" href="#volume_role_flags">Volume role flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td>APFS_VOL_ROLE_NONE</td><td>None</td></tr>
+
+<tr><td>0x0001</td><td>APFS_VOL_ROLE_SYSTEM</td><td>System</td></tr>
+
+<tr><td>0x0002</td><td>APFS_VOL_ROLE_USER</td><td>User</td></tr>
+
+<tr><td>0x0004</td><td>APFS_VOL_ROLE_RECOVERY</td><td>Recovery</td></tr>
+
+<tr><td>0x0008</td><td>APFS_VOL_ROLE_VM</td><td>VM</td></tr>
+
+<tr><td>0x0010</td><td>APFS_VOL_ROLE_PREBOOT</td><td>Preboot</td></tr>
+
+<tr><td>0x0020</td><td>APFS_VOL_ROLE_INSTALLER</td><td>Installer</td></tr>
 
 </table>
 </div>
@@ -10154,7 +10936,7 @@ extents. A sparse file extent has a physical block number of 0.</p>
 <p>The file content data is stored in a “com.apple.ResourceFork”
 <a href="#extended_attribute">extended attribute</a>.</p>
 <p>Also see: <a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>.</p>
-<h3 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h3>
+<h3 id="resource-fork-1"><a class="header" href="#resource-fork-1">Resource fork</a></h3>
 <p>TODO: complete this section.</p>
 <h3 id="extended-attribute-named-fork"><a class="header" href="#extended-attribute-named-fork">Extended attribute (named fork)</a></h3>
 <p>TODO: complete this section.</p>
@@ -10311,7 +11093,7 @@ container.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<h2 id="corruption-scenarios-2"><a class="header" href="#corruption-scenarios-2">Corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios-3"><a class="header" href="#format-edge-cases-and-corruption-scenarios-3">Format edge cases and corruption scenarios</a></h2>
 <h3 id="container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted"><a class="header" href="#container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted">Container key bag is hardware encrypted but volume is not encrypted</a></h3>
 <p>Seen in APFS containers created by certain digital forensics tools. The container key bag is either
 hardware encrypted or contains random data but the volume is not encrypted.</p>
@@ -11019,7 +11801,7 @@ block groups of the meta block group.</p>
 
 <tr><td>372</td><td>1</td><td></td><td>Number of block groups per flex block group, which is stored as: 2 ^ value</td></tr>
 
-<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_types">Checksum type</a></td></tr>
+<tr><td>373</td><td>1</td><td></td><td><a href="#checksum_types-1">Checksum type</a></td></tr>
 
 <tr><td>374</td><td>1</td><td></td><td>Unknown (encryption level)</td></tr>
 
@@ -11317,7 +12099,7 @@ RO_COMPAT_ are used interchangeably.</p>
 the upper 8-bits of the read-only compatible feature flags are set as in
 0xff000003. debugfs identifies these as FEATURE_R24 - FEATURE_R31.</p>
 </blockquote>
-<h3 id="checksum_types"><a class="header" href="#checksum_types">Checksum types</a></h3>
+<h3 id="checksum_types-1"><a class="header" href="#checksum_types-1">Checksum types</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -12284,7 +13066,7 @@ only set the first 4 bytes to 0 for the terminator.</p>
 <blockquote>
 <p>Note that the excluded bitmap is used for snapshots.</p>
 </blockquote>
-<h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Corruption scenarios</a></h2>
+<h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="file-entry-with-invalid-extents-header-signature"><a class="header" href="#file-entry-with-invalid-extents-header-signature">File entry with invalid extents header signature</a></h3>
 <p>File content inaccessible but file entry metadata and extended attributes
 accessible.</p>
@@ -12747,7 +13529,7 @@ data.</p>
 </table>
 </div>
 
-<h3 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h3>
+<h3 id="terminology-6"><a class="header" href="#terminology-6">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -13431,7 +14213,7 @@ volume.</p>
 </table>
 </div>
 
-<h3 id="terminology-6"><a class="header" href="#terminology-6">Terminology</a></h3>
+<h3 id="terminology-7"><a class="header" href="#terminology-7">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -15595,7 +16377,7 @@ typedef FourCharCode  OSType;
 <p>The file content size is stored in the data fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
-<h3 id="resource-fork-1"><a class="header" href="#resource-fork-1">Resource fork</a></h3>
+<h3 id="resource-fork-2"><a class="header" href="#resource-fork-2">Resource fork</a></h3>
 <p>The file content size is stored in the resource fork descriptor of the
 <a href="#catalog_file_record">catalog file record</a>.</p>
 <p>The extents of the file content are stored in the fork descriptor and extents overflow file.</p>
@@ -15661,7 +16443,7 @@ floppy disks.</p>
 </table>
 </div>
 
-<h3 id="terminology-7"><a class="header" href="#terminology-7">Terminology</a></h3>
+<h3 id="terminology-8"><a class="header" href="#terminology-8">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Term</th><th>Description</th></thead>
@@ -15942,7 +16724,7 @@ above.</p>
 </blockquote>
 <p>Windows does not necessarily uses the latest format version, e.g. Windows 10 (1809)
 has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
-<h3 id="terminology-8"><a class="header" href="#terminology-8">Terminology</a></h3>
+<h3 id="terminology-9"><a class="header" href="#terminology-9">Terminology</a></h3>
 <h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
 <p>NTFS refers to it file system blocks as clusters. Note that these are not the
 same as the physical clusters of a harddisk. For clarity this document will
@@ -18362,7 +19144,7 @@ not updated. For now the latter is assumed.</p>
 </table>
 </div>
 
-<h2 id="corruption_scenarios-1"><a class="header" href="#corruption_scenarios-1">Corruption scenarios</a></h2>
+<h2 id="corruption_scenarios-1"><a class="header" href="#corruption_scenarios-1">Format edge cases and corruption scenarios</a></h2>
 <h3 id="data-steam-with-inconsistent-data-flags"><a class="header" href="#data-steam-with-inconsistent-data-flags">Data steam with inconsistent data flags</a></h3>
 <p>An MFT entry contains an $ATTRIBUTE_LIST attribute that contains multiple $DATA
 attributes. The $DATA attributes define a LZNT1 compressed data stream though
