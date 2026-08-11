@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6f1a40b2.js";
+            window.path_to_searchindex_js = "searchindex-ab6dbf22.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f6c543e.js"></script>
@@ -4193,7 +4193,7 @@ be stored across multiple segment files.</p>
 </table>
 </div>
 
-<p>An UDIF image can also be encrypted.</p>
+<p>UDIF images can be encrypted, where each encrypted segment file has its own key protectors.</p>
 <h3 id="terminology-1"><a class="header" href="#terminology-1">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
@@ -4224,19 +4224,35 @@ image (CRawDiskImage).</p>
 </ul>
 <h3 id="encrypted-image-format"><a class="header" href="#encrypted-image-format">Encrypted image format</a></h3>
 <h4 id="encrypted-image-format-version-1"><a class="header" href="#encrypted-image-format-version-1">Encrypted image format version 1</a></h4>
+<p>Encrypted image format version 1 supports the following key protectors:</p>
+<ul>
+<li>Passphrase</li>
+</ul>
 <p>A version 1 encrypted segment file consist of:</p>
 <ul>
-<li>Data fork, containing encyrypted UDIF data</li>
+<li>Data fork, containing encrypted UDIF data</li>
 <li><a href="#encypted_file_footer">Encrypted file footer</a> at the end of the file</li>
 </ul>
+<blockquote>
+<p>Note that the encrypted UDIF data can contain an uncompressed UDIF image without file footer.</p>
+</blockquote>
 <h4 id="encrypted-image-format-version-2"><a class="header" href="#encrypted-image-format-version-2">Encrypted image format version 2</a></h4>
+<p>Encrypted image format version 2 supports the following key protectors:</p>
+<ul>
+<li>Passphrase</li>
+<li>Public key</li>
+<li>Unknown (keybag)</li>
+</ul>
 <p>A version 2 encrypted segment file consist of:</p>
 <ul>
 <li><a href="#encypted_file_header">Encrypted file header</a> at the start of the file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
-<li>Data fork, containing encyrypted UDIF data</li>
+<li>Data fork, containing encrypted UDIF data</li>
 </ul>
+<blockquote>
+<p>Note that the encrypted UDIF data can contain an uncompressed UDIF image without file footer.</p>
+</blockquote>
 <h3 id="characteristics-4"><a class="header" href="#characteristics-4">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
@@ -4316,8 +4332,10 @@ and consists of:</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
+<p>In an encrypted image file the offsets are relative from the start of the unencrypted image file.</p>
 <blockquote>
-<p>Note that the XML plist size can be 0, such as in an UDIF stub (UDxx) image.</p>
+<p>Note that both the XML plist and resource fork size can be 0, such as in an UDIF stub (UDxx)
+image.</p>
 </blockquote>
 <h3 id="image_flags"><a class="header" href="#image_flags">Image flags</a></h3>
 <div class="table-wrapper">
@@ -4729,9 +4747,9 @@ item.</p>
 
 <tr><td>40</td><td>4</td><td></td><td><a href="#algorithm_identifiers">Key derivation method</a></td></tr>
 
-<tr><td>44</td><td>4</td><td></td><td>Key derivation number of iterations</td></tr>
+<tr><td>44</td><td>4</td><td></td><td>Unknown</td></tr>
 
-<tr><td>48</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>48</td><td>4</td><td></td><td>Key derivation number of iterations</td></tr>
 
 <tr><td>52</td><td>4</td><td></td><td>Key derivation salt size, in number of bytes</td></tr>
 
@@ -4741,31 +4759,31 @@ item.</p>
 
 <tr><td>92</td><td>4</td><td></td><td>Block <a href="#encryption_modes">encryption mode</a></td></tr>
 
-<tr><td>96</td><td>4</td><td></td><td>Data (or block) <a href="#algorithm_identifiers">encryption method</a></td></tr>
+<tr><td>96</td><td>4</td><td></td><td>Block <a href="#algorithm_identifiers">encryption method</a></td></tr>
 
 <tr><td>100</td><td>4</td><td></td><td>Block key size, in number of bits</td></tr>
 
-<tr><td>104</td><td>32</td><td></td><td>Block initialization vector</td></tr>
+<tr><td>104</td><td>32</td><td></td><td>Unknown (Wrapped block (or master) data encryption key (DEK) initialization vector?)</td></tr>
 
-<tr><td>136</td><td>4</td><td></td><td>Wrapped AES key size</td></tr>
+<tr><td>136</td><td>4</td><td></td><td>Wrapped block (or master) data encryption key (DEK) size</td></tr>
 
-<tr><td>140</td><td>256</td><td></td><td>Wrapped AES key</td></tr>
+<tr><td>140</td><td>256</td><td></td><td>Wrapped block (or master) data encryption key (DEK)</td></tr>
 
 <tr><td>396</td><td>4</td><td></td><td><a href="#algorithm_identifiers">HMAC method</a></td></tr>
 
-<tr><td>400</td><td>4</td><td></td><td>Unknown (HMAC number of bits?)</td></tr>
+<tr><td>400</td><td>4</td><td></td><td>HMAC key size, in number of bits</td></tr>
 
-<tr><td>404</td><td>32</td><td></td><td>HMAC initialization vector</td></tr>
+<tr><td>404</td><td>32</td><td></td><td>Unknown (Wrapped block HMAC initialization vector?)</td></tr>
 
-<tr><td>436</td><td>4</td><td></td><td>Wrapped HMAC key size</td></tr>
+<tr><td>436</td><td>4</td><td></td><td>Wrapped block HMAC key size</td></tr>
 
-<tr><td>440</td><td>256</td><td></td><td>Wrapped HMAC key</td></tr>
+<tr><td>440</td><td>256</td><td></td><td>Wrapped block HMAC key</td></tr>
 
 <tr><td>696</td><td>4</td><td></td><td>Integrity <a href="#algorithm_identifiers">encryption method</a></td></tr>
 
-<tr><td>700</td><td>4</td><td></td><td>Unknown (Integrity number of bits?)</td></tr>
+<tr><td>700</td><td>4</td><td></td><td>Integrity key size, in number of bits</td></tr>
 
-<tr><td>704</td><td>32</td><td></td><td>Integrity initialization vector</td></tr>
+<tr><td>704</td><td>32</td><td></td><td>Unknown (Wrapped integrity key initialization vector?)</td></tr>
 
 <tr><td>736</td><td>4</td><td></td><td>Wrapped integrity key size</td></tr>
 
@@ -4786,6 +4804,48 @@ item.</p>
 </table>
 </div>
 
+<p>Key data can be obtained from the wrapped key data using the following approach (presumably based
+on RFC 3537):</p>
+<ul>
+<li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
+determine the key encryption key (KEK) based on a passphrase.</li>
+<li>Pad the initialization vector [0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05] with 0-byte values
+if necessesary, e.g. if initialization vector is 8 bytes but the encryption method (AES) requires
+an initialization vector of 16 bytes.</li>
+<li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
+of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
+<li>Remove the padding, specified by the padding type.</li>
+<li>Reverse the resulting intermediate key data.</li>
+</ul>
+<p>The intermediate key data is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Initialization vector</td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Wrapped key data</td></tr>
+
+</table>
+</div>
+
+<ul>
+<li>Pad the initialization vector of the intermediate key data with 0-byte values if necessesary.</li>
+<li>Decrypt the wrapped key data (of the intermediate key data) using the encryption method and mode,
+e.g. DES3-CBC, with the number of bits of the KEK (defined by encryption key size) and the
+initialization vector (of the intermediate key data) if applicable.</li>
+<li>Remove the padding, specified by the padding type.</li>
+</ul>
+<p>The decypted key data is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>0</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>...</td><td></td><td>Key data</td></tr>
+
+</table>
+</div>
+
 <h3 id="encypted_file_header"><a class="header" href="#encypted_file_header">Encrypted file header</a></h3>
 <p>The encrypted file header is of variable size and consists of:</p>
 <div class="table-wrapper">
@@ -4799,13 +4859,13 @@ item.</p>
 
 <tr><td>16</td><td>4</td><td></td><td>Block <a href="#encryption_modes">encryption mode</a></td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Data (or block) <a href="#algorithm_identifiers">encryption method</a></td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Block <a href="#algorithm_identifiers">encryption method</a></td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Block key size, in number of bits</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Initialization vector <a href="#algorithm_identifiers">HMAC method</a></td></tr>
+<tr><td>28</td><td>4</td><td></td><td><a href="#algorithm_identifiers">HMAC method</a></td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Initialization vector HMAC key size, in number of bits</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>HMAC key size, in number of bits</td></tr>
 
 <tr><td>36</td><td>16</td><td></td><td>Identifier (UUID), used in Mac OS keychain as account identifier</td></tr>
 
@@ -4874,32 +4934,32 @@ item.</p>
 
 <tr><td>96</td><td>4</td><td></td><td><a href="#encryption_modes">Encryption mode</a></td></tr>
 
-<tr><td>100</td><td>4</td><td></td><td>Encrypted data size</td></tr>
+<tr><td>100</td><td>4</td><td></td><td>Wrapped key data size</td></tr>
 
-<tr><td>104</td><td>64</td><td></td><td>Encrypted data</td></tr>
+<tr><td>104</td><td>64</td><td></td><td>Wrapped key data</td></tr>
 
 <tr><td>168</td><td>448</td><td></td><td>Unknown (empty values)</td></tr>
 
 </table>
 </div>
 
-<p>The encrypted data can be decrypted using the following approach:</p>
+<p>Key data can be obtained from the wrapped key data using the following approach:</p>
 <ul>
 <li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
 determine the key encryption key (KEK) based on a passphrase.</li>
 <li>Pad the initialization vector with 0-byte values if necessesary, e.g. if initialization vector
 is 8 bytes but the encryption method (AES) requires an initialization vector of 16 bytes.</li>
-<li>Decrypt the encrypted data using the encryption method and mode, e.g. AES-CBC, with the number
+<li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
 of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
 <li>Remove the padding, specified by the padding type.</li>
 </ul>
-<p>The decypted data is of variable size and consists of:</p>
+<p>The decypted key data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>...</td><td></td><td>Master data encryption key (DEK)</td></tr>
+<tr><td>0</td><td>...</td><td></td><td>Block (or master) data encryption key (DEK)</td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>HMAC key</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Block HMAC key</td></tr>
 
 <tr><td>...</td><td>5</td><td>"CKIE\x00"</td><td>Signature</td></tr>
 
@@ -5282,6 +5342,16 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 </table>
 </div>
 
+<h3 id="encrypted-block-data"><a class="header" href="#encrypted-block-data">Encrypted block data</a></h3>
+<p>The encrypted block data can be decrypted using the following approach:</p>
+<ul>
+<li>Calculate the specified block HMAC, e.g. HMAC-SHA-1, with the block HMAC key and the block number
+stored as a 32-bit big-endian value. This HMAC is used as the initialization vector for
+decryption.</li>
+<li>Decrypt the encrypted data using the block encryption method and mode, e.g. AES-CBC, with the
+number of bits of the block DEK (defined by the block encryption key size) and the initialization
+vector if applicable.</li>
+</ul>
 <h2 id="format-edge-cases-and-corruption-scenarios-1"><a class="header" href="#format-edge-cases-and-corruption-scenarios-1">Format edge cases and corruption scenarios</a></h2>
 <h3 id="non-sequential-segment-files"><a class="header" href="#non-sequential-segment-files">Non-sequential segment files</a></h3>
 <p>It is currently unknown if non-sequential segment files are supported.</p>
