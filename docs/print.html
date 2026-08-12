@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-003ae3c1.js";
+            window.path_to_searchindex_js = "searchindex-9b31e9d7.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b1deb91b.js"></script>
@@ -3173,7 +3173,7 @@ EWF can be encrypted using a pass-phrase or a certificate.</p>
 <li><a href="#encypted_container_header">Encrypted container header</a> at the start of the file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
-<li>Encrypted data</li>
+<li>Encrypted data, typically at offset 122368</li>
 </ul>
 <p>Version 2 supports the following key protectors:</p>
 <ul>
@@ -3829,7 +3829,8 @@ vector if applicable.</li>
 <h1 id="mac-os-sparse-bundle-sparsebundle-format"><a class="header" href="#mac-os-sparse-bundle-sparsebundle-format">Mac OS sparse bundle (.sparsebundle) format</a></h1>
 <p>The Mac OS sparse bundle (.sparsebundle) format is one of the disk image formats supported natively
 by Mac OS.</p>
-<p>The sparse bundle disk image was introduced in Mac OS X 10.5.</p>
+<p>Mac OS referers to the sparse image format as CSparseBundleDiskImage and was introduced in Mac OS X
+Leopard (10.5).</p>
 <h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>A sparse bundle consists of a directory (bundle) with the .sparsbundle suffix containing:</p>
 <ul>
@@ -3837,6 +3838,11 @@ by Mac OS.</p>
 <li>“Info.plist” file</li>
 <li>“token” file</li>
 <li>“bands” directory containing the band files</li>
+</ul>
+<p>Sparse bundles can be encrypted. For an encrypted sparse bundle:</p>
+<ul>
+<li>the “token” file contains a <a href="#mac-os-encrypted-encoding">Encrypted Encoding container</a></li>
+<li>the band files contain encrypted data</li>
 </ul>
 <h3 id="characteristics-1"><a class="header" href="#characteristics-1">Characteristics</a></h3>
 <div class="table-wrapper">
@@ -3889,7 +3895,10 @@ the following key-value pairs.</p>
 &lt;/plist&gt;
 </code></pre>
 <h2 id="token-file"><a class="header" href="#token-file">Token file</a></h2>
-<p>The token file is empty.</p>
+<p>The token file of an unencrypted sparse bundle is empty.</p>
+<p>The token file of an encryped spase bundle contains either an
+<a href="#encypted_container_footer">Encrypted Encoding container footer</a> or an
+<a href="#encypted_container_header">Encrypted Encoding container header</a>.</p>
 <h2 id="bands-directory"><a class="header" href="#bands-directory">Bands directory</a></h2>
 <p>The bands directory contains files containing the actual data of the bands. The files are named
 using a hexadecimal naming scheme where “0” is the 1st band, “a” the 10th, “f” the 15th, “10”
@@ -3898,6 +3907,7 @@ the 16th, etc.</p>
 <h1 id="mac-os-sparse-image-sparseimage-format"><a class="header" href="#mac-os-sparse-image-sparseimage-format">Mac OS sparse image (.sparseimage) format</a></h1>
 <p>The Mac OS sparse image (.sparseimage) format is one of the disk image formats supported natively
 by Mac OS.</p>
+<p>Mac OS referers to the sparse image format as CSparseDiskImage.</p>
 <h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
 <p>Sparse images can be encrypted. An encrypted sparse image uses a
 <a href="#mac-os-encrypted-encoding">Encrypted Encoding container</a>.</p>
