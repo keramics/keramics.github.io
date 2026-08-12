@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-68ab1385.js";
+            window.path_to_searchindex_js = "searchindex-003ae3c1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b1deb91b.js"></script>
@@ -179,6 +179,7 @@
 <p>The Universal Disk Image Format (UDIF) (.dmg) is one of the disk image formats supported natively
 by Mac OS. UDIF supersedes the New Disk Image Format (NDIF) format and was introduced in Max OS
 X 10.0 (Cheetah).</p>
+<p>Mac OS referers to the UDIF image format as CUDIFEncoding.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>An UDIF image can consists of one or more segment files, where:</p>
 <ul>
@@ -213,7 +214,9 @@ be stored across multiple segment files.</p>
 </table>
 </div>
 
-<p>UDIF images can be encrypted, where each encrypted segment file has its own key protectors.</p>
+<p>UDIF images can be encrypted. An encrypted UDIF image consists of one of more UDIF segment files,
+where each segment file uses a <a href="cdsaencr.html">Encrypted Encoding container</a> with its own key
+protectors.</p>
 <h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
@@ -225,9 +228,14 @@ be stored across multiple segment files.</p>
 </table>
 </div>
 
-<h3 id="udif-image-format"><a class="header" href="#udif-image-format">UDIF image format</a></h3>
-<p>Mac OS referers to the UDIF image format as CUDIFEncoding.</p>
-<h4 id="uncompressed-image-format"><a class="header" href="#uncompressed-image-format">Uncompressed image format</a></h4>
+<h3 id="image-formats"><a class="header" href="#image-formats">Image formats</a></h3>
+<p>Known types of UDIF segment files are:</p>
+<ul>
+<li>Uncompressed segment file</li>
+<li>Compressed segment file</li>
+<li>Encrypted segment file</li>
+</ul>
+<h4 id="uncompressed-segment-file-format"><a class="header" href="#uncompressed-segment-file-format">Uncompressed segment file format</a></h4>
 <p>An uncompressed UDIF segment file consist of:</p>
 <ul>
 <li>Image data</li>
@@ -237,16 +245,13 @@ be stored across multiple segment files.</p>
 <p>Note that an uncompressed UDIF image without file footer is equivalent to a RAW storage media
 image (CRawDiskImage).</p>
 </blockquote>
-<h4 id="compressed-image-format"><a class="header" href="#compressed-image-format">Compressed image format</a></h4>
+<h4 id="compressed-segment-file-format"><a class="header" href="#compressed-segment-file-format">Compressed segment file format</a></h4>
 <p>A compressed UDIF segment file consist of:</p>
 <ul>
 <li>Data fork, containing the image data</li>
 <li>Optional resource fork or XML plist</li>
 <li><a href="#file_footer">File footer</a> at the end of the file</li>
 </ul>
-<h3 id="encrypted-udif-image"><a class="header" href="#encrypted-udif-image">Encrypted UDIF image</a></h3>
-<p>An encrypted UDIF image consists of one of more UDIF segment files, where each segmentfile is
-encrypted using a <a href="cdsaencr.html">Encrypted Encoding container</a>.</p>
 <h4 id="encrypted-encoding-version-1-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-1-encrypted-udif-segment-file">Encrypted Encoding version 1 encrypted UDIF segment file</a></h4>
 <p>An Encrypted Encoding version 1 encryped UDIF segment file consists of:</p>
 <ul>
@@ -257,7 +262,7 @@ file</li>
 <blockquote>
 <p>Note that the encrypted UDIF data can contain an uncompressed UDIF image without file footer.</p>
 </blockquote>
-<h4 id="encrypted-image-format-version-2-encrypted-udif-segment-file"><a class="header" href="#encrypted-image-format-version-2-encrypted-udif-segment-file">Encrypted image format version 2 encrypted UDIF segment file</a></h4>
+<h4 id="encrypted-encoding-version-2-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-2-encrypted-udif-segment-file">Encrypted Encoding version 2 encrypted UDIF segment file</a></h4>
 <p>An Encrypted Encoding version 2 encryped UDIF segment file consists of:</p>
 <ul>
 <li><a href="cdsaencr.html#encypted_container_header">Encrypted Encoding container header</a> at the start of the
