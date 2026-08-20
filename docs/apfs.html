@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9b31e9d7.js";
+            window.path_to_searchindex_js = "searchindex-73815879.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b1deb91b.js"></script>
+        <script src="toc-94f1318b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -255,7 +255,6 @@ as both the primary and tweak key. The sector number, relative to the start of t
 used as the tweak value.</p>
 <p>The file system B-tree is encrypted using the volume master key and the sector number, relative to
 the start of the container, is used as the tweak value.</p>
-<h3 id="key_bag_entries"><a class="header" href="#key_bag_entries">Key bag entries</a></h3>
 <h2 id="objects"><a class="header" href="#objects">Objects</a></h2>
 <p>APFS uses the “object” data type to distinguish between different data types.</p>
 <h3 id="object_header"><a class="header" href="#object_header">Object header</a></h3>
@@ -263,7 +262,7 @@ the start of the container, is used as the tweak value.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a> (o_cksum)</td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a> (o_cksum), which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier (o_oid)</td></tr>
 
@@ -338,7 +337,7 @@ stored.</li>
 
 <tr><td>0x0000000d</td><td>OBJECT_TYPE_FS</td><td><a href="#volume_superblock">Volume (or file system) superblock</a></td></tr>
 
-<tr><td>0x0000000e</td><td>OBJECT_TYPE_FS</td><td><a href="#file_system">File system tree</a></td></tr>
+<tr><td>0x0000000e</td><td>OBJECT_TYPE_FS</td><td><a href="#file_system_tree">File system tree</a></td></tr>
 
 <tr><td>0x0000000f</td><td>OBJECT_TYPE_BLOCKREFTREE</td><td><a href="#extent_reference_tree">Extent-reference tree</a></td></tr>
 
@@ -452,7 +451,7 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header (btn_o)</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -476,7 +475,7 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header (btn_o)</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -507,25 +506,25 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 
 <tr><td>8</td><td>2</td><td></td><td>Entries data offset, which contains an offset relative to the end of the B-tree node header or -1 (0xffff) if not set (invalid)</td></tr>
 
-<tr><td>10</td><td>2</td><td></td><td>Entries data size</td></tr>
+<tr><td>10</td><td>2</td><td></td><td>Entries data size, in number of bytes</td></tr>
 
 <tr><td colspan="4"><em>Free space (btn_free_space)</em></td></tr>
 
 <tr><td>12</td><td>2</td><td></td><td>Unused data offset, which contains an offset relative to the end of the entries data or -1 (0xffff) if not set (invalid)</td></tr>
 
-<tr><td>14</td><td>2</td><td></td><td>Unused data size</td></tr>
+<tr><td>14</td><td>2</td><td></td><td>Unused data size, in number of bytes</td></tr>
 
 <tr><td colspan="4"><em>Key free list (btn_key_free_list)</em></td></tr>
 
 <tr><td>16</td><td>2</td><td></td><td>Unused key list offset, which contains an offset relative to unknown or -1 (0xffff) if not set (invalid)</td></tr>
 
-<tr><td>18</td><td>2</td><td></td><td>Unused key list size</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Unused key list size, in number of bytes</td></tr>
 
 <tr><td colspan="4"><em>Value free list (btn_val_free_list)</em></td></tr>
 
 <tr><td>20</td><td>2</td><td></td><td>Unused value list offset, which contains an offset relative to unknown or -1 (0xffff) if not set (invalid)</td></tr>
 
-<tr><td>22</td><td>2</td><td></td><td>Unused value list size</td></tr>
+<tr><td>22</td><td>2</td><td></td><td>Unused value list size, in number of bytes</td></tr>
 
 </table>
 </div>
@@ -573,11 +572,11 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td></td><td>Key data offset (key_offs), which contains an offset relative to the end of the entries data</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Key data size (key_len)</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Key data size (key_len), in number of bytes</td></tr>
 
 <tr><td>4</td><td>2</td><td></td><td>Value data offset (value_offs), which contains a reversed offset relative to the start of the B-Tree footer</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Value data size (value_len)</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Value data size (value_len), in number of bytes</td></tr>
 
 </table>
 </div>
@@ -593,17 +592,17 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 
 <tr><td>0</td><td>4</td><td></td><td><a href="#btree_flags">Flags</a> (bt_flags)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Node size (bt_node_size)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Node size (bt_node_size), in number of bytes</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Key size (bt_key_size), which is set to 0 if key has a variable size</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Key size (bt_key_size), in number of bytes and is set to 0 if key has a variable size</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Value size (bt_val_size), which is set to 0 if value has a variable size</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Value size (bt_val_size), in number of bytes and is set to 0 if value has a variable size</td></tr>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Maximum key size (bt_longest_key)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Maximum key size (bt_longest_key), in number of bytes</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Maximum value size (bt_longest_val)</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Maximum value size (bt_longest_val), in number of bytes</td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Total number of keys (bt_key_count)</td></tr>
 
@@ -694,7 +693,7 @@ the container.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -708,7 +707,7 @@ the container.</p>
 
 <tr><td>32</td><td>4</td><td>"NXSB"</td><td>Signature (nx_magix)</td></tr>
 
-<tr><td>36</td><td>4</td><td></td><td>Block size (nx_block_size)</td></tr>
+<tr><td>36</td><td>4</td><td></td><td>Block size (nx_block_size), in number of bytes</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Number of blocks (nx_block_count)</td></tr>
 
@@ -776,9 +775,9 @@ the container.</p>
 
 <tr><td colspan="4"><em><a href="#key_bag">Container key bag</a> area (nx_keylocker)</em></td></tr>
 
-<tr><td>1296</td><td>8</td><td></td><td>Container key bag area block number (nx_keybag_base), which contains a block number relative to the start of the container</td></tr>
+<tr><td>1296</td><td>8</td><td></td><td>Container key bag block number (nx_keybag_base), which contains a block number relative to the start of the container</td></tr>
 
-<tr><td>1304</td><td>8</td><td></td><td>Container key bag area number of blocks (nx_keybag_blocks)</td></tr>
+<tr><td>1304</td><td>8</td><td></td><td>Container key bag number of blocks (nx_keybag_blocks)</td></tr>
 
 <tr><td colspan="4"> </td></tr>
 
@@ -891,7 +890,7 @@ location in the container.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -934,7 +933,7 @@ location in the container.</p>
 
 <tr><td>4</td><td>4</td><td></td><td><a href="#object_subtypes">Object subtype</a> (cpm_subtype)</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Size (cpm_size) in number of bytes</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Size (cpm_size), in number of bytes</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Unknown (padding) (cpm_pad)</td></tr>
 
@@ -963,7 +962,7 @@ location in the container.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1050,7 +1049,7 @@ object map B-tree key represents the first key in the branch.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td><a href="#object_map_value_flags">Value object flags</a> (ov_flags)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Value object size (ov_size)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Value object size (ov_size), in number of bytes</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Value object physical address (ov_paddr), which contains a block number relative to the start of the container</td></tr>
 
@@ -1085,7 +1084,7 @@ TODO document Object Map Reaper Phases</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header (sm_o)</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1097,7 +1096,7 @@ TODO document Object Map Reaper Phases</p>
 
 <tr><td colspan="4"><em>Object values</em></td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Block size (sm_block_size)</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Block size (sm_block_size), in number of bytes</td></tr>
 
 <tr><td>36</td><td>4</td><td></td><td>Number of blocks per chunk (sm_blocks_per_chunk)</td></tr>
 
@@ -1267,7 +1266,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header (cab_o)</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1299,7 +1298,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header (cib_o)</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1349,7 +1348,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1399,7 +1398,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1444,7 +1443,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td>8</td><td>4</td><td></td><td>Type (type)</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Block size (blksize)</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Block size (blksize), in number of bytes</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>Object identifier (oid)</td></tr>
 
@@ -1471,7 +1470,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1494,7 +1493,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1517,7 +1516,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td>2</td><td>2</td><td></td><td>Number of entries (kl_nkeys)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Key bag data size (kl_nbytes), which contains the size of the key bag data, this includes the size of key bag header</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Key bag data size (kl_nbytes), in number of bytes and includes the size of key bag header</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Unknown (padding)</td></tr>
 
@@ -1542,7 +1541,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td>16</td><td>2</td><td></td><td><a href="#key_bag_entry_types">Entry type</a> (ke_tag)</td></tr>
 
-<tr><td>18</td><td>2</td><td></td><td>Entry data size (ke_keylen)</td></tr>
+<tr><td>18</td><td>2</td><td></td><td>Entry data size (ke_keylen), in number of bytes</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
 
@@ -1556,7 +1555,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x00</td><td>KB_TAG_UNKNOWN</td><td>Unknown</td></tr>
 
-<tr><td>0x01</td><td>KB_TAG_WRAPPING_KEY</td><td>Wrapping key</td></tr>
+<tr><td>0x01</td><td>KB_TAG_WRAPPING_KEY (or KB_TAG_RESERVED_1)</td><td>Wrapping key</td></tr>
 
 <tr><td>0x02</td><td>KB_TAG_VOLUME_KEY</td><td>Volume master key, which contains a <a href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></td></tr>
 
@@ -1564,9 +1563,13 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td>0x04</td><td>KB_TAG_VOLUME_PASSPHRASE_HINT</td><td>Passphrase hint</td></tr>
 
+<tr><td>0x05</td><td>KB_TAG_WRAPPING_M_KEY</td><td>Key used to wrap a media key</td></tr>
+
+<tr><td>0x06</td><td>KB_TAG_VOLUME_M_KEY</td><td>Key used to wrap a media key</td></tr>
+
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0xf8</td><td>KB_TAG_USER_PAYLOAD</td><td>Unknown (user payload)</td></tr>
+<tr><td>0xf8</td><td>KB_TAG_USER_PAYLOAD (or KB_TAG_RESERVED_F8)</td><td>Unknown (user payload)</td></tr>
 
 </table>
 </div>
@@ -1593,7 +1596,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>1</td><td></td><td>Value tag (or value type), where the most-significant bit represents a flag</td></tr>
 
-<tr><td>1</td><td>1</td><td></td><td>Value data size, where the most-significant bit represents a flag</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Value data size, in number of bytes, where the most-significant bit represents a flag</td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>Value data</td></tr>
 
@@ -1708,7 +1711,7 @@ directly read.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -1946,7 +1949,7 @@ directly read.</p>
 </table>
 </div>
 
-<h2 id="file_system"><a class="header" href="#file_system">File system</a></h2>
+<h2 id="file_system_tree"><a class="header" href="#file_system_tree">File system B-tree</a></h2>
 <p>The file system structures are stored in a <a href="#btree">B-tree</a>.</p>
 <p>The file system B-tree uses identifiers similar to catalog identifiers (CNIDs) on
 <a href="hfs.html">Hierarchical File System (HFS)</a>. In this document these identifiers are referred to as
@@ -2051,7 +2054,7 @@ file system B-tree key represents the first key in the branch.</p>
 
 <tr><td>44</td><td>4</td><td></td><td><a href="#snapshot_metadata_flags">Flags</a></td></tr>
 
-<tr><td>48</td><td>2</td><td></td><td>Name string size (name_len), which includes the size of the end-of-string character</td></tr>
+<tr><td>48</td><td>2</td><td></td><td>Name string size (name_len), in number of bytes, which includes the size of the end-of-string character</td></tr>
 
 <tr><td>50</td><td>...</td><td></td><td>Name string (name), which contains an UTF-8 encoded string with an end-of-string character</td></tr>
 
@@ -2088,7 +2091,7 @@ file system B-tree key represents the first key in the branch.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Extent size and data type (len_and_kind)</em></td></tr>
 
-<tr><td>0</td><td>60 bits</td><td></td><td>Extent data size</td></tr>
+<tr><td>0</td><td>60 bits</td><td></td><td>Extent size, in number of bytes</td></tr>
 
 <tr><td>7.4</td><td>4 bits</td><td></td><td><a href="#file_system_data_types">File system data type</a></td></tr>
 
@@ -2116,7 +2119,7 @@ file system B-tree key represents the first key in the branch.</p>
 </div>
 
 <h4 id="inode-value-data"><a class="header" href="#inode-value-data">Inode value data</a></h4>
-<p>The inode value data (APFS_TYPE_INVALID) is 8 bytes in size and consists of:</p>
+<p>The inode value data (j_inode_val_t) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2130,29 +2133,29 @@ file system B-tree key represents the first key in the branch.</p>
 
 <tr><td>32</td><td>8</td><td></td><td>Inode change date and time (change_time), which consists of a signed integer that contains the number of nanoseconds since January 1, 1970 00:00:00 UTC or 0 if not set</td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Access date and time (access_time), which consists of a signed integer that contains the number of nanoseconds since January 1, 1970 00:00:00 UTC or 0 if not set</td></tr>
+<tr><td>40</td><td>8</td><td></td><td>Access date and time (access_time), which consists of a signed integer that contains the number of nanoseconds since January 1, 1970 00:00:00 UTC or 0 if not set</td></tr>
 
-<tr><td>56</td><td>8</td><td></td><td><a href="#inode_flags">Inode flags</a> (internal_flags)</td></tr>
+<tr><td>48</td><td>8</td><td></td><td><a href="#inode_flags">Inode flags</a> (internal_flags)</td></tr>
 
-<tr><td>64</td><td>4</td><td></td><td>Number of children (nchildren) or number of (hard) links (nlink)</td></tr>
+<tr><td>56</td><td>4</td><td></td><td>Number of children (nchildren) or number of (hard) links (nlink)</td></tr>
 
-<tr><td>68</td><td>4</td><td></td><td>Unknown (default_protection_class)</td></tr>
+<tr><td>60</td><td>4</td><td></td><td>Unknown (default_protection_class)</td></tr>
 
-<tr><td>72</td><td>4</td><td></td><td>Unknown (write_generation_counter)</td></tr>
+<tr><td>64</td><td>4</td><td></td><td>Unknown (write_generation_counter)</td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#bsd_file_entry_flags">BSD file entry flags</a> (bsd_flags)</td></tr>
+<tr><td>68</td><td>4</td><td></td><td><a href="#bsd_file_entry_flags">BSD file entry flags</a> (bsd_flags)</td></tr>
 
-<tr><td>80</td><td>4</td><td></td><td>Owner user identifier (owner)</td></tr>
+<tr><td>72</td><td>4</td><td></td><td>Owner user identifier (owner)</td></tr>
 
-<tr><td>84</td><td>4</td><td></td><td>Group identifier (gid)</td></tr>
+<tr><td>76</td><td>4</td><td></td><td>Group identifier (gid)</td></tr>
 
-<tr><td>86</td><td>2</td><td></td><td><a href="#file_modes">File mode</a></td></tr>
+<tr><td>80</td><td>2</td><td></td><td><a href="#file_modes">File mode</a></td></tr>
 
-<tr><td>88</td><td>2</td><td></td><td>Unknown (pad1)</td></tr>
+<tr><td>82</td><td>2</td><td></td><td>Unknown (pad1)</td></tr>
 
-<tr><td>90</td><td>8</td><td></td><td>Unknown (pad2)</td></tr>
+<tr><td>84</td><td>8</td><td></td><td>Unknown (pad2)</td></tr>
 
-<tr><td>98</td><td>...</td><td></td><td><a href="#extended_fields">Extended fields</a> (xfields)</td></tr>
+<tr><td>92</td><td>...</td><td></td><td><a href="#extended_fields">Extended fields</a> (xfields)</td></tr>
 
 </table>
 </div>
@@ -2291,7 +2294,7 @@ file system B-tree key represents the first key in the branch.</p>
 
 <tr><td>7.4</td><td>4 bits</td><td>0x4</td><td><a href="#file_system_data_types">File system data type</a></td></tr>
 
-<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), which includes the size of the end-of-string character</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), in number of bytes, which includes the size of the end-of-string character</td></tr>
 
 <tr><td>10</td><td>...</td><td></td><td><a href="#extended_attribute_names">Name string</a> (name), which contains an UTF-8 encoded string with an end-of-string character</td></tr>
 
@@ -2309,7 +2312,7 @@ insensitive file system.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td></td><td><a href="#extended_attribute_flags">Flags</a> (flags)</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Extended attribute data size</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Extended attribute data size, in number of bytes</td></tr>
 
 <tr><td>4</td><td>...</td><td></td><td>Extended attribute data</td></tr>
 
@@ -2317,7 +2320,7 @@ insensitive file system.</p>
 </div>
 
 <blockquote>
-<p>Note that extended attribute data size can contain 0 if extended attribute flags
+<p>Note that extended attribute data size can contain 0 if the extended attribute flag
 XATTR_DATA_EMBEDDED is set.</p>
 </blockquote>
 <h4 id="extended_attribute_names"><a class="header" href="#extended_attribute_names">Extended attribute names</a></h4>
@@ -2332,7 +2335,7 @@ XATTR_DATA_EMBEDDED is set.</p>
 
 <tr><td>com.apple.assetsd.UUID</td><td></td></tr>
 
-<tr><td>com.apple.decmpfs</td><td><a href="decmpfs.html">Apple File System Compression (decmpfs)</a> extended attribute.</td></tr>
+<tr><td>com.apple.decmpfs</td><td><a href="decmpfs.html">Apple File System Compression (decmpfs)</a> extended attribute</td></tr>
 
 <tr><td>com.apple.FinderInfo</td><td></td></tr>
 
@@ -2391,7 +2394,7 @@ XATTR_DATA_EMBEDDED is set.</p>
 
 <tr><td>0x0002</td><td>XATTR_DATA_EMBEDDED</td><td>Extended attribute data is stored directly in the record</td></tr>
 
-<tr><td>0x0004</td><td>XATTR_FILE_SYSTEM_OWNED</td><td>Extended attribute record is owned by the file system</td></tr>
+<tr><td>0x0004</td><td>XATTR_FILE_SYSTEM_OWNED</td><td>Extended attribute is part of the file system, such as "com.apple.fs.symlink"</td></tr>
 
 <tr><td>0x0008</td><td>XATTR_RESERVED_8</td><td>Unknown (Reserved)</td></tr>
 
@@ -2405,7 +2408,7 @@ XATTR_DATA_EMBEDDED is set.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>8</td><td></td><td>Data stream file system object identifier (xattr_obj_id), which contains the file system object identifier of the file extents that make up the data stream</td></tr>
 
-<tr><td>8</td><td>48</td><td></td><td><a href="#data_stream_attribute">Data stream attribute</a></td></tr>
+<tr><td>8</td><td>40</td><td></td><td><a href="#data_stream_descriptor">Data stream descriptor</a></td></tr>
 
 </table>
 </div>
@@ -2432,7 +2435,7 @@ XATTR_DATA_EMBEDDED is set.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>8</td><td></td><td>Parent file system object identifier (parent_id)</td></tr>
 
-<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), which includes the size of the end-of-string character</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), in number of bytes, which includes the size of the end-of-string character</td></tr>
 
 <tr><td>10</td><td>...</td><td></td><td>Name string (name), which contains an UTF-8 encoded string with an end-of-string character</td></tr>
 
@@ -2472,7 +2475,7 @@ XATTR_DATA_EMBEDDED is set.</p>
 
 <tr><td>7.4</td><td>4 bits</td><td>0x8</td><td><a href="#file_system_data_types">File system data type</a></td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Logical address (logical_addr), which contains an offset relative to the start of the file entry data</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Logical extent offset (or address) (logical_addr), which contains an offset relative to the start of the file entry data</td></tr>
 
 </table>
 </div>
@@ -2483,11 +2486,13 @@ XATTR_DATA_EMBEDDED is set.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td colspan="4"><em>Extent data size and flags (len_and_flags)</em></td></tr>
+<tr><td colspan="4"><em>Extent size and flags (len_and_flags)</em></td></tr>
 
-<tr><td>0</td><td>7</td><td></td><td>Extent data size</td></tr>
+<tr><td>0</td><td>7</td><td></td><td>Extent size, in number of bytes</td></tr>
 
 <tr><td>7</td><td>1</td><td></td><td><a href="#file_extent_flags">Flags</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Physical block number (phys_block_num), which contains a block number relative to the start of the container</td></tr>
 
@@ -2507,8 +2512,9 @@ XATTR_DATA_EMBEDDED is set.</p>
 </div>
 
 <blockquote>
-<p>Note at according to the Apple File System Reference documentation there are currently no flags
-defined. It also refers to <code>len_and_flags</code> as <code>len_and_kind</code> interchangeably.</p>
+<p>Note that according to the Apple File System Reference documentation there are currently no flags
+defined. The reference documentation also refers to <code>len_and_flags</code> as <code>len_and_kind</code>
+interchangeably.</p>
 </blockquote>
 <h3 id="directory_record"><a class="header" href="#directory_record">Directory record</a></h3>
 <p>The directory record can have 2 different types of keys:</p>
@@ -2541,7 +2547,7 @@ is case-insensitive.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), which includes the size of the end-of-string character</td></tr>
+<tr><td>8</td><td>2</td><td></td><td>Name string size (name_len), in number of bytes, which includes the size of the end-of-string character</td></tr>
 
 <tr><td>10</td><td>...</td><td></td><td>Name string (name), which contains an UTF-8 encoded string with an end-of-string character</td></tr>
 
@@ -2564,7 +2570,7 @@ consists of:</p>
 
 <tr><td colspan="4"><em>Name string size and hash (name_len_and_hash)</em></td></tr>
 
-<tr><td>8</td><td>11 bits</td><td></td><td>Name string size, which includes the size of the end-of-string character</td></tr>
+<tr><td>8</td><td>11 bits</td><td></td><td>Name string size, in number of bytes, which includes the size of the end-of-string character</td></tr>
 
 <tr><td>9.3</td><td>21 bits</td><td></td><td><a href="#directory_entry_name_hash">Name hash</a></td></tr>
 
@@ -2669,7 +2675,7 @@ calculation, which is also referred to as weak CRC-32 calculation.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>8</td><td></td><td>Number of children (num_children)</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Total size (total_size)</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Total size (total_size), in number of bytes</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>Parent directory file system object identifier (chained_key)</td></tr>
 
@@ -2723,13 +2729,13 @@ filename.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td></td><td>Number of extended fields (xf_num_exts)</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Extended field value data size (xf_used_data)</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Extended fields data size (xf_used_data), in number of bytes</td></tr>
 
-<tr><td colspan="4"><em>Extended field data (xf_data)</em></td></tr>
+<tr><td colspan="4"><em>Extended fields data (xf_data)</em></td></tr>
 
 <tr><td>4</td><td>...</td><td></td><td>Array of <a href="#extended_field_descriptor">extended field descriptors</a></td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>Extended field value data</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>Extended fields data</td></tr>
 
 </table>
 </div>
@@ -2747,7 +2753,7 @@ filename.</p>
 
 <tr><td>1</td><td>1</td><td></td><td><a href="#extended_field_flags">Extended field flags</a> (x_flags)</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Extended field data size (x_size)</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Extended field data size (x_size), in number of bytes</td></tr>
 
 </table>
 </div>
@@ -2774,13 +2780,13 @@ filename.</p>
 
 <tr><td>4</td><td>INO_EXT_TYPE_NAME</td><td>Filename, where the extended field data contains an UTF-8 string with end-of-string character</td></tr>
 
-<tr><td>5</td><td>INO_EXT_TYPE_PREV_FSIZE</td><td>Previous file size, where the extended field data contains a 64-bit integer value</td></tr>
+<tr><td>5</td><td>INO_EXT_TYPE_PREV_FSIZE</td><td>Previous file size, in number of bytes, where the extended field data contains a 64-bit integer value</td></tr>
 
 <tr><td>6</td><td>INO_EXT_TYPE_RESERVED_6</td><td>Unknown (Reserved)</td></tr>
 
 <tr><td>7</td><td>INO_EXT_TYPE_FINDER_INFO</td><td>Finder information, where the extended field data contains a 32-bit integer value</td></tr>
 
-<tr><td>8</td><td>INO_EXT_TYPE_DSTREAM</td><td>Data stream, where the extended field data contains a <a href="#data_stream_attribute">data stream attribute</a></td></tr>
+<tr><td>8</td><td>INO_EXT_TYPE_DSTREAM</td><td>Data stream, where the extended field data contains a <a href="#data_stream_descriptor">data stream descriptor</a></td></tr>
 
 <tr><td>9</td><td>INO_EXT_TYPE_RESERVED_9</td><td>Unknown (Reserved)</td></tr>
 
@@ -2889,14 +2895,14 @@ device identifier is 4 bytes in size and consists of:</p>
 </table>
 </div>
 
-<h3 id="data_stream_attribute"><a class="header" href="#data_stream_attribute">Data stream attribute</a></h3>
-<p>The data stream attribute (j_dstream_t) is 40 bytes in size and consist of:</p>
+<h3 id="data_stream_descriptor"><a class="header" href="#data_stream_descriptor">Data stream descriptor</a></h3>
+<p>The data stream descriptor (j_dstream_t) is 40 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Used size (size)</td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Used size (size), in number of bytes</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Allocated size (alloced_size)</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Allocated size (alloced_size), in number of bytes</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>(Default) encryption identifier (default_crypto_id)</td></tr>
 
@@ -2920,7 +2926,7 @@ device identifier is 4 bytes in size and consists of:</p>
 <p>The file content size is stored in an INO_EXT_TYPE_DSTREAM
 <a href="#inode_extended_field_types">inode extended field type</a>.</p>
 <p>The file content data can be located through the <a href="#file_extent">file extents</a> for the data stream
-file system object identifier in the <a href="#file_system">file system tree</a>.</p>
+file system object identifier in the <a href="#file_system_tree">file system tree</a>.</p>
 <p>If the volume is encrypted the file content is encrypted with the encryption identifier in defined
 by the <a href="#file_extent">file extent</a>.</p>
 <p>If the <a href="#inode_flags">inode flag</a> INODE_IS_SPARSE is set the file contains one or more spare file
@@ -2947,7 +2953,7 @@ extents. A sparse file extent has a physical block number of 0.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -3005,7 +3011,7 @@ extents. A sparse file extent has a physical block number of 0.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -3074,7 +3080,7 @@ container.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td colspan="4"><em>Object header</em></td></tr>
 
-<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td><a href="#object_checksum">Object checksum</a>, which contains 0 if not set</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Object identifier</td></tr>
 
@@ -3104,16 +3110,17 @@ hardware encrypted or contains random data but the volume is not encrypted.</p>
 <li><a href="https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf">Apple File System Reference</a>,
 by Apple</li>
 </ul>
+<!-- rumdl-enable MD013 -->
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="file_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="hybrid.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="decmpfs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="assorted.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -3123,11 +3130,11 @@ by Apple</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="file_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="hybrid.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="decmpfs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="assorted.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

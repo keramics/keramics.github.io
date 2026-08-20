@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9b31e9d7.js";
+            window.path_to_searchindex_js = "searchindex-73815879.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b1deb91b.js"></script>
+        <script src="toc-94f1318b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -728,23 +728,23 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0</td><td>CSSM_PADDING_NONE</td><td>No padding</td></tr>
 
-<tr><td>1</td><td>CSSM_PADDING_CUSTOM</td><td></td></tr>
+<tr><td>1</td><td>CSSM_PADDING_CUSTOM</td><td>Unknown</td></tr>
 
 <tr><td>2</td><td>CSSM_PADDING_ZERO</td><td>Pad with 0</td></tr>
 
 <tr><td>3</td><td>CSSM_PADDING_ONE</td><td>Pad with 1</td></tr>
 
-<tr><td>4</td><td>CSSM_PADDING_ALTERNATE</td><td></td></tr>
+<tr><td>4</td><td>CSSM_PADDING_ALTERNATE</td><td>Unknown</td></tr>
 
-<tr><td>5</td><td>CSSM_PADDING_FF</td><td></td></tr>
+<tr><td>5</td><td>CSSM_PADDING_FF</td><td>Unknown (Pad with 0xff?)</td></tr>
 
 <tr><td>6</td><td>CSSM_PADDING_PKCS5</td><td>Pad using Public-Key Cryptography Standard (PKCS) 5 (RFC 2898)</td></tr>
 
 <tr><td>7</td><td>CSSM_PADDING_PKCS7</td><td>Pad using Public-Key Cryptography Standard (PKCS) 7 (RFC 2315)</td></tr>
 
-<tr><td>8</td><td>CSSM_PADDING_CIPHERSTEALING</td><td></td></tr>
+<tr><td>8</td><td>CSSM_PADDING_CIPHERSTEALING</td><td>Unknown</td></tr>
 
-<tr><td>9</td><td>CSSM_PADDING_RANDOM</td><td></td></tr>
+<tr><td>9</td><td>CSSM_PADDING_RANDOM</td><td>Unknown</td></tr>
 
 <tr><td>10</td><td>CSSM_PADDING_PKCS1</td><td>Pad using Public-Key Cryptography Standard (PKCS) 1</td></tr>
 
@@ -755,13 +755,13 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>CSSM_ALGMODE_NONE</td><td></td></tr>
+<tr><td>0</td><td>CSSM_ALGMODE_NONE</td><td>Unknown (Null algorithm mode)</td></tr>
 
-<tr><td>1</td><td>CSSM_ALGMODE_CUSTOM</td><td></td></tr>
+<tr><td>1</td><td>CSSM_ALGMODE_CUSTOM</td><td>Unknown (Custom mode)</td></tr>
 
-<tr><td>2</td><td>CSSM_ALGMODE_ECB</td><td>Electronic CodeBook (ECB) mode</td></tr>
+<tr><td>2</td><td>CSSM_ALGMODE_ECB</td><td>Electronic CodeBook (ECB) mode, without padding</td></tr>
 
-<tr><td>3</td><td>CSSM_ALGMODE_ECBPad</td><td></td></tr>
+<tr><td>3</td><td>CSSM_ALGMODE_ECBPad</td><td>Electronic CodeBook (ECB) mode with padding</td></tr>
 
 <tr><td>4</td><td>CSSM_ALGMODE_CBC</td><td>Cipher Block Chaining (CBC) mode, without padding</td></tr>
 
@@ -769,75 +769,75 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 
 <tr><td>6</td><td>CSSM_ALGMODE_CBCPadIV8</td><td>Cipher Block Chaining (CBC) mode with 8 byte initialization vector, with padding</td></tr>
 
-<tr><td>7</td><td>CSSM_ALGMODE_CFB</td><td></td></tr>
+<tr><td>7</td><td>CSSM_ALGMODE_CFB</td><td>Cipher feedback (CFB) mode</td></tr>
 
-<tr><td>8</td><td>CSSM_ALGMODE_CFB_IV8</td><td></td></tr>
+<tr><td>8</td><td>CSSM_ALGMODE_CFB_IV8</td><td>Cipher feedback (CFB) mode with 8 byte initialization vector</td></tr>
 
-<tr><td>9</td><td>CSSM_ALGMODE_CFBPadIV8</td><td></td></tr>
+<tr><td>9</td><td>CSSM_ALGMODE_CFBPadIV8</td><td>Cipher feedback (CFB) mode with 8 byte initialization vector, with padding</td></tr>
 
-<tr><td>10</td><td>CSSM_ALGMODE_OFB</td><td></td></tr>
+<tr><td>10</td><td>CSSM_ALGMODE_OFB</td><td>Output FeedBack (OFB) mode</td></tr>
 
-<tr><td>11</td><td>CSSM_ALGMODE_OFB_IV8</td><td></td></tr>
+<tr><td>11</td><td>CSSM_ALGMODE_OFB_IV8</td><td>Output FeedBack (OFB) mode mode with 8 byte initialization vector</td></tr>
 
-<tr><td>12</td><td>CSSM_ALGMODE_OFBPadIV8</td><td></td></tr>
+<tr><td>12</td><td>CSSM_ALGMODE_OFBPadIV8</td><td>Output FeedBack (OFB) mode with 8 byte initialization vector, with padding</td></tr>
 
-<tr><td>13</td><td>CSSM_ALGMODE_COUNTER</td><td></td></tr>
+<tr><td>13</td><td>CSSM_ALGMODE_COUNTER</td><td>Counter mode</td></tr>
 
-<tr><td>14</td><td>CSSM_ALGMODE_BC</td><td></td></tr>
+<tr><td>14</td><td>CSSM_ALGMODE_BC</td><td>Block Chaining mode</td></tr>
 
-<tr><td>15</td><td>CSSM_ALGMODE_PCBC</td><td></td></tr>
+<tr><td>15</td><td>CSSM_ALGMODE_PCBC</td><td>Propagating Cipher Block Chaining (CBC) mode</td></tr>
 
-<tr><td>16</td><td>CSSM_ALGMODE_CBCC</td><td></td></tr>
+<tr><td>16</td><td>CSSM_ALGMODE_CBCC</td><td>Cipher Block Chaining (CBC) with checksum mode</td></tr>
 
-<tr><td>17</td><td>CSSM_ALGMODE_OFBNLF</td><td></td></tr>
+<tr><td>17</td><td>CSSM_ALGMODE_OFBNLF</td><td>Output FeedBack (OFB) with non-linear function mode</td></tr>
 
-<tr><td>18</td><td>CSSM_ALGMODE_PBC</td><td></td></tr>
+<tr><td>18</td><td>CSSM_ALGMODE_PBC</td><td>Plaintext Block Chaining (PBC) mode</td></tr>
 
-<tr><td>19</td><td>CSSM_ALGMODE_PFB</td><td></td></tr>
+<tr><td>19</td><td>CSSM_ALGMODE_PFB</td><td>Plaintext FeedBack (PFB) mode</td></tr>
 
-<tr><td>20</td><td>CSSM_ALGMODE_CBCPD</td><td></td></tr>
+<tr><td>20</td><td>CSSM_ALGMODE_CBCPD</td><td>Cipher Block Chaining (CBC) if Plaintext Difference mode</td></tr>
 
-<tr><td>21</td><td>CSSM_ALGMODE_PUBLIC_KEY</td><td></td></tr>
+<tr><td>21</td><td>CSSM_ALGMODE_PUBLIC_KEY</td><td>Public key mode</td></tr>
 
-<tr><td>22</td><td>CSSM_ALGMODE_PRIVATE_KEY</td><td></td></tr>
+<tr><td>22</td><td>CSSM_ALGMODE_PRIVATE_KEY</td><td>Private key mode</td></tr>
 
-<tr><td>23</td><td>CSSM_ALGMODE_SHUFFLE</td><td></td></tr>
+<tr><td>23</td><td>CSSM_ALGMODE_SHUFFLE</td><td>Fortezza shuffle mode</td></tr>
 
-<tr><td>24</td><td>CSSM_ALGMODE_ECB64</td><td></td></tr>
+<tr><td>24</td><td>CSSM_ALGMODE_ECB64</td><td>64 byte Electronic CodeBook (ECB) mode</td></tr>
 
-<tr><td>25</td><td>CSSM_ALGMODE_CBC64</td><td></td></tr>
+<tr><td>25</td><td>CSSM_ALGMODE_CBC64</td><td>64 byte Cipher Block Chaining (CBC) mode</td></tr>
 
-<tr><td>26</td><td>CSSM_ALGMODE_OFB64</td><td></td></tr>
+<tr><td>26</td><td>CSSM_ALGMODE_OFB64</td><td>64 byte Output FeedBack (OFB) mode</td></tr>
 
-<tr><td>28</td><td>CSSM_ALGMODE_CFB32</td><td></td></tr>
+<tr><td>28</td><td>CSSM_ALGMODE_CFB32</td><td>32 byte Cipher feedback (CFB) mode</td></tr>
 
-<tr><td>29</td><td>CSSM_ALGMODE_CFB16</td><td></td></tr>
+<tr><td>29</td><td>CSSM_ALGMODE_CFB16</td><td>16 byte Cipher feedback (CFB) mode</td></tr>
 
-<tr><td>30</td><td>CSSM_ALGMODE_CFB8</td><td></td></tr>
+<tr><td>30</td><td>CSSM_ALGMODE_CFB8</td><td>8 byte Cipher feedback (CFB) mode</td></tr>
 
-<tr><td>31</td><td>CSSM_ALGMODE_WRAP</td><td></td></tr>
+<tr><td>31</td><td>CSSM_ALGMODE_WRAP</td><td>Unknown</td></tr>
 
-<tr><td>32</td><td>CSSM_ALGMODE_PRIVATE_WRAP</td><td></td></tr>
+<tr><td>32</td><td>CSSM_ALGMODE_PRIVATE_WRAP</td><td>Unknown</td></tr>
 
-<tr><td>33</td><td>CSSM_ALGMODE_RELAYX</td><td></td></tr>
+<tr><td>33</td><td>CSSM_ALGMODE_RELAYX</td><td>Unknown</td></tr>
 
-<tr><td>34</td><td>CSSM_ALGMODE_ECB128</td><td></td></tr>
+<tr><td>34</td><td>CSSM_ALGMODE_ECB128</td><td>128 byte Electronic CodeBook (ECB) mode</td></tr>
 
-<tr><td>35</td><td>CSSM_ALGMODE_ECB96</td><td></td></tr>
+<tr><td>35</td><td>CSSM_ALGMODE_ECB96</td><td>96 byte Electronic CodeBook (ECB) mode</td></tr>
 
-<tr><td>36</td><td>CSSM_ALGMODE_CBC128</td><td></td></tr>
+<tr><td>36</td><td>CSSM_ALGMODE_CBC128</td><td>128 byte Cipher Block Chaining (CBC) mode</td></tr>
 
-<tr><td>37</td><td>CSSM_ALGMODE_OAEP_HASH</td><td></td></tr>
+<tr><td>37</td><td>CSSM_ALGMODE_OAEP_HASH</td><td>Unknown (Algorithm mode for SET key wrapping?)</td></tr>
 
-<tr><td>38</td><td>CSSM_ALGMODE_PKCS1_EME_V15</td><td></td></tr>
+<tr><td>38</td><td>CSSM_ALGMODE_PKCS1_EME_V15</td><td>Public-Key Cryptography Standard (PKCS) 1 version 1.5</td></tr>
 
-<tr><td>39</td><td>CSSM_ALGMODE_PKCS1_EME_OAEP</td><td></td></tr>
+<tr><td>39</td><td>CSSM_ALGMODE_PKCS1_EME_OAEP</td><td>Public-Key Cryptography Standard (PKCS) 1 version 2.0</td></tr>
 
-<tr><td>40</td><td>CSSM_ALGMODE_PKCS1_EMSA_V15</td><td></td></tr>
+<tr><td>40</td><td>CSSM_ALGMODE_PKCS1_EMSA_V15</td><td>Unknown</td></tr>
 
-<tr><td>41</td><td>CSSM_ALGMODE_ISO_9796</td><td></td></tr>
+<tr><td>41</td><td>CSSM_ALGMODE_ISO_9796</td><td>Unknown</td></tr>
 
-<tr><td>42</td><td>CSSM_ALGMODE_X9_31</td><td></td></tr>
+<tr><td>42</td><td>CSSM_ALGMODE_X9_31</td><td>Unknown</td></tr>
 
 </table>
 </div>
@@ -846,8 +846,8 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 <p>The encrypted block data can be decrypted using the following approach:</p>
 <ul>
 <li>Calculate the specified block HMAC, e.g. HMAC-SHA-1, with the block HMAC key and the block number
-stored as a 32-bit big-endian value. This HMAC is used as the initialization vector for
-decryption.</li>
+stored as a 32-bit big-endian value, where 0 represents the first block. This HMAC is used as the
+initialization vector for decryption.</li>
 <li>Decrypt the encrypted data using the block encryption method and mode, e.g. AES-CBC, with the
 number of bits of the block DEK (defined by the block encryption key size) and the initialization
 vector if applicable.</li>

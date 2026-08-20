@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9b31e9d7.js";
+            window.path_to_searchindex_js = "searchindex-73815879.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b1deb91b.js"></script>
+        <script src="toc-94f1318b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -217,7 +217,7 @@ derive the sector size from the data:</p>
 <li>check the “boot signature” of the first EPR, if present</li>
 <li>check the content of well known partition types</li>
 </ul>
-<h2 id="cylinder-head-sector-chs-address"><a class="header" href="#cylinder-head-sector-chs-address">Cylinder Head Sector (CHS) address</a></h2>
+<h2 id="chs_address"><a class="header" href="#chs_address">Cylinder Head Sector (CHS) address</a></h2>
 <p>The Cylinder Head Sector (CHS) address is 24 bits in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -232,7 +232,7 @@ derive the sector size from the data:</p>
 </div>
 
 <p>The logical block address (LBA) can be determined from the CHS with the following calculation:</p>
-<pre><code class="language-python">lba = (((cylinder * heads_per_cylinder) + head) * sectors_per_track) + sector - 1
+<pre><code class="language-python">lba = (((cylinder * heads_per_cylinder) + head) * sectors_per_track) + (sector - 1)
 </code></pre>
 <h2 id="the-master-boot-record-mbr"><a class="header" href="#the-master-boot-record-mbr">The Master Boot Record (MBR)</a></h2>
 <p>The Master Boot Record (MBR) is a data structure that describes the properties of the storage
@@ -324,9 +324,9 @@ about the logical partition (volume) and additional extended partition tables.</
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>446</td><td>0x00</td><td>Unknown (Unused), which should contain zero bytes</td></tr>
 
-<tr><td>446</td><td>16</td><td></td><td>Partition table entry 1</td></tr>
+<tr><td>446</td><td>16</td><td></td><td>Partition table entry 1, contains the logical partition</td></tr>
 
-<tr><td>462</td><td>16</td><td></td><td>Partition table entry 2, which should contain an extended partition</td></tr>
+<tr><td>462</td><td>16</td><td></td><td>Partition table entry 2, which should contain an extended partition (of type 0x05) or be unused and contain zero bytes</td></tr>
 
 <tr><td>478</td><td>16</td><td>0x00</td><td>Partition table entry 3, which should be unused and contain zero bytes</td></tr>
 
@@ -339,8 +339,8 @@ about the logical partition (volume) and additional extended partition tables.</
 
 <p>The second partition entry contains an extended partition which points to the next EPR. The LBA
 addresses in the EPR are relative to the start of the first EPR.</p>
-<p>The first EPR typically has a <a href="#partition_types">partition type</a> of 0x05 but certain version of
-Windows are known to use a partition type 0x0f, such as Windows 98.</p>
+<p>The first EPR typically has a <a href="#partition_types">partition type</a> of “Extended (CHS)” (0x05) or
+“Extended (LBA)” (0x0f).</p>
 <h2 id="the-partition-table-entry"><a class="header" href="#the-partition-table-entry">The partition table entry</a></h2>
 <p>The partition table entry is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -348,19 +348,23 @@ Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>1</td><td></td><td><a href="#partition_flags">Partition flags</a></td></tr>
 
-<tr><td>1</td><td>3</td><td></td><td>The partition start address, which contains a CHS relative from the start of the harddisk</td></tr>
+<tr><td>1</td><td>3</td><td></td><td>The partition <a href="#chs_address">start CHS address</a>, which is relative from the start of the MBR</td></tr>
 
 <tr><td>4</td><td>1</td><td></td><td><a href="#partition_types">Partition type</a></td></tr>
 
-<tr><td>5</td><td>3</td><td></td><td>The partition end address, which contains a CHS relative from the start of the harddisk</td></tr>
+<tr><td>5</td><td>3</td><td></td><td>The partition <a href="#chs_address">end CHS address</a>, which is relative from the start of the MBR</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>The partition start address, which contains a LBA (sectors) relative from the start of the harddisk</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>The partition start LBA (sector address)</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Size of the partition in number of sectors</td></tr>
 
 </table>
 </div>
 
+<p>For partition table entry 1 (logical partition), the partition start LBA is relative from the start
+of the <strong>current</strong> extended partition record.</p>
+<p>For partition table entry 2 (next extended partition), the partition start LBA is relative from the
+start of the <strong>first</strong> extended partition record.</p>
 <h3 id="partition_flags"><a class="header" href="#partition_flags">Partition flags</a></h3>
 <p>The partition flags consist of the following values:</p>
 <div class="table-wrapper">
@@ -651,7 +655,7 @@ Windows are known to use a partition type 0x0f, such as Windows 98.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="gpt.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="linuxlvm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -665,7 +669,7 @@ Windows are known to use a partition type 0x0f, such as Windows 98.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="gpt.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="linuxlvm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

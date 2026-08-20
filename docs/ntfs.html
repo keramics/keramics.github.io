@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9b31e9d7.js";
+            window.path_to_searchindex_js = "searchindex-73815879.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b1deb91b.js"></script>
+        <script src="toc-94f1318b.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,8 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
-<p>The New Technologies File System (NTFS) format is the primary file system for
-Microsoft Windows versions that are based on Windows NT.</p>
+<p>The New Technologies File System (NTFS) format is the primary file system for Microsoft Windows
+versions that are based on Windows NT.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
@@ -217,35 +217,31 @@ Microsoft Windows versions that are based on Windows NT.</p>
 </div>
 
 <blockquote>
-<p>Note that the format versions mentioned above are the version as used by NTFS.
-Another common versioning schema uses the Windows version, e.g. NTFS 5.0 is the
-version of NTFS used on Windows XP which is version 3.1 in schema mentioned
-above.</p>
+<p>Note that the format versions mentioned above are the version as used by NTFS. Another common
+versioning schema uses the Windows version, e.g. NTFS 5.0 is the version of NTFS used on Windows XP
+which is version 3.1 in schema mentioned above.</p>
 </blockquote>
-<p>Windows does not necessarily uses the latest format version, e.g. Windows 10 (1809)
-has been observed to use NTFS version 1.2 for 64k cluster block size.</p>
+<p>Windows does not necessarily uses the latest format version, e.g. Windows 10 (1809) has been
+observed to use NTFS version 1.2 for 64k cluster block size.</p>
 <h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
 <h4 id="cluster"><a class="header" href="#cluster">Cluster</a></h4>
-<p>NTFS refers to it file system blocks as clusters. Note that these are not the
-same as the physical clusters of a harddisk. For clarity this document will
-refer to these as cluster blocks. In other sources they are also referred to as
-logical clusters.</p>
-<p>Typically a cluster block is 8 sectors (or 8 x 512 = 4096 bytes) in size. A
-cluster block number is relative to the start of the boot record.</p>
+<p>NTFS refers to it file system blocks as clusters. Note that these are not the same as the physical
+clusters of a harddisk. For clarity this document will refer to these as cluster blocks. In other
+sources they are also referred to as logical clusters.</p>
+<p>Typically a cluster block is 8 sectors (or 8 x 512 = 4096 bytes) in size. A cluster block number is
+relative to the start of the boot record.</p>
 <h4 id="virtual-cluster"><a class="header" href="#virtual-cluster">Virtual cluster</a></h4>
-<p>The term virtual cluster refers to cluster blocks which are relative to the
-start of a data stream.</p>
+<p>The term virtual cluster refers to cluster blocks which are relative to the start of a data stream.</p>
 <h4 id="long-and-short-file-name"><a class="header" href="#long-and-short-file-name">Long and short (file) name</a></h4>
-<p>In Windows terminology the name of a file (or directory) can either be short or
-long. The short name is an equivalent of the file name in the (DOS) 8.3 format.
-The long name is actual the (full) name of the file. The term long refers to
-the aspect that the name is longer than the short variant. Because most
-documentation refer to the (full) name as the long name, for clarity sake so
+<p>In Windows terminology the name of a file (or directory) can either be short or long. The short
+name is an equivalent of the file name in the (DOS) 8.3 format. The long name is actual the (full)
+name of the file. The term long refers to the aspect that the name is longer than the short
+variant. Because most documentation refer to the (full) name as the long name, for clarity sake so
 will this document.</p>
 <h4 id="metadata-files"><a class="header" href="#metadata-files">Metadata files</a></h4>
-<p>NTFS uses the Master File Table (MFT) to store information about files and
-directories. The MFT entries reference the different volume and file system
-metadata. There are several predefined metadata files.</p>
+<p>NTFS uses the Master File Table (MFT) to store information about files and directories. The MFT
+entries reference the different volume and file system metadata. There are several predefined
+metadata files.</p>
 <p>The following metadata files are predefined and use a fixed MFT entry number.</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -321,8 +317,8 @@ metadata. There are several predefined metadata files.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<p>The following metadata files are predefined, however the MFT entry number is
-commonly used but not fixed.</p>
+<p>The following metadata files are predefined, however the MFT entry number is commonly used but not
+fixed.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>MFT entry number</th><th>File name</th><th>Description</th></thead>
@@ -332,8 +328,7 @@ commonly used but not fixed.</p>
 </div>
 
 <h2 id="the-boot-record"><a class="header" href="#the-boot-record">The boot record</a></h2>
-<p>The boot record is stored at the start of the volume (in the $Boot metadata
-file) and contains:</p>
+<p>The boot record is stored at the start of the volume (in the $Boot metadata file) and contains:</p>
 <ul>
 <li>the file system signature</li>
 <li>the BIOS parameter block</li>
@@ -410,14 +405,13 @@ file) and contains:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="boot-entry-point"><a class="header" href="#boot-entry-point">Boot entry point</a></h3>
-<p>The boot entry point often contains a jump instruction to the boot code at
-offset 84 followed by a no-operation, e.g.</p>
+<p>The boot entry point often contains a jump instruction to the boot code at offset 84 followed by a
+no-operation, e.g.</p>
 <pre><code class="language-text">eb52   jmp 0x52
 90     nop
 </code></pre>
 <h3 id="number-of-sectors-per-cluster-block"><a class="header" href="#number-of-sectors-per-cluster-block">Number of sectors per cluster block</a></h3>
-<p>The number of sectors per cluster block value as used by mkntfs is defined as
-following:</p>
+<p>The number of sectors per cluster block value as used by mkntfs is defined as following:</p>
 <ul>
 <li>Values 0 to 128 represent sizes of 0 to 128 sectors.</li>
 <li>Values 244 to 255 represent sizes of <code>2^(256-n)</code> sectors.</li>
@@ -427,8 +421,8 @@ following:</p>
 <p>The cluster block size can be determined as following:</p>
 <pre><code class="language-python">cluster block size = bytes per sector x sectors per cluster block
 </code></pre>
-<p>Different NTFS implementations support different cluster block sizes. Known
-supported cluster block size:</p>
+<p>Different NTFS implementations support different cluster block sizes. Known supported cluster block
+size:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Cluster block size</th><th>Bytes per sector</th><th>Supported by</th></thead>
@@ -464,10 +458,9 @@ supported cluster block size:</p>
 </div>
 
 <blockquote>
-<p>Note that Windows 10 (1903) requires the partition containing the NTFS file
-system to be aligned with the cluster block size. For example for a cluster
-block size of 128k the partition must 128 KiB aligned. The default partition
-partition alignment appears to be 64 KiB.</p>
+<p>Note that Windows 10 (1903) requires the partition containing the NTFS file system to be aligned
+with the cluster block size. For example for a cluster block size of 128k the partition must 128
+KiB aligned. The default partition partition alignment appears to be 64 KiB.</p>
 </blockquote>
 <p>mkntfs restricts the cluster size to:</p>
 <pre><code class="language-python">bytes_per_sector &gt;= cluster_block_size &gt; 4096 * bytes_per_sector
@@ -476,29 +469,26 @@ partition alignment appears to be 64 KiB.</p>
 <p>The Master File Table (MFT) offset can be determined as following:</p>
 <pre><code class="language-python">mft_offset = boot_record_offset + (mft_cluster_block_number * cluster_block_size)
 </code></pre>
-<p>The lower 32-bit part of the NTFS volume serial number is the Windows API
-(WINAPI) volume serial number. This can be determined by comparing the output
-of:</p>
+<p>The lower 32-bit part of the NTFS volume serial number is the Windows API (WINAPI) volume serial
+number. This can be determined by comparing the output of:</p>
 <pre><code class="language-text">fsutil fsinfo volumeinfo C:
 fsutil fsinfo ntfsinfo C:
 </code></pre>
-<p>Often the total number of sectors in the boot record will be smaller than the
-underlying partition. A (nearly identical) backup of the boot record is stored
-in last sector of cluster block, that follows the last cluster block of the
-volume. Often this is the 512 bytes after the last sector of the volume, but
-not necessarily. The backup boot record is not included in the total number of
+<p>Often the total number of sectors in the boot record will be smaller than the underlying partition.
+A (nearly identical) backup of the boot record is stored in last sector of cluster block, that
+follows the last cluster block of the volume. Often this is the 512 bytes after the last sector of
+the volume, but not necessarily. The backup boot record is not included in the total number of
 sectors.</p>
 <h3 id="master-file-table-mft-and-index-entry-size"><a class="header" href="#master-file-table-mft-and-index-entry-size">Master File Table (MFT) and index entry size</a></h3>
-<p>The Master File Table (MFT) entry size and index entry size are defined as
-following:</p>
+<p>The Master File Table (MFT) entry size and index entry size are defined as following:</p>
 <ul>
 <li>Values 0 to 127 represent sizes of 0 to 127 cluster blocks.</li>
 <li>Values 128 to 255 represent sizes of 2^(256-n) bytes or 2^(-n) if considered as a signed byte.</li>
 <li>Other values are not considered valid.</li>
 </ul>
 <h3 id="bitlocker-drive-encryption-bde"><a class="header" href="#bitlocker-drive-encryption-bde">BitLocker Drive Encryption (BDE)</a></h3>
-<p>BitLocker Drive Encryption (BDE) uses the file system signature: “-FVE-FS-”.
-Where FVE is an abbreviation of Full Volume Encryption.</p>
+<p>BitLocker Drive Encryption (BDE) uses the file system signature: “-FVE-FS-”. Where FVE is an
+abbreviation of Full Volume Encryption.</p>
 <p>The data structures of BDE on Windows Vista and 7 differ.</p>
 <p>A Windows Vista BDE volume starts with:</p>
 <pre><code class="language-text">eb 52 90 2d 46 56 45 26 46 53 2d
@@ -509,9 +499,8 @@ Where FVE is an abbreviation of Full Volume Encryption.</p>
 <p>BDE is largely a stand-alone but has some integration with NTFS.</p>
 <p>TODO: link to BDE format documentation</p>
 <h3 id="volume-shadow-snapshots-vss"><a class="header" href="#volume-shadow-snapshots-vss">Volume Shadow Snapshots (VSS)</a></h3>
-<p>Volume Shadow Snapshots (VSS) uses the GUID
-3808876b-c176-4e48-b7ae-04046e6cc752 (stored in little-endian) to identify its
-data.</p>
+<p>Volume Shadow Snapshots (VSS) uses the GUID 3808876b-c176-4e48-b7ae-04046e6cc752 (stored in
+little-endian) to identify its data.</p>
 <p>VSS is largely a stand-alone but has some integration with NTFS.</p>
 <p>TODO: link to VSS format documentation</p>
 <h3 id="media_descriptor"><a class="header" href="#media_descriptor">Media descriptor</a></h3>
@@ -541,16 +530,15 @@ data.</p>
 </div>
 
 <h2 id="the-master-file-table-mft"><a class="header" href="#the-master-file-table-mft">The Master File Table (MFT)</a></h2>
-<p>The MFT consist of an array of MFT entries. The offset of the MFT table can be
-found in the volume header and the size of the MFT is defined by the MFT entry
-of the $MFT metadata file.</p>
+<p>The MFT consist of an array of MFT entries. The offset of the MFT table can be found in the volume
+header and the size of the MFT is defined by the MFT entry of the $MFT metadata file.</p>
 <blockquote>
-<p>Note that the MFT can consists of multiple data ranges, defined by the data
-runs in the $MFT metadata file.</p>
+<p>Note that the MFT can consists of multiple data ranges, defined by the data runs in the $MFT
+metadata file.</p>
 </blockquote>
 <h3 id="mft-entry"><a class="header" href="#mft-entry">MFT entry</a></h3>
-<p>Although the size of a MFT entry is defined in the volume header is commonly
-1024 bytes in size and consists of:</p>
+<p>Although the size of a MFT entry is defined in the volume header is commonly 1024 bytes in size and
+consists of:</p>
 <ul>
 <li>The MFT entry header</li>
 <li><a href="#fix_up_values">The fix-up values</a></li>
@@ -558,12 +546,11 @@ runs in the $MFT metadata file.</p>
 <li>Padding, which should contain 0-byte values</li>
 </ul>
 <blockquote>
-<p>Note that the MFT entry can be filled entirely with 0-byte values. Seen in
-Windows XP for MFT entry numbers 16 - 23.</p>
+<p>Note that the MFT entry can be filled entirely with 0-byte values. Seen in Windows XP for MFT
+entry numbers 16 - 23.</p>
 </blockquote>
 <h4 id="mft-entry-header"><a class="header" href="#mft-entry-header">MFT entry header</a></h4>
-<p>The MFT entry header (FILE_RECORD_SEGMENT_HEADER) is 42 or 48 bytes in size
-and consists of:</p>
+<p>The MFT entry header (FILE_RECORD_SEGMENT_HEADER) is 42 or 48 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -625,8 +612,8 @@ the sequence number is incremented each time that a file record segment is freed
 segment is not used.</p>
 <!-- rumdl-enable MD013 -->
 <h5 id="base-record-file-reference"><a class="header" href="#base-record-file-reference">Base record file reference</a></h5>
-<p>The base record file reference is used to store additional attributes for
-another MFT entry, e.g. for attribute lists.</p>
+<p>The base record file reference is used to store additional attributes for another MFT entry, e.g.
+for attribute lists.</p>
 <h4 id="mft_entry_flags"><a class="header" href="#mft_entry_flags">MFT entry flags</a></h4>
 <div class="table-wrapper">
 <table>
@@ -695,8 +682,7 @@ and consists of:</p>
 <li>alignment padding (8-byte alignment), can contain remnant data</li>
 </ul>
 <h4 id="mft-attribute-header"><a class="header" href="#mft-attribute-header">MFT attribute header</a></h4>
-<p>The MFT attribute header (ATTRIBUTE_RECORD_HEADER) is 16 bytes in size and
-consists of:</p>
+<p>The MFT attribute header (ATTRIBUTE_RECORD_HEADER) is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -736,12 +722,11 @@ consists of:</p>
 </table>
 </div>
 
-<p>TODO: determine the meaning of compression flag in the context of resident
-$INDEX_ROOT. Do the data flags have a different meaning for different
-attributes?</p>
+<p>TODO: determine the meaning of compression flag in the context of resident $INDEX_ROOT. Do the data
+flags have a different meaning for different attributes?</p>
 <h4 id="resident-mft-attribute"><a class="header" href="#resident-mft-attribute">Resident MFT attribute</a></h4>
-<p>The resident MFT attribute data is present when the non-resident flag is not
-set (0). The resident data is 8 bytes in size and consists of:</p>
+<p>The resident MFT attribute data is present when the non-resident flag is not set (0). The resident
+data is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -758,8 +743,8 @@ set (0). The resident data is 8 bytes in size and consists of:</p>
 
 <p>TODO: determine the meaning of indexed flag bits, other than the LSB</p>
 <h4 id="non-resident-mft-attribute"><a class="header" href="#non-resident-mft-attribute">Non-resident MFT attribute</a></h4>
-<p>The non-resident MFT attribute data is present when the non-resident flag is
-set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
+<p>The non-resident MFT attribute data is present when the non-resident flag is set (1). The
+non-resident data is 48 or 56 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -790,10 +775,9 @@ set (1). The non-resident data is 48 or 56 bytes in size and consists of:</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>The total size of the data runs should be larger or equal to the data size.</p>
 <blockquote>
-<p>Note that Windows will fill data beyond the valid data size with 0-byte values.
-The data size remains unchanged. This applies to compressed and uncompressed
-data. If the first VCN is zero a valid data size of 0 represents a file
-entirely filled with 0-byte values.</p>
+<p>Note that Windows will fill data beyond the valid data size with 0-byte values. The data size
+remains unchanged. This applies to compressed and uncompressed data. If the first VCN is zero a
+valid data size of 0 represents a file entirely filled with 0-byte values.</p>
 </blockquote>
 <p>TODO: determine the meaning of a VCN of -1</p>
 <p>For more information about compressed MFT attributes see <a href="#compression">compression</a>.</p>
@@ -808,8 +792,8 @@ entirely filled with 0-byte values.</p>
 </div>
 
 <h4 id="data-runs"><a class="header" href="#data-runs">Data runs</a></h4>
-<p>The data runs are stored in a variable size (data) runlist. This runlist
-consists of runlist elements.</p>
+<p>The data runs are stored in a variable size (data) runlist. This runlist consists of runlist
+elements.</p>
 <p>A runlist element is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -825,46 +809,38 @@ consists of runlist elements.</p>
 </table>
 </div>
 
-<p>The data run cluster block number is a singed value, where the MSB is the
-singed bit, e.g. if the data run cluster block contains “dbc8” it corresponds
-to the 64-bit value 0xffffffffffffdbc8.</p>
-<p>The first data run offset contains the absolute cluster block number where
-successive data run offsets are relative to the last data run offset.</p>
+<p>The data run cluster block number is a singed value, where the MSB is the singed bit, e.g. if the
+data run cluster block contains “dbc8” it corresponds to the 64-bit value 0xffffffffffffdbc8.</p>
+<p>The first data run offset contains the absolute cluster block number where successive data run
+offsets are relative to the last data run offset.</p>
 <blockquote>
-<p>Note that the cluster block number byte size is the first nibble when reading
-the byte stream, but here it is represented as the upper nibble of the first
-byte.</p>
+<p>Note that the cluster block number byte size is the first nibble when reading the byte stream,
+but here it is represented as the upper nibble of the first byte.</p>
 </blockquote>
 <p>The last runlist element is (0, 0), which is stored as a 0-byte value.</p>
-<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a>
-the size of the runlist is rounded up to the next multitude of 4 bytes, but
-based on analysis of data samples it seems that the size of the trailing data
-can be even larger than 3 and are not always 0-byte values.</p>
+<p>According to <a href="https://flatcap.github.io/linux-ntfs/ntfs/">NTFS documentation</a> the size of the
+runlist is rounded up to the next multitude of 4 bytes, but based on analysis of data samples it
+seems that the size of the trailing data can be even larger than 3 and are not always 0-byte values.</p>
 <p>TODO: provide examples of data runs</p>
 <h5 id="sparse-data-runs"><a class="header" href="#sparse-data-runs">Sparse data runs</a></h5>
-<p>The MFT attribute data flag (ATTRIBUTE_FLAG_SPARSE) indicates if the data
-stream is sparse or not, where the runlist can contain both sparse and
-non-sparse data runs.</p>
-<p>A sparse data run has a cluster block number value size of 0, representing
-there is no offset (cluster block number). A sparse data run is filled with
-0-byte values.</p>
-<p>Compressed data streams also define sparse data runs without setting the
-ATTRIBUTE_FLAG_SPARSE flag.</p>
+<p>The MFT attribute data flag (ATTRIBUTE_FLAG_SPARSE) indicates if the data stream is sparse or not,
+where the runlist can contain both sparse and non-sparse data runs.</p>
+<p>A sparse data run has a cluster block number value size of 0, representing there is no offset
+(cluster block number). A sparse data run is filled with 0-byte values.</p>
+<p>Compressed data streams also define sparse data runs without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 <blockquote>
-<p>Note that $BadClus:$Bad also defines a data run with a cluster block number
-value size of 0, without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
+<p>Note that $BadClus:$Bad also defines a data run with a cluster block number value size of 0,
+without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 </blockquote>
 <h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
-<p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed
-or not.</p>
-<p>Windows supports compressed data runs for NTFS file systems with a cluster block
-size of 4096 bytes or less.</p>
-<p>Windows 10 supports Windows Overlay Filter (WOF) compressed data, which stores
-the LZXPRESS Huffman or LZX compressed data in alternate data stream named
-WofCompressedData and links it to the default data stream using a reparse point.</p>
-<p>The data is stored in compression unit blocks. A compression unit typically
-consists of 16 cluster blocks. However the actual value is stored in the
-non-resident MFT attribute.</p>
+<p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed or not.</p>
+<p>Windows supports compressed data runs for NTFS file systems with a cluster block size of 4096 bytes
+or less.</p>
+<p>Windows 10 supports Windows Overlay Filter (WOF) compressed data, which stores the LZXPRESS Huffman
+or LZX compressed data in alternate data stream named WofCompressedData and links it to the default
+data stream using a reparse point.</p>
+<p>The data is stored in compression unit blocks. A compression unit typically consists of 16 cluster
+blocks. However the actual value is stored in the non-resident MFT attribute.</p>
 <p>Also see <a href="#compression">compression</a>.</p>
 <h2 id="the-attributes"><a class="header" href="#the-attributes">The attributes</a></h2>
 <h3 id="attribute_types"><a class="header" href="#attribute_types">Known attribute types</a></h3>
@@ -942,21 +918,19 @@ non-resident MFT attribute.</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="attribute_chains"><a class="header" href="#attribute_chains">Attribute chains</a></h3>
-<p>Multiple attributes can be chained to make up a single attribute data stream,
-e.g. the attributes:</p>
+<p>Multiple attributes can be chained to make up a single attribute data stream, e.g. the attributes:</p>
 <ol>
 <li>$INDEX_ALLOCATION ($I30) VCN: 0</li>
 <li>$INDEX_ALLOCATION ($I30) VCN: 596</li>
 </ol>
-<p>The first attribute will contain the size of the data defined by all the
-attributes and successive attributes should have a size of 0.</p>
-<p>It is assumed that the attributes in a chain must be continuous and defined
-in-order.</p>
+<p>The first attribute will contain the size of the data defined by all the attributes and successive
+attributes should have a size of 0.</p>
+<p>It is assumed that the attributes in a chain must be continuous and defined in-order.</p>
 <h3 id="the-standard-information-attribute"><a class="header" href="#the-standard-information-attribute">The standard information attribute</a></h3>
-<p>The standard information attribute ($STANDARD_INFORMATION) contains the basic
-file entry metadata. It is stored as a resident MFT attribute.</p>
-<p>The standard information data (STANDARD_INFORMATION) is either 48 or 72 bytes
-in size and consists of:</p>
+<p>The standard information attribute ($STANDARD_INFORMATION) contains the basic file entry metadata.
+It is stored as a resident MFT attribute.</p>
+<p>The standard information data (STANDARD_INFORMATION) is either 48 or 72 bytes in size and consists
+of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -992,22 +966,20 @@ in size and consists of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that MFT entries have been observed without a $STANDARD_INFORMATION
-attribute, but with other attributes such as $FILE_NAME and an $I30 index.</p>
+<p>Note that MFT entries have been observed without a $STANDARD_INFORMATION attribute, but with
+other attributes such as $FILE_NAME and an $I30 index.</p>
 </blockquote>
 <p>Recent version of NTFS support case-sentive file names. If a directory is case-sensitive the
 corresponding $STANDARD_INFORMATION attribute will have a maximum number of versions of 0 and a
 version number of 1.</p>
 <h3 id="the-attribute-list-attribute"><a class="header" href="#the-attribute-list-attribute">The attribute list attribute</a></h3>
-<p>The attribute list attribute ($ATTRIBUTE_LIST) is used to store MFT attributes
-outside the MFT entry, e.g. when the MFT entry is too small to store all the
-attributes.</p>
-<p>The entries in the list reference the location of MFT attributes. The attribute
-list attribute can be stored as either a resident (for a small amount of data)
-or non-resident MFT attribute.</p>
+<p>The attribute list attribute ($ATTRIBUTE_LIST) is used to store MFT attributes outside the MFT
+entry, e.g. when the MFT entry is too small to store all the attributes.</p>
+<p>The entries in the list reference the location of MFT attributes. The attribute list attribute can
+be stored as either a resident (for a small amount of data) or non-resident MFT attribute.</p>
 <blockquote>
-<p>Note that MFT entry 0 also can contain an attribute list and allows to store
-listed attributes beyond the first data run.</p>
+<p>Note that MFT entry 0 also can contain an attribute list and allows to store listed attributes
+beyond the first data run.</p>
 </blockquote>
 <h4 id="the-attribute-list"><a class="header" href="#the-attribute-list">The attribute list</a></h4>
 <p>An attribute list consists of:</p>
@@ -1015,8 +987,7 @@ listed attributes beyond the first data run.</p>
 <li>one or more attribute list entries</li>
 </ul>
 <h4 id="the-attribute-list-entry"><a class="header" href="#the-attribute-list-entry">The attribute list entry</a></h4>
-<p>An attribute list entry (ATTRIBUTE_LIST_ENTRY) is of variable size and
-consists of:</p>
+<p>An attribute list entry (ATTRIBUTE_LIST_ENTRY) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1042,9 +1013,8 @@ consists of:</p>
 </div>
 
 <h3 id="file_name_attribute"><a class="header" href="#file_name_attribute">The file name attribute</a></h3>
-<p>The file name attribute ($FILE_NAME) contains the basic file system information,
-like the parent file entry, various date and time values and name. It is stored
-as a resident MFT attribute.</p>
+<p>The file name attribute ($FILE_NAME) contains the basic file system information, like the parent
+file entry, various date and time values and name. It is stored as a resident MFT attribute.</p>
 <p>The file name data (FILE_NAME) is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1086,13 +1056,13 @@ as a resident MFT attribute.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<p>An MFT attribute can contain multiple file name attributes, e.g. for a separate
-(long) name and short name.</p>
-<p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp;
-Windows and POSIX name space $FILE_NAME attribute. However the directory entry
-index ($I30) of the parent directory only contained the DOS &amp; Windows name.</p>
-<p>In case of a hard link the MFT entry will contain additional file name
-attributes with the parent file reference of each hard link.</p>
+<p>An MFT attribute can contain multiple file name attributes, e.g. for a separate (long) name and
+short name.</p>
+<p>In several cases on a Vista NTFS volume the MFT entry contained both a DOS &amp; Windows and POSIX name
+space $FILE_NAME attribute. However the directory entry index ($I30) of the parent directory only
+contained the DOS &amp; Windows name.</p>
+<p>In case of a hard link the MFT entry will contain additional file name attributes with the parent
+file reference of each hard link.</p>
 <h4 id="namespace"><a class="header" href="#namespace">Namespace</a></h4>
 <div class="table-wrapper">
 <table>
@@ -1109,12 +1079,11 @@ attributes with the parent file reference of each hard link.</p>
 </div>
 
 <blockquote>
-<p>Note that the Windows API function CreateFile allows to create case-sensitive
-file names when the flag FILE_FLAG_POSIX_SEMANTICS is set.</p>
+<p>Note that the Windows API function CreateFile allows to create case-sensitive file names when the
+flag FILE_FLAG_POSIX_SEMANTICS is set.</p>
 </blockquote>
 <h4 id="long-to-short-name-conversion"><a class="header" href="#long-to-short-name-conversion">Long to short name conversion</a></h4>
-<p>A short name can be determined from a long name with the following approach. In
-the long name:</p>
+<p>A short name can be determined from a long name with the following approach. In the long name:</p>
 <ul>
 <li>ignore Unicode characters beyond the first 8-bit (extended ASCII)</li>
 <li>ignore control characters and spaces (character &lt; 0x20)</li>
@@ -1142,13 +1111,12 @@ in a directory with a lot of file names starting with “x86_microsoft”, becom
 <p>TODO: determine if the behavior is dependent on a setting that can be changed with fsutil</p>
 <h3 id="the-volume-version-attribute"><a class="header" href="#the-volume-version-attribute">The volume version attribute</a></h3>
 <p>The volume version attribute ($VOLUME_VERSION) contains volume version.</p>
-<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
-$AttrDef indicates the attribute to be 8 bytes in size.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute. $AttrDef indicates
+the attribute to be 8 bytes in size.</p>
 <h3 id="the-object-identifier-attribute"><a class="header" href="#the-object-identifier-attribute">The object identifier attribute</a></h3>
-<p>The object identifier attribute ($OBJECT_ID) contains distributed link tracker
-properties. It is stored as a resident MFT attribute.</p>
-<p>The object identifier attribute data is either 16 or 64 bytes in size and
-consists of:</p>
+<p>The object identifier attribute ($OBJECT_ID) contains distributed link tracker properties. It is
+stored as a resident MFT attribute.</p>
+<p>The object identifier attribute data is either 16 or 64 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1166,13 +1134,12 @@ consists of:</p>
 <p>Droid in this context refers to CDomainRelativeObjId.</p>
 <h3 id="the-security-descriptor-attribute"><a class="header" href="#the-security-descriptor-attribute">The security descriptor attribute</a></h3>
 <p>TODO: determine if this override any value in $Secure:$SDS?</p>
-<p>The security descriptor attribute ($SECURITY_DESCRIPTOR) contains a Windows NT
-security descriptor. It can be stored as either a resident (for a small amount
-of data) and non-resident MFT attribute.</p>
+<p>The security descriptor attribute ($SECURITY_DESCRIPTOR) contains a Windows NT security descriptor.
+It can be stored as either a resident (for a small amount of data) and non-resident MFT attribute.</p>
 <p>TODO: link to security descriptor format documentation</p>
 <h3 id="the-volume-name-attribute"><a class="header" href="#the-volume-name-attribute">The volume name attribute</a></h3>
-<p>The volume name attribute ($VOLUME_NAME) contains the volume label. It is
-stored as a resident MFT attribute.</p>
+<p>The volume name attribute ($VOLUME_NAME) contains the volume label. It is stored as a resident MFT
+attribute.</p>
 <p>The volume name attribute data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1184,8 +1151,8 @@ stored as a resident MFT attribute.</p>
 
 <p>The volume name attribute is used in the $Volume metadata file MFT entry.</p>
 <h3 id="the-volume-information-attribute"><a class="header" href="#the-volume-information-attribute">The volume information attribute</a></h3>
-<p>The volume information attribute ($VOLUME_INFORMATION) contains information
-about the volume. It is stored as a resident MFT attribute.</p>
+<p>The volume information attribute ($VOLUME_INFORMATION) contains information about the volume. It is
+stored as a resident MFT attribute.</p>
 <p>The volume information attribute data is 12 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1232,53 +1199,48 @@ about the volume. It is stored as a resident MFT attribute.</p>
 </div>
 
 <h3 id="the-data-stream-attribute"><a class="header" href="#the-data-stream-attribute">The data stream attribute</a></h3>
-<p>The data stream attribute ($DATA) contains the file data. It can be stored as
-either a resident (for a small amount of data) and non-resident MFT attribute.</p>
-<p>Multiple data attributes for the same data stream can be used in the attribute
-list to define different parts of the data stream data. The first data stream
-attribute will contain the size of the entire data stream data. Other data
-stream attributes should have a size of 0. Also see <a href="#attribute_chains">attribute chains</a>.</p>
+<p>The data stream attribute ($DATA) contains the file data. It can be stored as either a resident
+(for a small amount of data) and non-resident MFT attribute.</p>
+<p>Multiple data attributes for the same data stream can be used in the attribute list to define
+different parts of the data stream data. The first data stream attribute will contain the size of
+the entire data stream data. Other data stream attributes should have a size of 0. Also see
+<a href="#attribute_chains">attribute chains</a>.</p>
 <h3 id="the-index-root-attribute"><a class="header" href="#the-index-root-attribute">The index root attribute</a></h3>
-<p>The index root attribute ($INDEX_ROOT) contains the root of the index tree. It
-is stored as a resident MFT attribute.</p>
+<p>The index root attribute ($INDEX_ROOT) contains the root of the index tree. It is stored as a
+resident MFT attribute.</p>
 <p>Also see <a href="#index">the index</a> and <a href="#index_root">the index root</a>.</p>
 <h3 id="the-index-allocation-attribute"><a class="header" href="#the-index-allocation-attribute">The index allocation attribute</a></h3>
-<p>The index allocation attribute ($INDEX_ALLOCATION) contains an array of index
-entries. It is stored as a non-resident MFT attribute.</p>
-<p>The index allocation attribute itself does not define which attribute type it
-contains in the index value data. For this information it needs the
-corresponding index root attribute.</p>
-<p>Multiple index allocation attributes for the same index can be used in the
-attribute list to define different parts of the index allocation data. The
-first index allocation attribute will contain the size of the entire index
-allocation data. Other index allocation attributes should have a size of 0.
+<p>The index allocation attribute ($INDEX_ALLOCATION) contains an array of index entries. It is stored
+as a non-resident MFT attribute.</p>
+<p>The index allocation attribute itself does not define which attribute type it contains in the index
+value data. For this information it needs the corresponding index root attribute.</p>
+<p>Multiple index allocation attributes for the same index can be used in the attribute list to define
+different parts of the index allocation data. The first index allocation attribute will contain the
+size of the entire index allocation data. Other index allocation attributes should have a size of 0.
 Also see <a href="#attribute_chains">attribute chains</a>.</p>
 <p>Also see <a href="#index">the index</a>.</p>
 <h3 id="the-bitmap-attribute"><a class="header" href="#the-bitmap-attribute">The bitmap attribute</a></h3>
-<p>The bitmap attribute ($BITMAP) contains the allocation bitmap. It can be stored
-as either a resident (for a small amount of data) and non-resident MFT
-attribute.</p>
-<p>It is used to maintain information about which entry is used and which is not.
-Every bit in the bitmap represents an entry. The index is stored byte-wise with
-the LSB of the byte corresponds to the first allocation element. The allocation
-element can represent different things:</p>
+<p>The bitmap attribute ($BITMAP) contains the allocation bitmap. It can be stored as either a
+resident (for a small amount of data) and non-resident MFT attribute.</p>
+<p>It is used to maintain information about which entry is used and which is not. Every bit in the
+bitmap represents an entry. The index is stored byte-wise with the LSB of the byte corresponds to
+the first allocation element. The allocation element can represent different things:</p>
 <ul>
 <li>an MFT entry in the MFT (nameless) bitmap;</li>
 <li>an index entry in an index ($I30).</li>
 </ul>
-<p>The allocation element is allocated if the corresponding bit contains 1 or
-unallocated if 0.</p>
+<p>The allocation element is allocated if the corresponding bit contains 1 or unallocated if 0.</p>
 <h3 id="the-symbolic-link-attribute"><a class="header" href="#the-symbolic-link-attribute">The symbolic link attribute</a></h3>
 <p>The symbolic link attribute ($SYMBOLIC_LINK) contains a symbolic link.</p>
-<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
-$AttrDef indicates the attribute is of variable size.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute. $AttrDef indicates
+the attribute is of variable size.</p>
 <h3 id="the-reparse-point-attribute"><a class="header" href="#the-reparse-point-attribute">The reparse point attribute</a></h3>
-<p>The reparse point attribute ($REPARSE_POINT) contains information about a file
-system-level link. It is stored as a resident MFT attribute.</p>
+<p>The reparse point attribute ($REPARSE_POINT) contains information about a file system-level link.
+It is stored as a resident MFT attribute.</p>
 <p>Als see <a href="#reparse_point">the reparse point</a>.</p>
 <h3 id="the-hpfs-extended-attribute-information"><a class="header" href="#the-hpfs-extended-attribute-information">The (HPFS) extended attribute information</a></h3>
-<p>The (HPFS) extended attribute information ($EA_INFORMATION) contains
-information about the extended attribute ($EA).</p>
+<p>The (HPFS) extended attribute information ($EA_INFORMATION) contains information about the extended
+attribute ($EA).</p>
 <p>The extended attribute information data is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1337,8 +1299,8 @@ information about the extended attribute ($EA).</p>
 
 <h3 id="the-property-set-attribute"><a class="header" href="#the-property-set-attribute">The property set attribute</a></h3>
 <p>The property set attribute ($PROPERTY_SET) contains a property set.</p>
-<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute.
-$AttrDef does not seem to always define this attribute.</p>
+<p>TODO: complete section. Need a pre NTFS version 3.0 volume with this attribute. $AttrDef does not
+seem to always define this attribute.</p>
 <h3 id="the-logged-utility-stream-attribute"><a class="header" href="#the-logged-utility-stream-attribute">The logged utility stream attribute</a></h3>
 <p>TODO: complete section</p>
 <div class="table-wrapper">
@@ -1372,31 +1334,27 @@ $AttrDef does not seem to always define this attribute.</p>
 </div>
 
 <h2 id="index"><a class="header" href="#index">The index</a></h2>
-<p>The index structures are used for various purposes one of which are the
+<p>The index structures are used for various purposes one of which are the directory entries.</p>
+<p>The root of the index is stored in index root. The index root attribute defines which type of
+attribute is stored in the index and the root index node.</p>
+<p>If the index is too large part of the index is stored in an index allocation attribute with the
+same attribute name. The index allocation attribute defines a data stream which contains index
+entries. Each index entry contains an index node.</p>
+<p>An index consists of a tree, where both the branch and index leaf nodes contain the actual data.
+E.g. in case of a directory entries index, any node that contains index value data make up for the
 directory entries.</p>
-<p>The root of the index is stored in index root. The index root attribute defines
-which type of attribute is stored in the index and the root index node.</p>
-<p>If the index is too large part of the index is stored in an index allocation
-attribute with the same attribute name. The index allocation attribute defines
-a data stream which contains index entries. Each index entry contains an index
-node.</p>
-<p>An index consists of a tree, where both the branch and index leaf nodes contain
-the actual data. E.g. in case of a directory entries index, any node that
-contains index value data make up for the directory entries.</p>
-<p>The index value data in a branch node signifies the upper bound of the values
-in the that specific branch. E.g. if directory entries index branch node
-contains the name “textfile.txt” all names in that index branch are smaller
-than “textfile.txt”.</p>
+<p>The index value data in a branch node signifies the upper bound of the values in the that specific
+branch. E.g. if directory entries index branch node contains the name “textfile.txt” all names in
+that index branch are smaller than “textfile.txt”.</p>
 <blockquote>
-<p>Note the actual sorting order is dependent on the collation type defined in
-the index root attribute.</p>
+<p>Note the actual sorting order is dependent on the collation type defined in the index root
+attribute.</p>
 </blockquote>
-<p>The index allocation attribute is accompanied by a bitmap attribute with the
-corresponding attribute name. The bitmap attribute defines the allocation of
-virtual cluster blocks within the index allocation attribute data stream.</p>
+<p>The index allocation attribute is accompanied by a bitmap attribute with the corresponding
+attribute name. The bitmap attribute defines the allocation of virtual cluster blocks within the
+index allocation attribute data stream.</p>
 <blockquote>
-<p>Note that the index allocation attribute can be present even though it is not
-used.</p>
+<p>Note that the index allocation attribute can be present even though it is not used.</p>
 </blockquote>
 <h3 id="common-used-indexes"><a class="header" href="#common-used-indexes">Common used indexes</a></h3>
 <p>Indexes commonly used by NTFS are:</p>
@@ -1444,9 +1402,8 @@ used.</p>
 </div>
 
 <blockquote>
-<p>Note that for NTFS version 1.2 the index entry size does not have to match
-the index entry size in the volume header. The correct size seems to be the
-value in the index root header.</p>
+<p>Note that for NTFS version 1.2 the index entry size does not have to match the index entry size
+in the volume header. The correct size seems to be the value in the index root header.</p>
 </blockquote>
 <h4 id="collation_type"><a class="header" href="#collation_type">Collation type</a></h4>
 <div class="table-wrapper">
@@ -1499,8 +1456,7 @@ value in the index root header.</p>
 </div>
 
 <blockquote>
-<p>Note that there can be more fix-up value than supported by the index entry
-data size.</p>
+<p>Note that there can be more fix-up value than supported by the index entry data size.</p>
 </blockquote>
 <h3 id="the-index-node-header"><a class="header" href="#the-index-node-header">The index node header</a></h3>
 <p>The index node header is 16 bytes in size and consists of:</p>
@@ -1518,8 +1474,8 @@ data size.</p>
 </table>
 </div>
 
-<p>In an index entry (index allocation attribute) the index node size includes the
-size of the fix-up values and the alignment padding following it.</p>
+<p>In an index entry (index allocation attribute) the index node size includes the size of the fix-up
+values and the alignment padding following it.</p>
 <p>The remainder of the index node contains remnant data and/or zero-byte values.</p>
 <h4 id="index_node_flags"><a class="header" href="#index_node_flags">The index node flags</a></h4>
 <div class="table-wrapper">
@@ -1560,8 +1516,8 @@ size of the fix-up values and the alignment padding following it.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>The index values are stored 8 byte aligned.</p>
 <blockquote>
-<p>Note that some other sources define the index value flags as a 16-bit value
-followed by 2 bytes of padding.</p>
+<p>Note that some other sources define the index value flags as a 16-bit value followed by 2 bytes
+of padding.</p>
 </blockquote>
 <h4 id="the-index-value-flags"><a class="header" href="#the-index-value-flags">The index value flags</a></h4>
 <div class="table-wrapper">
@@ -1577,22 +1533,22 @@ followed by 2 bytes of padding.</p>
 <h3 id="index-key-and-value-data"><a class="header" href="#index-key-and-value-data">Index key and value data</a></h3>
 <h4 id="directory-entry-index-value"><a class="header" href="#directory-entry-index-value">Directory entry index value</a></h4>
 <p>The MFT attribute name of the directory entry index is: $I30.</p>
-<p>The directory entry index value contains a <a href="#file_name_attribute">file name attribute</a>
-in the index key data.</p>
+<p>The directory entry index value contains a <a href="#file_name_attribute">file name attribute</a> in the index
+key data.</p>
 <blockquote>
 <p>Note that the index value data can contain remnant data.</p>
 </blockquote>
-<p>The short and long names of the same file have a separate index values. The
-short name uses the DOS name space and the long name the WINDOWS name space.
-Index values with a single name use either the POSIX or DOS_WINDOWS name space.</p>
+<p>The short and long names of the same file have a separate index values. The short name uses the DOS
+name space and the long name the WINDOWS name space. Index values with a single name use either the
+POSIX or DOS_WINDOWS name space.</p>
 <p>A hard link to a file in the same directory has separate index values.</p>
 <h4 id="security-descriptor-hash-index-value"><a class="header" href="#security-descriptor-hash-index-value">Security descriptor hash index value</a></h4>
-<p>The MFT attribute name of the security descriptor hash index is: $SDH.
-It appears to only to be used by the $Secure metadata file.</p>
+<p>The MFT attribute name of the security descriptor hash index is: $SDH. It appears to only to be
+used by the $Secure metadata file.</p>
 <p>Also see <a href="#security_descriptor_hash_index_value">the security descriptor hash index value</a>.</p>
 <h4 id="security-descriptor-identifier-index-value"><a class="header" href="#security-descriptor-identifier-index-value">Security descriptor identifier index value</a></h4>
-<p>The MFT attribute name of the security descriptor identifier index is: $SII.
-It appears to only to be used by the $Secure metadata file.</p>
+<p>The MFT attribute name of the security descriptor identifier index is: $SII. It appears to only to
+be used by the $Secure metadata file.</p>
 <!-- rumdl-disable MD013 -->
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
 <!-- rumdl-enable MD013 -->
@@ -1684,21 +1640,20 @@ following attributes:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that if the chunk size equals the size of the uncompressed data the chunk
-is stored (as-is) uncompressed.</p>
+<p>Note that if the chunk size equals the size of the uncompressed data the chunk is stored (as-is)
+uncompressed.</p>
 </blockquote>
 <p>The size of the chunk offset table is:</p>
 <pre><code class="language-python">number of chunk offsets = uncompressed size / compression unit size
 </code></pre>
-<p>The offset of the first compressed data chunk is at the end of the chunk offset
-table and is not stored in the chunk offset table.</p>
-<p>If the uncompressed size of a chunk is smaller than the compression unit size
-the chunk is stored uncompressed.</p>
+<p>The offset of the first compressed data chunk is at the end of the chunk offset table and is not
+stored in the chunk offset table.</p>
+<p>If the uncompressed size of a chunk is smaller than the compression unit size the chunk is stored
+uncompressed.</p>
 <p>Also see <a href="#wof_compression_method">Windows Overlay Filter (WOF) compression method</a>.</p>
 <h2 id="reparse_point"><a class="header" href="#reparse_point">The reparse point</a></h2>
-<p>The reparse point is used to create file system-level links. Reparse data is
-stored in the reparse point attribute. The reparse point data
-(REPARSE_DATA_BUFFER) is of variable size and consists of:</p>
+<p>The reparse point is used to create file system-level links. Reparse data is stored in the reparse
+point attribute. The reparse point data (REPARSE_DATA_BUFFER) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1926,9 +1881,8 @@ stored in the reparse point attribute. The reparse point data
 </div>
 
 <h3 id="junction_reparse_data"><a class="header" href="#junction_reparse_data">Junction or mount point reparse data</a></h3>
-<p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains
-junction or mount point reparse data. The junction or mount point reparse data
-is of variable size and consists of:</p>
+<p>A reparse point with tag IO_REPARSE_TAG_MOUNT_POINT (0xa0000003) contains junction or mount point
+reparse data. The junction or mount point reparse data is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1952,8 +1906,8 @@ is of variable size and consists of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that it is currently unclear if the names contain an end-of-string
-character or if they are followed by alignment padding.</p>
+<p>Note that it is currently unclear if the names contain an end-of-string character or if they are
+followed by alignment padding.</p>
 </blockquote>
 <p>TODO: determine what character values like 0x0002 represent in the substitute name</p>
 <pre><code class="language-text">00000010: 5c 00 3f 00 3f 00 02 00  43 00 3a 00 5c 00 55 00   \.?.?... C.:.\.U.
@@ -1962,9 +1916,8 @@ character or if they are followed by alignment padding.</p>
 00000040: 6e 00 74 00 73 00 00 00                            n.t.s...
 </code></pre>
 <h3 id="symbolic_link_reparse_data"><a class="header" href="#symbolic_link_reparse_data">Symbolic link reparse data</a></h3>
-<p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic
-link reparse data. The symbolic link reparse data is of variable size and
-consists of:</p>
+<p>A reparse point with tag IO_REPARSE_TAG_SYMLINK (0xa000000c) contains symbolic link reparse data.
+The symbolic link reparse data is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1999,9 +1952,8 @@ consists of:</p>
 </div>
 
 <h3 id="wof_reparse_data"><a class="header" href="#wof_reparse_data">Windows Overlay Filter (WOF) reparse data</a></h3>
-<p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows
-Overlay Filter (WOF) reparse data. The Windows Overlay Filter (WOF) reparse
-data is 16 bytes in size and consists of:</p>
+<p>A reparse point with tag IO_REPARSE_TAG_WOF (0x80000017) contains Windows Overlay Filter (WOF)
+reparse data. The Windows Overlay Filter (WOF) reparse data is 16 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -2039,9 +1991,9 @@ data is 16 bytes in size and consists of:</p>
 
 <p>TODO: link to LZXPRESS Huffman and LZX documentation</p>
 <h3 id="wci_reparse_data"><a class="header" href="#wci_reparse_data">Windows Container Isolation (WCI) reparse data</a></h3>
-<p>A reparse point with tag IO_REPARSE_TAG_WCI (0x80000018) contains Windows
-Container Isolation (WCI) reparse data. The Windows Container Isolation (WCI)
-reparse data is of variable size and consists of:</p>
+<p>A reparse point with tag IO_REPARSE_TAG_WCI (0x80000018) contains Windows Container Isolation (WCI)
+reparse data. The Windows Container Isolation (WCI) reparse data is of variable size and consists
+of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2060,8 +2012,8 @@ reparse data is of variable size and consists of:</p>
 
 <h2 id="the-allocation-bitmap"><a class="header" href="#the-allocation-bitmap">The allocation bitmap</a></h2>
 <p>The metadata file $Bitmap contains the allocation bitmap.</p>
-<p>Every bit in the allocation bitmap represents a block the size of the cluster
-block, where the LSB is the first bit in a byte.</p>
+<p>Every bit in the allocation bitmap represents a block the size of the cluster block, where the LSB
+is the first bit in a byte.</p>
 <p>TODO: describe what the $SRAT data stream is used for.</p>
 <h2 id="access_control"><a class="header" href="#access_control">Access control</a></h2>
 <p>The $Secure metadata file contains the security descriptors used for access control.</p>
@@ -2176,15 +2128,14 @@ block, where the LSB is the first bit in a byte.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <h2 id="log_file"><a class="header" href="#log_file">Metadata transaction journal (log file)</a></h2>
 <p>TODO: complete section</p>
-<p>The metadata file $LogFile contains the metadata transaction journal and
-consists of:</p>
+<p>The metadata file $LogFile contains the metadata transaction journal and consists of:</p>
 <ul>
 <li>Log File Service restart page header</li>
 <li><a href="#fix_up_values">The fix-up values</a></li>
 </ul>
 <h3 id="log-file-service-restart-page-header"><a class="header" href="#log-file-service-restart-page-header">Log File service restart page header</a></h3>
-<p>The Log File service restart page header (LFS_RESTART_PAGE_HEADER) is 30 bytes
-in size and consists of:</p>
+<p>The Log File service restart page header (LFS_RESTART_PAGE_HEADER) is 30 bytes in size and consists
+of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -2229,11 +2180,10 @@ in size and consists of:</p>
 </div>
 
 <h2 id="usn_change_journal"><a class="header" href="#usn_change_journal">USN change journal</a></h2>
-<p>The metadata file $Extend$UsnJrnl contains the USN change journal. It is a
-sparse file in which NTFS stores records of changes to files and directories.
-Applications make use of the journal to respond to file and directory changes
-as they occur, like e.g. the Windows File Replication Service (FRS) and the
-Windows (Desktop) Search service.</p>
+<p>The metadata file $Extend$UsnJrnl contains the USN change journal. It is a sparse file in which
+NTFS stores records of changes to files and directories. Applications make use of the journal to
+respond to file and directory changes as they occur, like e.g. the Windows File Replication Service
+(FRS) and the Windows (Desktop) Search service.</p>
 <p>The USN change journal consists of:</p>
 <ul>
 <li>the $UsnJrnl:$Max data stream, containing metadata like the maximum size of the journal</li>
@@ -2257,15 +2207,14 @@ stream is sparse.</li>
 </div>
 
 <h2 id="usn-change-journal-entries"><a class="header" href="#usn-change-journal-entries">USN change journal entries</a></h2>
-<p>The $UsnJrnl:$J data stream consists of an array of USN change journal entries.
-The USN change journal entries are stored on a per block-basis and 8-byte
-aligned. Therefore the remainder of the block can contain 0-byte values.</p>
+<p>The $UsnJrnl:$J data stream consists of an array of USN change journal entries. The USN change
+journal entries are stored on a per block-basis and 8-byte aligned. Therefore the remainder of the
+block can contain 0-byte values.</p>
 <p>TODO: describe journal block size</p>
-<p>Once the stream reaches maximum size the earliest USN change journal entries
-are removed from the stream and replaced with a sparse data run.</p>
+<p>Once the stream reaches maximum size the earliest USN change journal entries are removed from the
+stream and replaced with a sparse data run.</p>
 <h3 id="usn-change-journal-entry"><a class="header" href="#usn-change-journal-entry">USN change journal entry</a></h3>
-<p>The USN change journal entry (USN_RECORD_V2) is of variable size and consists
-of:</p>
+<p>The USN change journal entry (USN_RECORD_V2) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2396,8 +2345,7 @@ of:</p>
 </div>
 
 <h3 id="ms-properties"><a class="header" href="#ms-properties">ms-properties</a></h3>
-<p>The ms-properties alternate data stream contains a Windows Serialized Property
-Store (SPS).</p>
+<p>The ms-properties alternate data stream contains a Windows Serialized Property Store (SPS).</p>
 <p>TODO: link to Windows Serialized Property Store (SPS) format documentation</p>
 <h3 id="zoneidentifier"><a class="header" href="#zoneidentifier">Zone.Identifier</a></h3>
 <p>The Zone.Identifier alternate data stream contains ASCII text in the form:</p>
@@ -2410,13 +2358,13 @@ of the origin.</p>
 <!-- rumdl-enable MD013 -->
 <h2 id="transactional_ntfs"><a class="header" href="#transactional_ntfs">Transactional NTFS (TxF)</a></h2>
 <p>As of Vista Transactional NTFS (TxF) was added.</p>
-<p>In TxF the resource manager (RM) keeps track of transactional metadata and log
-files. The TxF related metadata files are stored in the metadata directory:</p>
+<p>In TxF the resource manager (RM) keeps track of transactional metadata and log files. The TxF
+related metadata files are stored in the metadata directory:</p>
 <pre><code class="language-text">$Extend\$RmMetadata
 </code></pre>
 <h3 id="resource-manager-repair-information"><a class="header" href="#resource-manager-repair-information">Resource manager repair information</a></h3>
-<p>The resource manager repair information metadata file:
-$Extend$RmMetadata$Repair consists of the following data streams:</p>
+<p>The resource manager repair information metadata file “$Extend$RmMetadata$Repair” consists of the
+following data streams:</p>
 <ul>
 <li>the default (unnamed) data stream</li>
 <li>the $Config data stream, contains the resource manager repair configuration information</li>
@@ -2437,11 +2385,11 @@ $Extend$RmMetadata$Repair consists of the following data streams:</p>
 
 <h3 id="transactional-ntfs-txf-metadata-directory"><a class="header" href="#transactional-ntfs-txf-metadata-directory">Transactional NTFS (TxF) metadata directory</a></h3>
 <p>TODO: complete section</p>
-<p>The transactional NTFS (TxF) metadata directory: $Extend$RmMetadata$Txf is
-used to isolate files for delete or overwrite operations.</p>
+<p>The transactional NTFS (TxF) metadata directory “$Extend$RmMetadata$Txf” is used to isolate files
+for delete or overwrite operations.</p>
 <h3 id="txf-old-page-stream-tops-file"><a class="header" href="#txf-old-page-stream-tops-file">TxF Old Page Stream (TOPS) file</a></h3>
-<p>The TxF Old Page Stream (TOPS) file: $Extend$RmMetadata$TxfLog$Tops consists
-of the following data streams:</p>
+<p>The TxF Old Page Stream (TOPS) file “$Extend$RmMetadata$TxfLog$Tops” consists of the following
+data streams:</p>
 <ul>
 <li>the default (unnamed) data stream, contains metadata about the resource manager, such as its GUID,
 its CLFS log policy, and the LSN at which recovery should start</li>
@@ -2483,11 +2431,11 @@ directory</li>
 </div>
 
 <h4 id="txf-old-page-stream-tops-file-data"><a class="header" href="#txf-old-page-stream-tops-file-data">TxF Old Page Stream (TOPS) file data</a></h4>
-<p>The $Tops:$T data streams contains the file data that is partially overwritten
-by a transaction. It consists of multiple pending transaction XML-documents.</p>
+<p>The $Tops:$T data streams contains the file data that is partially overwritten by a transaction. It
+consists of multiple pending transaction XML-documents.</p>
 <p>TODO: describe start of each sector containing 0x0001</p>
-<p>A pending transaction XML-document starts with an UTF-8 byte-order-mark. Is
-roughly contains the following data:</p>
+<p>A pending transaction XML-document starts with an UTF-8 byte-order-mark. Is roughly contains the
+following data:</p>
 <pre><code class="language-xml">&lt;?xml version='1.0' encoding='utf-8'?&gt;
 &lt;PendingTransaction Version="2.0" Identifier="..."&gt;
    &lt;Transactions&gt;
@@ -2543,8 +2491,8 @@ roughly contains the following data:</p>
 &lt;/PendingTransaction&gt;
 </code></pre>
 <h3 id="transactional-ntfs-txf-common-log-file-system-clfs-files"><a class="header" href="#transactional-ntfs-txf-common-log-file-system-clfs-files">Transactional NTFS (TxF) Common Log File System (CLFS) files</a></h3>
-<p>TxF uses a Common Log File System (CLFS) log store and the logged utility
-stream attribute named $TXF_DATA.</p>
+<p>TxF uses a Common Log File System (CLFS) log store and the logged utility stream attribute named
+$TXF_DATA.</p>
 <p>TODO: link to CLFS format documentation</p>
 <p>The base log file (BLF) of the TxF log store is:</p>
 <pre><code class="language-text">$Extend\$RmMetadata\$TxfLog\TxfLog.blf
@@ -2559,8 +2507,8 @@ $Extend\$RmMetadata\$TxfLog\TxfLogContainer00000000000000000002
 <li>TxfLog stream, which contains the TxF log records.</li>
 </ul>
 <h3 id="transactional-data-logged-utility-stream-attribute"><a class="header" href="#transactional-data-logged-utility-stream-attribute">Transactional data logged utility stream attribute</a></h3>
-<p>The transactional data ($TXF_DATA) logged utility stream attribute is 56 bytes
-in size and consist of:</p>
+<p>The transactional data ($TXF_DATA) logged utility stream attribute is 56 bytes in size and consist
+of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2584,8 +2532,8 @@ in size and consist of:</p>
 </div>
 
 <blockquote>
-<p>Note that a single MFT entry can contain multiple Transactional data logged
-utility stream attributes.</p>
+<p>Note that a single MFT entry can contain multiple Transactional data logged utility stream
+attributes.</p>
 </blockquote>
 <h2 id="windows-definitions"><a class="header" href="#windows-definitions">Windows definitions</a></h2>
 <h3 id="file_attribute_flags"><a class="header" href="#file_attribute_flags">File attribute flags</a></h3>
@@ -2630,10 +2578,9 @@ utility stream attributes.</p>
 </table>
 </div>
 
-<p>The following flags are mainly used in the file name attribute and sparsely in
-the standard information attribute. It could be that they have a different
-meaning in both types of attributes or that the standard information flags are
-not updated. For now the latter is assumed.</p>
+<p>The following flags are mainly used in the file name attribute and sparsely in the standard
+information attribute. It could be that they have a different meaning in both types of attributes
+or that the standard information flags are not updated. For now the latter is assumed.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -2646,12 +2593,9 @@ not updated. For now the latter is assumed.</p>
 
 <h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="data-steam-with-inconsistent-data-flags"><a class="header" href="#data-steam-with-inconsistent-data-flags">Data steam with inconsistent data flags</a></h3>
-<p>An MFT entry contains an $ATTRIBUTE_LIST attribute that contains multiple $DATA
-attributes. The $DATA attributes define a LZNT1 compressed data stream though
-only the first $DATA attribute has the compressed data flag set.</p>
-<blockquote>
-<p>Note that it is unclear if this is a corruption scenario or not.</p>
-</blockquote>
+<p>An MFT entry contains an $ATTRIBUTE_LIST attribute that contains multiple $DATA attributes. The
+$DATA attributes define a LZNT1 compressed data stream though only the first $DATA attribute has
+the compressed data flag set.</p>
 <pre><code class="language-text">MFT entry: 220 information:
     Is allocated                   : true
     File reference                 : 220-59
@@ -2698,8 +2642,11 @@ Attribute: 5
     Data size                      : 4487594 bytes
     Data flags                     : 0x0001
 </code></pre>
+<blockquote>
+<p>Note that it is unclear if this is a format edge case or corruption scenario.</p>
+</blockquote>
 <h3 id="directory-entry-with-outdated-file-reference"><a class="header" href="#directory-entry-with-outdated-file-reference">Directory entry with outdated file reference</a></h3>
-<p>The directory entry: \ProgramData\McAfee\Common Framework\Task\5.ini</p>
+<p>The directory entry “\ProgramData\McAfee\Common Framework\Task\5.ini”</p>
 <pre><code class="language-text">File entry:
     Path                           : \ProgramData\McAfee\Common Framework\Task\5.ini
     File reference                 : 51106-400
@@ -2754,6 +2701,81 @@ Attribute: 3
     Data flags                     : 0x0000
 </code></pre>
 <p>TODO: determine if $LogFile could be used to recover from this corruption scenario</p>
+<h3 id="directory-entry-referencing-mft-entry-with-base-record"><a class="header" href="#directory-entry-referencing-mft-entry-with-base-record">Directory entry referencing MFT entry with base record</a></h3>
+<p>The directory entry
+“\System Volume Information\DFSR\Config\Replica_F68AA759-069D-48B1-BE6F-205F26A792D0.XML”.</p>
+<pre><code class="language-text">File entry:
+    Path                           : \System Volume Information\DFSR\Config\Replica_F68AA759-069D-48B1-BE6F-205F26A792D0.XML
+    File reference                 : 77019-345
+    Name                           : Replica_F68AA759-069D-48B1-BE6F-205F26A792D0.XML
+    Parent file reference          : 19780-3
+    Size                           : 0
+</code></pre>
+<p>The corresponding MFT entry:</p>
+<pre><code class="language-text">MFT entry: 77019 information:
+    Is allocated                   : true
+    File reference                 : 77019-345
+    Base record file reference     : 296-623
+    Journal sequence number        : 24747653240
+    Number of attributes           : 1
+
+Attribute: 1
+    Attribute type                 : $DATA (0x00000080)
+    Data VCN range                 : 0 - 249
+    Data size                      : 1023546 bytes
+    Data flags                     : 0x0000
+</code></pre>
+<p>The parent MFT entry:</p>
+<pre><code class="language-text">MFT entry: 296 information:
+    Is allocated                   : true
+    File reference                 : 296-623
+    Base record file reference     : Not set (0)
+    Journal sequence number        : 24747648692
+    Number of attributes           : 4
+
+Attribute: 1
+    Attribute type                 : $STANDARD_INFORMATION (0x00000010)
+    Creation time                  : Dec 05, 2009 20:39:34.765625000 UTC
+    Modification time              : Apr 08, 2012 17:33:45.756367200 UTC
+    Access time                    : Apr 08, 2012 06:06:11.653828200 UTC
+    Entry modification time        : Apr 08, 2012 17:33:45.756367200 UTC
+    Owner identifier               : 0
+    Security descriptor identifier : 408
+    Update sequence number         : 6855921000
+    File attribute flags           : 0x00000020
+        Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+
+Attribute: 2
+    Attribute type                 : $ATTRIBUTE_LIST (0x00000020)
+    Data size                      : 96 bytes
+    Number of entries              : 3
+    Entry: 0                       : $STANDARD_INFORMATION (0x00000010) in file reference: 296-623
+    Entry: 1                       : $FILE_NAME (0x00000030) in file reference: 296-623
+    Entry: 2                       : $DATA (0x00000080) in file reference: 77019-345
+
+Attribute: 3
+    Attribute type                 : $FILE_NAME (0x00000030)
+    Parent file reference          : 1371-1
+    Creation time                  : Dec 05, 2009 20:39:34.765625000 UTC
+    Modification time              : Apr 08, 2012 06:06:11.653828200 UTC
+    Access time                    : Apr 08, 2012 06:06:11.653828200 UTC
+    Entry modification time        : Apr 08, 2012 06:06:11.653828200 UTC
+    File attribute flags           : 0x00000020
+        Should be archived (FILE_ATTRIBUTE_ARCHIVE)
+    Name space                     : DOS and Windows (3)
+    Name                           : winlogon.log
+
+Attribute: 4
+    Attribute type                 : $DATA (0x00000080)
+    Data VCN range                 : 0 - 249
+    Data size                      : 1023546 bytes
+    Data flags                     : 0x0000
+</code></pre>
+<blockquote>
+<p>Note it is currently assumed this is a corruption scenario and the data is part of the attribute
+list of MFT entry 296 not of the file “Replica_F68AA759-069D-48B1-BE6F-205F26A792D0.XML”. The
+VOLUME_IS_DIRTY volume flag was not set.</p>
+</blockquote>
 <h3 id="lznt1-compressed-block-with-data-size-of-0"><a class="header" href="#lznt1-compressed-block-with-data-size-of-0">LZNT1 compressed block with data size of 0</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
 <p>A compression unit (index 30) consisting of the following data runs:</p>
@@ -2786,8 +2808,8 @@ compressed chunk size                     : 1
 signature value                           : 0
 is compressed flag                        : 0
 </code></pre>
-<p>It was observed in 2 differnt NTFS implementations that the entire block is
-filled with 0-byte values.</p>
+<p>It was observed in 2 differnt NTFS implementations that the entire block is filled with 0-byte
+values.</p>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
 <h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
 <p>Not sure if this is a corruption scenario or a data format edge case.</p>
@@ -2816,8 +2838,7 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
 *
 1d84fff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 </code></pre>
-<p>This relates to a LZNT1 compressed block that appears to be truncated at offset
-16384 (0x00004000).</p>
+<p>This relates to a LZNT1 compressed block that appears to be truncated at offset 16384 (0x00004000).</p>
 <pre><code class="language-text">compressed data offset                    : 16384 (0x00004000)
 compression flag byte                     : 0x00
 </code></pre>
@@ -2870,7 +2891,7 @@ by Microsoft</li>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="assorted.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="hybrid.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -2884,7 +2905,7 @@ by Microsoft</li>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="assorted.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="hybrid.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
