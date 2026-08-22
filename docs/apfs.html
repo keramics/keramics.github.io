@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1c778c35.js";
+            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-94f1318b.js"></script>
@@ -2934,12 +2934,20 @@ extents. A sparse file extent has a physical block number of 0.</p>
 <h3 id="compressed-data-extended-attribute"><a class="header" href="#compressed-data-extended-attribute">Compressed data extended attribute</a></h3>
 <p>The file content data and size are stored in the compressed data header of a “com.apple.decmpfs”
 <a href="#extended_attribute">extended attribute</a>.</p>
+<blockquote>
+<p>Note it is currently assumed that the file entry either must not have a data fork or it the data
+fork must be of size 0.</p>
+</blockquote>
 <p>Also see: <a href="decmpfs.html">Apple File System Compression (decmpfs)</a>.</p>
 <h3 id="compressed-data-extended-attribute-with-resource-fork"><a class="header" href="#compressed-data-extended-attribute-with-resource-fork">Compressed data extended attribute with resource fork</a></h3>
 <p>The file content size is stored in the compressed data header of a “com.apple.decmpfs”
 <a href="#extended_attribute">extended attribute</a>.</p>
 <p>The file content data is stored in a “com.apple.ResourceFork”
 <a href="#extended_attribute">extended attribute</a>.</p>
+<blockquote>
+<p>Note it is currently assumed that the file entry either must not have a data fork or it the data
+fork must be of size 0.</p>
+</blockquote>
 <p>Also see: <a href="decmpfs.html">Apple File System Compression (decmpfs)</a>.</p>
 <h3 id="resource-fork"><a class="header" href="#resource-fork">Resource fork</a></h3>
 <p>TODO: complete this section.</p>

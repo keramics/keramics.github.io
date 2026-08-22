@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1c778c35.js";
+            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-94f1318b.js"></script>
@@ -176,9 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="virtual-hard-disk-vhd-image-format"><a class="header" href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD) image format</a></h1>
-<p>The Virtual Hard Disk (VHD) format is used by Microsoft vitualization products
-as one of its image formats. It is both used the store hard disk images and
-snapshots.</p>
+<p>The Virtual Hard Disk (VHD) format is used by Microsoft vitualization products as one of its image
+formats. It is both used the store hard disk images and snapshots.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>There are multiple types of VHD images, namely:</p>
 <ul>
@@ -193,8 +192,8 @@ snapshots.</p>
 <li>file footer</li>
 </ul>
 <blockquote>
-<p>Note that a fixed-size VHD image is equivalent to a raw storage media image
-with an additional footer.</p>
+<p>Note that a fixed-size VHD image is equivalent to a raw storage media image with an additional
+footer.</p>
 </blockquote>
 <h3 id="dynamic-size-or-sparse-hard-disk-image"><a class="header" href="#dynamic-size-or-sparse-hard-disk-image">Dynamic-size (or sparse) hard disk image</a></h3>
 <p>A dynamic-size (or sparse) VHD image consists of:</p>
@@ -229,12 +228,12 @@ with an additional footer.</p>
 
 <p>The number of bytes per sector is 512.</p>
 <h3 id="undo-disk-image"><a class="header" href="#undo-disk-image">Undo disk image</a></h3>
-<p>Virtual PC has a feature to create “Undo Disks”. This undo disk feature stores
-a differential hard disk image in files named something similar like:</p>
+<p>Virtual PC has a feature to create “Undo Disks”. This undo disk feature stores a differential hard
+disk image in files named something similar like:</p>
 <pre><code class="language-text">VirtualPCUndo_&lt;name&gt;_0_0_hhmmssMMDDYYYY.vud
 </code></pre>
-<p>Where the date and time seems to be stored in UTC and &lt;name&gt; represents the
-name of the parent image.</p>
+<p>Where the date and time seems to be stored in UTC and &lt;name&gt; represents the name of the
+parent image.</p>
 <h2 id="file-footer"><a class="header" href="#file-footer">File footer</a></h2>
 <p>The file footer is 512 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -386,11 +385,11 @@ name of the parent image.</p>
 </table>
 </div>
 
-<p>The maximum number of block allocation table entries should match the maximum
-possible number of blocks in the disk.</p>
+<p>The maximum number of block allocation table entries should match the maximum possible number of
+blocks in the disk.</p>
 <blockquote>
-<p>Note that the parent name can also contain a full path, e.g. in .avhd files.
-The part segments are separated by the \ character.</p>
+<p>Note that the parent name can also contain a full path, e.g. in .avhd files. The part segments
+are separated by the \ character.</p>
 </blockquote>
 <h3 id="parent-locator-entry"><a class="header" href="#parent-locator-entry">Parent locator entry</a></h3>
 <p>The parent locator entry is 24 bytes in size and consists of:</p>
@@ -437,16 +436,16 @@ The part segments are separated by the \ character.</p>
 
 <h2 id="block-allocation-table"><a class="header" href="#block-allocation-table">Block allocation table</a></h2>
 <p>The block allocation table is only used in dynamic and differential disk images.</p>
-<p>The block allocation table consists of 32-bit entries. An entry contains the
-sector number where the data block starts or is set to 0xffffffff (-1) if the
-block is sparse or stored in the parent disk image.</p>
+<p>The block allocation table consists of 32-bit entries. An entry contains the sector number where
+the data block starts or is set to 0xffffffff (-1) if the block is sparse or stored in the parent
+disk image.</p>
 <pre><code class="language-python">if block_allocation_table_entry == 0xffffffff:
     block is sparse or stored in parent
 else:
     file_offset = (block_allocation_table_entry * 512 ) + sector_bitmap_size
 </code></pre>
-<p>Unused block in a dynamic disk are sparse and should be filled with zero byte
-values. In a differential disk the block is stored in the parent disk image.</p>
+<p>Unused block in a dynamic disk are sparse and should be filled with zero byte values. In a
+differential disk the block is stored in the parent disk image.</p>
 <h2 id="data-blocks"><a class="header" href="#data-blocks">Data blocks</a></h2>
 <p>Data blocks are only used in dynamic and differential disk images.</p>
 <p>A data block consists of:</p>
@@ -458,13 +457,12 @@ values. In a differential disk the block is stored in the parent disk image.</p>
 </code></pre>
 <p>The size of the bitmap is rounded up to the next multitude of the sector size.</p>
 <h3 id="sector-bitmap"><a class="header" href="#sector-bitmap">Sector bitmap</a></h3>
-<p>In dynamic disk images the sector bitmap indicates which sectors contain data
-(bit set to 1) or are sparse (bit set to 0).</p>
-<p>In differential disk images the sector bitmap indicates which sectors are stored
-within the image (bit set to 1) or in the parent (bit set to 0).</p>
+<p>In dynamic disk images the sector bitmap indicates which sectors contain data (bit set to 1) or are
+sparse (bit set to 0).</p>
+<p>In differential disk images the sector bitmap indicates which sectors are stored within the image
+(bit set to 1) or in the parent (bit set to 0).</p>
 <p>The bitmap is padded to a 512-byte sector boundary.</p>
-<p>The bitmap is stored on a per-byte basis with the MSB represents the first bit
-in the bitmap.</p>
+<p>The bitmap is stored on a per-byte basis with the MSB represents the first bit in the bitmap.</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <ul>
 <li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=23850">VHD Specifications</a>, by Microsoft</li>

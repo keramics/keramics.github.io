@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1c778c35.js";
+            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-94f1318b.js"></script>
@@ -283,9 +283,9 @@ can be stored in any of the first 4 sectors.</p>
 volume identifier is stored as “9LBcEB7PQTGIlLI0KxrtzrynjuSL983W” but is equivalent to its
 formatted variant “9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W”, which is used in the metadata.</p>
 <blockquote>
-<p>Note that the data area size can be 0.</p>
+<p>Note that the data area size can be 0, and currently it is assumed that this represents all
+remaining (available) space within the physical volume.</p>
 </blockquote>
-<p>TODO: Determine if this represent all remaining available space?</p>
 <h4 id="data_area_descriptor"><a class="header" href="#data_area_descriptor">Data area descriptor</a></h4>
 <div class="table-wrapper">
 <table>
@@ -454,8 +454,8 @@ myvg {
 <p>A property is defined as:</p>
 <pre><code class="language-text">&lt;identifier&gt; = &lt;value&gt;
 </code></pre>
-<p>Where <code>&lt;identifier&gt;</code> contains a unique name of the property and <code>&lt;value&gt;</code> is one of the following
-types:</p>
+<p>Where &lt;identifier&gt; contains a unique name of the property and &lt;value&gt; is one of the
+following types:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -485,8 +485,8 @@ values.</p>
 </code></pre>
 <p>Where:</p>
 <ul>
-<li><code>&lt;name&gt;</code> contains the name of the volume group;</li>
-<li><code>&lt;properties&gt;</code> contains one of the following properties.</li>
+<li>&lt;name&gt; contains the <a href="#names">name</a> of the volume group;</li>
+<li>&lt;properties&gt; contains one of the following properties.</li>
 </ul>
 <p>TODO: Note can there be more than 1 volume group?</p>
 <div class="table-wrapper">
@@ -513,7 +513,7 @@ values.</p>
 </table>
 </div>
 
-<p><code>&lt;sub sections&gt;</code> contains one of the following sub sections:</p>
+<p>&lt;sub sections&gt; contains one of the following sub sections:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -524,6 +524,13 @@ values.</p>
 </table>
 </div>
 
+<h3 id="names"><a class="header" href="#names">Volume group and logical volume names</a></h3>
+<ul>
+<li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hypen)</li>
+<li>A volume group name should not start with a hypen</li>
+<li>A logical volume name can start with a hypen, but it is reserved for logical volumes that have
+been removed but are stil being tracked by the format</li>
+</ul>
 <h3 id="physical-volumes-sub-section"><a class="header" href="#physical-volumes-sub-section">Physical volumes sub section</a></h3>
 <p>The physical volumes sub section is defined as:</p>
 <pre><code class="language-text">physical_volumes {
@@ -532,7 +539,7 @@ values.</p>
 </code></pre>
 <p>Where:</p>
 <ul>
-<li><code>&lt;sub sections&gt;</code> contains one of the following sub sections:</li>
+<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
 </ul>
 <div class="table-wrapper">
 <table>
@@ -551,7 +558,7 @@ values.</p>
 <p>Where:</p>
 <ul>
 <li># is a place holder for a the physical volume number e.g. pv0</li>
-<li><code>&lt;properties&gt;</code> contains one of the following properties:</li>
+<li>&lt;properties&gt; contains one of the following properties:</li>
 </ul>
 <div class="table-wrapper">
 <table>
@@ -585,12 +592,12 @@ values.</p>
 </code></pre>
 <p>Where:</p>
 <ul>
-<li><code>&lt;sub sections&gt;</code> contains one of the following sub sections:</li>
+<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
 </ul>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td><code>&lt;name&gt;</code></td><td>Individual physical volume sub section, where <code>&lt;name&gt;</code> is a place holder for a the logical volume name</td></tr>
+<tr><td>&lt;name&gt;</td><td>Individual physical volume sub section, where &lt;name&gt; is a place holder for a the logical volume name</td></tr>
 
 </table>
 </div>
@@ -604,12 +611,12 @@ values.</p>
 </code></pre>
 <p>Where:</p>
 <ul>
-<li><code>&lt;name&gt;</code> contains the name of the physical volume</li>
+<li>&lt;name&gt; contains the <a href="#names">name</a> of the physical volume</li>
 </ul>
 <p>Some implementations use lv_ as the prefix for a logical volume note that the format does not imply
 this convention.</p>
 <ul>
-<li><code>&lt;properties&gt;</code> contains one of the following properties:</li>
+<li>&lt;properties&gt; contains one of the following properties:</li>
 </ul>
 <div class="table-wrapper">
 <table>
@@ -630,7 +637,7 @@ this convention.</p>
 </div>
 
 <ul>
-<li><code>&lt;sub sections&gt;</code> contains one of the following sub sections:</li>
+<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
 </ul>
 <div class="table-wrapper">
 <table>
@@ -649,7 +656,7 @@ this convention.</p>
 <p>Where:</p>
 <ul>
 <li># is a place holder for the segment number e.g. segment1</li>
-<li><code>&lt;properties&gt;</code> contains one of the following properties:</li>
+<li>&lt;properties&gt; contains one of the following properties:</li>
 </ul>
 <div class="table-wrapper">
 <table>
@@ -752,8 +759,9 @@ this convention.</p>
 </code></pre>
 <p>Where:</p>
 <ul>
-<li><code>&lt;physical volume name&gt;</code> is a string containing the physical volume name e.g. “pv0”.</li>
-<li><code>&lt;start extent number&gt;</code> the segment start extent number relative from the start of the data area.</li>
+<li>&lt;physical volume name&gt; is a string containing the physical volume name e.g. “pv0”.</li>
+<li>&lt;start extent number&gt; the segment start extent number relative from the start of the data
+area.</li>
 </ul>
 <pre><code class="language-python">start_extent_offset = (
     (start_extent_number * extent_size * sector_size) + physical_volume_data_area_start_offset
