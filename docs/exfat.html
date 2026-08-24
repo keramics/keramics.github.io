@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
+            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-94f1318b.js"></script>
+        <script src="toc-98b8595d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,21 +181,21 @@
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
-<li>Main boot region
+<li>Main boot region (11 sectors)
 <ul>
 <li>boot sector (or boot record)</li>
-<li>7 extended boot sectors</li>
-<li>OEM parameters sector</li>
-<li>Reserved sector</li>
+<li>7 extended boot sectors; can contain a sector signature (“\x55\xaa”)</li>
+<li>OEM parameters sector; can contain a sector signature (“\x55\xaa”)</li>
+<li>Reserved sector; can contain a sector signature (“\x55\xaa”)</li>
 <li>boot checksum sector</li>
 </ul>
 </li>
-<li>Backup boot region
+<li>Backup boot region (11 sectors)
 <ul>
 <li>boot sector (or boot record)</li>
-<li>7 extended boot sectors</li>
-<li>OEM parameters sector</li>
-<li>Reserved sector</li>
+<li>7 extended boot sectors; can contain a sector signature (“\x55\xaa”)</li>
+<li>OEM parameters sector; can contain a sector signature (“\x55\xaa”)</li>
+<li>Reserved sector; can contain a sector signature (“\x55\xaa”)</li>
 <li>boot checksum sector</li>
 </ul>
 </li>
@@ -227,7 +227,7 @@
 </table>
 </div>
 
-<h3 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h3>
+<h2 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h2>
 <p>The boot record is stored in the first sector of the volume.</p>
 <p>The boot record is at least 512 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -297,6 +297,35 @@
 </table>
 </div>
 
+<h2 id="boot-checksum-sector"><a class="header" href="#boot-checksum-sector">Boot checksum sector</a></h2>
+<p>The boot checksum sector is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Boot checksum</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>16</td><td>496</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<pre><code class="language-python">checksum = 0
+
+for index in range(0, 11 * bytes_per_sector):
+    # Ignore the volume flags and percent in use values.
+    if index in (106, 107, 112):
+        continue
+
+    carry = 0x80000000 if (checksum &amp; 1) else 0
+    checksum = carry + (checksum &gt;&gt; 1) + sectors[index]
+    checksum &amp;= 0xFFFFFFFF
+</code></pre>
 <h2 id="cluster-block-allocation-table"><a class="header" href="#cluster-block-allocation-table">Cluster block allocation table</a></h2>
 <p>A cluster block allocation table consists of:</p>
 <ul>

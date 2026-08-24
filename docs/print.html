@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
+            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-94f1318b.js"></script>
+        <script src="toc-98b8595d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -207,8 +207,8 @@ such as a hard disk, a floppy or optical disk like CD-ROM or DVD.</p>
 <p>EWF is short for Expert Witness Compression Format. It is a file type used to store storage media
 images for digital forensic purposes. It is currently widely used in the field of computer
 forensics in proprietary tooling like EnCase en FTK.</p>
-<p>The <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> is the earliest
-known specification of the format was provided by ASR Data for the SMART application.</p>
+<p>The “ASR Data - E01 Compression Format” is the earliest known specification of the format was
+provided by ASR Data for the SMART application.</p>
 <p>The EWF format was superseded by the <a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
@@ -408,8 +408,7 @@ values but data, probably the memory is not filled with 0-byte values.</p>
 <!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
 <!-- rumdl-disable MD013 -->
-<p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
-defines the following:</p>
+<p>There are multiple section types. “ASR Data - E01 Compression Format” defines the following:</p>
 <!-- rumdl-enable MD013 -->
 <ul>
 <li>Header section</li>
@@ -751,7 +750,7 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 <p>The header section is identified in the section data type field as “header”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Defined in “ASR Data - E01 Compression Format”</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the
@@ -798,11 +797,10 @@ information consists of at least 4 lines:</p>
 <h4 id="ewf-format"><a class="header" href="#ewf-format">EWF format</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of
-line character(s) is a newline (0x0a).</li>
+<li>“ASR Data - E01 Compression Format” specifies the end of line character(s) is a newline (0x0a).</li>
 </ul>
-<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
-the 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<p>According to “ASR Data - E01 Compression Format” the 3rd and the 4th line consist of the following
+tab (0x09) separated values:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead>
@@ -828,8 +826,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 </div>
 
 <p>Also see <a href="#header_values">header values</a></p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert
-Witness Compression uses ‘f’, fastest compression.</p>
+<p>“ASR Data - E01 Compression Format” states that the Expert Witness Compression uses ‘f’, fastest
+compression.</p>
 <h4 id="encase-1-ewf-e01"><a class="header" href="#encase-1-ewf-e01">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -1270,9 +1268,8 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 <h5 id="notes"><a class="header" href="#notes">Notes</a></h5>
 <p>There should not be a tab, carriage return and newline characters within the text in the 4th line.
 Or is there a method to escape these characters?</p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that these
-characters should not be used in the free form text. Need to confirm this, the specification only
-speaks of a newline character.</p>
+<p>“ASR Data - E01 Compression Format” states that these characters should not be used in the free
+form text. Need to confirm this, the specification only speaks of a newline character.</p>
 <p>Currently the password has no a additional value than allow an application check it. The data
 itself is not protected using the password. The password hashing algorithm is unknown. Need to find
 out. And does the algorithm differ per EnCase version? probably not. The algorithm does not differ
@@ -1281,7 +1278,7 @@ in EnCase 1 to 7. FTK Imager does not bother with a password.</p>
 <p>The volume section is identified in the section data type field as “volume”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Defined in “ASR Data - E01 Compression Format”</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>Found after the header section of the first segment file. Not found in subsequent segment files.</li>
@@ -1289,7 +1286,7 @@ SMART (EWF-S01)</li>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
 <h4 id="ewf-specification"><a class="header" href="#ewf-specification">EWF specification</a></h4>
 <!-- rumdl-disable MD013 -->
-<p>The specification according to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</p>
+<p>The specification according to “ASR Data - E01 Compression Format”.</p>
 <!-- rumdl-enable MD013 -->
 <p>The volume section data is 94 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -1460,7 +1457,7 @@ shows the Fastbloc.</p>
 <p>The disk section is identified in the section data type field as “disk”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Not found in SMART (EWF-S01).</li>
 </ul>
 <p>With a disk section in an FTK Imager 2.3 (EWF-E01) image it was confirmed that the disk section is
@@ -1474,7 +1471,7 @@ method to differentiate between a partition (volume) image or a physical disk im
 <p>The data section is identified in the section data type field as “data”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7.
 Not found in SMART (EWF-S01).</li>
 <li>For multiple segment files it does not reside in the first segment file. For a single segment
@@ -1493,7 +1490,7 @@ start of the segment files, except for the first.</li>
 <p>The sectors section is identified in the section data type field as “sectors”.
 Some aspects of this section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
 found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>The first sectors section can be found after the volume section in the first segment file or at
@@ -1552,7 +1549,7 @@ data).</p>
 <p>The table section is identified in the section data type field as “table”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 </ul>
@@ -1588,7 +1585,7 @@ file header in subsequent segment files.</li>
 </table>
 </div>
 
-<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></p>
+<p>According to “ASR Data - E01 Compression Format”:</p>
 <ul>
 <li>the number of entries, contains 0x01</li>
 <li>the table can hold 16375 entries if more entries are required an additional table section should
@@ -1821,7 +1818,7 @@ uncompressed. This allows EnCase 6.7.1 faulty EWF files to be converted.</p>
 <p>The table2 section is identified in the section data type field as “table2”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
 found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>Uses the same format as the table section.</li>
@@ -1836,7 +1833,7 @@ purposes.</p>
 <p>The next section is identified in the section data type field as “next”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>The last section within a segment other than the last segment file.</li>
@@ -2792,7 +2789,7 @@ order mark.</p>
 <p>The session section is identifier in the section data type field as “session”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is not found in SMART (EWF-S01) and FTK Imager (EWF-E01).</li>
 <li>It is found in EnCase 5 and 6 (EWF-E01) files.</li>
 <li>It is only added to the last segment file for images of optical disc (CD/DVD/BD) media.</li>
@@ -2861,7 +2858,7 @@ the start of the session and the ISO 9660 volume descriptor.</p>
 <p>The error2 section is identifier in the section data type field as “error2”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is not found in SMART (EWF-S01).</li>
 <li>It is found in, EnCase 3 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is only added to the last segment file when errors were encountered while reading the input.</li>
@@ -2937,7 +2934,7 @@ section are:</p>
 <p>The hash section is identified in the section data type field as “hash”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is found in SMART (EWF-S01) and FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is not found in EnCase 5 (EWF-L01).</li>
 <li>The hash section is optional, it does not need to be present. If it does it resides in the last
@@ -2980,7 +2977,7 @@ different formats, but differ for different media and different program sessions
 <p>The done section is identified in the section data type field as “done”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5
 (EWF-L01) files.</li>
 <li>The done section is the last section within the last segment file.</li>
@@ -4372,7 +4369,7 @@ sector are 512.</p>
 
 <tr><td>33</td><td>1</td><td></td><td>Number of level 2 table bits</td></tr>
 
-<tr><td>34</td><td>2</td><td></td><td>[yellow-background]<em>Unknown (empty values)</em></td></tr>
+<tr><td>34</td><td>2</td><td></td><td>Unknown (empty values)</td></tr>
 
 <tr><td>36</td><td>4</td><td></td><td>Encryption method</td></tr>
 
@@ -4919,7 +4916,8 @@ image (CRawDiskImage).</p>
 <p>A compressed UDIF segment file consist of:</p>
 <ul>
 <li>Data fork, containing the image data</li>
-<li>Optional resource fork or XML plist</li>
+<li>Optional XML plist</li>
+<li>Optional resource fork</li>
 <li><a href="#file_footer">File footer</a> at the end of the file</li>
 </ul>
 <h4 id="encrypted-encoding-version-1-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-1-encrypted-udif-segment-file">Encrypted Encoding version 1 encrypted UDIF segment file</a></h4>
@@ -5339,7 +5337,7 @@ item.</p>
 
 <tr><td>16</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Unknown (DataOffset), which seems to be always 0</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Base data offset, which contains the byte offset relative to the start of the segment data stream</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td>Unknown (BuffersNeeded)</td></tr>
 
@@ -5365,13 +5363,13 @@ item.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td><a href="#udif_block_table_entry_types">Entry type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Unknown (comment?)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (comment related?)</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Start sector, which contains the sector number relative to the start of the start sector of the block table</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the start of the segment data stream</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the base data offset in the block table header</td></tr>
 
 <tr><td>32</td><td>8</td><td></td><td>Data size, which contain the number of bytes of data stored, which is 0 for sparse data</td></tr>
 
@@ -5422,6 +5420,7 @@ item.</p>
 <h3 id="xml-plist-and-resource-fork-both-in-use"><a class="header" href="#xml-plist-and-resource-fork-both-in-use">XML plist and resource fork both in use</a></h3>
 <p>The XML plist and resource fork could be used simultaneously, allowing for a single UDIF to
 contain multiple images.</p>
+<p>It is currently assumed that the XML plist is leading.</p>
 <h3 id="xml-plist-andor-resource-fork-in-non-first-segment-files"><a class="header" href="#xml-plist-andor-resource-fork-in-non-first-segment-files">XML plist and/or resource fork in non-first segment files</a></h3>
 <p>The XML plist and/or resource fork could be used in non-first segment files.</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -7070,12 +7069,22 @@ by VMWare</li>
 <h1 id="volume-system-formats"><a class="header" href="#volume-system-formats">Volume system formats</a></h1>
 <p>A volume (or logical drive) is a single continous accessible storage area, typically containing a
 file system. A volume system format is used to manage the storage of one or more volumes.</p>
-<p>Although related, a volume is a different concept as a partition.</p>
+<p>A partition is a part of (typically) storage media. A partition is different conceptually, but
+its usage is comparable to a volume.</p>
+<p>This documentation uses the term volume systems in a broad sense to describe:</p>
+<ul>
+<li>encrypted volumes;</li>
+<li>logical volume managers;</li>
+<li>and partitioning schemes.</li>
+</ul>
 <h2 id="formats-1"><a class="header" href="#formats-1">Formats</a></h2>
 <ul>
 <li><a href="#apple-partition-map-apm-format">Apple Partition Map (APM)</a></li>
+<li><a href="#bsd-disklabel-format">BSD disklabel</a></li>
+<li><a href="#core-storage">Core Storage (CS)</a></li>
 <li><a href="#guid-partition-table-gpt-format">GUID Partition Table (GPT)</a></li>
 <li><a href="#linux-logical-volume-manager-lvm-format">Linux Logical Volume Manager (LVM)</a></li>
+<li><a href="#linux-unified-key-setup-luks-disk-encryption-format">Linux Unified Key Setup (LUKS) Disk Encryption</a></li>
 <li><a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR)</a></li>
 </ul>
 <p>Also see: <a href="#hybrid-volume-and-file-system-formats">hybrid volume and file system formats</a></p>
@@ -7103,6 +7112,7 @@ Macintosh computers the <a href="#guid-partition-table-gpt-format">GUID Partitio
 </table>
 </div>
 
+<p>The number of bytes per sector is 512 or 2048.</p>
 <h3 id="terminology-2"><a class="header" href="#terminology-2">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
@@ -7320,6 +7330,229 @@ therefore the first entry in the partition map describes the partition map itsel
 <p>Note that the “is in use” status flags does not appear to be used consistently.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="bsd-disklabel-format"><a class="header" href="#bsd-disklabel-format">BSD disklabel format</a></h1>
+<p>The BSD disklabel format is a partitioning schema mainly used by BSD operating systems.</p>
+<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
+<p>A BSD disklabel consists of one or more partition entries, labeled alphabetically from “a” to “h”
+(or “p” in some BSD variants).</p>
+<blockquote>
+<p>Note that BSD disklabel originally contained 8 entries for describing partitions and some BSD
+variants have since increased this to 16 partitions.</p>
+</blockquote>
+<p>Labels “a”, “b”, “c” and “d” have a predefined meaning:</p>
+<ul>
+<li>“a” is the “root” partition;</li>
+<li>“b” is the “swap” partition;</li>
+<li>“c” is the volume used by disklabel;</li>
+<li>“d” is the entire physical disk.</li>
+</ul>
+<blockquote>
+<p>Note that information about partition “d” is not stored in the corresponding BSD disklabel
+partition entry and typically filled with 0-byte values.</p>
+</blockquote>
+<h3 id="characteristics-10"><a class="header" href="#characteristics-10">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+<tr><td>Date and time values</td><td>N/A</td></tr>
+
+<tr><td>Character strings</td><td>ASCII</td></tr>
+
+</table>
+</div>
+
+<p>The number of bytes per sector is 512.</p>
+<h2 id="bsd-disklabel"><a class="header" href="#bsd-disklabel">BSD disklabel</a></h2>
+<p>The BSD disklabel is stored at offset 512. It can be preceded by a <a href="#master-boot-record-mbr-partition-table-format">MBR</a> with a single
+partition of type 0xa5 (FreeBSD).</p>
+<p>The BSD disklabel is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"WEV\x82"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Drive type</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Controller specific drive sub type</td></tr>
+
+<tr><td>8</td><td>16</td><td></td><td>Drive type name, which contains an ASCII string</td></tr>
+
+<tr><td>24</td><td>16</td><td></td><td>Unknown (Pack identifier?), which contains an ASCII string</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>(Data) Sectors per track</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Tracks per cylinder</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>(Data) Cylinders per unit</td></tr>
+
+<tr><td>56</td><td>4</td><td></td><td>(Data) Sectors per cylinder</td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>(Data) Sectors per unit</td></tr>
+
+<tr><td>64</td><td>2</td><td></td><td>Spare sectors per track</td></tr>
+
+<tr><td>66</td><td>2</td><td></td><td>Spare sectors per cylinder</td></tr>
+
+<tr><td>68</td><td>4</td><td></td><td>Alternate cylinders per unit</td></tr>
+
+<tr><td>72</td><td>2</td><td></td><td>Unknown (Rotational speed?)</td></tr>
+
+<tr><td>74</td><td>2</td><td></td><td>Unknown (Hardware sector interleave?)</td></tr>
+
+<tr><td>76</td><td>2</td><td></td><td>Unknown (Sector 0 skew per track?)</td></tr>
+
+<tr><td>78</td><td>2</td><td></td><td>Unknown (Sector 0 skew per cylinder?)</td></tr>
+
+<tr><td>80</td><td>4</td><td></td><td>Unknown (Head switch time in microseconds?)</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Unknown (Track-to-track seek time in microseconds?)</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td>Flags</td></tr>
+
+<tr><td>92</td><td>5 x 4</td><td></td><td>Unknown (Drive-type specific information?)</td></tr>
+
+<tr><td>112</td><td>5 x 4</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>132</td><td>4</td><td>"WEV\x82"</td><td>Signature</td></tr>
+
+<tr><td>136</td><td>2</td><td></td><td>Checksum, which contains a XOR of the BSD disklabel</td></tr>
+
+<tr><td>138</td><td>2</td><td></td><td>Number of partition entries, should not exceed 16 (MAXPARTITIONS)</td></tr>
+
+<tr><td>140</td><td>4</td><td></td><td>Boot area size in bytes</td></tr>
+
+<tr><td>144</td><td>4</td><td></td><td>Maximum superblock size in bytes</td></tr>
+
+<tr><td>148</td><td>number of partitions x 16</td><td></td><td>Array of partition entries</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the number of partition entries contains the total number of entries in the array, not
+the number of partitions in use.</p>
+</blockquote>
+<p>The checksum is calculated as following:</p>
+<ul>
+<li>set the checksum value to 0</li>
+<li>XOR every 16-bit value in the disklabel</li>
+</ul>
+<h3 id="drive_types"><a class="header" href="#drive_types">Drive types</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td>DTYPE_SMD</td><td>SMD, XSMD</td></tr>
+
+<tr><td>2</td><td>DTYPE_MSCP</td><td>MSCP</td></tr>
+
+<tr><td>3</td><td>DTYPE_DEC</td><td>DEC (rk, rl)</td></tr>
+
+<tr><td>4</td><td>DTYPE_SCSI</td><td>SCSI</td></tr>
+
+<tr><td>5</td><td>DTYPE_ESDI</td><td>ESDI</td></tr>
+
+<tr><td>6</td><td>DTYPE_ST506</td><td>ST506</td></tr>
+
+<tr><td>7</td><td>DTYPE_HPIB</td><td>CS/80 on HP-IB</td></tr>
+
+<tr><td>8</td><td>DTYPE_HPFL</td><td>HP Fiber-link</td></tr>
+
+<tr><td colspan="3"> </td></tr>
+
+<tr><td>10</td><td>DTYPE_FLOPPY</td><td>Floppy drive</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="flags"><a class="header" href="#flags">Flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>D_REMOVABLE</td><td>Removable media</td></tr>
+
+<tr><td>0x00000002</td><td>D_ECC</td><td>Media supports error-correction codes (ECC)</td></tr>
+
+<tr><td>0x00000004</td><td>D_BADSECT</td><td>Media suppors bad sectro forwarding</td></tr>
+
+<tr><td>0x00000008</td><td>D_RAMDISK</td><td>Emulated media using RAM</td></tr>
+
+<tr><td>0x00000010</td><td>D_CHAIN</td><td>Media can do back-to-back transfers</td></tr>
+
+</table>
+</div>
+
+<h3 id="partition-entry"><a class="header" href="#partition-entry">Partition entry</a></h3>
+<p>The partition entry is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of sectors</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Start sector</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>File system (basic) fragment size</td></tr>
+
+<tr><td>12</td><td>1</td><td></td><td>File system type</td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>File system fragments per block</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Unknown (File system specific value)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that an emtpy partition entry consists of 0-byte values.</p>
+</blockquote>
+<h4 id="file_system_types"><a class="header" href="#file_system_types">File system types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>FS_UNUSED</td><td>Unused</td></tr>
+
+<tr><td>1</td><td>FS_SWAP</td><td>Swap</td></tr>
+
+<tr><td>2</td><td>FS_V6</td><td>6th edition</td></tr>
+
+<tr><td>3</td><td>FS_V7</td><td>7th edition</td></tr>
+
+<tr><td>4</td><td>FS_SYSV</td><td>System V</td></tr>
+
+<tr><td>5</td><td>FS_V71K</td><td>7th edition with 1 KiB blocks</td></tr>
+
+<tr><td>6</td><td>FS_V8</td><td>8th edition with 4 KiB blocks</td></tr>
+
+<tr><td>7</td><td>FS_BSDFFS</td><td>BSD 4.2 fast file system (FFS)</td></tr>
+
+<tr><td>8</td><td>FS_MSDOS</td><td>MS-DOS file system</td></tr>
+
+<tr><td>9</td><td>FS_BSDLFS</td><td>BSD 4.4 log-structured file system</td></tr>
+
+<tr><td>10</td><td>FS_OTHER</td><td>Other (unspecified) file system</td></tr>
+
+<tr><td>11</td><td>FS_HPFS</td><td>OS/2 high-performance file system (HPFS)</td></tr>
+
+<tr><td>12</td><td>FS_ISO9660</td><td>ISO 9660 (CD-ROM) file system</td></tr>
+
+<tr><td>13</td><td>FS_BOOT</td><td>Boot code</td></tr>
+
+<tr><td>14</td><td></td><td>Unknown (Vinum)</td></tr>
+
+</table>
+</div>
+
+<h2 id="references-5"><a class="header" href="#references-5">References</a></h2>
+<ul>
+<li><a href="https://man.freebsd.org/cgi/man.cgi?query=disklabel&amp;sektion=5&amp;apropos=0&amp;manpath=4.4BSD+Lite2">FreeBSD Manual Pages</a></li>
+<li><a href="https://en.wikipedia.org/wiki/BSD_disklabel">BSD disklabel</a>, by Wikipedia</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="core-storage"><a class="header" href="#core-storage">Core Storage</a></h1>
 <p>Core Storage is a logical volume management system for Mac OS and was introduced in Mac OS X Lion
 (10.7).</p>
@@ -7328,7 +7561,7 @@ therefore the first entry in the partition map describes the partition map itsel
 <h1 id="guid-partition-table-gpt-format"><a class="header" href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a></h1>
 <p>The GUID Partition Table (GPT) is a partitioning schema that is the successor to the
 <a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) Partition Table</a> for Intel x86 based computers.</p>
-<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
+<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
 <p>A GUID Partition Table (GPT) consists of:</p>
 <ul>
 <li>A protective or hybrid Master Boot Record (MBR) stored in block (LBA) 0</li>
@@ -7347,7 +7580,7 @@ therefore the first entry in the partition map describes the partition map itsel
 <blockquote>
 <p>Note that the maximum number of partitions is typically 128, but can be 256 as well.</p>
 </blockquote>
-<h3 id="characteristics-10"><a class="header" href="#characteristics-10">Characteristics</a></h3>
+<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -7810,14 +8043,14 @@ checkum value is considered to be 0 during calculation.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linux-logical-volume-manager-lvm-format"><a class="header" href="#linux-logical-volume-manager-lvm-format">Linux Logical Volume Manager (LVM) format</a></h1>
 <p>The Linux Logical Volume Manager (LVM) format is used by the Logical Volume Manager (LVM) on Linux.</p>
-<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
 <p>A Linux LVM consist of:</p>
 <ul>
 <li>Volume group</li>
 <li>Physical volumes</li>
 <li>Logical volumes</li>
 </ul>
-<h3 id="characteristics-11"><a class="header" href="#characteristics-11">Characteristics</a></h3>
+<h3 id="characteristics-12"><a class="header" href="#characteristics-12">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -7994,23 +8227,23 @@ updated. The metadata area, therefore, can contain copies of older versions of t
 <ul>
 <li>Volume group main section
 <ul>
-<li>Physical volumes sub section
+<li>Physical volumes object
 <ul>
-<li>Physical volume sub sections</li>
+<li>Physical volume object</li>
 </ul>
 </li>
-<li>Logical volumes sub section
+<li>Logical volumes object
 <ul>
-<li>Logical volume sub sections
+<li>Logical volume object
 <ul>
-<li>Segment sub section</li>
+<li>Segment object</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Global properties</li>
+<li>Top level properties</li>
 </ul>
 <p>According to “RHEL 5 - Logical Volume Manager Administration” by default, an identical copy of the
 metadata is maintained in every metadata area in every physical volume within the volume group. The
@@ -8083,11 +8316,10 @@ myvg {
 }
 </code></pre>
 <h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
-<p>The metadata sections are textual and use the following properties.</p>
-<p>A property is defined as:</p>
+<p>The metadata is textual and uses properties, where a property is defined as:</p>
 <pre><code class="language-text">&lt;identifier&gt; = &lt;value&gt;
 </code></pre>
-<p>Where &lt;identifier&gt; contains a unique name of the property and &lt;value&gt; is one of the
+<p>The identifier contains an unique name of the property and &lt;value&gt; is one of the
 following types:</p>
 <div class="table-wrapper">
 <table>
@@ -8109,205 +8341,156 @@ following types:</p>
 <p>Note that for now it is assumed that the # character is not allowed to be used in any of the
 values.</p>
 </blockquote>
-<h3 id="volume-group-main-section"><a class="header" href="#volume-group-main-section">Volume group main section</a></h3>
-<p>The volume group main section is defined as:</p>
-<pre><code class="language-text">&lt;name&gt; {
-&lt;properties&gt;
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;name&gt; contains the <a href="#names">name</a> of the volume group;</li>
-<li>&lt;properties&gt; contains one of the following properties.</li>
-</ul>
-<p>TODO: Note can there be more than 1 volume group?</p>
+<h3 id="top-level-properties"><a class="header" href="#top-level-properties">Top level properties</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>extent_size</td><td>The size of an extent, in number of sectors</td></tr>
+<tr><td>"contents"</td><td>The contents of the metadata area, which contains the string "Text Format Volume Group"</td></tr>
 
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
+<tr><td>"creation_host"</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
 
-<tr><td>format</td><td>Optional format identifier, such as "lvm2"</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
-<tr><td>id</td><td>Volume group identifier (VG UUID), which contains an ASCII string in the following format: fg1fKZ-xoHz-CfAD-yQPx-l2HL-Y7kA-9kJ9LD</td></tr>
+<tr><td>"description"</td><td>Unknown (Description of the metadata area?)</td></tr>
 
-<tr><td>max_lv</td><td>Maximum number of logical volumes</td></tr>
+<tr><td><a href="#metadata_names">&lt;volume group name&gt;</a></td><td><a href="#metadata_volume_group_object">Volume group object</a></td></tr>
 
-<tr><td>max_pv</td><td>Maximum number of physical volumes</td></tr>
-
-<tr><td>metadata_copies</td><td>Unknown (The number of metadata copies?)</td></tr>
-
-<tr><td>seqno</td><td>Metadata sequence number</td></tr>
-
-<tr><td>status</td><td>The <a href="#status_flags-1">status flags</a>, which contains a list of strings</td></tr>
+<tr><td>"version"</td><td>The metadata area version, which contains an integer value of 1</td></tr>
 
 </table>
 </div>
 
-<p>&lt;sub sections&gt; contains one of the following sub sections:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Description</th></thead>
-<tr><td>physical_volumes</td><td>The physical volumes sub sections</td></tr>
-
-<tr><td>logical_volumes</td><td>The logical volumes sub sections</td></tr>
-
-</table>
-</div>
-
-<h3 id="names"><a class="header" href="#names">Volume group and logical volume names</a></h3>
+<blockquote>
+<p>Note it is assumed that there can only be 1 volume group object.</p>
+</blockquote>
+<h3 id="metadata_names"><a class="header" href="#metadata_names">Volume group and logical volume names</a></h3>
 <ul>
 <li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hypen)</li>
 <li>A volume group name should not start with a hypen</li>
 <li>A logical volume name can start with a hypen, but it is reserved for logical volumes that have
 been removed but are stil being tracked by the format</li>
 </ul>
-<h3 id="physical-volumes-sub-section"><a class="header" href="#physical-volumes-sub-section">Physical volumes sub section</a></h3>
-<p>The physical volumes sub section is defined as:</p>
-<pre><code class="language-text">physical_volumes {
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<blockquote>
+<p>Note that some implementations use lv_ as the prefix for a logical volume, however this is not
+enforced by the format.</p>
+</blockquote>
+<h3 id="metadata_volume_group_object"><a class="header" href="#metadata_volume_group_object">Volume group object</a></h3>
+<p>The volume group object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>pv#</td><td>Individual physical volume sub section, where # is a place holder for a the physical volume number e.g. pv0. 0 appears to be the first number that is used</td></tr>
+<tr><td>"extent_size"</td><td>The size of an extent, in number of sectors</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags-1">Flags</a></td></tr>
+
+<tr><td>"format"</td><td>Optional format identifier, such as "lvm2"</td></tr>
+
+<tr><td>"id"</td><td>Volume group identifier (VG UUID), which contains an ASCII string in the following format: fg1fKZ-xoHz-CfAD-yQPx-l2HL-Y7kA-9kJ9LD</td></tr>
+
+<tr><td>"logical_volumes"</td><td><a href="#metadata_logical_volumes_object">Logical volumes object</a></td></tr>
+
+<tr><td>"max_lv"</td><td>Maximum number of logical volumes</td></tr>
+
+<tr><td>"max_pv"</td><td>Maximum number of physical volumes</td></tr>
+
+<tr><td>"metadata_copies"</td><td>Unknown (The number of metadata copies?)</td></tr>
+
+<tr><td>"physical_volumes"</td><td><a href="#metadata_physical_volumes_object">Physical volumes object</a></td></tr>
+
+<tr><td>"seqno"</td><td>Metadata sequence number</td></tr>
+
+<tr><td>"status"</td><td>The <a href="#status_flags-1">status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="physical-volume-sub-section"><a class="header" href="#physical-volume-sub-section">Physical volume sub section</a></h3>
-<p>Each physical volume sub section is defined as:</p>
-<pre><code class="language-text">pv# {
-&lt;properties&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li># is a place holder for a the physical volume number e.g. pv0</li>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_physical_volumes_object"><a class="header" href="#metadata_physical_volumes_object">Physical volumes object</a></h3>
+<p>The physical volumes object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>device</td><td>The device filename, which contains an ASCII string, e.g. /dev/dm-0</td></tr>
-
-<tr><td>device_id</td><td>Unknown (device identifier "/tmp/lvm.raw")</td></tr>
-
-<tr><td>device_id_type</td><td>Unknown (device type "loop_file")</td></tr>
-
-<tr><td>dev_size</td><td>The physical volume size including non-usable space, in number of sectors</td></tr>
-
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
-
-<tr><td>id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
-
-<tr><td>pe_count</td><td>The number of (allocated) extents in the physical volume</td></tr>
-
-<tr><td>pe_start</td><td>The start extent, which contains an offset in bytes relative from the start of the physical volume</td></tr>
-
-<tr><td>status</td><td>The <a href="#status_flags-1">status flags</a>, which contains a list of strings</td></tr>
+<tr><td>pv#</td><td>Individual <a href="#metadata_physical_volume_object">physical volume object</a>, where # is a place holder for a the physical volume number e.g. pv0. 0 appears to be the first number that is used</td></tr>
 
 </table>
 </div>
 
-<h3 id="logical-volumes-sub-section"><a class="header" href="#logical-volumes-sub-section">Logical volumes sub section</a></h3>
-<p>The logical volumes sub section is defined as:</p>
-<pre><code class="language-text">logical_volumes {
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<h3 id="metadata_physical_volume_object"><a class="header" href="#metadata_physical_volume_object">Physical volume object</a></h3>
+<p>Each physical volume object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>&lt;name&gt;</td><td>Individual physical volume sub section, where &lt;name&gt; is a place holder for a the logical volume name</td></tr>
+<tr><td>"device"</td><td>The device filename, which contains an ASCII string, e.g. /dev/dm-0</td></tr>
+
+<tr><td>"device_id"</td><td>Unknown (device identifier "/tmp/lvm.raw")</td></tr>
+
+<tr><td>"device_id_type"</td><td>Unknown (device type "loop_file")</td></tr>
+
+<tr><td>"dev_size"</td><td>The physical volume size including non-usable space, in number of sectors</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags-1">Flags</a></td></tr>
+
+<tr><td>"id"</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
+
+<tr><td>"pe_count"</td><td>The number of (allocated) extents in the physical volume</td></tr>
+
+<tr><td>"pe_start"</td><td>The start extent, which contains an offset in bytes relative from the start of the physical volume</td></tr>
+
+<tr><td>"status"</td><td>The <a href="#status_flags-1">status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="logical-volume-sub-section"><a class="header" href="#logical-volume-sub-section">Logical volume sub section</a></h3>
-<p>Each logical volume sub section is defined as:</p>
-<pre><code class="language-text">&lt;name&gt; {
-&lt;properties&gt;
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;name&gt; contains the <a href="#names">name</a> of the physical volume</li>
-</ul>
-<p>Some implementations use lv_ as the prefix for a logical volume note that the format does not imply
-this convention.</p>
-<ul>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_logical_volumes_object"><a class="header" href="#metadata_logical_volumes_object">Logical volumes object</a></h3>
+<p>The logical volumes object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>creation_host</td><td>The hostname of the system on which the logical volume was created</td></tr>
-
-<tr><td>creation_time</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
-
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
-
-<tr><td>id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
-
-<tr><td>segment_count</td><td>The number of segment sub sections</td></tr>
-
-<tr><td>status</td><td><a href="#status_flags-1">Status flags</a>, which contains a list of strings</td></tr>
+<tr><td><a href="#metadata_names">&lt;logical volume name&gt;</a></td><td>Individual <a href="#metadata_logical_volume_object">logical volume object</a>, where &lt;name&gt; is a place holder for a the logical volume name</td></tr>
 
 </table>
 </div>
 
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<h3 id="metadata_logical_volume_object"><a class="header" href="#metadata_logical_volume_object">Logical volume object</a></h3>
+<p>Each logical volume object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>segment#</td><td>Individual physical volume sub section, where # is a place holder for the segment number e.g. segment1. 1 appears to be the first number that is used</td></tr>
+<tr><td>"creation_host"</td><td>The hostname of the system on which the logical volume was created</td></tr>
+
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags-1">Flags</a></td></tr>
+
+<tr><td>"id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
+
+<tr><td>"segment_count"</td><td>The number of segments</td></tr>
+
+<tr><td>"segment#"</td><td>Individual <a href="#metadata_segment_object">segment objects</a>, where # is a place holder for the segment number e.g. segment1. 1 appears to be the first number that is used</td></tr>
+
+<tr><td>"status"</td><td><a href="#status_flags-1">Status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="segment-sub-section"><a class="header" href="#segment-sub-section">Segment sub section</a></h3>
-<p>Each segment sub section is defined as:</p>
-<pre><code class="language-text">segment# {
-&lt;properties&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li># is a place holder for the segment number e.g. segment1</li>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_segment_object"><a class="header" href="#metadata_segment_object">Segment object</a></h3>
+<p>Each segment object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>extent_count</td><td>The number of extents in the segment (or current logical extent)</td></tr>
+<tr><td>"extent_count"</td><td>The number of extents in the segment (or current logical extent)</td></tr>
 
-<tr><td>start_extent</td><td>The start extent of the segment, which contains an offset in number of extents relative from the start of the segment</td></tr>
+<tr><td>"start_extent"</td><td>The start extent of the segment, which contains an offset in number of extents relative from the start of the segment</td></tr>
 
-<tr><td>stripe_count</td><td>The number of stripes in the segment, where 1 represents linear striping</td></tr>
+<tr><td>"stripe_count"</td><td>The number of stripes in the segment, where 1 represents linear striping</td></tr>
 
-<tr><td>stripes</td><td>The stripes list</td></tr>
+<tr><td>"stripes"</td><td><a href="#metadata_stripes_list">Stripes list</a></td></tr>
 
-<tr><td>type</td><td>The <a href="#segment_types">segment type</a></td></tr>
+<tr><td>"type"</td><td><a href="#metadata_segment_types">Segment type</a></td></tr>
 
 </table>
 </div>
 
-<h3 id="segment_types"><a class="header" href="#segment_types">Segment types</a></h3>
+<h3 id="metadata_segment_types"><a class="header" href="#metadata_segment_types">Segment types</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -8385,7 +8568,7 @@ this convention.</p>
 <blockquote>
 <p>Note that a comparable list can be retrieved using <code>lvm segtypes</code>.</p>
 </blockquote>
-<h3 id="stripes-list"><a class="header" href="#stripes-list">Stripes list</a></h3>
+<h3 id="metadata_stripes_list"><a class="header" href="#metadata_stripes_list">Stripes list</a></h3>
 <pre><code class="language-text">stripes = [
 &lt;physical volume name&gt;, &lt;start extent number&gt;
 ]
@@ -8400,23 +8583,6 @@ area.</li>
     (start_extent_number * extent_size * sector_size) + physical_volume_data_area_start_offset
 )
 </code></pre>
-<h3 id="global-properties"><a class="header" href="#global-properties">Global properties</a></h3>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Description</th></thead>
-<tr><td>contents</td><td>The contents of the metadata area, which contains the string "Text Format Volume Group"</td></tr>
-
-<tr><td>creation_host</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
-
-<tr><td>creation_time</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
-
-<tr><td>description</td><td>Unknown (Description of the metadata area?)</td></tr>
-
-<tr><td>version</td><td>The metadata area version, which contains an integer value of 1</td></tr>
-
-</table>
-</div>
-
 <h3 id="status_flags-1"><a class="header" href="#status_flags-1">Status flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -8434,13 +8600,13 @@ area.</li>
 </table>
 </div>
 
-<h3 id="flags"><a class="header" href="#flags">Flags</a></h3>
+<h3 id="flags-1"><a class="header" href="#flags-1">Flags</a></h3>
 <p>TODO: complete section</p>
 <h3 id="comments"><a class="header" href="#comments">Comments</a></h3>
 <p>Textual metadata such as:</p>
 <pre><code class="language-text"># Generated by LVM2 version 2.02.39 (2008-06-27): Sat Jan 17 11:45:29 2009
 </code></pre>
-<h2 id="references-5"><a class="header" href="#references-5">References</a></h2>
+<h2 id="references-6"><a class="header" href="#references-6">References</a></h2>
 <!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://tldp.org/HOWTO/LVM-HOWTO">LVM HOWTO</a></li>
@@ -8448,16 +8614,541 @@ area.</li>
 </ul>
 <!-- rumdl-enable MD013 -->
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="linux-unified-key-setup-luks-disk-encryption-format"><a class="header" href="#linux-unified-key-setup-luks-disk-encryption-format">Linux Unified Key Setup (LUKS) Disk Encryption format</a></h1>
+<p>Linux Unified Key Setup (LUKS) Disk Encryption is commonly used by Linux to encrypt storage media
+volumes.</p>
+<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
+<p>There are 2 versions of the Linux Unified Key Setup (LUKS) Disk Encryption format, each with a
+separate layout.</p>
+<h3 id="characteristics-13"><a class="header" href="#characteristics-13">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td>N/A</td></tr>
+
+<tr><td>Character strings</td><td>ASCII string with an end-of-string character</td></tr>
+
+</table>
+</div>
+
+<h3 id="layout-version-1"><a class="header" href="#layout-version-1">Layout version 1</a></h3>
+<p>A LUKS version 1 encrypted volume consist of:</p>
+<ul>
+<li>volume header</li>
+<li>8 x key slots</li>
+<li>split master key material</li>
+<li>encrypted (volume) data</li>
+</ul>
+<p>The total reserved size of the LUKS metadata (volume header and split master key material) seems to
+commonly be 2 MiB.</p>
+<p>The number of bytes per sector is 512.</p>
+<h3 id="layout-version-2"><a class="header" href="#layout-version-2">Layout version 2</a></h3>
+<p>A LUKS version 2 encrypted volume consist of:</p>
+<ul>
+<li>metadata area
+<ul>
+<li>volume header</li>
+<li>JSON area</li>
+</ul>
+</li>
+<li>backup metadata area
+<ul>
+<li>backup volume header</li>
+<li>backup JSON area</li>
+</ul>
+</li>
+<li>keyslots area</li>
+<li>encrypted (volume) data</li>
+</ul>
+<p>The number of bytes per sector is stored in the JSON metadata and can be 512, 1024, 2048, or 4096.</p>
+<h2 id="keys"><a class="header" href="#keys">Keys</a></h2>
+<p>To encrypt storage media LUKS Disk Encryption uses different kind of keys.</p>
+<h3 id="master-key-mk"><a class="header" href="#master-key-mk">Master Key (MK)</a></h3>
+<p>The Master Key (MK) is derived from the Split Master Key (SMK). The size of the MK is dependent on
+the master key size value in the volume header. Commonly the MK is 128-bit or 256-bit of size. The
+MK is used to de/encrypt the encrypted (volume) data.</p>
+<h3 id="split-master-key-smk"><a class="header" href="#split-master-key-smk">Split Master Key (SMK)</a></h3>
+<p>The Split Master Key (SMK) is stored encrypted with a specific user key (UK) in the split master
+key material. The size of the key material and hence the SMK is the size of the Master Key (MK)
+times the number of stripes.</p>
+<p>The MK is determined from the SMK using the anti-forensic (AF) diffuser using the hashing method.</p>
+<p>The resulting MK can be validated with the master key validation hash stored in the volume header.
+The validation hash can be calculated using the PBKDF2 algorithm with:</p>
+<ul>
+<li>The <a href="#hashing_method">hashing method</a> stored in the volume header (format version 1) or metadata
+(format version 2).</li>
+<li>The number of iterations as stored in the volume header.</li>
+<li>A salt, as stored in the volume header.</li>
+<li>The master key as the input data.</li>
+</ul>
+<h3 id="user-key-uk"><a class="header" href="#user-key-uk">User Key (UK)</a></h3>
+<p>The User Key (UK) is derived from the user password. The UK is used to de/encrypt the corresponding
+split master key material.</p>
+<p>The user key is calculated using the PBKDF2 algorithm with:</p>
+<ul>
+<li>The <a href="#hashing_method">hashing method</a> stored in the volume header (format version 1) or metadata
+(format version 2).</li>
+<li>The number of iterations as stored in the corresponding key slot.</li>
+<li>A salt, as stored in the corresponding key slot.</li>
+<li>The password string as the input data (bytes).</li>
+<li>A (output) key size that is the same as that of the Master Key (MK).</li>
+</ul>
+<h2 id="encryption-methods-1"><a class="header" href="#encryption-methods-1">Encryption methods</a></h2>
+<p>LUKS supports multiple encryption methods, different encryption chaining modes and initialization
+vector modes.</p>
+<h3 id="initialization-vector-modes"><a class="header" href="#initialization-vector-modes">Initialization vector modes</a></h3>
+<h4 id="the-null-initialization-vector-mode"><a class="header" href="#the-null-initialization-vector-mode">The null initialization vector mode</a></h4>
+<p>In the null initialization vector mode the initialization vector (IV) is filled with 0‑byte values.</p>
+<h4 id="the-plain-initialization-vector-modes"><a class="header" href="#the-plain-initialization-vector-modes">The plain initialization vector modes</a></h4>
+<p>In the plain and plain64 initialization vector mode the initialization vector (IV) is filled with
+respectively a 32-bit or 64-bit little-endian representation of the corresponding sector number
+padded with 0-byte values.</p>
+<p>The sector number is relative to the start of the data not relative to the start of the volume
+header.</p>
+<h4 id="the-encrypted-sector-salt-initialization-vector-essiv-mode"><a class="header" href="#the-encrypted-sector-salt-initialization-vector-essiv-mode">The encrypted sector-salt initialization vector (ESSIV) mode</a></h4>
+<p>Int the encrypted sector-salt initialization vector (ESSIV) mode the initialization vector (IV) is
+determined by:</p>
+<ol>
+<li>hashing the encryption key with hashing method defined in the initialization vector mode options.</li>
+<li>encrypting the little-endian representation of the corresponding sector number padded with
+0-byte values with the hash of the encryption key.</li>
+</ol>
+<blockquote>
+<p>Note that the sector number is relative to the start of the data not relative to the start of the
+volume header.</p>
+</blockquote>
+<h4 id="the-benbi-initialization-vector-mode"><a class="header" href="#the-benbi-initialization-vector-mode">The benbi initialization vector mode</a></h4>
+<p>In the benbi initialization vector mode the initialization vector (IV) is filled with a 64-bit
+big-endian representation of the corresponding cipher block (or narrow block)-count (starting at 1)
+padded with 0-byte values.</p>
+<p>The sector number is relative to the start of the data not relative to the start of the volume
+header.</p>
+<p>The cipher block-count is calculated as:</p>
+<pre><code class="language-python">cipher_block_count = (sector_number &lt;&lt; (log2(bytes_per_sectory) - log2(iv_size))) + 1
+</code></pre>
+<p>Benbi is presumably the abbreviation of big-endian numeric block index, or equivalent.</p>
+<h4 id="the-lmk-initialization-vector-mode"><a class="header" href="#the-lmk-initialization-vector-mode">The lmk initialization vector mode</a></h4>
+<p>TODO: complete section</p>
+<h3 id="aes-cbc"><a class="header" href="#aes-cbc">AES-CBC</a></h3>
+<p>Decryption uses:</p>
+<ul>
+<li>AES-CBC with Master Key (MK) decryption of sector data</li>
+<li>The initialization vector of the AES-CBC is dependent on the initialization vector mode defined
+in the volume header. In recent versions of Linux, AES-CBC is combined with the ESSIV
+initialization vector mode by default.</li>
+<li>The initialization vector is 16 bytes of size.</li>
+</ul>
+<h3 id="aes-ecb"><a class="header" href="#aes-ecb">AES-ECB</a></h3>
+<p>Decryption uses:</p>
+<ul>
+<li>AES-ECB with Master Key (MK) decryption of sector data</li>
+<li>No initialization vector is used.</li>
+<li>The initialization vector is 16 bytes of size.</li>
+</ul>
+<h3 id="aes-xts"><a class="header" href="#aes-xts">AES-XTS</a></h3>
+<p>TODO: complete section</p>
+<ul>
+<li>The initialization vector is 16 bytes of size.</li>
+</ul>
+<h3 id="anubis"><a class="header" href="#anubis">Anubis</a></h3>
+<p>TODO: complete section</p>
+<p>Default encryption mode is cbc-plain
+Size of initialization vector?</p>
+<h3 id="blowfish"><a class="header" href="#blowfish">Blowfish</a></h3>
+<p>TODO: complete section</p>
+<p>Default encryption mode is cbc-plain
+Size of initialization vector?</p>
+<h3 id="cast5"><a class="header" href="#cast5">Cast5</a></h3>
+<p>TODO: complete section</p>
+<p>RFC 2144
+Size of initialization vector?</p>
+<h3 id="cast6"><a class="header" href="#cast6">Cast6</a></h3>
+<p>TODO: complete section</p>
+<p>RFC 2612
+Default encryption mode is cbc-plain
+Size of initialization vector?</p>
+<h3 id="serpent"><a class="header" href="#serpent">Serpent</a></h3>
+<p>TODO: complete section</p>
+<p>Default encryption mode is cbc-plain
+Size of initialization vector?</p>
+<h3 id="twofish"><a class="header" href="#twofish">Twofish</a></h3>
+<p>TODO: complete section</p>
+<p>Default encryption mode is cbc-plain
+Size of initialization vector?</p>
+<h2 id="volume-header"><a class="header" href="#volume-header">Volume header</a></h2>
+<h3 id="volume-header---format-version-1"><a class="header" href="#volume-header---format-version-1">Volume header - format version 1</a></h3>
+<p>The volume header is 4096 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>6</td><td>"LUKS\xba\xbe"</td><td>Signature</td></tr>
+
+<tr><td>6</td><td>2</td><td>1</td><td>Format version</td></tr>
+
+<tr><td>8</td><td>32</td><td></td><td><a href="#encryption_method">Encryption method</a> (Cipher name), which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>40</td><td>32</td><td></td><td><a href="#encryption_mode">Encryption mode</a> (Cipher mode), which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>72</td><td>32</td><td></td><td><a href="#hashing_method">Hashing method</a>, which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>104</td><td>4</td><td></td><td>Encrypted data start sector</td></tr>
+
+<tr><td>108</td><td>4</td><td></td><td>Master key size, in number of bytes</td></tr>
+
+<tr><td>112</td><td>20</td><td></td><td>Master key validation hash</td></tr>
+
+<tr><td>132</td><td>32</td><td></td><td>Master key derivation salt</td></tr>
+
+<tr><td>164</td><td>4</td><td></td><td>Master key derivation number of iterations</td></tr>
+
+<tr><td>168</td><td>40</td><td></td><td>Volume identifier, which contains an ASCII string with an end-of-string character that consists of a lower-case UUID</td></tr>
+
+<tr><td>208</td><td>8 x 48</td><td></td><td>Array of <a href="#key_slot">key slots</a></td></tr>
+
+<tr><td>592</td><td>3504</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<p>The hashing method is used for the user key calculation and the anti-forensic (AF) diffuser.</p>
+<h3 id="volume_header_v2"><a class="header" href="#volume_header_v2">Volume header - format version 2</a></h3>
+<p>The volume header (or binary header) is 4096 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>6</td><td>"LUKS\xba\xbe"</td><td>Signature</td></tr>
+
+<tr><td>6</td><td>2</td><td>2</td><td>Format version</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Metadata area size, which consists of the size of the volume header and JSON area</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Epoch (or sequence identifier)</td></tr>
+
+<tr><td>24</td><td>48</td><td></td><td>Volume label, which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>72</td><td>32</td><td></td><td>Metadata area checksum method (or algorithm), which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>104</td><td>64</td><td></td><td>Salt</td></tr>
+
+<tr><td>168</td><td>40</td><td></td><td>Volume identifier, which contains an ASCII string with an end-of-string character that consists of a lower-case UUID</td></tr>
+
+<tr><td>208</td><td>48</td><td></td><td>Unknown (subsystem), which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>256</td><td>8</td><td></td><td>Header offset, which is relative from the start of the volume</td></tr>
+
+<tr><td>264</td><td>184</td><td></td><td>Unknown (padding), which according to "LUKS2 On-Disk Format Specification" this must be filled with 0-byte values</td></tr>
+
+<tr><td>448</td><td>64</td><td></td><td>Metadata area checksum</td></tr>
+
+<tr><td>512</td><td>7 x 512 = 3584</td><td></td><td>Unknown (padding), which according to "LUKS2 On-Disk Format Specification" this must be filled with 0-byte values</td></tr>
+
+</table>
+</div>
+
+<h3 id="json-area"><a class="header" href="#json-area">JSON area</a></h3>
+<p>The JSON area is stored directly after the volume header and must be 4096-byte aligned. The JSON
+area is variable of size and constists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>...</td><td></td><td>JSON string, which contains an ASCII string with an end-of-string character</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (padding), which according to "LUKS2 On-Disk Format Specification" this must be filled with 0-byte values</td></tr>
+
+</table>
+</div>
+
+<h4 id="example-1"><a class="header" href="#example-1">Example</a></h4>
+<pre><code class="language-json">{
+  "keyslots": {
+    "0": {
+      "type": "luks2",
+      "key_size": 32,
+      "af": {
+        "type": "luks1",
+        "stripes": 4000,
+        "hash": "sha1"
+      },
+      "area": {
+        "type": "raw",
+        "offset": "32768",
+        "size": "131072",
+        "encryption": "aes-ecb",
+        "key_size": 32
+      },
+      "kdf": {
+        "type": "argon2i",
+        "time": 6,
+        "memory": 1048576,
+        "cpus": 4,
+        "salt": "X3OghBqUPLPkYuaFlSu4w/4VsRlRNDBzN+IW5Y5JQSU="
+      }
+    }
+  },
+  "tokens": {},
+  "segments": {
+    "0": {
+      "type": "crypt",
+      "offset": "16777216",
+      "size": "dynamic",
+      "iv_tweak": "0",
+      "encryption": "aes-ecb",
+      "sector_size": 512
+    }
+  },
+  "digests": {
+    "0": {
+      "type": "pbkdf2",
+      "keyslots": [
+        "0"
+      ],
+      "segments": [
+        "0"
+      ],
+      "hash": "sha1",
+      "iterations": 154931,
+      "salt": "wxT97+jYHKhAat3rZb6XXuwXVRn3DM7tvGy8+ZukM38=",
+      "digest": "WHT1SoOLP3tummIDhiNTxP39dfw="
+    }
+  },
+  "config": {
+    "json_size": "12288",
+    "keyslots_size": "16744448"
+  }
+}
+</code></pre>
+<h4 id="top-level-properties-1"><a class="header" href="#top-level-properties-1">Top level properties</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"config"</td><td><a href="#metadata_config_object">Config object</a></td></tr>
+
+<tr><td>"digests"</td><td><a href="#metadata_digests_object">Digests object</a></td></tr>
+
+<tr><td>"keyslots"</td><td><a href="#metadata_keyslots_object">Keyslots object</a></td></tr>
+
+<tr><td>"segments"</td><td><a href="#metadata_segments_object">Segments object</a></td></tr>
+
+<tr><td>"tokens"</td><td><a href="#metadata_tokens_object">Tokens object</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_config_object"><a class="header" href="#metadata_config_object">Config object</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"flags"</td><td>List of strings</td></tr>
+
+<tr><td>"json_size"</td><td>String containing an integer</td></tr>
+
+<tr><td>"keyslots_size"</td><td>String containing an integer</td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_digests_object"><a class="header" href="#metadata_digests_object">Digests object</a></h4>
+<p>TODO: complete section</p>
+<h4 id="metadata_keyslots_object"><a class="header" href="#metadata_keyslots_object">Keyslots object</a></h4>
+<p>Contains zero or more <a href="#metadata_keyslot_object">keyslot object</a>.</p>
+<h4 id="metadata_keyslot_object"><a class="header" href="#metadata_keyslot_object">Keyslot object</a></h4>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"af"</td><td>Anti-forensics (diffuser) object</td></tr>
+
+<tr><td>"area"</td><td></td></tr>
+
+<tr><td>"kdf"</td><td>Key derivation object</td></tr>
+
+<tr><td>"key_size"</td><td></td></tr>
+
+<tr><td>"priority"</td><td></td></tr>
+
+<tr><td>"type"</td><td></td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_segments_object"><a class="header" href="#metadata_segments_object">Segments object</a></h4>
+<p>TODO: complete section</p>
+<h4 id="metadata_tokens_object"><a class="header" href="#metadata_tokens_object">Tokens object</a></h4>
+<p>TODO: complete section</p>
+<h3 id="backup-metadata-area"><a class="header" href="#backup-metadata-area">Backup metadata area</a></h3>
+<p>To make recovery easier the backup metadata area starts at a fixed offset:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Maximum JSON area size</th></thead>
+<tr><td>16384 (0x004000)</td><td>12 KiB</td></tr>
+
+<tr><td>32768 (0x008000)</td><td>28 KiB</td></tr>
+
+<tr><td>65536 (0x010000)</td><td>60 KiB</td></tr>
+
+<tr><td>131072 (0x020000)</td><td>124 KiB</td></tr>
+
+<tr><td>262144 (0x040000)</td><td>252 KiB</td></tr>
+
+<tr><td>524288 (0x080000)</td><td>508 KiB</td></tr>
+
+<tr><td>1048576 (0x100000)</td><td>1020 KiB</td></tr>
+
+<tr><td>2097152 (0x200000)</td><td>2044 KiB</td></tr>
+
+<tr><td>4194304 (0x400000)</td><td>4092 KiB</td></tr>
+
+</table>
+</div>
+
+<h4 id="backup-volume-header---format-version-2"><a class="header" href="#backup-volume-header---format-version-2">Backup volume header - format version 2</a></h4>
+<p>The backup (or secondary) volume header - format version 2 is the same as the
+<a href="#volume_header_v2">Volume header - format version 2</a> with a different signature: “SKUL\xba\xbe”.</p>
+<h3 id="keyslots-area"><a class="header" href="#keyslots-area">Keyslots area</a></h3>
+<p>TODO: complete section</p>
+<h3 id="encryption_method"><a class="header" href="#encryption_method">Encryption method</a></h3>
+<p>The encryption mode consists of a string in the form:</p>
+<pre><code class="language-text">cipher
+</code></pre>
+<p>Where known values of cipher are:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>arc4</td><td>Alleged RC4 (ARC4)</td></tr>
+
+<tr><td>aes</td><td>Advanced Encryption Standard (AES)</td></tr>
+
+<tr><td>anubis</td><td>Anubis</td></tr>
+
+<tr><td>blowfish</td><td>Blowfish</td></tr>
+
+<tr><td>cast5</td><td>Cast5 (RFC 2144)</td></tr>
+
+<tr><td>cast6</td><td>Cast6 (RFC 2612)</td></tr>
+
+<tr><td>serpent</td><td>Serpent</td></tr>
+
+<tr><td>tnepres</td><td>Reversed variant of Serpent</td></tr>
+
+<tr><td>twofish</td><td>Twofish</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that it is assumed that these identifiers are case insensitive.</p>
+</blockquote>
+<h3 id="encryption_mode"><a class="header" href="#encryption_mode">Encryption mode</a></h3>
+<p>The encryption mode consists of a string in the form:</p>
+<pre><code class="language-text">chaining_mode[-initialization_vector_mode[:initialization_vector_options]]
+</code></pre>
+<p>Where known values of chaining mode are:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>cbc</td><td>Cipher-block chaining (CBC)</td></tr>
+
+<tr><td>ecb</td><td>Electronic codebook (ECB), which should not have a initialization vector mode set</td></tr>
+
+<tr><td>xts</td><td>XEX-based tweaked-codebook mode with ciphertext stealing (XTS)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that it is assumed that these identifiers are case insensitive.</p>
+</blockquote>
+<p>TODO: determine ctr and lrw</p>
+<p>And known values of initialization vector mode are:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>benbi</td><td>The initialization vector is the 64-bit big-endian cipher block (or narrow block)-count (starting at 1)</td></tr>
+
+<tr><td>essiv</td><td>Encrypted sector-salt initialization vector (ESSIV). The "essiv" initialization vector mode requires a hash algorithm to be defined as an initialization vector option. This is specified in the form "essiv:hash", e.g. "essiv:sha256"</td></tr>
+
+<tr><td>lmk</td><td>Compatible implementation of the block chaining mode used by the Loop-AES block device encryption system</td></tr>
+
+<tr><td>null</td><td>The initialization vector is always zero</td></tr>
+
+<tr><td>plain</td><td>The initialization vector is the 32-bit little-endian version of the sector number, padded with zeros if necessary</td></tr>
+
+<tr><td>plain64</td><td>The initialization vector is the 64-bit little-endian version of the sector number, padded with zeros if necessary</td></tr>
+
+<tr><td>plumb</td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that it is assumed that these identifiers are case insensitive.</p>
+</blockquote>
+<h3 id="hashing_method"><a class="header" href="#hashing_method">Hashing method</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>ripemd160</td><td>RIPEMD-160</td></tr>
+
+<tr><td>sha1</td><td>SHA-1</td></tr>
+
+<tr><td>sha224</td><td>SHA-224</td></tr>
+
+<tr><td>sha256</td><td>SHA-256</td></tr>
+
+<tr><td>sha512</td><td>SHA-512</td></tr>
+
+<tr><td>wd256</td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that it is assumed that these identifiers are case insensitive.</p>
+</blockquote>
+<p>The hashing method must at least produce 20 bytes of hash data. Therefore hashing methods like:
+ghash, MD5 are unsupported.</p>
+<h3 id="key_slot"><a class="header" href="#key_slot">Key slot</a></h3>
+<p>The key slot is 48 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>State (of key slot), where 0x0000dead represents inactive (dead) and 0x00ac71f3 represents active</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Key material number of iterations</td></tr>
+
+<tr><td>8</td><td>32</td><td></td><td>Key material salt</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Key material start sector</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Key material number of (anti-forensic) stripes</td></tr>
+
+</table>
+</div>
+
+<h2 id="format-edge-cases-and-corruption-scenarios-3"><a class="header" href="#format-edge-cases-and-corruption-scenarios-3">Format edge cases and corruption scenarios</a></h2>
+<h3 id="uninitialized-encrypted-volume-data"><a class="header" href="#uninitialized-encrypted-volume-data">Uninitialized encrypted volume data</a></h3>
+<p>Running “cryptsetup luksFormat” will not initialize the encrypted volume data, the data is
+initialized on write. The uninitialized encrypted data is treated as-is on decryption.</p>
+<h2 id="references-7"><a class="header" href="#references-7">References</a></h2>
+<ul>
+<li><a href="https://gitlab.com/cryptsetup/cryptsetup/-/wikis/LUKS-standard/on-disk-format.pdf">LUKS On-Disk Format Specification</a>,
+by Clemens Fruhwirth</li>
+<li><a href="https://gitlab.com/cryptsetup/cryptsetup/blob/master/docs/on-disk-format-luks2.pdf">LUKS2 On-Disk Format Specification</a>,
+by Milan Broz</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="master-boot-record-mbr-partition-table-format"><a class="header" href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) partition table format</a></h1>
 <p>The Master Boot Record (MBR) partition table is mainly used on the family of Intel x86 based
 computers.</p>
-<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
+<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
 <p>A MBR partition table consists of:</p>
 <ul>
 <li>Master Boot Record (MBR)</li>
 <li>Extended Partition Records (EPRs)</li>
 </ul>
-<h3 id="characteristics-12"><a class="header" href="#characteristics-12">Characteristics</a></h3>
+<h3 id="characteristics-14"><a class="header" href="#characteristics-14">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -8599,7 +9290,7 @@ about the logical partition (volume) and additional extended partition tables.</
 
 <tr><td>446</td><td>16</td><td></td><td>Partition table entry 1, contains the logical partition</td></tr>
 
-<tr><td>462</td><td>16</td><td></td><td>Partition table entry 2, which should contain an extended partition (of type 0x05) or be unused and contain zero bytes</td></tr>
+<tr><td>462</td><td>16</td><td></td><td>Partition table entry 2, which should contain an extended partition (of type 0x05) or contain zero bytes if unused</td></tr>
 
 <tr><td>478</td><td>16</td><td>0x00</td><td>Partition table entry 3, which should be unused and contain zero bytes</td></tr>
 
@@ -8614,6 +9305,9 @@ about the logical partition (volume) and additional extended partition tables.</
 addresses in the EPR are relative to the start of the first EPR.</p>
 <p>The first EPR typically has a <a href="#partition_types-2">partition type</a> of “Extended (CHS)” (0x05) or
 “Extended (LBA)” (0x0f).</p>
+<blockquote>
+<p>Note that an extended boot record can be empty.</p>
+</blockquote>
 <h2 id="the-partition-table-entry"><a class="header" href="#the-partition-table-entry">The partition table entry</a></h2>
 <p>The partition table entry is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -8959,13 +9653,13 @@ sectors. Can be compressed, encrypted or sparse.</li>
 System Compression (decmpfs) to compress file contents.</p>
 <p>decmpfs is sometimes referred to as AFSC (Apple File System Compression) or HFS/HFS+ compression
 and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
-<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
+<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
 <li>compressed file content data</li>
 </ul>
-<h3 id="characteristics-13"><a class="header" href="#characteristics-13">Characteristics</a></h3>
+<h3 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -9239,12 +9933,12 @@ Linux.</p>
 </table>
 </div>
 
-<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
+<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
 <p>An Extended File System (ext) consists of:</p>
 <ul>
 <li>one or more block groups</li>
 </ul>
-<h3 id="characteristics-14"><a class="header" href="#characteristics-14">Characteristics</a></h3>
+<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -10918,7 +11612,7 @@ only set the first 4 bytes to 0 for the terminator.</p>
 <h3 id="file-entry-with-invalid-extents-header-signature"><a class="header" href="#file-entry-with-invalid-extents-header-signature">File entry with invalid extents header signature</a></h3>
 <p>File content inaccessible but file entry metadata and extended attributes
 accessible.</p>
-<h2 id="references-6"><a class="header" href="#references-6">References</a></h2>
+<h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
 <ul>
 <li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux
 kernel documentation</li>
@@ -10927,24 +11621,24 @@ kernel documentation</li>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
 <p>The Extensible File Allocation Table (exFAT) file system format is a successor of the
 <a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a> file system format.</p>
-<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
-<li>Main boot region
+<li>Main boot region (11 sectors)
 <ul>
 <li>boot sector (or boot record)</li>
-<li>7 extended boot sectors</li>
-<li>OEM parameters sector</li>
-<li>Reserved sector</li>
+<li>7 extended boot sectors; can contain a sector signature (“\x55\xaa”)</li>
+<li>OEM parameters sector; can contain a sector signature (“\x55\xaa”)</li>
+<li>Reserved sector; can contain a sector signature (“\x55\xaa”)</li>
 <li>boot checksum sector</li>
 </ul>
 </li>
-<li>Backup boot region
+<li>Backup boot region (11 sectors)
 <ul>
 <li>boot sector (or boot record)</li>
-<li>7 extended boot sectors</li>
-<li>OEM parameters sector</li>
-<li>Reserved sector</li>
+<li>7 extended boot sectors; can contain a sector signature (“\x55\xaa”)</li>
+<li>OEM parameters sector; can contain a sector signature (“\x55\xaa”)</li>
+<li>Reserved sector; can contain a sector signature (“\x55\xaa”)</li>
 <li>boot checksum sector</li>
 </ul>
 </li>
@@ -10963,7 +11657,7 @@ kernel documentation</li>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h3>
+<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -10976,7 +11670,7 @@ kernel documentation</li>
 </table>
 </div>
 
-<h3 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h3>
+<h2 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h2>
 <p>The boot record is stored in the first sector of the volume.</p>
 <p>The boot record is at least 512 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -11046,6 +11740,35 @@ kernel documentation</li>
 </table>
 </div>
 
+<h2 id="boot-checksum-sector"><a class="header" href="#boot-checksum-sector">Boot checksum sector</a></h2>
+<p>The boot checksum sector is at least 512 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Boot checksum</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Copy of boot checksum</td></tr>
+
+<tr><td>16</td><td>496</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<pre><code class="language-python">checksum = 0
+
+for index in range(0, 11 * bytes_per_sector):
+    # Ignore the volume flags and percent in use values.
+    if index in (106, 107, 112):
+        continue
+
+    carry = 0x80000000 if (checksum &amp; 1) else 0
+    checksum = carry + (checksum &gt;&gt; 1) + sectors[index]
+    checksum &amp;= 0xFFFFFFFF
+</code></pre>
 <h2 id="cluster-block-allocation-table"><a class="header" href="#cluster-block-allocation-table">Cluster block allocation table</a></h2>
 <p>A cluster block allocation table consists of:</p>
 <ul>
@@ -11397,7 +12120,7 @@ of the root directory.</p>
 </table>
 </div>
 
-<h2 id="references-7"><a class="header" href="#references-7">References</a></h2>
+<h2 id="references-9"><a class="header" href="#references-9">References</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-gb/windows/win32/fileio/exfat-specification">exFAT file system specification</a>,
 by Microsoft</li>
@@ -11415,7 +12138,7 @@ and Windows.</p>
 <li>FAT-32</li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">exFAT</a></li>
 </ul>
-<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
 <p>A FAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -11431,7 +12154,7 @@ and Windows.</p>
 <blockquote>
 <p>Note that FAT-32 stores the root directory as part of the file and directory data.</p>
 </blockquote>
-<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
+<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12037,7 +12760,7 @@ character (0x0000) are padded with 0xffff.</p>
 </table>
 </div>
 
-<h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
+<h2 id="references-10"><a class="header" href="#references-10">References</a></h2>
 <ul>
 <li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>,
 by Microsoft</li>
@@ -12068,7 +12791,7 @@ OS 10.0 or later.</p>
 HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
 case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
 volume.</p>
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
@@ -12100,7 +12823,7 @@ volume.</p>
 <li>optional backup (or alternate) <a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h4 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h4>
+<h4 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -14333,7 +15056,7 @@ stored;</li>
     (data area start sector * 512) + (embedded volume block number * block size)
 )
 </code></pre>
-<h2 id="references-9"><a class="header" href="#references-9">References</a></h2>
+<h2 id="references-11"><a class="header" href="#references-11">References</a></h2>
 <!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://github.com/apple-oss-distributions/hfs/blob/main/core/hfs_format.h">hfs_format.h</a></li>
@@ -14346,7 +15069,7 @@ by Apple Inc.</li>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
 <p>The Macintosh File System (MFS) is the first file system created for Mac OS, intended for 400 KiB
 floppy disks.</p>
-<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
+<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
 <p>A MFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">boot block</a></li>
@@ -14356,7 +15079,7 @@ floppy disks.</p>
 <li>optional backup (or alternate) <a href="#master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
+<h3 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -14604,7 +15327,7 @@ multiple blocks</li>
 <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for Microsoft Windows
 versions that are based on Windows NT.</p>
-<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
+<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -14612,7 +15335,7 @@ versions that are based on Windows NT.</p>
 <li>Master File Table (MFT)</li>
 <li>Mirror Master File Table (MFT)</li>
 </ul>
-<h3 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h3>
+<h3 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -17275,7 +17998,7 @@ rest with with 0-byte values</li>
 <li>another implementation seems to provide the data that was already in its buffer</li>
 </ul>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
-<h2 id="references-10"><a class="header" href="#references-10">References</a></h2>
+<h2 id="references-12"><a class="header" href="#references-12">References</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>,
 by Microsoft</li>
@@ -17321,7 +18044,7 @@ by Microsoft</li>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
 iOS. APFS supersedes the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
-<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
+<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
 <p>APFS consists of:</p>
 <ul>
 <li>A container
@@ -17330,7 +18053,7 @@ Sierra (10.13) and iOS 10.3.</p>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h3>
+<h3 id="characteristics-22"><a class="header" href="#characteristics-22">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -17365,17 +18088,17 @@ recent Unicode versions has been observed.</p>
 </table>
 </div>
 
-<h2 id="keys"><a class="header" href="#keys">Keys</a></h2>
+<h2 id="keys-1"><a class="header" href="#keys-1">Keys</a></h2>
 <p>To encrypt storage media APFS uses different kind of keys.</p>
 <h3 id="volume-master-key"><a class="header" href="#volume-master-key">Volume master key</a></h3>
 <p>The Volume Master Key (VMK) is used to encrypt the data of a specific volume.</p>
 <h3 id="volume-key"><a class="header" href="#volume-key">Volume key</a></h3>
 <p>For every volume on an Mac OS system with APFS, APFS provides for a volume password to unlock the
 encrypted data. The volume password is used to determine a volume key.</p>
-<h2 id="encryption-methods-1"><a class="header" href="#encryption-methods-1">Encryption methods</a></h2>
+<h2 id="encryption-methods-2"><a class="header" href="#encryption-methods-2">Encryption methods</a></h2>
 <p>APFS uses the AES-XTS encryption method to encrypt the key bag, file system metadata and content
 data.</p>
-<h3 id="aes-xts"><a class="header" href="#aes-xts">AES-XTS</a></h3>
+<h3 id="aes-xts-1"><a class="header" href="#aes-xts-1">AES-XTS</a></h3>
 <p>The AES-XTS encryption method uses:</p>
 <ul>
 <li>a primary key (key 1) to encrypt/decrypt the data (the whitened plaintext/ciphertext).</li>
@@ -20248,13 +20971,13 @@ container.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<h2 id="format-edge-cases-and-corruption-scenarios-3"><a class="header" href="#format-edge-cases-and-corruption-scenarios-3">Format edge cases and corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios-4"><a class="header" href="#format-edge-cases-and-corruption-scenarios-4">Format edge cases and corruption scenarios</a></h2>
 <h3 id="container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted"><a class="header" href="#container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted">Container key bag is hardware encrypted but volume is not encrypted</a></h3>
 <p>Seen in APFS containers created by certain digital forensics tools. The container key bag is either
 hardware encrypted or contains random data but the volume is not encrypted.</p>
 <h2 id="notes-2-1"><a class="header" href="#notes-2-1">Notes</a></h2>
 <p>TODO describe evict_mapping_val_t</p>
-<h2 id="references-11"><a class="header" href="#references-11">References</a></h2>
+<h2 id="references-13"><a class="header" href="#references-13">References</a></h2>
 <!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf">Apple File System Reference</a>,
@@ -20272,7 +20995,7 @@ by Apple</li>
 <p>The property list (plist) formats are used to store various kinds of data, for
 example configuration data. The format is know to be used stand-alone as well
 as embedded in other data formats.</p>
-<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
+<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -20494,14 +21217,14 @@ consists of:</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data
 format, as defined in RFC1950, allows for multiple techniques but only the
 Deflate compression method, a variation of LZ77, is used.</p>
-<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
+<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h3>
+<h3 id="characteristics-23"><a class="header" href="#characteristics-23">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -21022,7 +21745,7 @@ while( block_header.last_block_flag == 0 );
     return( ( upper_word &lt;&lt; 16 ) | lower_word );
 }
 </code></pre>
-<h2 id="references-12"><a class="header" href="#references-12">References</a></h2>
+<h2 id="references-14"><a class="header" href="#references-14">References</a></h2>
 <ul>
 <li><a href="http://www.ietf.org/rfc/rfc1950.txt">RFC1950 - ZLIB Compressed Data Format Specification</a></li>
 <li><a href="http://www.ietf.org/rfc/rfc1951.txt">RFC1951 - DEFLATE Compressed Data Format Specification</a></li>

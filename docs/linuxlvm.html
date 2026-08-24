@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
+            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-94f1318b.js"></script>
+        <script src="toc-98b8595d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -361,23 +361,23 @@ updated. The metadata area, therefore, can contain copies of older versions of t
 <ul>
 <li>Volume group main section
 <ul>
-<li>Physical volumes sub section
+<li>Physical volumes object
 <ul>
-<li>Physical volume sub sections</li>
+<li>Physical volume object</li>
 </ul>
 </li>
-<li>Logical volumes sub section
+<li>Logical volumes object
 <ul>
-<li>Logical volume sub sections
+<li>Logical volume object
 <ul>
-<li>Segment sub section</li>
+<li>Segment object</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Global properties</li>
+<li>Top level properties</li>
 </ul>
 <p>According to “RHEL 5 - Logical Volume Manager Administration” by default, an identical copy of the
 metadata is maintained in every metadata area in every physical volume within the volume group. The
@@ -450,11 +450,10 @@ myvg {
 }
 </code></pre>
 <h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
-<p>The metadata sections are textual and use the following properties.</p>
-<p>A property is defined as:</p>
+<p>The metadata is textual and uses properties, where a property is defined as:</p>
 <pre><code class="language-text">&lt;identifier&gt; = &lt;value&gt;
 </code></pre>
-<p>Where &lt;identifier&gt; contains a unique name of the property and &lt;value&gt; is one of the
+<p>The identifier contains an unique name of the property and &lt;value&gt; is one of the
 following types:</p>
 <div class="table-wrapper">
 <table>
@@ -476,205 +475,156 @@ following types:</p>
 <p>Note that for now it is assumed that the # character is not allowed to be used in any of the
 values.</p>
 </blockquote>
-<h3 id="volume-group-main-section"><a class="header" href="#volume-group-main-section">Volume group main section</a></h3>
-<p>The volume group main section is defined as:</p>
-<pre><code class="language-text">&lt;name&gt; {
-&lt;properties&gt;
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;name&gt; contains the <a href="#names">name</a> of the volume group;</li>
-<li>&lt;properties&gt; contains one of the following properties.</li>
-</ul>
-<p>TODO: Note can there be more than 1 volume group?</p>
+<h3 id="top-level-properties"><a class="header" href="#top-level-properties">Top level properties</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>extent_size</td><td>The size of an extent, in number of sectors</td></tr>
+<tr><td>"contents"</td><td>The contents of the metadata area, which contains the string "Text Format Volume Group"</td></tr>
 
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
+<tr><td>"creation_host"</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
 
-<tr><td>format</td><td>Optional format identifier, such as "lvm2"</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
-<tr><td>id</td><td>Volume group identifier (VG UUID), which contains an ASCII string in the following format: fg1fKZ-xoHz-CfAD-yQPx-l2HL-Y7kA-9kJ9LD</td></tr>
+<tr><td>"description"</td><td>Unknown (Description of the metadata area?)</td></tr>
 
-<tr><td>max_lv</td><td>Maximum number of logical volumes</td></tr>
+<tr><td><a href="#metadata_names">&lt;volume group name&gt;</a></td><td><a href="#metadata_volume_group_object">Volume group object</a></td></tr>
 
-<tr><td>max_pv</td><td>Maximum number of physical volumes</td></tr>
-
-<tr><td>metadata_copies</td><td>Unknown (The number of metadata copies?)</td></tr>
-
-<tr><td>seqno</td><td>Metadata sequence number</td></tr>
-
-<tr><td>status</td><td>The <a href="#status_flags">status flags</a>, which contains a list of strings</td></tr>
+<tr><td>"version"</td><td>The metadata area version, which contains an integer value of 1</td></tr>
 
 </table>
 </div>
 
-<p>&lt;sub sections&gt; contains one of the following sub sections:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Description</th></thead>
-<tr><td>physical_volumes</td><td>The physical volumes sub sections</td></tr>
-
-<tr><td>logical_volumes</td><td>The logical volumes sub sections</td></tr>
-
-</table>
-</div>
-
-<h3 id="names"><a class="header" href="#names">Volume group and logical volume names</a></h3>
+<blockquote>
+<p>Note it is assumed that there can only be 1 volume group object.</p>
+</blockquote>
+<h3 id="metadata_names"><a class="header" href="#metadata_names">Volume group and logical volume names</a></h3>
 <ul>
 <li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hypen)</li>
 <li>A volume group name should not start with a hypen</li>
 <li>A logical volume name can start with a hypen, but it is reserved for logical volumes that have
 been removed but are stil being tracked by the format</li>
 </ul>
-<h3 id="physical-volumes-sub-section"><a class="header" href="#physical-volumes-sub-section">Physical volumes sub section</a></h3>
-<p>The physical volumes sub section is defined as:</p>
-<pre><code class="language-text">physical_volumes {
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<blockquote>
+<p>Note that some implementations use lv_ as the prefix for a logical volume, however this is not
+enforced by the format.</p>
+</blockquote>
+<h3 id="metadata_volume_group_object"><a class="header" href="#metadata_volume_group_object">Volume group object</a></h3>
+<p>The volume group object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>pv#</td><td>Individual physical volume sub section, where # is a place holder for a the physical volume number e.g. pv0. 0 appears to be the first number that is used</td></tr>
+<tr><td>"extent_size"</td><td>The size of an extent, in number of sectors</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags">Flags</a></td></tr>
+
+<tr><td>"format"</td><td>Optional format identifier, such as "lvm2"</td></tr>
+
+<tr><td>"id"</td><td>Volume group identifier (VG UUID), which contains an ASCII string in the following format: fg1fKZ-xoHz-CfAD-yQPx-l2HL-Y7kA-9kJ9LD</td></tr>
+
+<tr><td>"logical_volumes"</td><td><a href="#metadata_logical_volumes_object">Logical volumes object</a></td></tr>
+
+<tr><td>"max_lv"</td><td>Maximum number of logical volumes</td></tr>
+
+<tr><td>"max_pv"</td><td>Maximum number of physical volumes</td></tr>
+
+<tr><td>"metadata_copies"</td><td>Unknown (The number of metadata copies?)</td></tr>
+
+<tr><td>"physical_volumes"</td><td><a href="#metadata_physical_volumes_object">Physical volumes object</a></td></tr>
+
+<tr><td>"seqno"</td><td>Metadata sequence number</td></tr>
+
+<tr><td>"status"</td><td>The <a href="#status_flags">status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="physical-volume-sub-section"><a class="header" href="#physical-volume-sub-section">Physical volume sub section</a></h3>
-<p>Each physical volume sub section is defined as:</p>
-<pre><code class="language-text">pv# {
-&lt;properties&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li># is a place holder for a the physical volume number e.g. pv0</li>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_physical_volumes_object"><a class="header" href="#metadata_physical_volumes_object">Physical volumes object</a></h3>
+<p>The physical volumes object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>device</td><td>The device filename, which contains an ASCII string, e.g. /dev/dm-0</td></tr>
-
-<tr><td>device_id</td><td>Unknown (device identifier "/tmp/lvm.raw")</td></tr>
-
-<tr><td>device_id_type</td><td>Unknown (device type "loop_file")</td></tr>
-
-<tr><td>dev_size</td><td>The physical volume size including non-usable space, in number of sectors</td></tr>
-
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
-
-<tr><td>id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
-
-<tr><td>pe_count</td><td>The number of (allocated) extents in the physical volume</td></tr>
-
-<tr><td>pe_start</td><td>The start extent, which contains an offset in bytes relative from the start of the physical volume</td></tr>
-
-<tr><td>status</td><td>The <a href="#status_flags">status flags</a>, which contains a list of strings</td></tr>
+<tr><td>pv#</td><td>Individual <a href="#metadata_physical_volume_object">physical volume object</a>, where # is a place holder for a the physical volume number e.g. pv0. 0 appears to be the first number that is used</td></tr>
 
 </table>
 </div>
 
-<h3 id="logical-volumes-sub-section"><a class="header" href="#logical-volumes-sub-section">Logical volumes sub section</a></h3>
-<p>The logical volumes sub section is defined as:</p>
-<pre><code class="language-text">logical_volumes {
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<h3 id="metadata_physical_volume_object"><a class="header" href="#metadata_physical_volume_object">Physical volume object</a></h3>
+<p>Each physical volume object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>&lt;name&gt;</td><td>Individual physical volume sub section, where &lt;name&gt; is a place holder for a the logical volume name</td></tr>
+<tr><td>"device"</td><td>The device filename, which contains an ASCII string, e.g. /dev/dm-0</td></tr>
+
+<tr><td>"device_id"</td><td>Unknown (device identifier "/tmp/lvm.raw")</td></tr>
+
+<tr><td>"device_id_type"</td><td>Unknown (device type "loop_file")</td></tr>
+
+<tr><td>"dev_size"</td><td>The physical volume size including non-usable space, in number of sectors</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags">Flags</a></td></tr>
+
+<tr><td>"id"</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
+
+<tr><td>"pe_count"</td><td>The number of (allocated) extents in the physical volume</td></tr>
+
+<tr><td>"pe_start"</td><td>The start extent, which contains an offset in bytes relative from the start of the physical volume</td></tr>
+
+<tr><td>"status"</td><td>The <a href="#status_flags">status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="logical-volume-sub-section"><a class="header" href="#logical-volume-sub-section">Logical volume sub section</a></h3>
-<p>Each logical volume sub section is defined as:</p>
-<pre><code class="language-text">&lt;name&gt; {
-&lt;properties&gt;
-&lt;sub sections&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li>&lt;name&gt; contains the <a href="#names">name</a> of the physical volume</li>
-</ul>
-<p>Some implementations use lv_ as the prefix for a logical volume note that the format does not imply
-this convention.</p>
-<ul>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_logical_volumes_object"><a class="header" href="#metadata_logical_volumes_object">Logical volumes object</a></h3>
+<p>The logical volumes object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>creation_host</td><td>The hostname of the system on which the logical volume was created</td></tr>
-
-<tr><td>creation_time</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
-
-<tr><td>flags</td><td><a href="#flags">Flags</a></td></tr>
-
-<tr><td>id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
-
-<tr><td>segment_count</td><td>The number of segment sub sections</td></tr>
-
-<tr><td>status</td><td><a href="#status_flags">Status flags</a>, which contains a list of strings</td></tr>
+<tr><td><a href="#metadata_names">&lt;logical volume name&gt;</a></td><td>Individual <a href="#metadata_logical_volume_object">logical volume object</a>, where &lt;name&gt; is a place holder for a the logical volume name</td></tr>
 
 </table>
 </div>
 
-<ul>
-<li>&lt;sub sections&gt; contains one of the following sub sections:</li>
-</ul>
+<h3 id="metadata_logical_volume_object"><a class="header" href="#metadata_logical_volume_object">Logical volume object</a></h3>
+<p>Each logical volume object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>segment#</td><td>Individual physical volume sub section, where # is a place holder for the segment number e.g. segment1. 1 appears to be the first number that is used</td></tr>
+<tr><td>"creation_host"</td><td>The hostname of the system on which the logical volume was created</td></tr>
+
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+
+<tr><td>"flags"</td><td><a href="#flags">Flags</a></td></tr>
+
+<tr><td>"id</td><td>Physical volume identifier (PV UUID), which contains an ASCII string in the following format: 9LBcEB-7PQT-GIlL-I0Kx-rtzr-ynju-SL983W</td></tr>
+
+<tr><td>"segment_count"</td><td>The number of segments</td></tr>
+
+<tr><td>"segment#"</td><td>Individual <a href="#metadata_segment_object">segment objects</a>, where # is a place holder for the segment number e.g. segment1. 1 appears to be the first number that is used</td></tr>
+
+<tr><td>"status"</td><td><a href="#status_flags">Status flags</a>, which contains a list of strings</td></tr>
 
 </table>
 </div>
 
-<h3 id="segment-sub-section"><a class="header" href="#segment-sub-section">Segment sub section</a></h3>
-<p>Each segment sub section is defined as:</p>
-<pre><code class="language-text">segment# {
-&lt;properties&gt;
-}
-</code></pre>
-<p>Where:</p>
-<ul>
-<li># is a place holder for the segment number e.g. segment1</li>
-<li>&lt;properties&gt; contains one of the following properties:</li>
-</ul>
+<h3 id="metadata_segment_object"><a class="header" href="#metadata_segment_object">Segment object</a></h3>
+<p>Each segment object contains the following properties:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>extent_count</td><td>The number of extents in the segment (or current logical extent)</td></tr>
+<tr><td>"extent_count"</td><td>The number of extents in the segment (or current logical extent)</td></tr>
 
-<tr><td>start_extent</td><td>The start extent of the segment, which contains an offset in number of extents relative from the start of the segment</td></tr>
+<tr><td>"start_extent"</td><td>The start extent of the segment, which contains an offset in number of extents relative from the start of the segment</td></tr>
 
-<tr><td>stripe_count</td><td>The number of stripes in the segment, where 1 represents linear striping</td></tr>
+<tr><td>"stripe_count"</td><td>The number of stripes in the segment, where 1 represents linear striping</td></tr>
 
-<tr><td>stripes</td><td>The stripes list</td></tr>
+<tr><td>"stripes"</td><td><a href="#metadata_stripes_list">Stripes list</a></td></tr>
 
-<tr><td>type</td><td>The <a href="#segment_types">segment type</a></td></tr>
+<tr><td>"type"</td><td><a href="#metadata_segment_types">Segment type</a></td></tr>
 
 </table>
 </div>
 
-<h3 id="segment_types"><a class="header" href="#segment_types">Segment types</a></h3>
+<h3 id="metadata_segment_types"><a class="header" href="#metadata_segment_types">Segment types</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -752,7 +702,7 @@ this convention.</p>
 <blockquote>
 <p>Note that a comparable list can be retrieved using <code>lvm segtypes</code>.</p>
 </blockquote>
-<h3 id="stripes-list"><a class="header" href="#stripes-list">Stripes list</a></h3>
+<h3 id="metadata_stripes_list"><a class="header" href="#metadata_stripes_list">Stripes list</a></h3>
 <pre><code class="language-text">stripes = [
 &lt;physical volume name&gt;, &lt;start extent number&gt;
 ]
@@ -767,23 +717,6 @@ area.</li>
     (start_extent_number * extent_size * sector_size) + physical_volume_data_area_start_offset
 )
 </code></pre>
-<h3 id="global-properties"><a class="header" href="#global-properties">Global properties</a></h3>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Description</th></thead>
-<tr><td>contents</td><td>The contents of the metadata area, which contains the string "Text Format Volume Group"</td></tr>
-
-<tr><td>creation_host</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
-
-<tr><td>creation_time</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
-
-<tr><td>description</td><td>Unknown (Description of the metadata area?)</td></tr>
-
-<tr><td>version</td><td>The metadata area version, which contains an integer value of 1</td></tr>
-
-</table>
-</div>
-
 <h3 id="status_flags"><a class="header" href="#status_flags">Status flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -823,7 +756,7 @@ area.</li>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="mbr.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="luksde.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -837,7 +770,7 @@ area.</li>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="mbr.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="luksde.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

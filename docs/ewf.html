@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
+            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-94f1318b.js"></script>
+        <script src="toc-98b8595d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -179,8 +179,8 @@
 <p>EWF is short for Expert Witness Compression Format. It is a file type used to store storage media
 images for digital forensic purposes. It is currently widely used in the field of computer
 forensics in proprietary tooling like EnCase en FTK.</p>
-<p>The <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> is the earliest
-known specification of the format was provided by ASR Data for the SMART application.</p>
+<p>The “ASR Data - E01 Compression Format” is the earliest known specification of the format was
+provided by ASR Data for the SMART application.</p>
 <p>The EWF format was superseded by the <a href="ewf2.html">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
@@ -380,8 +380,7 @@ values but data, probably the memory is not filled with 0-byte values.</p>
 <!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
 <!-- rumdl-disable MD013 -->
-<p>There are multiple section types. <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
-defines the following:</p>
+<p>There are multiple section types. “ASR Data - E01 Compression Format” defines the following:</p>
 <!-- rumdl-enable MD013 -->
 <ul>
 <li>Header section</li>
@@ -723,7 +722,7 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 <p>The header section is identified in the section data type field as “header”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Defined in “ASR Data - E01 Compression Format”</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>Found at the start of the first segment file or in EnCase 4 to 7 after the header2 section in the
@@ -770,11 +769,10 @@ information consists of at least 4 lines:</p>
 <h4 id="ewf-format"><a class="header" href="#ewf-format">EWF format</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
-<li><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> specifies the end of
-line character(s) is a newline (0x0a).</li>
+<li>“ASR Data - E01 Compression Format” specifies the end of line character(s) is a newline (0x0a).</li>
 </ul>
-<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>
-the 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
+<p>According to “ASR Data - E01 Compression Format” the 3rd and the 4th line consist of the following
+tab (0x09) separated values:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier number</th><th>Character in 3rd line</th><th>Value in 4th line</th></thead>
@@ -800,8 +798,8 @@ the 3rd and the 4th line consist of the following tab (0x09) separated values:</
 </div>
 
 <p>Also see <a href="#header_values">header values</a></p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that the Expert
-Witness Compression uses ‘f’, fastest compression.</p>
+<p>“ASR Data - E01 Compression Format” states that the Expert Witness Compression uses ‘f’, fastest
+compression.</p>
 <h4 id="encase-1-ewf-e01"><a class="header" href="#encase-1-ewf-e01">EnCase 1 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -1242,9 +1240,8 @@ entries that consist of: S &lt;1&gt; &lt;2&gt; &lt;3&gt;
 <h5 id="notes"><a class="header" href="#notes">Notes</a></h5>
 <p>There should not be a tab, carriage return and newline characters within the text in the 4th line.
 Or is there a method to escape these characters?</p>
-<p><a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a> states that these
-characters should not be used in the free form text. Need to confirm this, the specification only
-speaks of a newline character.</p>
+<p>“ASR Data - E01 Compression Format” states that these characters should not be used in the free
+form text. Need to confirm this, the specification only speaks of a newline character.</p>
 <p>Currently the password has no a additional value than allow an application check it. The data
 itself is not protected using the password. The password hashing algorithm is unknown. Need to find
 out. And does the algorithm differ per EnCase version? probably not. The algorithm does not differ
@@ -1253,7 +1250,7 @@ in EnCase 1 to 7. FTK Imager does not bother with a password.</p>
 <p>The volume section is identified in the section data type field as “volume”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></li>
+<li>Defined in “ASR Data - E01 Compression Format”</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>Found after the header section of the first segment file. Not found in subsequent segment files.</li>
@@ -1261,7 +1258,7 @@ SMART (EWF-S01)</li>
 <p>In the next paragraphs the various versions of the volume section are described.</p>
 <h4 id="ewf-specification"><a class="header" href="#ewf-specification">EWF specification</a></h4>
 <!-- rumdl-disable MD013 -->
-<p>The specification according to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</p>
+<p>The specification according to “ASR Data - E01 Compression Format”.</p>
 <!-- rumdl-enable MD013 -->
 <p>The volume section data is 94 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -1432,7 +1429,7 @@ shows the Fastbloc.</p>
 <p>The disk section is identified in the section data type field as “disk”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Not found in SMART (EWF-S01).</li>
 </ul>
 <p>With a disk section in an FTK Imager 2.3 (EWF-E01) image it was confirmed that the disk section is
@@ -1446,7 +1443,7 @@ method to differentiate between a partition (volume) image or a physical disk im
 <p>The data section is identified in the section data type field as “data”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, and EWF-L01 in EnCase 5 to 7.
 Not found in SMART (EWF-S01).</li>
 <li>For multiple segment files it does not reside in the first segment file. For a single segment
@@ -1465,7 +1462,7 @@ start of the segment files, except for the first.</li>
 <p>The sectors section is identified in the section data type field as “sectors”.
 Some aspects of this section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
 found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>The first sectors section can be found after the volume section in the first segment file or at
@@ -1524,7 +1521,7 @@ data).</p>
 <p>The table section is identified in the section data type field as “table”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 </ul>
@@ -1560,7 +1557,7 @@ file header in subsequent segment files.</li>
 </table>
 </div>
 
-<p>According to <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a></p>
+<p>According to “ASR Data - E01 Compression Format”:</p>
 <ul>
 <li>the number of entries, contains 0x01</li>
 <li>the table can hold 16375 entries if more entries are required an additional table section should
@@ -1793,7 +1790,7 @@ uncompressed. This allows EnCase 6.7.1 faulty EWF files to be converted.</p>
 <p>The table2 section is identified in the section data type field as “table2”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
 found in EnCase 1 (EWF-E01) or SMART (EWF-S01).</li>
 <li>Uses the same format as the table section.</li>
@@ -1808,7 +1805,7 @@ purposes.</p>
 <p>The next section is identified in the section data type field as “next”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 1 to 7 or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7, and
 SMART (EWF-S01)</li>
 <li>The last section within a segment other than the last segment file.</li>
@@ -2764,7 +2761,7 @@ order mark.</p>
 <p>The session section is identifier in the section data type field as “session”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is not found in SMART (EWF-S01) and FTK Imager (EWF-E01).</li>
 <li>It is found in EnCase 5 and 6 (EWF-E01) files.</li>
 <li>It is only added to the last segment file for images of optical disc (CD/DVD/BD) media.</li>
@@ -2833,7 +2830,7 @@ the start of the session and the ISO 9660 volume descriptor.</p>
 <p>The error2 section is identifier in the section data type field as “error2”. Some aspects of this
 section are:</p>
 <ul>
-<li>Not defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is not found in SMART (EWF-S01).</li>
 <li>It is found in, EnCase 3 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is only added to the last segment file when errors were encountered while reading the input.</li>
@@ -2909,7 +2906,7 @@ section are:</p>
 <p>The hash section is identified in the section data type field as “hash”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is found in SMART (EWF-S01) and FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) files.</li>
 <li>It is not found in EnCase 5 (EWF-L01).</li>
 <li>The hash section is optional, it does not need to be present. If it does it resides in the last
@@ -2952,7 +2949,7 @@ different formats, but differ for different media and different program sessions
 <p>The done section is identified in the section data type field as “done”. Some aspects of this
 section are:</p>
 <ul>
-<li>Defined in <a href="http://www.asrdata.com/whitepaper-html">ASR Data - E01 Compression Format</a>.</li>
+<li>Defined in “ASR Data - E01 Compression Format”.</li>
 <li>It is found in SMART (EWF-S01), FTK Imager, EnCase 1 to 7 and linen 5 to 7 (EWF-E01) and EnCase 5
 (EWF-L01) files.</li>
 <li>The done section is the last section within the last segment file.</li>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-dd7f4c64.js";
+            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-94f1318b.js"></script>
+        <script src="toc-98b8595d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -249,7 +249,8 @@ image (CRawDiskImage).</p>
 <p>A compressed UDIF segment file consist of:</p>
 <ul>
 <li>Data fork, containing the image data</li>
-<li>Optional resource fork or XML plist</li>
+<li>Optional XML plist</li>
+<li>Optional resource fork</li>
 <li><a href="#file_footer">File footer</a> at the end of the file</li>
 </ul>
 <h4 id="encrypted-encoding-version-1-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-1-encrypted-udif-segment-file">Encrypted Encoding version 1 encrypted UDIF segment file</a></h4>
@@ -669,7 +670,7 @@ item.</p>
 
 <tr><td>16</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Unknown (DataOffset), which seems to be always 0</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Base data offset, which contains the byte offset relative to the start of the segment data stream</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td>Unknown (BuffersNeeded)</td></tr>
 
@@ -695,13 +696,13 @@ item.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td></td><td><a href="#udif_block_table_entry_types">Entry type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Unknown (comment?)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Unknown (comment related?)</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Start sector, which contains the sector number relative to the start of the start sector of the block table</td></tr>
 
 <tr><td>16</td><td>8</td><td></td><td>Number of sectors</td></tr>
 
-<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the start of the segment data stream</td></tr>
+<tr><td>24</td><td>8</td><td></td><td>Data offset, which contains the byte offset relative to the base data offset in the block table header</td></tr>
 
 <tr><td>32</td><td>8</td><td></td><td>Data size, which contain the number of bytes of data stored, which is 0 for sparse data</td></tr>
 
@@ -752,6 +753,7 @@ item.</p>
 <h3 id="xml-plist-and-resource-fork-both-in-use"><a class="header" href="#xml-plist-and-resource-fork-both-in-use">XML plist and resource fork both in use</a></h3>
 <p>The XML plist and resource fork could be used simultaneously, allowing for a single UDIF to
 contain multiple images.</p>
+<p>It is currently assumed that the XML plist is leading.</p>
 <h3 id="xml-plist-andor-resource-fork-in-non-first-segment-files"><a class="header" href="#xml-plist-andor-resource-fork-in-non-first-segment-files">XML plist and/or resource fork in non-first segment files</a></h3>
 <p>The XML plist and/or resource fork could be used in non-first segment files.</p>
 
