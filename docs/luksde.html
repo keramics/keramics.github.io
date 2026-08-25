@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7f9e3fca.js";
+            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-98b8595d.js"></script>
@@ -197,8 +197,8 @@ separate layout.</p>
 <h3 id="layout-version-1"><a class="header" href="#layout-version-1">Layout version 1</a></h3>
 <p>A LUKS version 1 encrypted volume consist of:</p>
 <ul>
-<li>volume header</li>
-<li>8 x key slots</li>
+<li><a href="#volume_header_v1">volume header</a></li>
+<li>8 x <a href="#key_slot_v1">key slots</a></li>
 <li>split master key material</li>
 <li>encrypted (volume) data</li>
 </ul>
@@ -210,8 +210,8 @@ commonly be 2 MiB.</p>
 <ul>
 <li>metadata area
 <ul>
-<li>volume header</li>
-<li>JSON area</li>
+<li><a href="#volume_header_v2">volume header</a></li>
+<li><a href="#json_area">JSON area</a></li>
 </ul>
 </li>
 <li>backup metadata area
@@ -339,8 +339,8 @@ Size of initialization vector?</p>
 <p>Default encryption mode is cbc-plain
 Size of initialization vector?</p>
 <h2 id="volume-header"><a class="header" href="#volume-header">Volume header</a></h2>
-<h3 id="volume-header---format-version-1"><a class="header" href="#volume-header---format-version-1">Volume header - format version 1</a></h3>
-<p>The volume header is 4096 bytes in size and consists of:</p>
+<h3 id="volume_header_v1"><a class="header" href="#volume_header_v1">Volume header - format version 1</a></h3>
+<p>The volume header - format version 1 is 4096 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -366,7 +366,7 @@ Size of initialization vector?</p>
 
 <tr><td>168</td><td>40</td><td></td><td>Volume identifier, which contains an ASCII string with an end-of-string character that consists of a lower-case UUID</td></tr>
 
-<tr><td>208</td><td>8 x 48</td><td></td><td>Array of <a href="#key_slot">key slots</a></td></tr>
+<tr><td>208</td><td>8 x 48</td><td></td><td>Array of <a href="#key_slot_v1">key slots</a></td></tr>
 
 <tr><td>592</td><td>3504</td><td></td><td>Unknown (empty values)</td></tr>
 
@@ -375,7 +375,7 @@ Size of initialization vector?</p>
 
 <p>The hashing method is used for the user key calculation and the anti-forensic (AF) diffuser.</p>
 <h3 id="volume_header_v2"><a class="header" href="#volume_header_v2">Volume header - format version 2</a></h3>
-<p>The volume header (or binary header) is 4096 bytes in size and consists of:</p>
+<p>The volume header - format version 2 (or binary header) is 4096 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -397,7 +397,7 @@ Size of initialization vector?</p>
 
 <tr><td>208</td><td>48</td><td></td><td>Unknown (subsystem), which contains an ASCII string with an end-of-string character</td></tr>
 
-<tr><td>256</td><td>8</td><td></td><td>Header offset, which is relative from the start of the volume</td></tr>
+<tr><td>256</td><td>8</td><td></td><td>Metadata area offset, which is relative from the start of the storage media in which the LUKS volume is stored</td></tr>
 
 <tr><td>264</td><td>184</td><td></td><td>Unknown (padding), which according to "LUKS2 On-Disk Format Specification" this must be filled with 0-byte values</td></tr>
 
@@ -408,7 +408,7 @@ Size of initialization vector?</p>
 </table>
 </div>
 
-<h3 id="json-area"><a class="header" href="#json-area">JSON area</a></h3>
+<h2 id="json_area"><a class="header" href="#json_area">JSON area</a></h2>
 <p>The JSON area is stored directly after the volume header and must be 4096-byte aligned. The JSON
 area is variable of size and constists of:</p>
 <div class="table-wrapper">
@@ -421,7 +421,7 @@ area is variable of size and constists of:</p>
 </table>
 </div>
 
-<h4 id="example"><a class="header" href="#example">Example</a></h4>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
 <pre><code class="language-json">{
   "keyslots": {
     "0": {
@@ -480,24 +480,24 @@ area is variable of size and constists of:</p>
   }
 }
 </code></pre>
-<h4 id="top-level-properties"><a class="header" href="#top-level-properties">Top level properties</a></h4>
+<h3 id="top-level-properties"><a class="header" href="#top-level-properties">Top level properties</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
 <tr><td>"config"</td><td><a href="#metadata_config_object">Config object</a></td></tr>
 
-<tr><td>"digests"</td><td><a href="#metadata_digests_object">Digests object</a></td></tr>
+<tr><td>"digests"</td><td>One or more <a href="#metadata_digests_object">digests object</a></td></tr>
 
-<tr><td>"keyslots"</td><td><a href="#metadata_keyslots_object">Keyslots object</a></td></tr>
+<tr><td>"keyslots"</td><td>One or more <a href="#metadata_keyslots_object">keyslots object</a></td></tr>
 
-<tr><td>"segments"</td><td><a href="#metadata_segments_object">Segments object</a></td></tr>
+<tr><td>"segments"</td><td>One ore more <a href="#metadata_segments_object">segments object</a></td></tr>
 
-<tr><td>"tokens"</td><td><a href="#metadata_tokens_object">Tokens object</a></td></tr>
+<tr><td>"tokens"</td><td>Zero or more <a href="#metadata_tokens_object">tokens object</a></td></tr>
 
 </table>
 </div>
 
-<h4 id="metadata_config_object"><a class="header" href="#metadata_config_object">Config object</a></h4>
+<h3 id="metadata_config_object"><a class="header" href="#metadata_config_object">Config object</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -507,38 +507,174 @@ area is variable of size and constists of:</p>
 
 <tr><td>"keyslots_size"</td><td>String containing an integer</td></tr>
 
+<tr><td>"requirements"</td><td></td></tr>
+
 </table>
 </div>
 
-<h4 id="metadata_digests_object"><a class="header" href="#metadata_digests_object">Digests object</a></h4>
-<p>TODO: complete section</p>
-<h4 id="metadata_keyslots_object"><a class="header" href="#metadata_keyslots_object">Keyslots object</a></h4>
-<p>Contains zero or more <a href="#metadata_keyslot_object">keyslot object</a>.</p>
-<h4 id="metadata_keyslot_object"><a class="header" href="#metadata_keyslot_object">Keyslot object</a></h4>
+<h3 id="metadata_digests_object"><a class="header" href="#metadata_digests_object">Digests object</a></h3>
 <p>TODO: complete section</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>"af"</td><td>Anti-forensics (diffuser) object</td></tr>
+<tr><td>"digest"</td><td></td></tr>
 
-<tr><td>"area"</td><td></td></tr>
+<tr><td>"hash"</td><td>type "pbkdf2"</td></tr>
 
-<tr><td>"kdf"</td><td>Key derivation object</td></tr>
+<tr><td>"iterations"</td><td>type "pbkdf2"</td></tr>
 
-<tr><td>"key_size"</td><td></td></tr>
+<tr><td>"keyslots"</td><td></td></tr>
 
-<tr><td>"priority"</td><td></td></tr>
+<tr><td>"salt"</td><td></td></tr>
+
+<tr><td>"segments"</td><td></td></tr>
 
 <tr><td>"type"</td><td></td></tr>
 
 </table>
 </div>
 
-<h4 id="metadata_segments_object"><a class="header" href="#metadata_segments_object">Segments object</a></h4>
+<h3 id="metadata_keyslots_object"><a class="header" href="#metadata_keyslots_object">Keyslots object</a></h3>
+<p>Contains zero or more <a href="#metadata_keyslot_object">keyslot object</a>.</p>
+<h3 id="metadata_keyslot_object"><a class="header" href="#metadata_keyslot_object">Keyslot object</a></h3>
 <p>TODO: complete section</p>
-<h4 id="metadata_tokens_object"><a class="header" href="#metadata_tokens_object">Tokens object</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"af"</td><td><a href="#metadata_keyslot_af_object">Anti-forensics (diffuser) object</a>, which should only be present in type "luks2"</td></tr>
+
+<tr><td>"area"</td><td><a href="#metadata_keyslot_area_object">Key slot area object</a></td></tr>
+
+<tr><td>"direction"</td><td>Re-encryption direction, which should only be present in type "reencrypt"</td></tr>
+
+<tr><td>"kdf"</td><td><a href="#metadata_keyslot_kdf_object">Key derivation object</a>, which should only be present in type "luks2"</td></tr>
+
+<tr><td>"key_size"</td><td>Key size, in number of bytes</td></tr>
+
+<tr><td>"mode"</td><td>Re-encryption mode, which should only be present in type "reencrypt"</td></tr>
+
+<tr><td>"priority"</td><td>Priority, where 0 represents "ignore", 1 "normal" and 2 "high"</td></tr>
+
+<tr><td>"type"</td><td>Keyslot type, which can be "luks2" or "reencrypt"</td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_keyslot_af_object"><a class="header" href="#metadata_keyslot_af_object">Anti-forensics (diffuser) object</a></h4>
 <p>TODO: complete section</p>
-<h3 id="backup-metadata-area"><a class="header" href="#backup-metadata-area">Backup metadata area</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"hash"</td><td>type "luks1"</td></tr>
+
+<tr><td>"stripes"</td><td>type "luks1"</td></tr>
+
+<tr><td>"type"</td><td>Anti-forensics type, which can be "luks1"</td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_keyslot_area_object"><a class="header" href="#metadata_keyslot_area_object">Keyslot area object</a></h4>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"encryption"</td><td>type "raw"</td></tr>
+
+<tr><td>"hash"</td><td>types "checksum" and "datashift-checksum"</td></tr>
+
+<tr><td>"key_size"</td><td>type "raw"</td></tr>
+
+<tr><td>"offset"</td><td></td></tr>
+
+<tr><td>"sector_size"</td><td>types "checksum" and "datashift-checksum"</td></tr>
+
+<tr><td>"shift_size"</td><td>types "datashift", "datashift-checksum" and "datashift-journal"</td></tr>
+
+<tr><td>"size"</td><td></td></tr>
+
+<tr><td>"type"</td><td>Area type, which can be "raw", "checksum", "none", "journal"</td></tr>
+
+</table>
+</div>
+
+<h4 id="metadata_keyslot_kdf_object"><a class="header" href="#metadata_keyslot_kdf_object">Key derivation object</a></h4>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"cpus"</td><td>types "argon2i" and "argon2id"</td></tr>
+
+<tr><td>"hash"</td><td>type "pbkdf2"</td></tr>
+
+<tr><td>"iterations"</td><td>type "pbkdf2"</td></tr>
+
+<tr><td>"memory"</td><td>types "argon2i" and "argon2id"</td></tr>
+
+<tr><td>"salt"</td><td></td></tr>
+
+<tr><td>"time"</td><td>types "argon2i" and "argon2id"</td></tr>
+
+<tr><td>"type"</td><td>The PBKDF type, which can be "pbkdf2", "argon2i" and "argon2id"</td></tr>
+
+</table>
+</div>
+
+<h3 id="metadata_segments_object"><a class="header" href="#metadata_segments_object">Segments object</a></h3>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"encryption"</td><td>type "crypt"</td></tr>
+
+<tr><td>"flags"</td><td></td></tr>
+
+<tr><td>"integrity"</td><td>type "crypt"</td></tr>
+
+<tr><td>"iv_tweak"</td><td>type "crypt"</td></tr>
+
+<tr><td>"offset"</td><td></td></tr>
+
+<tr><td>"sector_size"</td><td>type "crypt"</td></tr>
+
+<tr><td>"size"</td><td></td></tr>
+
+<tr><td>"type"</td><td>Segment type, which can be "linear" or "crypt"</td></tr>
+
+</table>
+</div>
+
+<h4 id="segment-integrity-object"><a class="header" href="#segment-integrity-object">Segment integrity object</a></h4>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"journal_encryption"</td><td></td></tr>
+
+<tr><td>"journal_integrity"</td><td></td></tr>
+
+<tr><td>"key_size"</td><td></td></tr>
+
+<tr><td>"type"</td><td></td></tr>
+
+</table>
+</div>
+
+<h3 id="metadata_tokens_object"><a class="header" href="#metadata_tokens_object">Tokens object</a></h3>
+<p>TODO: complete section</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Description</th></thead>
+<tr><td>"key_description"</td><td>type "luks2-keyring"</td></tr>
+
+<tr><td>"keyslots"</td><td></td></tr>
+
+<tr><td>"type"</td><td></td></tr>
+
+</table>
+</div>
+
+<h2 id="backup-metadata-area"><a class="header" href="#backup-metadata-area">Backup metadata area</a></h2>
 <p>To make recovery easier the backup metadata area starts at a fixed offset:</p>
 <div class="table-wrapper">
 <table>
@@ -564,16 +700,35 @@ area is variable of size and constists of:</p>
 </table>
 </div>
 
-<h4 id="backup-volume-header---format-version-2"><a class="header" href="#backup-volume-header---format-version-2">Backup volume header - format version 2</a></h4>
+<h3 id="backup-volume-header---format-version-2"><a class="header" href="#backup-volume-header---format-version-2">Backup volume header - format version 2</a></h3>
 <p>The backup (or secondary) volume header - format version 2 is the same as the
 <a href="#volume_header_v2">Volume header - format version 2</a> with a different signature: “SKUL\xba\xbe”.</p>
-<h3 id="keyslots-area"><a class="header" href="#keyslots-area">Keyslots area</a></h3>
-<p>TODO: complete section</p>
+<h2 id="keyslots"><a class="header" href="#keyslots">Keyslots</a></h2>
+<h3 id="key_slot_v1"><a class="header" href="#key_slot_v1">Key slot - format version 1</a></h3>
+<p>The key slot - format version 1 is 48 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>State (of key slot), where 0x0000dead represents inactive (dead) and 0x00ac71f3 represents active</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Key material number of iterations</td></tr>
+
+<tr><td>8</td><td>32</td><td></td><td>Key material salt</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Key material start sector</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Key material number of (anti-forensic) stripes</td></tr>
+
+</table>
+</div>
+
+<h2 id="string-identifiers"><a class="header" href="#string-identifiers">String identifiers</a></h2>
+<p>LUKS uses various string values as identifiers.</p>
+<blockquote>
+<p>Note that it is assumed that these identifiers are case insensitive.</p>
+</blockquote>
 <h3 id="encryption_method"><a class="header" href="#encryption_method">Encryption method</a></h3>
-<p>The encryption mode consists of a string in the form:</p>
-<pre><code class="language-text">cipher
-</code></pre>
-<p>Where known values of cipher are:</p>
+<p>Known values of encryption method are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -598,14 +753,12 @@ area is variable of size and constists of:</p>
 </table>
 </div>
 
-<blockquote>
-<p>Note that it is assumed that these identifiers are case insensitive.</p>
-</blockquote>
 <h3 id="encryption_mode"><a class="header" href="#encryption_mode">Encryption mode</a></h3>
-<p>The encryption mode consists of a string in the form:</p>
+<p>The encryption mode consists of a string in the format:</p>
 <pre><code class="language-text">chaining_mode[-initialization_vector_mode[:initialization_vector_options]]
 </code></pre>
-<p>Where known values of chaining mode are:</p>
+<h4 id="chaining-mode"><a class="header" href="#chaining-mode">Chaining mode</a></h4>
+<p>Known values of chaining mode are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -622,7 +775,8 @@ area is variable of size and constists of:</p>
 <p>Note that it is assumed that these identifiers are case insensitive.</p>
 </blockquote>
 <p>TODO: determine ctr and lrw</p>
-<p>And known values of initialization vector mode are:</p>
+<h4 id="initialization-vector-mode-and-options"><a class="header" href="#initialization-vector-mode-and-options">Initialization vector mode and options</a></h4>
+<p>Known values of initialization vector mode and options are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -643,10 +797,8 @@ area is variable of size and constists of:</p>
 </table>
 </div>
 
-<blockquote>
-<p>Note that it is assumed that these identifiers are case insensitive.</p>
-</blockquote>
 <h3 id="hashing_method"><a class="header" href="#hashing_method">Hashing method</a></h3>
+<p>Known values of hashing method are:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
@@ -665,29 +817,8 @@ area is variable of size and constists of:</p>
 </table>
 </div>
 
-<blockquote>
-<p>Note that it is assumed that these identifiers are case insensitive.</p>
-</blockquote>
-<p>The hashing method must at least produce 20 bytes of hash data. Therefore hashing methods like:
-ghash, MD5 are unsupported.</p>
-<h3 id="key_slot"><a class="header" href="#key_slot">Key slot</a></h3>
-<p>The key slot is 48 bytes in size and consists of:</p>
-<div class="table-wrapper">
-<table>
-<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>State (of key slot), where 0x0000dead represents inactive (dead) and 0x00ac71f3 represents active</td></tr>
-
-<tr><td>4</td><td>4</td><td></td><td>Key material number of iterations</td></tr>
-
-<tr><td>8</td><td>32</td><td></td><td>Key material salt</td></tr>
-
-<tr><td>40</td><td>4</td><td></td><td>Key material start sector</td></tr>
-
-<tr><td>44</td><td>4</td><td></td><td>Key material number of (anti-forensic) stripes</td></tr>
-
-</table>
-</div>
-
+<p>The hashing method must at least produce 20 bytes of hash data. Therefore hashing methods like
+ghash and MD5 are unsupported.</p>
 <h2 id="format-edge-cases-and-corruption-scenarios"><a class="header" href="#format-edge-cases-and-corruption-scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="uninitialized-encrypted-volume-data"><a class="header" href="#uninitialized-encrypted-volume-data">Uninitialized encrypted volume data</a></h3>
 <p>Running “cryptsetup luksFormat” will not initialize the encrypted volume data, the data is
