@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -503,9 +503,9 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>CSSM_ALGID_NONE</td><td>None</td></tr>
+<tr><td>0</td><td>CSSM_ALGID_NONE</td><td>No algorithm (none)</td></tr>
 
-<tr><td>1</td><td>CSSM_ALGID_CUSTOM</td><td></td></tr>
+<tr><td>1</td><td>CSSM_ALGID_CUSTOM</td><td>Custom algorithm</td></tr>
 
 <tr><td>2</td><td>CSSM_ALGID_DH</td><td>Diffie Hellman key exchange</td></tr>
 
@@ -613,111 +613,111 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 
 <tr><td>54</td><td>CSSM_ALGID_CAST5</td><td>CAST5</td></tr>
 
-<tr><td>55</td><td>CSSM_ALGID_GenericSecret</td><td></td></tr>
+<tr><td>55</td><td>CSSM_ALGID_GenericSecret</td><td>Generic secret</td></tr>
 
-<tr><td>56</td><td>CSSM_ALGID_ConcatBaseAndKey</td><td></td></tr>
+<tr><td>56</td><td>CSSM_ALGID_ConcatBaseAndKey</td><td>Concatenate base key with key</td></tr>
 
-<tr><td>57</td><td>CSSM_ALGID_ConcatKeyAndBase</td><td></td></tr>
+<tr><td>57</td><td>CSSM_ALGID_ConcatKeyAndBase</td><td>Concatenate key with base key</td></tr>
 
-<tr><td>58</td><td>CSSM_ALGID_ConcatBaseAndData</td><td></td></tr>
+<tr><td>58</td><td>CSSM_ALGID_ConcatBaseAndData</td><td>Concatenate base key with data</td></tr>
 
-<tr><td>59</td><td>CSSM_ALGID_ConcatDataAndBase</td><td></td></tr>
+<tr><td>59</td><td>CSSM_ALGID_ConcatDataAndBase</td><td>Concatenate data with base key</td></tr>
 
-<tr><td>60</td><td>CSSM_ALGID_XORBaseAndData</td><td></td></tr>
+<tr><td>60</td><td>CSSM_ALGID_XORBaseAndData</td><td>XOR base key with data</td></tr>
 
-<tr><td>61</td><td>CSSM_ALGID_ExtractFromKey</td><td></td></tr>
+<tr><td>61</td><td>CSSM_ALGID_ExtractFromKey</td><td>Extract key from base key</td></tr>
 
-<tr><td>62</td><td>CSSM_ALGID_SSL3PreMasterGen</td><td></td></tr>
+<tr><td>62</td><td>CSSM_ALGID_SSL3PreMasterGen</td><td>SSL 3 with 48 byte pre-master key</td></tr>
 
-<tr><td>63</td><td>CSSM_ALGID_SSL3MasterDerive</td><td></td></tr>
+<tr><td>63</td><td>CSSM_ALGID_SSL3MasterDerive</td><td>Derive an SSL 3 key from a pre-master key</td></tr>
 
-<tr><td>64</td><td>CSSM_ALGID_SSL3KeyAndMacDerive</td><td></td></tr>
+<tr><td>64</td><td>CSSM_ALGID_SSL3KeyAndMacDerive</td><td>Derive SSL3 key and MAC</td></tr>
 
-<tr><td>65</td><td>CSSM_ALGID_SSL3MD5_MAC</td><td></td></tr>
+<tr><td>65</td><td>CSSM_ALGID_SSL3MD5_MAC</td><td>SSL 3 with MD5 MAC</td></tr>
 
-<tr><td>66</td><td>CSSM_ALGID_SSL3SHA1_MAC</td><td></td></tr>
+<tr><td>66</td><td>CSSM_ALGID_SSL3SHA1_MAC</td><td>SSL 3 with SHA-1 MAC</td></tr>
 
-<tr><td>67</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD5</td><td></td></tr>
+<tr><td>67</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD5</td><td>PKCS5 key derivation using PBKDF1 with MD5</td></tr>
 
-<tr><td>68</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD2</td><td></td></tr>
+<tr><td>68</td><td>CSSM_ALGID_PKCS5_PBKDF1_MD2</td><td>PKCS5 key derivation using PBKDF1 with MD2</td></tr>
 
-<tr><td>69</td><td>CSSM_ALGID_PKCS5_PBKDF1_SHA1</td><td></td></tr>
+<tr><td>69</td><td>CSSM_ALGID_PKCS5_PBKDF1_SHA1</td><td>PKCS5 key derivation using PBKDF1 with SHA-1</td></tr>
 
-<tr><td>70</td><td>CSSM_ALGID_WrapLynks</td><td></td></tr>
+<tr><td>70</td><td>CSSM_ALGID_WrapLynks</td><td>Spyrus LYNKS DES based wrapping scheme with checksum</td></tr>
 
-<tr><td>71</td><td>CSSM_ALGID_WrapSET_OAEP</td><td></td></tr>
+<tr><td>71</td><td>CSSM_ALGID_WrapSET_OAEP</td><td>SET key wrapping</td></tr>
 
-<tr><td>72</td><td>CSSM_ALGID_BATON</td><td></td></tr>
+<tr><td>72</td><td>CSSM_ALGID_BATON</td><td>Fortezza BATON</td></tr>
 
-<tr><td>73</td><td>CSSM_ALGID_ECDSA</td><td></td></tr>
+<tr><td>73</td><td>CSSM_ALGID_ECDSA</td><td>Elliptic Curve DSA</td></tr>
 
-<tr><td>74</td><td>CSSM_ALGID_MAYFLY</td><td></td></tr>
+<tr><td>74</td><td>CSSM_ALGID_MAYFLY</td><td>Fortezza MAYFLY</td></tr>
 
-<tr><td>75</td><td>CSSM_ALGID_JUNIPER</td><td></td></tr>
+<tr><td>75</td><td>CSSM_ALGID_JUNIPER</td><td>Fortezza JUNIPER</td></tr>
 
-<tr><td>76</td><td>CSSM_ALGID_FASTHASH</td><td></td></tr>
+<tr><td>76</td><td>CSSM_ALGID_FASTHASH</td><td>Fortezza FASTHASH</td></tr>
 
-<tr><td>77</td><td>CSSM_ALGID_3DES</td><td></td></tr>
+<tr><td>77</td><td>CSSM_ALGID_3DES</td><td>Generix 3DES</td></tr>
 
-<tr><td>78</td><td>CSSM_ALGID_SSL3MD5</td><td></td></tr>
+<tr><td>78</td><td>CSSM_ALGID_SSL3MD5</td><td>SSL 3 with MD5</td></tr>
 
-<tr><td>79</td><td>CSSM_ALGID_SSL3SHA1</td><td></td></tr>
+<tr><td>79</td><td>CSSM_ALGID_SSL3SHA1</td><td>SSL 3 with SHA-1</td></tr>
 
-<tr><td>80</td><td>CSSM_ALGID_FortezzaTimestamp</td><td></td></tr>
+<tr><td>80</td><td>CSSM_ALGID_FortezzaTimestamp</td><td>Fortezza with timestamp</td></tr>
 
-<tr><td>81</td><td>CSSM_ALGID_SHA1WithDSA</td><td></td></tr>
+<tr><td>81</td><td>CSSM_ALGID_SHA1WithDSA</td><td>SHA-1 with DSA</td></tr>
 
-<tr><td>82</td><td>CSSM_ALGID_SHA1WithECDSA</td><td></td></tr>
+<tr><td>82</td><td>CSSM_ALGID_SHA1WithECDSA</td><td>SHA-1 with Elliptic Curve DSA</td></tr>
 
-<tr><td>83</td><td>CSSM_ALGID_DSA_BSAFE</td><td></td></tr>
+<tr><td>83</td><td>CSSM_ALGID_DSA_BSAFE</td><td>DSA with BSAFE Key</td></tr>
 
-<tr><td>84</td><td>CSSM_ALGID_ECDH</td><td></td></tr>
+<tr><td>84</td><td>CSSM_ALGID_ECDH</td><td>Elliptic Curve DiffieHellman Key Exchange</td></tr>
 
-<tr><td>85</td><td>CSSM_ALGID_ECMQV</td><td></td></tr>
+<tr><td>85</td><td>CSSM_ALGID_ECMQV</td><td>Elliptic Curve MQV key exchange</td></tr>
 
-<tr><td>86</td><td>CSSM_ALGID_PKCS12_SHA1_PBE</td><td></td></tr>
+<tr><td>86</td><td>CSSM_ALGID_PKCS12_SHA1_PBE</td><td>PKCS12 SHA-1 PBE key derivation</td></tr>
 
-<tr><td>87</td><td>CSSM_ALGID_ECNRA</td><td></td></tr>
+<tr><td>87</td><td>CSSM_ALGID_ECNRA</td><td>Elliptic Curve Nyberg-Rueppel</td></tr>
 
-<tr><td>88</td><td>CSSM_ALGID_SHA1WithECNRA</td><td></td></tr>
+<tr><td>88</td><td>CSSM_ALGID_SHA1WithECNRA</td><td>SHA-1 with Elliptic Curve Nyberg-Rueppel</td></tr>
 
-<tr><td>89</td><td>CSSM_ALGID_ECES</td><td></td></tr>
+<tr><td>89</td><td>CSSM_ALGID_ECES</td><td>Elliptic Curve Encryption Scheme</td></tr>
 
-<tr><td>90</td><td>CSSM_ALGID_ECAES</td><td></td></tr>
+<tr><td>90</td><td>CSSM_ALGID_ECAES</td><td>Elliptic Curve Authenticate Encryption Scheme</td></tr>
 
-<tr><td>91</td><td>CSSM_ALGID_SHA1HMAC</td><td></td></tr>
+<tr><td>91</td><td>CSSM_ALGID_SHA1HMAC</td><td>SHA1-MAC</td></tr>
 
-<tr><td>92</td><td>CSSM_ALGID_FIPS186Random</td><td></td></tr>
+<tr><td>92</td><td>CSSM_ALGID_FIPS186Random</td><td>FIPS186 Random</td></tr>
 
-<tr><td>93</td><td>CSSM_ALGID_ECC</td><td></td></tr>
+<tr><td>93</td><td>CSSM_ALGID_ECC</td><td>Elliptic Curve Encryption (ECC)</td></tr>
 
-<tr><td>94</td><td>CSSM_ALGID_MQV</td><td></td></tr>
+<tr><td>94</td><td>CSSM_ALGID_MQV</td><td>Discrete-Log MQV key exchange</td></tr>
 
-<tr><td>95</td><td>CSSM_ALGID_NRA</td><td></td></tr>
+<tr><td>95</td><td>CSSM_ALGID_NRA</td><td>Discrete-Log Nyberg-Rueppel Signature scheme</td></tr>
 
-<tr><td>96</td><td>CSSM_ALGID_IntelPlatformRandom</td><td></td></tr>
+<tr><td>96</td><td>CSSM_ALGID_IntelPlatformRandom</td><td>Intel Platform Random Number Generator</td></tr>
 
-<tr><td>97</td><td>CSSM_ALGID_UTC</td><td></td></tr>
+<tr><td>97</td><td>CSSM_ALGID_UTC</td><td>Date and time value in the form: "YYYYMMDDhhmmss"</td></tr>
 
-<tr><td>98</td><td>CSSM_ALGID_HAVAL3</td><td></td></tr>
+<tr><td>98</td><td>CSSM_ALGID_HAVAL3</td><td>HAVAL3 Digest</td></tr>
 
-<tr><td>99</td><td>CSSM_ALGID_HAVAL4</td><td></td></tr>
+<tr><td>99</td><td>CSSM_ALGID_HAVAL4</td><td>HAVAL4 Digest</td></tr>
 
-<tr><td>100</td><td>CSSM_ALGID_HAVAL5</td><td></td></tr>
+<tr><td>100</td><td>CSSM_ALGID_HAVAL5</td><td>HAVAL5 Digest</td></tr>
 
-<tr><td>101</td><td>CSSM_ALGID_TIGER</td><td></td></tr>
+<tr><td>101</td><td>CSSM_ALGID_TIGER</td><td>TIGER Digest</td></tr>
 
-<tr><td>102</td><td>CSSM_ALGID_MD5HMAC</td><td></td></tr>
+<tr><td>102</td><td>CSSM_ALGID_MD5HMAC</td><td>HMAC-MD5</td></tr>
 
-<tr><td>103</td><td>CSSM_ALGID_PKCS5_PBKDF2</td><td>PBKDF2-HMAC-SHA1</td></tr>
+<tr><td>103</td><td>CSSM_ALGID_PKCS5_PBKDF2</td><td>PKCS5 key derivation using PBKDF2 with SHA-1 (PBKDF2-HMAC-SHA1)</td></tr>
 
-<tr><td>104</td><td>CSSM_ALGID_RUNNING_COUNTER</td><td></td></tr>
+<tr><td>104</td><td>CSSM_ALGID_RUNNING_COUNTER</td><td>Running hardware counter</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x80000000</td><td>CSSM_ALGID_VENDOR_DEFINED</td><td></td></tr>
+<tr><td>0x80000000</td><td>CSSM_ALGID_VENDOR_DEFINED</td><td>Vendor defined algorithm</td></tr>
 
-<tr><td>0x80000001</td><td>CSSM_ALGID_AES</td><td></td></tr>
+<tr><td>0x80000001</td><td>CSSM_ALGID_AES</td><td>Advanced Encryption Standard (AES)</td></tr>
 
 </table>
 </div>
@@ -746,7 +746,7 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 
 <tr><td>9</td><td>CSSM_PADDING_RANDOM</td><td>Unknown</td></tr>
 
-<tr><td>10</td><td>CSSM_PADDING_PKCS1</td><td>Pad using Public-Key Cryptography Standard (PKCS) 1</td></tr>
+<tr><td>10</td><td>CSSM_PADDING_PKCS1</td><td>Pad using Public-Key Cryptography Standard (PKCS) 1 (RFC 2437)</td></tr>
 
 </table>
 </div>

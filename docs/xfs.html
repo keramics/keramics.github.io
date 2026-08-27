@@ -1,0 +1,2192 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>X File System (XFS) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-45901c2e.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="x-file-system-xfs"><a class="header" href="#x-file-system-xfs">X File System (XFS)</a></h1>
+<p>The X File System (XFS) is a file system that originates from SGI but is used in various Linux
+distributions like RHEL. Some sources indicate that X was a a placeholder for a name that never
+given.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch) and fraction of second in number of nanoseconds, or in bigtime (number of nanoseconds since December 13, 1901 20:45:52 UTC)</td></tr>
+
+<tr><td>Character strings</td><td>UTF-8</td></tr>
+
+</table>
+</div>
+
+<p>TODO: to confirm if on older systems the character strings is a narrow character (Single Byte
+Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage.</p>
+<h2 id="terminology"><a class="header" href="#terminology">Terminology</a></h2>
+<h3 id="absolute-and-relative-inode-numbers"><a class="header" href="#absolute-and-relative-inode-numbers">Absolute and relative inode numbers</a></h3>
+<p>A relative inode number is an inode number used within a specific allocation group. An absolute
+inode number combines the allocation group number and the relative inode number.</p>
+<pre><code class="language-python">number_of_relative_inode_number_bits = (
+    allocation_group_size_log2 + number_of_inodes_per_block_log2
+)
+absolute_inode_number = (
+    (allocation_group_number &lt;&lt; number_of_relative_inode_number_bits) | relative_inode_number
+)
+</code></pre>
+<h3 id="file_system_block_number"><a class="header" href="#file_system_block_number">File system block number</a></h3>
+<p>A relative block number is a block number relative to the start of an allocation group. A file
+system block number (xfs_fsblock_t) combines the allocation group number and the relative block
+number.</p>
+<pre><code class="language-python">number_of_relative_block_number_bits = allocation_group_size_log2
+
+file_system_block_number = (
+    (allocation_group_number &lt;&lt; number_of_relative_block_number_bits) | relative_block_number
+)
+file_offset = (allocation_group_block_number + relative_block_number) * block_size
+</code></pre>
+<h2 id="the-allocation-group"><a class="header" href="#the-allocation-group">The allocation group</a></h2>
+<p>An allocation group consists of:</p>
+<ul>
+<li>a sector containing a superblock</li>
+<li>a sector containing free block information</li>
+<li>a sector containing inode B+ tree information</li>
+<li>a sector containing internal free list</li>
+<li>blocks containing
+<ul>
+<li>root of the inode B+ tree</li>
+<li>root of the free space B+ tree</li>
+<li>free list</li>
+<li>inodes table</li>
+</ul>
+</li>
+</ul>
+<h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
+<p>The XFS superblock (xfs_sb_t) is 208 bytes of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"XFSB"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Block size, which is typicaly 4096 bytes (4 KiB) and can range from 512 to 65536 bytes</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Total number of blocks</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Number of real-time (device) blocks</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Number of real-time (device) extents</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>File system (or volume) identifier, which contains an UUID</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Journal block number, which contains a <a href="#file_system_block_number">file system block number</a> or 0 if the journal is stored on a separate device</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Root directory inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Real-time bitmap extents inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
+
+<tr><td>72</td><td>8</td><td></td><td>Real-time bitmap summary inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
+
+<tr><td>80</td><td>4</td><td></td><td>Real-time extent size, in number of blocks</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Allocation group size, in number of blocks</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td>Number of allocation groups</td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Real-time bitmap size, in number of blocks</td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Journal size, in number of blocks</td></tr>
+
+<tr><td>100</td><td>2</td><td></td><td><a href="#version_and_feature_flags">Version and feature flags</a></td></tr>
+
+<tr><td>102</td><td>2</td><td></td><td>Sector size (in bytes)</td></tr>
+
+<tr><td>104</td><td>2</td><td></td><td>Inode size (in bytes), which can range from 256 to 2048</td></tr>
+
+<tr><td>106</td><td>2</td><td></td><td>Number of inodes per block</td></tr>
+
+<tr><td>108</td><td>12</td><td></td><td>Volume label (or name)</td></tr>
+
+<tr><td>120</td><td>1</td><td></td><td>Block size in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>121</td><td>1</td><td></td><td>Sector size in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>122</td><td>1</td><td></td><td>Inode size in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>123</td><td>1</td><td></td><td>Number of inodes per block in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>124</td><td>1</td><td></td><td>Allocation group size in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>125</td><td>1</td><td></td><td>Number of real-time (device) extents in log2, where value = ( 2 ^ value in log2 ) or 0 if value in log2 is 0</td></tr>
+
+<tr><td>126</td><td>1</td><td></td><td>Creation flag, which contains a value to indicate file system is being created</td></tr>
+
+<tr><td>127</td><td>1</td><td></td><td>Inodes percentage, which contains the percentage of the maximum space of the volume to use for inodes</td></tr>
+
+<tr><td colspan="4"><em>Only used in the first superblock</em></td></tr>
+
+<tr><td>128</td><td>8</td><td></td><td>Number of inodes</td></tr>
+
+<tr><td>136</td><td>8</td><td></td><td>Number of free inodes</td></tr>
+
+<tr><td>144</td><td>8</td><td></td><td>Number of free data blocks</td></tr>
+
+<tr><td>152</td><td>8</td><td></td><td>Number of free real-time extents</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_VERSION_QUOTABIT feature flag is set</em></td></tr>
+
+<tr><td>160</td><td>8</td><td></td><td>User quota inode number</td></tr>
+
+<tr><td>168</td><td>8</td><td></td><td>Group (or project) quota inode number</td></tr>
+
+<tr><td>176</td><td>2</td><td></td><td><a href="#quota_flags">Quota flags</a></td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>178</td><td>1</td><td></td><td><a href="#miscellaneous_flags">Miscellaneous flags</a></td></tr>
+
+<tr><td>179</td><td>1</td><td>0</td><td>Unknown (reserved or shared version number)</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_VERSION_ALIGNBIT feature flag is set</em></td></tr>
+
+<tr><td>180</td><td>4</td><td></td><td>Inode chunk alignment size, in number of blocks</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>184</td><td>4</td><td></td><td>Stripe (or RAID) unit size, in number of blocks</td></tr>
+
+<tr><td>188</td><td>4</td><td></td><td>Stripe (or RAID) width, in number of blocks</td></tr>
+
+<tr><td>192</td><td>1</td><td></td><td>Directory block size in log2</td></tr>
+
+<tr><td>193</td><td>1</td><td></td><td>Journal device sector size in log2</td></tr>
+
+<tr><td>194</td><td>2</td><td></td><td>Journal device sector size (in bytes)</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_VERSION_LOGV2BIT feature flag is set</em></td></tr>
+
+<tr><td>196</td><td>4</td><td></td><td>Journal device stripe or RAID unit size</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>200</td><td>4</td><td></td><td><a href="#secondary_feature_flags">Secondary feature flags</a></td></tr>
+
+<tr><td>204</td><td>4</td><td></td><td>Copy of secondary feature flags, which was introduced to work-around 64-bit alignment errors</td></tr>
+
+<tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
+
+<tr><td>208</td><td>4</td><td></td><td><a href="#compatible_feature_flags">(Read-write) compatible feature flags</a></td></tr>
+
+<tr><td>212</td><td>4</td><td></td><td><a href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></td></tr>
+
+<tr><td>216</td><td>4</td><td></td><td><a href="#incompatible_feature_flags">(Read-write) incompatible feature flags</a></td></tr>
+
+<tr><td>220</td><td>4</td><td></td><td><a href="#journal_incompatible_feature_flags">Journal (read-write) incompatible feature flags</a></td></tr>
+
+<tr><td>224</td><td>4</td><td></td><td>Checksum of the superblock</td></tr>
+
+<tr><td>228</td><td>4</td><td></td><td>Unknown (Sparse inode chunk alignment in number of blocks)</td></tr>
+
+<tr><td>232</td><td>4</td><td></td><td>Project quota inode number</td></tr>
+
+<tr><td>240</td><td>8</td><td></td><td>Journal log sequence number (LSN) of the last superblock update</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_FEAT_INCOMPAT_META_UUID incompatible feature flag is set</em></td></tr>
+
+<tr><td>248</td><td>16</td><td></td><td>Metadata identifier, which contains an UUID</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_FEAT_RO_COMPAT_RMAPBT incompatible feature flag is set</em></td></tr>
+
+<tr><td>264</td><td>8</td><td></td><td>Real-time Reverse Mapping B+tree inode number</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the allocation group size and allocation group size in log2 are not necessarily
+equivalent.</p>
+</blockquote>
+<p>TODO: Determine if superblock format version 1 152 bytes in size?</p>
+<h3 id="version_and_feature_flags"><a class="header" href="#version_and_feature_flags">Version and feature flags</a></h3>
+<p>The 4 LSB contain the version the remaining bits are used to store feature flags.</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Version</th><th>Identifier</th><th>Introduced in</th></thead>
+<tr><td colspan="3"><em>First generation</em></td></tr>
+
+<tr><td>1</td><td>XFS_SB_VERSION_1</td><td>Introduced in Irix 5.3</td></tr>
+
+<tr><td>2</td><td>XFS_SB_VERSION_2</td><td>Introduced in Irix 6.2, added extended attribute support</td></tr>
+
+<tr><td>3</td><td>XFS_SB_VERSION_3</td><td>Introduced in Irix 6.2, added inode version 2 support</td></tr>
+
+<tr><td colspan="3"><em>Second generation</em></td></tr>
+
+<tr><td>4</td><td>XFS_SB_VERSION_4</td><td>Introduced in Irix 6.2, added directory version 2 support</td></tr>
+
+<tr><td colspan="3"><em>Third generation</em></td></tr>
+
+<tr><td>5</td><td>XFS_SB_VERSION_5</td><td>Intoduces in Linux 3.10</td></tr>
+
+</table>
+</div>
+  
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td colspan="3"><em>Introduced in XFS_SB_VERSION_2</em></td></tr>
+
+<tr><td>0x0010</td><td>XFS_SB_VERSION_ATTRBIT</td><td>Inodes support extended attributes</td></tr>
+
+<tr><td colspan="3"><em>Introduced in XFS_SB_VERSION_3</em></td></tr>
+
+<tr><td>0x0020</td><td>XFS_SB_VERSION_NLINKBIT</td><td>Inodes use a 32-bit number of links value</td></tr>
+
+<tr><td colspan="3"><em>Introduced in XFS_SB_VERSION_4</em></td></tr>
+
+<tr><td>0x0040</td><td>XFS_SB_VERSION_QUOTABIT</td><td>Quotas enabled</td></tr>
+
+<tr><td>0x0080</td><td>XFS_SB_VERSION_ALIGNBIT</td><td>Use inode chunk alignment</td></tr>
+
+<tr><td>0x0100</td><td>XFS_SB_VERSION_DALIGNBIT</td><td>Has underlying stripe or RAID. The Stripe (or RAID) unit size and width values in the superblock should be set</td></tr>
+
+<tr><td>0x0200</td><td>XFS_SB_VERSION_SHAREDBIT</td><td>Unknown (set if reserved shared version is used)</td></tr>
+
+<tr><td>0x0400</td><td>XFS_SB_VERSION_LOGV2BIT</td><td>Has version 2 journaling logs</td></tr>
+
+<tr><td>0x0800</td><td>XFS_SB_VERSION_SECTORBIT</td><td>Sector size is not 512 bytes</td></tr>
+
+<tr><td>0x1000</td><td>XFS_SB_VERSION_EXTFLGBIT</td><td>Unwritten extents are used, which should always be set</td></tr>
+
+<tr><td>0x2000</td><td>XFS_SB_VERSION_DIRV2BIT</td><td>Version 2 directories are used</td></tr>
+
+<tr><td>0x4000</td><td>XFS_SB_VERSION_BORGBIT</td><td>Unknown (ASCII only case-insensitive)</td></tr>
+
+<tr><td>0x8000</td><td>XFS_SB_VERSION_MOREBITSBIT</td><td>Secondary feature flags are used</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="secondary_feature_flags"><a class="header" href="#secondary_feature_flags">Secondary feature flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>XFS_SB_VERSION2_RESERVED1BIT</td><td>Unknown (reserved)</td></tr>
+
+<tr><td>0x00000002</td><td>XFS_SB_VERSION2_LAZYSBCOUNTBIT</td><td>Has lazy global counters. Free space and inode values are only tracked in the primary superblock</td></tr>
+
+<tr><td>0x00000004</td><td>XFS_SB_VERSION2_RESERVED4BIT</td><td>Unknown (reserved)</td></tr>
+
+<tr><td>0x00000008</td><td>XFS_SB_VERSION2_ATTR2BIT</td><td>Version 2 extended attributes are used</td></tr>
+
+<tr><td>0x00000010</td><td>XFS_SB_VERSION2_PARENTBIT</td><td>Inodes have a parent pointer</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000080</td><td>XFS_SB_VERSION2_PROJID32BIT</td><td>Has 32-bit project identifiers</td></tr>
+
+<tr><td>0x00000100</td><td>XFS_SB_VERSION2_CRCBIT</td><td>Has metadata checksums</td></tr>
+
+<tr><td>0x00000200</td><td>XFS_SB_VERSION2_FTYPE</td><td>Directory entries contain a file type</td></tr>
+
+</table>
+</div>
+
+<h3 id="miscellaneous_flags"><a class="header" href="#miscellaneous_flags">Miscellaneous flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x01</td><td>XFS_SBF_READONLY</td><td>Read-only file system</td></tr>
+
+</table>
+</div>
+
+<h3 id="quota_flags"><a class="header" href="#quota_flags">Quota flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td>XFS_UQUOTA_ACCT</td><td>User quota accounting is enabled</td></tr>
+
+<tr><td>0x0002</td><td>XFS_UQUOTA_ENFD</td><td>User quotas are enforced</td></tr>
+
+<tr><td>0x0004</td><td>XFS_UQUOTA_CHKD</td><td>User quotas have been checked and updated on disk</td></tr>
+
+<tr><td>0x0008</td><td>XFS_PQUOTA_ACCT</td><td>Project quota accounting is enabled</td></tr>
+
+<tr><td>0x0010</td><td>XFS_OQUOTA_ENFD</td><td>Other (group/project) quotas are enforced</td></tr>
+
+<tr><td>0x0020</td><td>XFS_OQUOTA_CHKD</td><td>Other (group/project) quotas have been checked</td></tr>
+
+<tr><td>0x0040</td><td>XFS_GQUOTA_ACCT</td><td>Group quota accounting is enabled</td></tr>
+
+<tr><td>0x0080</td><td>XFS_GQUOTA_ENFD</td><td>Group quotas are enforced</td></tr>
+
+<tr><td>0x0100</td><td>XFS_GQUOTA_CHKD</td><td>Group quotas have been checked</td></tr>
+
+<tr><td>0x0200</td><td>XFS_PQUOTA_ENFD</td><td>Project quotas are enforced</td></tr>
+
+<tr><td>0x0400</td><td>XFS_PQUOTA_CHKD</td><td>Project quotas have been checked</td></tr>
+
+</table>
+</div>
+
+<h3 id="compatible_feature_flags"><a class="header" href="#compatible_feature_flags">Compatible feature flags</a></h3>
+<p>Current no compatible feature flags are defined.</p>
+<h3 id="read_only_compatible_feature_flags"><a class="header" href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>XFS_SB_FEAT_RO_COMPAT_FINOBT</td><td>Has free inode btree</td></tr>
+
+<tr><td>0x00000002</td><td>XFS_SB_FEAT_RO_COMPAT_RMAPBT</td><td>Has reverse map btree</td></tr>
+
+<tr><td>0x00000004</td><td>XFS_SB_FEAT_RO_COMPAT_REFLINK</td><td>Has reflinked files</td></tr>
+
+<tr><td>0x00000008</td><td>XFS_SB_FEAT_RO_COMPAT_INOBTCNT</td><td>Has inobt block counts</td></tr>
+
+</table>
+</div>
+
+<h3 id="incompatible_feature_flags"><a class="header" href="#incompatible_feature_flags">Incompatible feature flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>XFS_SB_FEAT_INCOMPAT_FTYPE</td><td>Has filetype in dirent</td></tr>
+
+<tr><td>0x00000002</td><td>XFS_SB_FEAT_INCOMPAT_SPINODES</td><td>Has sparse inode chunks</td></tr>
+
+<tr><td>0x00000004</td><td>XFS_SB_FEAT_INCOMPAT_META_UUID</td><td>Use a metadata identifier</td></tr>
+
+<tr><td>0x00000008</td><td>XFS_SB_FEAT_INCOMPAT_BIGTIME</td><td>Inode (v3) contains bigtime timestamps</td></tr>
+
+<tr><td>0x00000010</td><td>XFS_SB_FEAT_INCOMPAT_NEEDSREPAIR</td><td>Needs repair</td></tr>
+
+<tr><td>0x00000020</td><td>XFS_SB_FEAT_INCOMPAT_NREXT64</td><td>Inode (v3) contains a 64-bit number of data extents and 32-bit number of (extended) attribute extent values</td></tr>
+
+<tr><td>0x00000040</td><td>XFS_SB_FEAT_INCOMPAT_EXCHRANGE</td><td>Has exchangerange</td></tr>
+
+<tr><td>0x00000080</td><td>XFS_SB_FEAT_INCOMPAT_PARENT</td><td>Has parent directory reference attributes</td></tr>
+
+<tr><td>0x00000100</td><td>XFS_SB_FEAT_INCOMPAT_METADIR</td><td>Has metadata directory (tree)</td></tr>
+
+<tr><td>0x00000200</td><td>XFS_SB_FEAT_INCOMPAT_ZONED</td><td>Has zoned RT allocator</td></tr>
+
+<tr><td>0x00000400</td><td>XFS_SB_FEAT_INCOMPAT_ZONE_GAPS</td><td>RTGs have LBA gaps</td></tr>
+
+</table>
+</div>
+
+<h3 id="journal_incompatible_feature_flags"><a class="header" href="#journal_incompatible_feature_flags">Journal incompatible feature flags</a></h3>
+<p>Current no journal incompatible feature flags are defined.</p>
+<h2 id="free-block-information"><a class="header" href="#free-block-information">Free block information</a></h2>
+<p>The free block information stores references:</p>
+<ul>
+<li>the block offset B+ tree, that tracks the free space by block number</li>
+<li>the block count B+ tree, that tracks the size of the free space block</li>
+</ul>
+<p>The free block information (xfs_agf_t) is 64 or 224 bytes of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"XAGF"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Version</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Sequence number, which contains the allocation group number of the corresponding sector</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Unknown (Allocation group size), in number of blocks</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Free space counts B+ tree root block number</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Free space sizes B+ tree root block number</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Free space counts B+ tree height/depth</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Free space sizes B+ tree height/depth</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Index of the first "free list" block</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Index of the last "free list" block</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>"Free list" size, in number of blocks</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Number of free blocks in the allocation group</td></tr>
+
+<tr><td>56</td><td>4</td><td></td><td>Longest contiguous free space in the allocation group, in number of blocks</td></tr>
+
+<tr><td colspan="4"><em>Only used if the XFS_SB_VERSION2_LAZYSBCOUNTBIT feature flag is set</em></td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Number of blocks used for the free space B+ trees</td></tr>
+
+<tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
+
+<tr><td>64</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>80</td><td>4</td><td></td><td>Unknown (Size of the reverse mapping B+ tree in blocks)</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Unknown (Size of the reference count B+ tree in blocks)</td></tr>
+
+<tr><td>88</td><td>4</td><td></td><td>Reverse mapping B+ tree root block number, which contains a block number relative to the start of the allocation group</td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Reference count B+ tree root block number, which contains a block number relative to the start of the allocation group</td></tr>
+
+<tr><td>96</td><td>14 x 8</td><td></td><td>Unknown (reserved)</td></tr>
+
+<tr><td>208</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>216</td><td>4</td><td></td><td>Unknown (Checksum of the free sector)</td></tr>
+
+<tr><td>220</td><td>4</td><td></td><td>Unknown (reserved)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h2 id="free-list"><a class="header" href="#free-list">Free list</a></h2>
+<p>A free list consists of:</p>
+<ul>
+<li>As of version 5, free list header</li>
+<li>Array of free block numbers</li>
+</ul>
+<h3 id="free-list-header"><a class="header" href="#free-list-header">Free list header</a></h3>
+<p>The free list header is 36 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"AGFL"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Sequence number, which contains the allocation group number of the corresponding sector</td></tr>
+
+<tr><td>8</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Checksum</td></tr>
+
+</table>
+</div>
+
+<p>TODO: describe sb_uuid or sb_meta_uuid</p>
+<h2 id="inode-information"><a class="header" href="#inode-information">Inode information</a></h2>
+<p>The inode information (xfs_agi_t) is 296 or 336 bytes of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"XAGI"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Version</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Sequence number, which contains the allocation group number of the corresponding sector</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Unknown (Allocation group size), in number of blocks</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Number of inodes in the allocation group</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Inode B+ tree root block number, which contains a block number relative to the start of the allocation group</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Inode B+ tree height/depth</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Number of unused (free) inodes in the allocation group</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>First inode number of the last allocated inode chunk, which contains an inode number relative to the allocation group</td></tr>
+
+<tr><td>36</td><td>4</td><td>-1 (0xffffffff)</td><td>Unknown</td></tr>
+
+<tr><td>40</td><td>64 x 4</td><td></td><td>Hash table of unlinked (deleted) inodes that are still being referenced, which contains -1 (0xffffffff) if not set</td></tr>
+
+<tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
+
+<tr><td>296</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>312</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>316</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>320</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>328</td><td>4</td><td></td><td>Free inode B+ tree root block number, which contains a block number relative to the start of the allocation group</td></tr>
+
+<tr><td>332</td><td>4</td><td></td><td>Free inode B+ tree height/depth</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h2 id="b-tree"><a class="header" href="#b-tree">B+ tree</a></h2>
+<p>XFS uses B+ trees to store various types of information. There are 2 different types of B+ trees,
+namely:</p>
+<ul>
+<li>Free space block B+ tree</li>
+<li>Inode B+ tree</li>
+<li>Reference count B+ tree</li>
+</ul>
+<h3 id="btree_block"><a class="header" href="#btree_block">B+ tree block</a></h3>
+<p>A B+ tree block consists of:</p>
+<ul>
+<li>B+ tree block header</li>
+<li>Array of branch or leaf block records</li>
+</ul>
+<h3 id="btree_block_header"><a class="header" href="#btree_block_header">B+ tree block header</a></h3>
+<h4 id="btree_block_header_32bit"><a class="header" href="#btree_block_header_32bit">B+ tree block header 32-bit</a></h4>
+<p>The B+ tree block header 32-bit (xfs_btree_sblock_t or xfs_btree_iblock_t) is 16 or 56 bytes of
+size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Signature</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Level (or depth/height), which contains 0 for a leaf block</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Number of records</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Previous B+ tree block number, which contains a block number relative to the start of the allocation group or -1 (0xffffffff) if not set</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Next B+ tree block number, which contains a block number relative to the start of the allocation group or -1 (0xffffffff) if not set</td></tr>
+
+<tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Block number</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>Owner allocation group, which contains the allocation group the block is part of</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Checksum</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h4 id="btree_block_header_64bit"><a class="header" href="#btree_block_header_64bit">B+ tree block header 64-bit</a></h4>
+<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 68 bytes of size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Signature</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Level (or depth/height), where 0 represents a leaf block</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Number of records</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Previous B+ tree block number, which contains -1 (0xffffffff) if not set</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Next B+ tree block number, which contains -1 (0xffffffff) if not set</td></tr>
+
+<tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Block number</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>40</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Owner allocation group, which contains the allocation group the block is part of</td></tr>
+
+<tr><td>64</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>64</td><td>4</td><td>0</td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="b-tree-block-extended-header"><a class="header" href="#b-tree-block-extended-header">B+ tree block extended header</a></h3>
+<p>TODO: complete section</p>
+<p>TODO: determine where this is defined, it seems to be represented in the examples.</p>
+<h4 id="b-tree-block-header-signatures"><a class="header" href="#b-tree-block-header-signatures">B+ tree block header signatures</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Signature</th><th>Description</th></thead>
+<tr><td>"AB3B"</td><td>File system version 5 free space block offset B+ tree</td></tr>
+
+<tr><td>"AB3C"</td><td>File system version 5 free space block count B+ tree</td></tr>
+
+<tr><td>"ABTB"</td><td>Free space block offset B+ tree</td></tr>
+
+<tr><td>"ABTC"</td><td>Free space block count B+ tree</td></tr>
+
+<tr><td>"FIB3"</td><td>File system version 5 free inode B+tree</td></tr>
+
+<tr><td>"FIBT"</td><td>Free inode B+tree</td></tr>
+
+<tr><td>"IAB3"</td><td>File system version 5 (allocated) inode B+tree</td></tr>
+
+<tr><td>"IABT"</td><td>(Allocated) inode B+tree</td></tr>
+
+<tr><td>"R3FC"</td><td>File system version 5 reference count B+ tree</td></tr>
+
+</table>
+</div>
+
+<h3 id="free-space-b-tree"><a class="header" href="#free-space-b-tree">Free space B+ tree</a></h3>
+<p>TODO: complete section</p>
+<h4 id="free-space-b-tree-branch-node-record"><a class="header" href="#free-space-b-tree-branch-node-record">Free space B+ tree branch node record</a></h4>
+<p>The free space B+ tree branch node record (xfs_alloc_ptr_t) is 4 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="free-space-b-tree-leaf-node-record"><a class="header" href="#free-space-b-tree-leaf-node-record">Free space B+ tree leaf node record</a></h4>
+<p>The free space B+ tree leaf node record (xfs_alloc_key_t) is 8 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (ar_startblock)</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown (ar_blockcount)</td></tr>
+
+</table>
+</div>
+
+<h3 id="inode-b-tree"><a class="header" href="#inode-b-tree">Inode B+ tree</a></h3>
+<p>The inode B+ tree uses <a href="#btree_block_header_32bit">the B+ tree block header 32-bit</a>.</p>
+<h4 id="inode-b-tree-branch-node"><a class="header" href="#inode-b-tree-branch-node">Inode B+ tree branch node</a></h4>
+<p>The inode B+ tree branch node consists of:</p>
+<ul>
+<li>node header</li>
+<li>array of inode B+ tree branch node entry keys</li>
+<li>array of inode B+ tree branch node entry values</li>
+</ul>
+<p>The number of key-value pairs is calculated as following:</p>
+<pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 8
+</code></pre>
+<h5 id="inode-b-tree-branch-node-key"><a class="header" href="#inode-b-tree-branch-node-key">Inode B+ tree branch node key</a></h5>
+<p>The inode B+ tree branch node key (xfs_inobt_key_t) is 4 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of the first inode in the branch, which contains an inode number relative to the allocation group</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the inode number of the last key can be 0.</p>
+</blockquote>
+<h5 id="inode-b-tree-branch-node-value"><a class="header" href="#inode-b-tree-branch-node-value">Inode B+ tree branch node value</a></h5>
+<p>The inode B+ tree branch node key is 4 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Block number of the inode B+ tree sub node, which contains a block number relative to the start of the allocation group</td></tr>
+
+</table>
+</div>
+
+<h4 id="inode-b-tree-leaf-node-record"><a class="header" href="#inode-b-tree-leaf-node-record">Inode B+ tree leaf node record</a></h4>
+<p>The inode B+ tree leaf node record (xfs_inobt_rec_t) is 16 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of the first inode of the inode chunk, which contains an inode number relative to the allocation group</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of unused (free) inodes of the inode chunk</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Inode chunk allocation bitmap, which tracks which inodes of the inode chunk are unused (free)</td></tr>
+
+</table>
+</div>
+
+<p>The inode chunk is a group of 64 inodes. The file offset of the inode chunk is calculated as
+following:</p>
+<pre><code class="language-python">file_offset = allocation_group_file_offset + (inode_number * inode_size)
+</code></pre>
+<h2 id="inode"><a class="header" href="#inode">Inode</a></h2>
+<p>The inode can be followed by:</p>
+<ul>
+<li>data fork (descriptor)
+<ul>
+<li>device identifier (fork type is XFS_DINODE_FMT_DEV)</li>
+<li>inline data fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
+<li>extent list data fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extent B+ tree data fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+</ul>
+</li>
+<li>optional (extended) attributes data fork (descriptor)
+<ul>
+<li>inline attributes fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
+<li>extent list attributes fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extent B+ tree attributes fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+</ul>
+</li>
+</ul>
+<h3 id="inode-version-1"><a class="header" href="#inode-version-1">Inode version 1</a></h3>
+<p>The inode version 1 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>"IN"</td><td>Signature</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+
+<tr><td>4</td><td>1</td><td>1</td><td>Format version</td></tr>
+
+<tr><td>5</td><td>1</td><td></td><td>(Data) <a href="#fork_type">fork type</a></td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Number of links</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Owner (or user) identifier (UID)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Group identifier (GID)</td></tr>
+
+<tr><td>16</td><td>14</td><td>0</td><td>Unknown (contains data in XFS_SB_VERSION_1)</td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Flush counter, which contains a value that is incremented on flush</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>(last) access time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>(last) access time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>(last) modification time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>(last) modification time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>(last) inode change time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>(last) inode change time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>(Data) size</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Number of (data) blocks</td></tr>
+
+<tr><td>72</td><td>4</td><td></td><td>Extent size</td></tr>
+
+<tr><td>76</td><td>4</td><td></td><td>Number of data extents</td></tr>
+
+<tr><td>80</td><td>2</td><td></td><td>Number of (extended) attributes extents, which can contain 0 if an attributes fork of type XFS_DINODE_FMT_EXTENTS is empty</td></tr>
+
+<tr><td>82</td><td>1</td><td></td><td>(Extended) attributes fork descriptor offset, which contains an offset (value x 8) relative to the end of the inode</td></tr>
+
+<tr><td>83</td><td>1</td><td></td><td>(Extended) attributes fork type</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Unknown (DMAPI event mask)</td></tr>
+
+<tr><td>88</td><td>2</td><td></td><td>Unknown (DMAPI state)</td></tr>
+
+<tr><td>90</td><td>2</td><td></td><td>Inode flags</td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Generation number</td></tr>
+
+<tr><td colspan="4"><em>Non-inode core field</em></td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Unknown (next unlinked inode), which contains -1 (0xffffffff) if not set</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="inode-version-2"><a class="header" href="#inode-version-2">Inode version 2</a></h3>
+<p>The inode version 2 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>"IN"</td><td>Signature</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+
+<tr><td>4</td><td>1</td><td>2</td><td>Format version</td></tr>
+
+<tr><td>5</td><td>1</td><td></td><td>(Data) <a href="#fork_type">fork type</a></td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Owner (or user) identifier (UID)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Group identifier (GID)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Number of links</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Project identifier</td></tr>
+
+<tr><td>22</td><td>8</td><td>0</td><td>Unknown (padding)</td></tr>
+
+<tr><td>30</td><td>2</td><td></td><td>Flush counter, which contains a value that is incremented on flush</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>(last) access time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>(last) access time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>(last) modification time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>(last) modification time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>(last) inode change time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>(last) inode change time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>(Data) size</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Number of (data) blocks</td></tr>
+
+<tr><td>72</td><td>4</td><td></td><td>Extent size</td></tr>
+
+<tr><td>76</td><td>4</td><td></td><td>Number of data extents</td></tr>
+
+<tr><td>80</td><td>2</td><td></td><td>Number of (extended) attributes extents, which can contain 0 if an attributes fork of type XFS_DINODE_FMT_EXTENTS is empty</td></tr>
+
+<tr><td>82</td><td>1</td><td></td><td>(Extended) attributes fork descriptor offset, which contains an offset (value x 8) relative to the end of the inode</td></tr>
+
+<tr><td>83</td><td>1</td><td></td><td>(Extended) attributes fork type</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Unknown (DMAPI event mask)</td></tr>
+
+<tr><td>88</td><td>2</td><td></td><td>Unknown (DMAPI state)</td></tr>
+
+<tr><td>90</td><td>2</td><td></td><td>Inode flags</td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Generation number</td></tr>
+
+<tr><td colspan="4"><em>Non-inode core field</em></td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Unknown (next unlinked inode), which contains -1 (0xffffffff) if not set</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="inode-version-3"><a class="header" href="#inode-version-3">Inode version 3</a></h3>
+<p>The inode version 3 (xfs_dinode_core_t) is 176 bytes of size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>"IN"</td><td>Signature</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td><a href="#file_mode">File mode</a>, which contains file type and permissions</td></tr>
+
+<tr><td>4</td><td>1</td><td>3</td><td>Format version</td></tr>
+
+<tr><td>5</td><td>1</td><td></td><td>(Data) <a href="#fork_type">fork type</a></td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Owner (or user) identifier (UID)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Group identifier (GID)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Number of links</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Project identifier lower 16-bit</td></tr>
+
+<tr><td>22</td><td>2</td><td></td><td>Project identifier upper 16-bit</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_NREXT64 not is set</em></td></tr>
+
+<tr><td>24</td><td>8</td><td>0</td><td>Unknown (padding)</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_NREXT64 is set</em></td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Number of data extents (64-bit)</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_BIGTIME not is set</em></td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>(last) access time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td>(last) access time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>(last) modification time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>(last) modification time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td>(last) inode change time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>(last) inode change time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_BIGTIME is set</em></td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>(last) access time, which contains a bigtime timestamp</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>(last) modification time, which contains a bigtime timestamp</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>(last) inode change time, which contains a bigtime timestamp</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>(Data) size</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Number of (data) blocks</td></tr>
+
+<tr><td>72</td><td>4</td><td></td><td>Extent size</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_NREXT64 not is set</em></td></tr>
+
+<tr><td>76</td><td>4</td><td></td><td>Number of data extents</td></tr>
+
+<tr><td>80</td><td>2</td><td></td><td>Number of (extended) attributes extents, which can contain 0 if an attributes fork of type XFS_DINODE_FMT_EXTENTS is empty</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_NREXT64 is set</em></td></tr>
+
+<tr><td>76</td><td>4</td><td></td><td>Number of (extended) attributes extents (32-bit), which can contain 0 if an attributes fork of type XFS_DINODE_FMT_EXTENTS is empty</td></tr>
+
+<tr><td>80</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>82</td><td>1</td><td></td><td>(Extended) attributes fork descriptor offset, which contains an offset (value x 8) relative to the end of the inode</td></tr>
+
+<tr><td>83</td><td>1</td><td></td><td>(Extended) attributes fork type</td></tr>
+
+<tr><td>84</td><td>4</td><td></td><td>Unknown (DMAPI event mask)</td></tr>
+
+<tr><td>88</td><td>2</td><td></td><td>Unknown (DMAPI state)</td></tr>
+
+<tr><td>90</td><td>2</td><td></td><td><a href="#inode_flags">Inode flags</a></td></tr>
+
+<tr><td>92</td><td>4</td><td></td><td>Generation number</td></tr>
+
+<tr><td colspan="4"><em>Pre version 3 non-inode core field</em></td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Unknown (next unlinked inode), which contains -1 (0xffffffff) if not set</td></tr>
+
+<tr><td colspan="4"><em>Introduced in version 3</em></td></tr>
+
+<tr><td>100</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>104</td><td>8</td><td></td><td>Change count, which contains the number of changes made to the inode</td></tr>
+
+<tr><td>112</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>120</td><td>8</td><td></td><td>Extended inode flags</td></tr>
+
+<tr><td>128</td><td>4</td><td></td><td>Copy-on-write (COW) extent size</td></tr>
+
+<tr><td>132</td><td>12</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_BIGTIME not is set</em></td></tr>
+
+<tr><td>144</td><td>4</td><td></td><td>Creation time, which contains a POSIX timestamp in seconds</td></tr>
+
+<tr><td>148</td><td>4</td><td></td><td>Creation time fraction of second, which contains number of nanoseconds</td></tr>
+
+<tr><td colspan="4"><em>If incompatible feature flag XFS_SB_FEAT_INCOMPAT_BIGTIME is set</em></td></tr>
+
+<tr><td>144</td><td>8</td><td></td><td>Creation time, which contains a bigtime timestamp</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>152</td><td>8</td><td></td><td>Inode number, which contains an absolute inode number</td></tr>
+
+<tr><td>160</td><td>16</td><td></td><td>Inode type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="file_mode"><a class="header" href="#file_mode">File mode</a></h3>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td colspan="3"><em>Access other, bitmask: 0x0007 (S_IRWXO)</em></td></tr>
+
+<tr><td>0x0001</td><td>S_IXOTH</td><td>X-access for other</td></tr>
+
+<tr><td>0x0002</td><td>S_IWOTH</td><td>W-access for other</td></tr>
+
+<tr><td>0x0004</td><td>S_IROTH</td><td>R-access for other</td></tr>
+
+<tr><td colspan="3"><em>Access group, bitmask: 0x0038 (S_IRWXG)</em></td></tr>
+
+<tr><td>0x0008</td><td>S_IXGRP</td><td>X-access for group</td></tr>
+
+<tr><td>0x0010</td><td>S_IWGRP</td><td>W-access for group</td></tr>
+
+<tr><td>0x0020</td><td>S_IRGRP</td><td>R-access for group</td></tr>
+
+<tr><td colspan="3"><em>Access owner (or user), bitmask: 0x01c0 (S_IRWXU)</em></td></tr>
+
+<tr><td>0x0040</td><td>S_IXUSR</td><td>X-access for owner (or user)</td></tr>
+
+<tr><td>0x0080</td><td>S_IWUSR</td><td>W-access for owner (or user)</td></tr>
+
+<tr><td>0x0100</td><td>S_IRUSR</td><td>R-access for owner (or user)</td></tr>
+
+<tr><td colspan="3"><em>Other</em></td></tr>
+
+<tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
+
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+
+<tr><td colspan="3"><em>Type of file, bitmask: 0xf000 (S_IFMT)</em></td></tr>
+
+<tr><td>0x1000</td><td>S_IFIFO</td><td>Named pipe (FIFO)</td></tr>
+
+<tr><td>0x2000</td><td>S_IFCHR</td><td>Character device</td></tr>
+
+<tr><td>0x4000</td><td>S_IFDIR</td><td>Directory</td></tr>
+
+<tr><td>0x6000</td><td>S_IFBLK</td><td>Block device</td></tr>
+
+<tr><td>0x8000</td><td>S_IFREG</td><td>Regular file</td></tr>
+
+<tr><td>0xa000</td><td>S_IFLNK</td><td>Symbolic link</td></tr>
+
+<tr><td>0xc000</td><td>S_IFSOCK</td><td>Socket</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="fork_type"><a class="header" href="#fork_type">Fork type</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>XFS_DINODE_FMT_DEV</td><td>Device identifier is stored inline (in the inode)</td></tr>
+
+<tr><td>1</td><td>XFS_DINODE_FMT_LOCAL</td><td>Data is stored inline (in the inode)</td></tr>
+
+<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extent_list">an extent list</a></td></tr>
+
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extent_btree">an extents B+ tree</a></td></tr>
+
+<tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
+
+<tr><td>5</td><td>XFS_DINODE_FMT_RMAP</td><td>Data is referrence by a reverse mapping</td></tr>
+
+</table>
+</div>
+
+<h3 id="inode_flags"><a class="header" href="#inode_flags">Inode flags</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td>XFS_DIFLAG_REALTIME</td><td>The data is located on the real-time device</td></tr>
+
+<tr><td>0x0002</td><td>XFS_DIFLAG_PREALLOC</td><td>The extents have been preallocated</td></tr>
+
+<tr><td>0x0004</td><td>XFS_DIFLAG_NEWRTBM</td><td>Uses the new real-time bitmap format</td></tr>
+
+<tr><td>0x0008</td><td>XFS_DIFLAG_IMMUTABLE</td><td>Immutable (cannot be modified)</td></tr>
+
+<tr><td>0x0010</td><td>XFS_DIFLAG_APPEND</td><td>Append only</td></tr>
+
+<tr><td>0x0020</td><td>XFS_DIFLAG_SYNC</td><td>Use synchronous write</td></tr>
+
+<tr><td>0x0040</td><td>XFS_DIFLAG_NOATIME</td><td>Do not update access time (atime)</td></tr>
+
+<tr><td>0x0080</td><td>XFS_DIFLAG_NODUMP</td><td>Do not "dump", which indicates that xfsdump should ignore the file</td></tr>
+
+<tr><td>0x0100</td><td>XFS_DIFLAG_RTINHERIT</td><td>Sub directories inherit XFS_DIFLAG_REALTIME</td></tr>
+
+<tr><td>0x0200</td><td>XFS_DIFLAG_PROJINHERIT</td><td>Sub directories inherit the project identifier</td></tr>
+
+<tr><td>0x0400</td><td>XFS_DIFLAG_NOSYMLINKS</td><td>No symbolic links can be created for sub directories</td></tr>
+
+<tr><td>0x0800</td><td>XFS_DIFLAG_EXTSIZE</td><td>Has extent size</td></tr>
+
+<tr><td>0x1000</td><td>XFS_DIFLAG_EXTSZINHERIT</td><td>Sub directories inherit extent size</td></tr>
+
+<tr><td>0x2000</td><td>XFS_DIFLAG_NODEFRAG</td><td>Do not defragment</td></tr>
+
+<tr><td>0x4000</td><td>XFS_DIFLAG_FILESTREAM</td><td>Unknown (Use filestream allocator)</td></tr>
+
+</table>
+</div>
+
+<h3 id="extent_list"><a class="header" href="#extent_list">Extent list</a></h3>
+<p>The extent list consists of:</p>
+<ul>
+<li>one or more <a href="#packed_extent">packed extents</a></li>
+</ul>
+<h4 id="packed_extent"><a class="header" href="#packed_extent">Packed extent</a></h4>
+<p>The packed extent (xfs_bmbt_rec_t) is 128 bits of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>21 bits</td><td></td><td>Number of blocks</td></tr>
+
+<tr><td>2.4</td><td>52 bits</td><td></td><td>Physical block number, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
+
+<tr><td>9.1</td><td>54 bits</td><td></td><td>Logical block number</td></tr>
+
+<tr><td>15.7</td><td>1 bit</td><td></td><td>Uninitialized (unwritten) extent</td></tr>
+
+</table>
+</div>
+
+<h3 id="extent_btree"><a class="header" href="#extent_btree">Extent B+ tree</a></h3>
+<h4 id="extent-b-tree-root-node"><a class="header" href="#extent-b-tree-root-node">Extent B+ tree root node</a></h4>
+<p>The root node of the extents B+ tree is stored in the inode and equivalent to
+<a href="#extent_btree_branch_node">an extent B+ tree branch node</a>.</p>
+<p>The number of key-value pairs is calculated as following:</p>
+<pre><code class="language-python">number_of_key_value_pairs = (node_data_size - 4) / 16
+</code></pre>
+<p>Where “node data size” is <code>(attributes_fork_descriptor_offset * 8)</code> if the value is not 0, or
+otherwise the remaining inode block size.</p>
+<h4 id="extent-b-tree-sub-node-block"><a class="header" href="#extent-b-tree-sub-node-block">Extent B+ tree sub node block</a></h4>
+<p>An extent B+ tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
+<p>The inode B+ tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
+<h5 id="extent-b-tree-sub-node-block-header"><a class="header" href="#extent-b-tree-sub-node-block-header">Extent B+ tree sub node block header</a></h5>
+<p>The sub node block header (xfs_bmbt_block_t) is equivalent to
+<a href="#btree_block_header">B+ tree block header</a>.</p>
+<h5 id="extent-b-tree-sub-node-block-header-signatures"><a class="header" href="#extent-b-tree-sub-node-block-header-signatures">Extent B+ tree sub node block header signatures</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Signature</th><th>Description</th></thead>
+<tr><td>"BMA3"</td><td>File system version 5 extent B+ tree sub node block</td></tr>
+
+<tr><td>"BMAP"</td><td>Extent B+ tree sub node block</td></tr>
+
+</table>
+</div>
+
+<h4 id="extent_btree_branch_node"><a class="header" href="#extent_btree_branch_node">Extent B+ tree branch node</a></h4>
+<p>The extent B+ tree branch node record consists of:</p>
+<ul>
+<li>node header</li>
+<li>array of extent B+ tree branch node entry keys</li>
+<li>array of extent B+ tree branch node entry values</li>
+</ul>
+<p>TODO: number of key-value pairs</p>
+<p>The number of key-value pairs is calculated as following:</p>
+<pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 16
+</code></pre>
+<h5 id="extent-b-tree-branch-node-header"><a class="header" href="#extent-b-tree-branch-node-header">Extent B+ tree branch node header</a></h5>
+<p>The branch node header (xfs_bmdr_block_t) is 4 byte of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Node level</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Number of used key-value pairs in the node</td></tr>
+
+</table>
+</div>
+
+<h5 id="extent-b-tree-branch-node-entry-key"><a class="header" href="#extent-b-tree-branch-node-entry-key">Extent B+ tree branch node entry key</a></h5>
+<p>The branch node entry key (xfs_bmbt_key_t) is 8 byte of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Data offset</td></tr>
+
+</table>
+</div>
+
+<h5 id="extent-b-tree-branch-node-entry-value"><a class="header" href="#extent-b-tree-branch-node-entry-value">Extent B+ tree branch node entry value</a></h5>
+<p>The branch node entry value (xfs_bmbt_ptr_t or xfs_bmdr_ptr_t) is 8 byte of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Block number of the extent B+ tree sub node, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
+
+</table>
+</div>
+
+<h4 id="extent-b-tree-leaf-block-node"><a class="header" href="#extent-b-tree-leaf-block-node">Extent B+ tree leaf block node</a></h4>
+<p>The extent B+ tree leaf block node consists of:</p>
+<ul>
+<li>one or more <a href="#packed_extent">packed extents</a></li>
+</ul>
+<h2 id="directory-entries"><a class="header" href="#directory-entries">Directory entries</a></h2>
+<p>Directories entries are stored in the data fork of a directory inode. The directory entries can be
+stored in multiple ways:</p>
+<ul>
+<li>as a short-form directory table</li>
+<li>as an extent-based block directory (or leaf directory)</li>
+<li>as an extent-based directory B+ tree (or node directory)</li>
+</ul>
+<h3 id="short-form-directory-table"><a class="header" href="#short-form-directory-table">Short-form directory table</a></h3>
+<p>The short-form directory table (xfs_dir_sf_t or xfs_dir2_sf_t) is stored in the inode (as inline
+data), where fork type is XFS_DINODE_FMT_LOCAL. The short-form directory table consist of:</p>
+<ul>
+<li>Short-form directory table header</li>
+<li>Short-form directory table entries</li>
+</ul>
+<p>The XFS_SB_VERSION_DIRV2BIT flag in the superblock indicates if version 2 is used.</p>
+<h4 id="short-form-directory-table-header-version-1"><a class="header" href="#short-form-directory-table-header-version-1">Short-form directory table header version 1</a></h4>
+<p>The short-form directory table header version 1 (xfs_dir_sf_hdr_t) is 9 bytes of size and consists
+of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Parent inode number, which contains an absolute inode number</td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td>Number of entries</td></tr>
+
+</table>
+</div>
+
+<h4 id="short-form-directory-table-header-version-2"><a class="header" href="#short-form-directory-table-header-version-2">Short-form directory table header version 2</a></h4>
+<p>The short-form directory table header version 2 (xfs_dir2_sf_hdr_t) is 6 or 10 bytes of size and
+consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Number of 32-bit entries</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Number of 64-bit entries</td></tr>
+
+<tr><td>2</td><td>4 or 8</td><td></td><td>Parent inode number, which contains an absolute inode number</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that if the inode numbers are stored as 32-bit values then number of 32-bit entries is set
+and number of 64-bit entries must be 0. If the inode numbers are stored as 64-bit values then
+number of 64-bit entries is set and number of 32-bit entries must be 0.</p>
+</blockquote>
+<h4 id="short-form-directory-table-entry-version-1"><a class="header" href="#short-form-directory-table-entry-version-1">Short-form directory table entry version 1</a></h4>
+<p>The short-form directory table entry version 1 (xfs_dir_sf_entry_t) is variable of size and
+consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Inode number, which contains an absolute inode number</td></tr>
+
+<tr><td>9</td><td>1</td><td></td><td>Name size, which does not include the end-of-string character</td></tr>
+
+<tr><td>10</td><td>...</td><td></td><td>Name</td></tr>
+
+</table>
+</div>
+
+<h4 id="short-form-directory-table-entry-version-2"><a class="header" href="#short-form-directory-table-entry-version-2">Short-form directory table entry version 2</a></h4>
+<p>The short-form directory table entry version 2 (xfs_dir2_sf_entry_t) is variable of size and
+consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Name size, which does not include the end-of-string character</td></tr>
+
+<tr><td>1</td><td>2</td><td></td><td>Unknown (offset, tag)</td></tr>
+
+<tr><td>3</td><td>...</td><td></td><td>Name</td></tr>
+
+<tr><td colspan="4"><em>Only present if XFS_SB_VERSION2_FTYPE is set</em></td></tr>
+
+<tr><td>...</td><td>1</td><td></td><td>File type</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>...</td><td>4 or 8</td><td></td><td>Inode number, which contains an absolute inode number</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that file type seems to be present on format version even if XFS_SB_VERSION2_FTYPE is not
+set.</p>
+</blockquote>
+<h3 id="directory_leaf_block"><a class="header" href="#directory_leaf_block">Directory (leaf) block</a></h3>
+<p>A directory (leaf) block (xfs_dir_leafblock_t) consist of:</p>
+<ul>
+<li>a block header</li>
+<li>array of block entries</li>
+<li>array of block values</li>
+<li>a block footer</li>
+</ul>
+<p>If the XFS_SB_VERSION_DIRV2BIT flag in the superblock is set the directory is stored using
+<a href="#block_directory">a block directory</a>.</p>
+<p>If more than one block is needed to store the extended attributes
+<a href="#directory_btree">a directory B+ tree</a> is used.</p>
+<h4 id="directory-leaf-block-header-version-1"><a class="header" href="#directory-leaf-block-header-version-1">Directory (leaf) block header version 1</a></h4>
+<p>A directory (leaf) block header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>12</td><td></td><td><a href="#file_system_block_header_version_1">File system block header version 1</a></td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Used (block) data size, in number of bytes</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Used data offset</td></tr>
+
+<tr><td>18</td><td>1</td><td></td><td>Flag to indicate block compaction is needed</td></tr>
+
+<tr><td>19</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>20</td><td>4 x 3</td><td></td><td>Array of <a href="#block_free_region_v2">free regions</a> in the block</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that a directory (leaf) block header version 2 (xfs_dir2_leaf_hdr_t) is equivalent to
+version 1.</p>
+</blockquote>
+<h4 id="directory-leaf-block-entry-version-1"><a class="header" href="#directory-leaf-block-entry-version-1">Directory (leaf) block entry version 1</a></h4>
+<p>The directory (leaf) block entry (xfs_dir_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Name hash</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Values offset, which contains an offset relative to the start of the directory block</td></tr>
+
+<tr><td>6</td><td>1</td><td></td><td>Name size, which does not include the end-of-string character</td></tr>
+
+<tr><td>7</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that s directory (leaf) block entry version 2 (xfs_dir2_leaf_entry_t) is equivalent to
+version 1.</p>
+</blockquote>
+<h4 id="directory-leaf-block-values"><a class="header" href="#directory-leaf-block-values">Directory (leaf) block values</a></h4>
+<p>The directory (leaf) block value (xfs_dir_leaf_name_t) is variable of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Inode number, which contains an absolute inode number</td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Name</td></tr>
+
+</table>
+</div>
+
+<h4 id="directory-leaf-block-footer-version-1"><a class="header" href="#directory-leaf-block-footer-version-1">Directory (leaf) block footer version 1</a></h4>
+<p>A directory (leaf) block footer version 1 (xfs_dir_leaf_tail_t) is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Unknown (bestcount)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that s directory (leaf) block footer version 2 (xfs_dir2_leaf_tail_t) is equivalent to
+version 1.</p>
+</blockquote>
+<h3 id="block_directory"><a class="header" href="#block_directory">Block directory</a></h3>
+<p>A block directory (xfs_dir2_block_t) consist of one or more blocks that consist of:</p>
+<ul>
+<li>a block directory header</li>
+<li>array of used and unused directory entries</li>
+<li>hash values of the entries</li>
+<li>a block directory footer</li>
+</ul>
+<p>If the XFS_SB_VERSION_DIRV2BIT flag in the superblock is not set the directory is stored using
+<a href="#directory_leaf_block">a directory (leaf) block</a>.</p>
+<h4 id="block-directory-header"><a class="header" href="#block-directory-header">Block directory header</a></h4>
+<h5 id="block-directory-header-version-2"><a class="header" href="#block-directory-header-version-2">Block directory header version 2</a></h5>
+<p>The block directory header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"XD2B" or "XD2D"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4 x 3</td><td></td><td>Array of <a href="#block_free_region_v2">free regions</a> in the block</td></tr>
+
+</table>
+</div>
+
+<h5 id="block-directory-header-version-3"><a class="header" href="#block-directory-header-version-3">Block directory header version 3</a></h5>
+<p>The block directory header version 3 (xfs_dir3_data_hdr_t) is 48 bytes of size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"XDB3" or "XDD3"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Block number</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>24</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Owner inode number, which contains the absolute inode number the block is part of</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>48</td><td>4 x 3</td><td></td><td>Array of <a href="#block_free_region_v2">free regions</a> in the block</td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h5 id="block-directory-header-version-signatures"><a class="header" href="#block-directory-header-version-signatures">Block directory header version signatures</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Signature</th><th>Description</th></thead>
+<tr><td>"XD2B"</td><td>Version 2 directory entries B+ tree (single block)</td></tr>
+
+<tr><td>"XD2D"</td><td>Version 2 directory entries B+ tree (multi block)</td></tr>
+
+<tr><td>"XD2F"</td><td>Version 2 directory free space B+ tree</td></tr>
+
+<tr><td>"XDB3"</td><td>Version 3 Directory entries B+ tree (single block)</td></tr>
+
+<tr><td>"XDD3"</td><td>Version 3 Directory entries B+ tree (multi block)</td></tr>
+
+<tr><td>"XDF3"</td><td>Version 3 Directory free space B+ tree</td></tr>
+
+</table>
+</div>
+
+<h5 id="block_free_region_v2"><a class="header" href="#block_free_region_v2">Block free region version 2</a></h5>
+<p>The block free region version 2 (xfs_dir2_data_free_t) is 4 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Free region offset, which is relative to the start of the directory block</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Size</td></tr>
+
+</table>
+</div>
+
+<h4 id="block-directory-entries"><a class="header" href="#block-directory-entries">Block directory entries</a></h4>
+<h5 id="block-directory-entry-version-2"><a class="header" href="#block-directory-entry-version-2">Block directory entry version 2</a></h5>
+<p>The block directory entry version 2 (xfs_dir2_data_entry_t) is variable of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Inode number, which contains an absolute inode number</td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td>Name size, which does not include the end-of-string character</td></tr>
+
+<tr><td>9</td><td>...</td><td></td><td>Name</td></tr>
+
+<tr><td colspan="4"><em>Only present if XFS_SB_VERSION2_FTYPE is set</em></td></tr>
+
+<tr><td>...</td><td>1</td><td></td><td>Unknown (ftype)</td></tr>
+
+<tr><td colspan="4"><em>Common</em></td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (8-byte alignment padding?)</td></tr>
+
+<tr><td>...</td><td>2</td><td></td><td>Unknown (offset, tag)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h5 id="unused-block-directory-entry-version-2"><a class="header" href="#unused-block-directory-entry-version-2">Unused block directory entry version 2</a></h5>
+<p>The unused block directory entry version 2 (xfs_dir2_data_unused_t) is variable of size
+and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0xffff</td><td>Signature (free tag)</td></tr>
+
+<tr><td>2</td><td>4</td><td></td><td>Entry size, which contains the size of the unused block including the size of the signature and entry size</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>...</td><td>2</td><td></td><td>Unknown (offset, tag)</td></tr>
+
+</table>
+</div>
+
+<h4 id="block-directory-hash-value"><a class="header" href="#block-directory-hash-value">Block directory hash value</a></h4>
+<p>The block directory hash value (xfs_dir_leaf_entry_t or xfs_dir2_leaf_entry_t) is 8 bytes of size
+and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Hash value of the name of the directory entry</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Entry offset, which is relative to the start of the block</td></tr>
+
+</table>
+</div>
+
+<h4 id="block-directory-footer"><a class="header" href="#block-directory-footer">Block directory footer</a></h4>
+<h5 id="block-directory-footer-version-2"><a class="header" href="#block-directory-footer-version-2">Block directory footer version 2</a></h5>
+<p>The block directory footer version 2 (xfs_dir2_block_tail_t) is 8 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of directory entries</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Number of unused entries</td></tr>
+
+</table>
+</div>
+
+<h3 id="directory_btree"><a class="header" href="#directory_btree">Directory B+ tree</a></h3>
+<p>The first block in the extents is the B+ tree root block.</p>
+<h3 id="directory-b-tree-branch-node-block"><a class="header" href="#directory-b-tree-branch-node-block">Directory B+ tree branch node block</a></h3>
+<p>An attributes B+ tree branch node block consist of:</p>
+<ul>
+<li><a href="#directory_branch_node_block_header">a directory branch node block header</a></li>
+<li>array of directory branch node entry</li>
+</ul>
+<h4 id="directory_branch_node_block_header"><a class="header" href="#directory_branch_node_block_header">Directory branch node block header</a></h4>
+<p>A directory branch node block header is 16 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>12</td><td></td><td><a href="#file_system_block_header_version_1">File system block header version 1</a></td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Node level</td></tr>
+
+</table>
+</div>
+
+<h4 id="directory-b-tree-branch-node-block-entry"><a class="header" href="#directory-b-tree-branch-node-block-entry">Directory B+ tree branch node block entry</a></h4>
+<p>A directory B+ tree branch node block entry is 8 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Name hash</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Sub block number, which contains a block number relative to the start of the attributes extents</td></tr>
+
+</table>
+</div>
+
+<h2 id="device-identifier"><a class="header" href="#device-identifier">Device identifier</a></h2>
+<p>Character and block devices identifiers are stored as inline data with fork type is
+XFS_DINODE_FMT_DEV.</p>
+<p>The device identifier (xfs_dev_t) is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>18 bits</td><td></td><td>Minor device number</td></tr>
+
+<tr><td>2.2</td><td>14 bits</td><td></td><td>Major device number</td></tr>
+
+</table>
+</div>
+
+<h2 id="file-content"><a class="header" href="#file-content">File content</a></h2>
+<p>XFS supports multiple ways to store file content:</p>
+<ul>
+<li>inline data (fork type is XFS_DINODE_FMT_LOCAL)</li>
+<li>extents defined by either an extent list (fork type is XFS_DINODE_FMT_EXTENTS) or an extent
+B+ tree (fork type is XFS_DINODE_FMT_BTREE)</li>
+</ul>
+<h3 id="inline-data"><a class="header" href="#inline-data">Inline data</a></h3>
+<p>The file content data is stored in the inode data fork.</p>
+<h3 id="extents"><a class="header" href="#extents">Extents</a></h3>
+<p>The file content data is stored in the block defined by the extents.</p>
+<p>If the logical block numbers of successive extents are non-contiguous this means the file content
+data has an implicit sparse extent (or hole).</p>
+<p>TODO: determine if the hole can be at the start or end of the file content data.</p>
+<h2 id="file-system-block-b-tree"><a class="header" href="#file-system-block-b-tree">File system block B+ tree</a></h2>
+<p>The file system block B+ tree is a structure used to store the directory and attributes B+ trees</p>
+<h3 id="file_system_block_header"><a class="header" href="#file_system_block_header">File system block header</a></h3>
+<h4 id="file_system_block_header_version_1"><a class="header" href="#file_system_block_header_version_1">File system block header version 1</a></h4>
+<p>If the superblock format version &lt;= 4 the file system block header version 1 is used. The file
+system block header version 1 (xfs_da_blkinfo_t) is 12 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>(Logical) block number of the next B+ tree block at the same level</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>(Logical) block number of the previous B+ tree block at the same level</td></tr>
+
+<tr><td>8</td><td>2</td><td>0xfbee</td><td>Signature (XFS_ATTR_LEAF_MAGIC)</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that a file system block header version 2 is equivalent to version 1.</p>
+</blockquote>
+<h4 id="file_system_block_header_version_3"><a class="header" href="#file_system_block_header_version_3">File system block header version 3</a></h4>
+<p>If the superblock format version &gt;= 5 the file system block header version 3 is used. The file
+system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>(Logical) block number of the next B+ tree block at the same level</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>(Logical) block number of the previous B+ tree block at the same level</td></tr>
+
+<tr><td>8</td><td>2</td><td>0x3bee</td><td>Signature (XFS_ATTR3_LEAF_MAGIC)</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Block number</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Owner inode number, which contains the absolute inode number the block is part of</td></tr>
+
+</table>
+</div>
+
+<h4 id="file-system-block-header-signatures"><a class="header" href="#file-system-block-header-signatures">File system block header signatures</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Signature</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x3bee</td><td>XFS_ATTR_LEAF_MAGIC</td><td>File system version 5 attributes B+ tree leaf block</td></tr>
+
+<tr><td>0x3ebe</td><td>XFS_DA3_NODE_MAGIC</td><td>File system version 5 directory or attributes B+ tree branch block</td></tr>
+
+<tr><td>0xd2f1</td><td>XFS_DIR2_LEAF1_MAGIC</td><td></td></tr>
+
+<tr><td>0xd2ff</td><td>XFS_DIR2_LEAFN_MAGIC</td><td></td></tr>
+
+<tr><td>0xfbee</td><td>XFS_ATTR_LEAF_MAGIC</td><td>Attributes B+ tree leaf block</td></tr>
+
+<tr><td>0xfebe</td><td>XFS_DA_NODE_MAGIC</td><td>Directory or attributes B+ tree branch block</td></tr>
+
+<tr><td>0xfeeb</td><td>XFS_DIR_LEAF_MAGIC</td><td>Directory B+ tree leaf block</td></tr>
+
+</table>
+</div>
+
+<h2 id="extended-attributes"><a class="header" href="#extended-attributes">Extended attributes</a></h2>
+<p>Extended attributes are stored in the attributes fork of an inode. The extended attributes can be
+stored in multiple ways:</p>
+<ul>
+<li>as a short-form attributes table</li>
+<li>as an extent-based <a href="#attributes_block">attributes block</a> (or leaf attributes)</li>
+<li>as an extent-based <a href="#attributes_btree">attributes B+ tree</a> (or node attributes)</li>
+</ul>
+<p>The start of the attributes fork can be determined using the attributes fork descriptor offset.</p>
+<h3 id="short-form-attributes-table"><a class="header" href="#short-form-attributes-table">Short-form attributes table</a></h3>
+<p>If the inode attributes fork type is XFS_DINODE_FMT_LOCAL the extended attributes are stored in a
+short-form attributes table (xfs_attr_shortform) inline in the attribtes fork. The short-form
+attributes table consist of:</p>
+<ul>
+<li>a short-form attribute table header</li>
+<li>one or more short-form attribute table entries</li>
+</ul>
+<h4 id="the-short-form-attribute-table-header"><a class="header" href="#the-short-form-attribute-table-header">The short-form attribute table header</a></h4>
+<p>The short-form attribute table header (xfs_attr_sf_hdr) is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Data size, which contains the size of the short form attributes table data</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>3</td><td>1</td><td></td><td>Unknown (padding?)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the size of the short-form attribute header deviates from <code>[SGI18]</code> based on analysis
+of test data.</p>
+</blockquote>
+<h4 id="the-short-form-attribute-entry"><a class="header" href="#the-short-form-attribute-entry">The short-form attribute entry</a></h4>
+<p>The short-form attribute table entry (xfs_attr_sf_entry) is variable of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Name size</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Value data size</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td><a href="#attribute_flags">Attribute flags</a></td></tr>
+
+<tr><td>3</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Value data</td></tr>
+
+</table>
+</div>
+
+<h3 id="attributes_block"><a class="header" href="#attributes_block">Attributes (leaf) block</a></h3>
+<p>If the inode attributes fork type is XFS_DINODE_FMT_EXTENTS the extended attributes are stored in
+an attributes (leaf) block. The attributes fork contains <a href="#extent_list">an extent list</a>.</p>
+<p>An attributes (leaf) block (xfs_attr_leafblock_t or xfs_attr3_leafblock_t) consist of:</p>
+<ul>
+<li><a href="#attributes_leaf_block_header">an attributes (leaf) block header</a></li>
+<li>array of block entries</li>
+<li>array of local or remote attribute block values</li>
+</ul>
+<p>If more than one block is needed to store the extended attributes
+<a href="#attributes_btree">an attributes B+ tree</a> is used.</p>
+<blockquote>
+<p>Note that since extended attributes were introduced in superblock format version 2 there are no
+version 1 structures.</p>
+</blockquote>
+<h4 id="attributes_leaf_block_header"><a class="header" href="#attributes_leaf_block_header">Attributes (leaf) block header</a></h4>
+<h5 id="attributes-leaf-block-header-version-2"><a class="header" href="#attributes-leaf-block-header-version-2">Attributes (leaf) block header version 2</a></h5>
+<p>If the superblock format version &lt;= 4 the attributes (leaf) block header version 2 is used. The
+attributes (leaf) block header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>12</td><td></td><td><a href="#file_system_block_header_version_1">File system block header version 1</a></td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Used (block) data size, in number of bytes</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Used data offset</td></tr>
+
+<tr><td>18</td><td>1</td><td></td><td>Flag to indicate block compaction is needed</td></tr>
+
+<tr><td>19</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>20</td><td>4 x 3</td><td></td><td>Array of <a href="#block_free_region_v2">free regions</a> in the block</td></tr>
+
+</table>
+</div>
+
+<h5 id="attributes-leaf-block-header-version-3"><a class="header" href="#attributes-leaf-block-header-version-3">Attributes (leaf) block header version 3</a></h5>
+<p>If the superblock format version &gt;= 5 the attributes (leaf) block header version 3 is used. The
+attributes (leaf) block header version 3 (xfs_attr3_leaf_hdr_t) is 80 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>56</td><td></td><td><a href="#file_system_block_header_version_3">File system block header version 3</a></td></tr>
+
+<tr><td>56</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>58</td><td>2</td><td></td><td>Used (block) data size, in number of bytes</td></tr>
+
+<tr><td>60</td><td>2</td><td></td><td>Used data offset</td></tr>
+
+<tr><td>62</td><td>1</td><td></td><td>Flag to indicate block compaction is needed</td></tr>
+
+<tr><td>63</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+
+<tr><td>64</td><td>4 x 3</td><td></td><td>Array of <a href="#block_free_region_v2">free regions</a> in the block</td></tr>
+
+<tr><td>76</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<h4 id="attributes-leaf-block-entry"><a class="header" href="#attributes-leaf-block-entry">Attributes (leaf) block entry</a></h4>
+<p>The attributes (leaf) block entry (xfs_attr_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Name hash</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Values offset, which is relative to the start of the attributes block</td></tr>
+
+<tr><td>6</td><td>1</td><td></td><td><a href="#attribute_flags">Attribute flags</a></td></tr>
+
+<tr><td>7</td><td>1</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<h4 id="attribute-leaf-block-values"><a class="header" href="#attribute-leaf-block-values">Attribute (leaf) block values</a></h4>
+<p>If the attributes (leaf) block entry flag XFS_ATTR_LOCAL is set the attribute values are stored as
+local attribute block values otherwise as remote attribute block values. The value data of remote
+attribute values are stored in
+<a href="#remote_attribute_value_data_block">a remote attribute value data block</a>.</p>
+<h5 id="local-attribute-block-values"><a class="header" href="#local-attribute-block-values">Local attribute block values</a></h5>
+<p>The local attributes values (xfs_attr_leaf_name_local_t) is variable of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Value data size</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td>Name size</td></tr>
+
+<tr><td>3</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<h5 id="remote-attribute-block-values"><a class="header" href="#remote-attribute-block-values">Remote attribute block values</a></h5>
+<p>The remote attributes values (xfs_attr_leaf_name_remote_t) is variable of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Value data block number, which is relative to the start of the attributes extents</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Value data size</td></tr>
+
+<tr><td>8</td><td>1</td><td></td><td>Name size</td></tr>
+
+<tr><td>9</td><td>...</td><td></td><td>Name string, which contains an ASCII string without end-of-string character</td></tr>
+
+</table>
+</div>
+
+<h3 id="attributes_btree"><a class="header" href="#attributes_btree">Attributes B+ tree</a></h3>
+<p>If the inode attributes fork type is XFS_DINODE_FMT_BTREE the extended attributes are stored in an
+attributes B+ tree. The attributes fork contains <a href="#extent_btree">an extent B+ tree</a>.</p>
+<p>The first block in the extents is the B+ tree root block.</p>
+<h3 id="attributes-b-tree-branch-node-block"><a class="header" href="#attributes-b-tree-branch-node-block">Attributes B+ tree branch node block</a></h3>
+<p>An attributes B+ tree branch node block consist of:</p>
+<ul>
+<li><a href="#attributes_branch_node_block_header">an attributes branch node block header</a></li>
+<li>array of attribute branch node entry</li>
+</ul>
+<h4 id="attributes_branch_node_block_header"><a class="header" href="#attributes_branch_node_block_header">Attributes branch node block header</a></h4>
+<h5 id="attributes-branch-node-block-header-version-2"><a class="header" href="#attributes-branch-node-block-header-version-2">Attributes branch node block header version 2</a></h5>
+<p>If the superblock format version &lt;= 4 the attributes branch node block header version 2 is used.
+The attributes branch node block header version 2 (xfs_da_blkinfo_t) is 16 bytes of size and
+consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>12</td><td></td><td><a href="#file_system_block_header_version_1">File system block header version 1</a></td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Node level</td></tr>
+
+</table>
+</div>
+
+<h5 id="attributes-branch-node-block-header-version-3"><a class="header" href="#attributes-branch-node-block-header-version-3">Attributes branch node block header version 3</a></h5>
+<p>If the superblock format version &gt;= 5 the attributes branch node block header version 3 is used.
+The attributes branch node block header version 3 (xfs_da3_blkinfo_t) is 64 bytes of size and
+consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>56</td><td></td><td><a href="#file_system_block_header_version_3">File system block header version 3</a></td></tr>
+
+<tr><td>56</td><td>2</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>58</td><td>2</td><td></td><td>Node level</td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<h5 id="attributes-branch-node-block-entry"><a class="header" href="#attributes-branch-node-block-entry">Attributes branch node block entry</a></h5>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Name hash</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Sub block number, which is relative to the start of the attributes extents</td></tr>
+
+</table>
+</div>
+
+<h3 id="attributes-b-tree-leaf-node"><a class="header" href="#attributes-b-tree-leaf-node">Attributes B+ tree leaf node</a></h3>
+<p>The extended attributes B+ tree leaf node is equivalent to an <a href="#attributes_block">attributes block</a>.</p>
+<h3 id="attribute_flags"><a class="header" href="#attribute_flags">The attribute flags</a></h3>
+<p>The attribute flags indicate the prefix (or namespace) of the attribute name.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Name prefix</th><th>Description</th></thead>
+<tr><td>0x00</td><td></td><td>"user."</td><td>The attribute is part of the user namespace</td></tr>
+
+<tr><td>0x01</td><td>XFS_ATTR_LOCAL</td><td></td><td>The attribute value is contained within the current block</td></tr>
+
+<tr><td>0x02</td><td>XFS_ATTR_ROOT</td><td>"trusted."</td><td>The attribute is part of the trusted namespace</td></tr>
+
+<tr><td>0x04</td><td>XFS_ATTR_SECURE</td><td>"secure."</td><td>The attribute is part of the secure namespace</td></tr>
+
+<tr><td>0x08</td><td>XFS_ATTR_PARENT</td><td></td><td>The attribute contains a parent directory reference, where the attribute name contains the file tentry name and the attribute value data <a href="#parent_directory_attribute_value_data">a reference to the parent directory</a></td></tr>
+
+<tr><td></td><td></td><td></td><td></td></tr>
+
+<tr><td>0x80</td><td>XFS_ATTR_INCOMPLETE</td><td></td><td>The attribute is being modified</td></tr>
+
+</table>
+</div>
+
+<h4 id="remote_attribute_value_data_block"><a class="header" href="#remote_attribute_value_data_block">Remote attribute value data block</a></h4>
+<p>If the superblock format version &lt;= 4 the attribute value data is stored directly in remote
+attribute value date blocks.</p>
+<p>If the superblock format version &gt;= 5 each individual remote attribute value data block will start
+with a remote attribute value data block header version 3 followed by attribute value data.</p>
+<p>The attributes extents contain the physical location of the individual remote attribute value data
+blocks.</p>
+<h5 id="remote-attribute-value-data-block-header-version-3"><a class="header" href="#remote-attribute-value-data-block-header-version-3">Remote attribute value data block header version 3</a></h5>
+<p>The remote attribute value data block header (xfs_attr3_rmt_hdr) is 52 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"XARM"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Value data offset</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Value data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Checksum of the remote attribute value data block</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Block type identifier, which contains an UUID that should correspond to sb_uuid or sb_meta_uuid</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Owner inode number, which contains the absolute inode number the block is part of</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Block number</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Log sequence number</td></tr>
+
+</table>
+</div>
+
+<h5 id="parent_directory_attribute_value_data"><a class="header" href="#parent_directory_attribute_value_data">Parent directory attribute value data</a></h5>
+<p>The parent directory attribute value data (xfs_parent_rec) is 12 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Parent directory inode number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Parent directory generation number</td></tr>
+
+</table>
+</div>
+
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/docs/xfs_filesystem_structure.pdf">XFS Filesystem Structure - 3rd Edition</a></li>
+<li><a href="https://kernel.googlesource.com/pub/scm/fs/xfs/xfs-documentation/+/master/design/XFS_Filesystem_Structure">XFS Filesystem Structure</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ntfs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="hybrid.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ntfs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="hybrid.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

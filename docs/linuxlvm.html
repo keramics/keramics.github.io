@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -628,73 +628,77 @@ enforced by the format.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Description</th></thead>
-<tr><td>cache</td><td></td></tr>
+<tr><td>cache</td><td>Segment that is used as a cache, e.g. SSD for a HDD</td></tr>
 
-<tr><td>cache-pool</td><td></td></tr>
+<tr><td>cache-pool</td><td>Segment used as a cache for both data and metadata</td></tr>
 
-<tr><td>error</td><td></td></tr>
+<tr><td>error</td><td>Segment that fails read and write operations, intended for testing</td></tr>
 
-<tr><td>free</td><td></td></tr>
+<tr><td>free</td><td>Unallocated segment</td></tr>
 
-<tr><td>linear</td><td></td></tr>
+<tr><td>integrity</td><td>Segment with integrity checksum</td></tr>
 
-<tr><td>mirror</td><td></td></tr>
+<tr><td>linear</td><td>Linear physical volume</td></tr>
 
-<tr><td>raid0</td><td></td></tr>
+<tr><td>mirror</td><td>Segment that mirrors data across multiple physical volumes (comparable to RAID1)</td></tr>
 
-<tr><td>raid0_meta</td><td></td></tr>
+<tr><td>raid0</td><td>Segment that contains a stripe of data (RAID0)</td></tr>
 
-<tr><td>raid1</td><td></td></tr>
+<tr><td>raid0_meta</td><td>RAID0 physical volume that contains data and metadata</td></tr>
 
-<tr><td>raid10</td><td></td></tr>
+<tr><td>raid1</td><td>Segment that mirrors data across multiple physical volumes (RAID1)</td></tr>
 
-<tr><td>raid10_near</td><td></td></tr>
+<tr><td>raid10</td><td>Segment that contains a stripe of data (RAID0) that mirrors data across multiple physical volumes (RAID1)</td></tr>
 
-<tr><td>raid4</td><td></td></tr>
+<tr><td>raid10_near</td><td>RAID10 segment that copies data sectors near each other</td></tr>
 
-<tr><td>raid5</td><td></td></tr>
+<tr><td>raid4</td><td>Segment with stripes across multiple physical volumes with parity data (RAID4)</td></tr>
 
-<tr><td>raid5_la</td><td></td></tr>
+<tr><td>raid5</td><td>Segment with stripes across multiple physical volumes with parity data (RAID5)</td></tr>
 
-<tr><td>raid5_ls</td><td></td></tr>
+<tr><td>raid5_la</td><td>RAID5 variant that uses left asymmetric layout</td></tr>
 
-<tr><td>raid5_n</td><td></td></tr>
+<tr><td>raid5_ls</td><td>RAID5 variant that uses left symmetric layout</td></tr>
 
-<tr><td>raid5_ra</td><td></td></tr>
+<tr><td>raid5_n</td><td>RAID5 variant with dedicated parity layout</td></tr>
 
-<tr><td>raid5_rs</td><td></td></tr>
+<tr><td>raid5_ra</td><td>RAID5 variant that uses right asymmetric layout</td></tr>
 
-<tr><td>raid6</td><td></td></tr>
+<tr><td>raid5_rs</td><td>RAID5 variant that uses right symmetric layout</td></tr>
 
-<tr><td>raid6_la_6</td><td></td></tr>
+<tr><td>raid6</td><td>Segment with stripes across multiple physical volumes with dual parity data (RAID6)</td></tr>
 
-<tr><td>raid6_n_6</td><td></td></tr>
+<tr><td>raid6_la_6</td><td>RAID6 variant that uses left asymmetric layout</td></tr>
 
-<tr><td>raid6_nc</td><td></td></tr>
+<tr><td>raid6_ls_6</td><td>RAID6 variant that uses left symmetric layout</td></tr>
 
-<tr><td>raid6_nr</td><td></td></tr>
+<tr><td>raid6_n_6</td><td>RAID6 variant with dedicated parity layout</td></tr>
 
-<tr><td>raid6_ra_6</td><td></td></tr>
+<tr><td>raid6_nc</td><td>RAID6 variant that uses no-change layout</td></tr>
 
-<tr><td>raid6_rs_6</td><td></td></tr>
+<tr><td>raid6_nr</td><td>RAID6 variant that uses non-rotating layout</td></tr>
 
-<tr><td>raid6_zr</td><td></td></tr>
+<tr><td>raid6_ra_6</td><td>RAID6 variant that uses right asymmetric layout</td></tr>
 
-<tr><td>snapshot</td><td></td></tr>
+<tr><td>raid6_rs_6</td><td>RAID6 variant that uses right symmetric layout</td></tr>
 
-<tr><td>striped</td><td>Is striped</td></tr>
+<tr><td>raid6_zr</td><td>RAID6 variant that uses zero-restart layout</td></tr>
 
-<tr><td>thin</td><td></td></tr>
+<tr><td>snapshot</td><td>Segment that contains a snapshot</td></tr>
 
-<tr><td>thin-pool</td><td></td></tr>
+<tr><td>striped</td><td>Segment that contains a stripe of data (comparable to RAID0)</td></tr>
 
-<tr><td>vdo</td><td></td></tr>
+<tr><td>thin</td><td>Segment that allocated on write</td></tr>
 
-<tr><td>vdo-pool</td><td></td></tr>
+<tr><td>thin-pool</td><td>Segment that manages a shared pool of data and metadata</td></tr>
 
-<tr><td>writecache</td><td></td></tr>
+<tr><td>vdo</td><td>Virtual Data Optimizer (VDO) physical volume</td></tr>
 
-<tr><td>zero</td><td></td></tr>
+<tr><td>vdo-pool</td><td>Virtual Data Optimizer (VDO) pool</td></tr>
+
+<tr><td>writecache</td><td>Segment that is used as a write-only cache</td></tr>
+
+<tr><td>zero</td><td>Segment that is sparse (filled with 0-byte values)</td></tr>
 
 </table>
 </div>

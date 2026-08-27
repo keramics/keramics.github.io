@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,9 +176,9 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="property-list-plist-format"><a class="header" href="#property-list-plist-format">Property list (plist) format</a></h1>
-<p>The property list (plist) formats are used to store various kinds of data, for
-example configuration data. The format is know to be used stand-alone as well
-as embedded in other data formats.</p>
+<p>The property list (plist) formats are used to store various kinds of data, for example
+configuration data. The format is know to be used stand-alone as well as embedded in other data
+formats.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
@@ -233,8 +233,7 @@ as embedded in other data formats.</p>
 </div>
 
 <h3 id="binary-plist-header"><a class="header" href="#binary-plist-header">Binary plist header</a></h3>
-<p>The binary plist header (CFBinaryPlistHeader) is 8 bytes in size and consists
-of:</p>
+<p>The binary plist header (CFBinaryPlistHeader) is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -328,8 +327,8 @@ of:</p>
 <li>array of object references that identify the element objects.</li>
 <li>the element object data</li>
 </ul>
-<p>The byte size of the object reference is defined in the trailer. An object
-reference of 1 will refer to the first object in the (object) offset table.</p>
+<p>The byte size of the object reference is defined in the trailer. An object reference of 1 will
+refer to the first object in the (object) offset table.</p>
 <h4 id="set-object"><a class="header" href="#set-object">Set object</a></h4>
 <p>The set object consists of:</p>
 <ul>
@@ -337,8 +336,8 @@ reference of 1 will refer to the first object in the (object) offset table.</p>
 <li>array of object references that identify the element objects.</li>
 <li>the element object data</li>
 </ul>
-<p>The byte size of the object reference is defined in the trailer. An object
-reference of 1 will refer to the first object in the (object) offset table.</p>
+<p>The byte size of the object reference is defined in the trailer. An object reference of 1 will
+refer to the first object in the (object) offset table.</p>
 <h4 id="dictionary-object"><a class="header" href="#dictionary-object">Dictionary object</a></h4>
 <p>The dictionary object consists of:</p>
 <ul>
@@ -347,9 +346,8 @@ reference of 1 will refer to the first object in the (object) offset table.</p>
 <li>array of object references that identify the value objects.</li>
 <li>the key/value object data</li>
 </ul>
-<p>The byte size of the key and object reference is defined in the trailer. A key
-and object reference of 1 will refer to the first object in the (object) offset
-table.</p>
+<p>The byte size of the key and object reference is defined in the trailer. A key and object reference
+of 1 will refer to the first object in the (object) offset table.</p>
 <h3 id="object-offset-table"><a class="header" href="#object-offset-table">(Object) offset table</a></h3>
 <p>The offset table consists of an array of offsets. The trailer defines:</p>
 <ul>
@@ -359,8 +357,7 @@ table.</p>
 </ul>
 <p>The offset values are relative from the start of the file.</p>
 <h3 id="binary-plist-trailer"><a class="header" href="#binary-plist-trailer">Binary plist trailer</a></h3>
-<p>The binary plist trailer (CFBinaryPlistTrailer) is 32 bytes in size and
-consists of:</p>
+<p>The binary plist trailer (CFBinaryPlistTrailer) is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

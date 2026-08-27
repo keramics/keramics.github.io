@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,8 +176,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="extended-file-system-ext-format"><a class="header" href="#extended-file-system-ext-format">Extended File System (ext) format</a></h1>
-<p>The Extended File System (ext) is one of the more common file system used in
-Linux.</p>
+<p>The Extended File System (ext) is one of the more common file system used in Linux.</p>
 <p>There are multiple version of ext.</p>
 <div class="table-wrapper">
 <table>
@@ -221,37 +220,33 @@ Linux.</p>
 <li>inode bitmap</li>
 <li>allocated and unallocated blocks</li>
 </ul>
-<p>The primary superblock is stored at offset 1024 relative from the start of the
-volume. Backup superblocks are stored at offset 1024 relative from the start of
-the block group if block size &lt;= 1024 or otherwise at offset 0 from the start
-of the block group.</p>
+<p>The primary superblock is stored at offset 1024 relative from the start of the volume. Backup
+superblocks are stored at offset 1024 relative from the start of the block group if block
+size &lt;= 1024 or otherwise at offset 0 from the start of the block group.</p>
 <p>The group descriptor table is stored in the block after the superblock.</p>
-<p>An ext2 file system with revision 0 stores a copy at the start of every block
-group, along with backups of the group descriptor table. Later revisions reduce
-the number of backup copies by only putting backups in specific groups (sparse
-superblock feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
-<p>Not all values in a backup superblock and backup group descriptor tables match
-those of the primary superblock and group descriptor table.</p>
+<p>An ext2 file system with revision 0 stores a copy at the start of every block group, along with
+backups of the group descriptor table. Later revisions reduce the number of backup copies by only
+putting backups in specific groups (sparse superblock feature EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER).</p>
+<p>Not all values in a backup superblock and backup group descriptor tables match those of the primary
+superblock and group descriptor table.</p>
 <blockquote>
-<p>Note that backup superblocks can be empty (filled with 0-byte values) or
-contain remnant data on an Android ext file system with sparse_super.</p>
+<p>Note that backup superblocks can be empty (filled with 0-byte values) or contain remnant data on
+an Android ext file system with sparse_super.</p>
 </blockquote>
 <h3 id="flex-block-groups"><a class="header" href="#flex-block-groups">Flex block groups</a></h3>
-<p>Flex (or flexible) block groups are a set of block groups that treated as
-a single logical block group. Metadata such as the superblock, group
-descriptors, data block bitmaps spans the entire logical block group and
-not the individual block groups part of the set.</p>
+<p>Flex (or flexible) block groups are a set of block groups that treated as a single logical block
+group. Metadata such as the superblock, group descriptors, data block bitmaps spans the entire
+logical block group and not the individual block groups part of the set.</p>
 <h3 id="meta-block-groups"><a class="header" href="#meta-block-groups">Meta block groups</a></h3>
-<p>Meta block groups (META_BG) are a set (or cluster) of block groups, for which
-its group descriptor structures can be stored in a single block.</p>
-<p>The first meta block group value in the superblock indicates what the first</p>
-<p>meta block group value is 256, and the number of group descriptors that can be
-stored in a single block 64, then the group descriptors for the block groups
-[0, 16383] are stored in the group descriptor table after the primary
-superblock and corresponding locations of backups.</p>
-<p>Successive group descriptor tables, for example [16384, 16447], are stored in
-the first block group of a meta block group and backups in the second and last
-block groups of the meta block group.</p>
+<p>Meta block groups (META_BG) are a set (or cluster) of block groups, for which its group descriptor
+structures can be stored in a single block.</p>
+<p>The first meta block group value in the superblock indicates what the first meta block group is to
+cluster as a meta block group. For example if the first meta block group value is 256, and the
+number of group descriptors that can be stored in a single block 64, then the group descriptors for
+the block groups [0, 16383] are stored in the group descriptor table after the primary superblock
+and corresponding locations of backups.</p>
+<p>Successive group descriptor tables, for example [16384, 16447], are stored in the first block
+group of a meta block group and backups in the second and last block groups of the meta block group.</p>
 <h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
 <p>The volume is devided in blocks:</p>
 <pre><code class="language-python">block offset = block number * block size
@@ -693,28 +688,26 @@ block groups of the meta block group.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
-<p>Note that some versions of mkfs.ext set the file system creation time even for
-ext2 and when EXT3_FEATURE_COMPAT_HAS_JOURNAL is not set.</p>
+<p>Note that some versions of mkfs.ext set the file system creation time even for ext2 and when
+EXT3_FEATURE_COMPAT_HAS_JOURNAL is not set.</p>
 </blockquote>
 <p>TODO: Is the only way to determine the file system version the compatibility and equivalent flags?</p>
 <h3 id="checksum-calculation"><a class="header" href="#checksum-calculation">Checksum calculation</a></h3>
-<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
-polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
-checksum.</p>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and
+initial value of 0 is used to calculate the checksum.</p>
 <p>The checksum is calculated over the 1020 bytes of data of the suberblock.</p>
 <h3 id="metadata-checksum-seed-calculation"><a class="header" href="#metadata-checksum-seed-calculation">Metadata checksum seed calculation</a></h3>
-<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
-polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
-checksum.</p>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and
+initial value of 0 is used to calculate the checksum.</p>
 <p>The checksum is calculated over:</p>
 <ul>
 <li>the 16 byte file system identifier in the superblock</li>
 </ul>
-<p>If EXT4_FEATURE_INCOMPAT_CSUM_SEED is set the metadata checksum seed value
-stored in the superblock should be used instead of calculating it based on the
-file system identifier.</p>
-<p>If checksum type is CRC-32C, the metadata checksum seed is stored as
-0xffffffff - CRC-32C.</p>
+<p>If EXT4_FEATURE_INCOMPAT_CSUM_SEED is set the metadata checksum seed value stored in the superblock
+should be used instead of calculating it based on the file system identifier.</p>
+<p>If checksum type is CRC-32C, the metadata checksum seed is stored as:</p>
+<pre><code class="language-text">0xffffffff - CRC-32C
+</code></pre>
 <h3 id="file_system_state_flags"><a class="header" href="#file_system_state_flags">File system state flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -803,8 +796,8 @@ file system identifier.</p>
 </div>
 
 <blockquote>
-<p>Note that EXT2_FEATURE_COMPAT_, EXT3_FEATURE_COMPAT_, EXT4_FEATURE_COMPAT_ and
-COMPAT_ can be used interchangeably.</p>
+<p>Note that EXT2_FEATURE_COMPAT_, EXT3_FEATURE_COMPAT_, EXT4_FEATURE_COMPAT_ and COMPAT_ can be
+used interchangeably.</p>
 </blockquote>
 <h3 id="incompatible_feature_flags"><a class="header" href="#incompatible_feature_flags">Incompatible feature flags</a></h3>
 <div class="table-wrapper">
@@ -850,8 +843,8 @@ COMPAT_ can be used interchangeably.</p>
 </div>
 
 <blockquote>
-<p>Note that EXT2_FEATURE_INCOMPAT_, EXT3_FEATURE_INCOMPAT_,
-EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
+<p>Note that EXT2_FEATURE_INCOMPAT_, EXT3_FEATURE_INCOMPAT_, EXT4_FEATURE_INCOMPAT_ and INCOMPAT_
+can be used interchangeably.</p>
 </blockquote>
 <h3 id="read_only_compatible_feature_flags"><a class="header" href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></h3>
 <div class="table-wrapper">
@@ -894,13 +887,13 @@ EXT4_FEATURE_INCOMPAT_ and INCOMPAT_ can be used interchangeably.</p>
 </table>
 </div>
 
-<p>EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_, EXT4_FEATURE_RO_COMPAT_ and
-RO_COMPAT_ are used interchangeably.</p>
 <blockquote>
-<p>Note that in some ext file systems used by ChromeOS it has been observed that
-the upper 8-bits of the read-only compatible feature flags are set as in
-0xff000003. debugfs identifies these as FEATURE_R24 - FEATURE_R31.</p>
+<p>Note that EXT2_FEATURE_RO_COMPAT_, EXT3_FEATURE_RO_COMPAT_, EXT4_FEATURE_RO_COMPAT_ and
+RO_COMPAT_ are used interchangeably.</p>
 </blockquote>
+<p>In some ext file systems, such as those used by ChromeOS, it has been observed that the upper
+8-bits of the read-only compatible feature flags are set as in 0xff000003. debugfs identifies these
+as FEATURE_R24 - FEATURE_R31.</p>
 <h3 id="checksum_types"><a class="header" href="#checksum_types">Checksum types</a></h3>
 <div class="table-wrapper">
 <table>
@@ -941,9 +934,8 @@ the upper 8-bits of the read-only compatible feature flags are set as in
 </div>
 
 <blockquote>
-<p>Note that it has been observed that implementations that support ext4 can set
-a value in the padding. It is currently assumed that this value contains
-<a href="#block_group_flags">block group flags</a>.</p>
+<p>Note that it has been observed that implementations that support ext4 can set a value in the
+padding. It is currently assumed that this value contains <a href="#block_group_flags">block group flags</a>.</p>
 </blockquote>
 <h3 id="the-ext4-group-descriptor"><a class="header" href="#the-ext4-group-descriptor">The ext4 group descriptor</a></h3>
 <p>The ext4 group descriptor is 68 bytes in size and consists of:</p>
@@ -1003,12 +995,11 @@ a value in the padding. It is currently assumed that this value contains
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<p>If checksum type is CRC-32C, the checksum is stored as the lower 16-bits of
-0xffffffff - CRC-32C, otherwise the checksum is stored as a CRC-16.</p>
+<p>If checksum type is CRC-32C, the checksum is stored as the lower 16-bits of 0xffffffff - CRC-32C,
+otherwise the checksum is stored as a CRC-16.</p>
 <h3 id="checksum-calculation-1"><a class="header" href="#checksum-calculation-1">Checksum calculation</a></h3>
-<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
-polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
-checksum.</p>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and
+initial value of 0 is used to calculate the checksum.</p>
 <p>The checksum is calculated over:</p>
 <ul>
 <li>the 16 byte file system identifier in the superblock</li>
@@ -1032,20 +1023,17 @@ checksum.</p>
 
 <h2 id="direct-and-indirect-blocks"><a class="header" href="#direct-and-indirect-blocks">Direct and indirect blocks</a></h2>
 <p>Direct blocks are blocks that part of the data stream of a file entry.</p>
-<p>A direct block number is 0 that is part of the data stream represents a sparse
-data block.</p>
-<p>Indirect blocks are blocks that refer to blocks containing direct or indirect
-block numbers. There are multiple levels of indirect block:</p>
+<p>A direct block number is 0 that is part of the data stream represents a sparse data block.</p>
+<p>Indirect blocks are blocks that refer to blocks containing direct or indirect block numbers. There
+are multiple levels of indirect block:</p>
 <ul>
 <li>indirect blocks (level 1), that refer to direct blocks</li>
 <li>double indirect blocks (level 2), that refer to indirect blocks</li>
 <li>triple indirect blocks (level 3), that refer to double indirect blocks</li>
 </ul>
-<p>An indirect block number is 0 that is part of the data stream represents sparse
-data blocks.</p>
+<p>An indirect block number is 0 that is part of the data stream represents sparse data blocks.</p>
 <h2 id="extents"><a class="header" href="#extents">Extents</a></h2>
-<p>Extents were introduced in ext4 and are controlled by
-EXT4_FEATURE_INCOMPAT_EXTENTS.</p>
+<p>Extents were introduced in ext4 and are controlled by EXT4_FEATURE_INCOMPAT_EXTENTS.</p>
 <p>Extents form an extent B-Tree, where:</p>
 <ul>
 <li><a href="#ext4_extent_index">extent indexes</a> are stored in the branch nodes and</li>
@@ -1058,9 +1046,8 @@ EXT4_FEATURE_INCOMPAT_EXTENTS.</p>
 <li>extents footer</li>
 </ul>
 <blockquote>
-<p>Note that inodes can have an implicit last sparse extent if the the inode
-data size is greater than the total data size defined by the extent
-descriptors.</p>
+<p>Note that inodes can have an implicit last sparse extent if the the inode data size is greater
+than the total data size defined by the extent descriptors.</p>
 </blockquote>
 <h3 id="ext4_extents_header"><a class="header" href="#ext4_extents_header">The ext4 extents header</a></h3>
 <p>The ext4 extents header (ext4_extent_header) is 12 bytes in size and consists of:</p>
@@ -1096,17 +1083,16 @@ descriptors.</p>
 </table>
 </div>
 
-<p>If number of blocks &gt; 32768 the extent is considered “uninitialized” which is
-(as far as currently known) comparable to extent being sparse. The number of
-blocks of the sparse extent can be determined as following:</p>
+<p>If number of blocks &gt; 32768 the extent is considered “uninitialized” which is (as far as currently
+known) comparable to extent being sparse. The number of blocks of the sparse extent can be
+determined as following:</p>
 <pre><code class="language-python">sparse_number_of_blocks = number_of_blocks - 32768
 </code></pre>
-<p>Sparse extents can exist between the extent descriptors. In such a case the
-logical block number will not align with the information from the previous
-extent descriptors.</p>
+<p>Sparse extents can exist between the extent descriptors. In such a case the logical block number
+will not align with the information from the previous extent descriptors.</p>
 <blockquote>
-<p>Note that the native Linux ext implementation expects the extents to be stored
-in order of logical block number.</p>
+<p>Note that the native Linux ext implementation expects the extents to be stored in order of
+logical block number.</p>
 </blockquote>
 <h3 id="ext4_extent_index"><a class="header" href="#ext4_extent_index">The ext4 extents index</a></h3>
 <p>The ext4 extent index (ext4_extent_idx) is 12 bytes in size and consists of:</p>
@@ -1135,12 +1121,10 @@ in order of logical block number.</p>
 </div>
 
 <h2 id="the-inode"><a class="header" href="#the-inode">The inode</a></h2>
-<p>The size of the inode is defined in the superblock when dynamic inode
-information is present.</p>
+<p>The size of the inode is defined in the superblock when dynamic inode information is present.</p>
 <blockquote>
-<p>Note that the ext4 inode format can be used on ext2 formatted file system.
-This was observed in combination with format revision 1 and inode size &gt; 128
-created by mkfs.ext2.</p>
+<p>Note that the ext4 inode format can be used on ext2 formatted file system. This was observed in
+combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.</p>
 </blockquote>
 <h3 id="the-ext2-inode"><a class="header" href="#the-ext2-inode">The ext2 inode</a></h3>
 <p>The ext2 inode is 128 bytes in size and consists of:</p>
@@ -1203,11 +1187,11 @@ created by mkfs.ext2.</p>
 </div>
 
 <blockquote>
-<p>Note that for a character and block device the first 2 bytes of the array of
-direct block numbers contain the minor and major device number respectively.</p>
+<p>Note that for a character and block device the first 2 bytes of the array of direct block numbers
+contain the minor and major device number respectively.</p>
 </blockquote>
-<p>If the inode size is larger than 128 bytes, the additional data can be stored
-using an ext4 inode extension.</p>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored using an ext4 inode
+extension.</p>
 <h3 id="the-ext3-inode"><a class="header" href="#the-ext3-inode">The ext3 inode</a></h3>
 <p>The ext3 inode is 132 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -1277,11 +1261,11 @@ using an ext4 inode extension.</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that for a character and block device the first 2 bytes of the array of
-direct block numbers contain the minor and major device number respectively.</p>
+<p>Note that for a character and block device the first 2 bytes of the array of direct block numbers
+contain the minor and major device number respectively.</p>
 </blockquote>
-<p>If the inode size is larger than 128 bytes, the additional data can be stored
-using an ext4 inode extension.</p>
+<p>If the inode size is larger than 128 bytes, the additional data can be stored using an ext4 inode
+extension.</p>
 <h3 id="the-ext4-inode"><a class="header" href="#the-ext4-inode">The ext4 inode</a></h3>
 <p>The ext4 inode is 160 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -1398,13 +1382,12 @@ using an ext4 inode extension.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>If checksum type is CRC-32C, the checksum is stored as 0xffffffff - CRC-32C.</p>
 <blockquote>
-<p>Note that for a character and block device the first 2 bytes of the array of
-direct block numbers contain the minor and major device number respectively.</p>
+<p>Note that for a character and block device the first 2 bytes of the array of direct block numbers
+contain the minor and major device number respectively.</p>
 </blockquote>
 <h4 id="checksum-calculation-2"><a class="header" href="#checksum-calculation-2">Checksum calculation</a></h4>
-<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli
-polynomial (0x1edc6f41) and initial value of 0 is used to calculate the
-checksum.</p>
+<p>If checksum type is CRC-32C, the CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and
+initial value of 0 is used to calculate the checksum.</p>
 <p>The checksum is calculated from:</p>
 <ul>
 <li>the 16 byte file system identifier in the superblock</li>
@@ -1429,8 +1412,8 @@ following:</p>
 <pre><code class="language-python">extra_precision_timestamp = (extra_epoch_value * 0x100000000) + timestamp
 </code></pre>
 <h4 id="notes"><a class="header" href="#notes">Notes</a></h4>
-<p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification
-time can contain a valid timestamp.</p>
+<p>It has been observed that when EXT4_EA_INODE_FL is set the (last) modification time can contain a
+valid timestamp.</p>
 <!-- rumdl-disable MD013 -->
 <p>According to <a href="https://docs.kernel.org/filesystems/ext4/overview.html#large-extended-attribute-values">The Linux Kernel documentation</a></p>
 <!-- rumdl-enable MD013 -->
@@ -1604,17 +1587,16 @@ correct one being accessed.</p>
 </div>
 
 <h2 id="inline-data"><a class="header" href="#inline-data">Inline data</a></h2>
-<p>ext4 supports storing file entry data inline when the inode flag
-EXT4_INLINE_DATA_FL is set.</p>
+<p>ext4 supports storing file entry data inline when the inode flag EXT4_INLINE_DATA_FL is set.</p>
 <blockquote>
-<p>Note that inodes can have an implicit last sparse extent if the the inode
-data size is greater than 60 bytes.</p>
+<p>Note that inodes can have an implicit last sparse extent if the the inode data size is greater
+than 60 bytes.</p>
 </blockquote>
 <h2 id="huge_files"><a class="header" href="#huge_files">Huge files</a></h2>
 <p>TODO: complete section</p>
 <h2 id="directory-entries"><a class="header" href="#directory-entries">Directory entries</a></h2>
-<p>Directories entries are stored in the data blocks of a directory inode. The
-directory entries can be stored in multiple ways:</p>
+<p>Directories entries are stored in the data blocks of a directory inode. The directory entries can
+be stored in multiple ways:</p>
 <ul>
 <li>as linear directory entries</li>
 <li>as inline data directory entries</li>
@@ -1646,10 +1628,10 @@ directory entries can be stored in multiple ways:</p>
 </table>
 </div>
 
-<p>Older directory entry structures considered the name size a 16-bit value, but
-the upper byte was never used.</p>
-<p>The name can contain any character value except the path segment separator (‘/’)
-and the NUL-character (‘\0’).</p>
+<p>Older directory entry structures considered the name size a 16-bit value, but the upper byte was
+never used.</p>
+<p>The name can contain any character value except the path segment separator (‘/’) and the
+NUL-character (‘\0’).</p>
 <h4 id="file_types"><a class="header" href="#file_types">File types</a></h4>
 <div class="table-wrapper">
 <table>
@@ -1674,10 +1656,9 @@ and the NUL-character (‘\0’).</p>
 </div>
 
 <h3 id="inline-data-directory-entries"><a class="header" href="#inline-data-directory-entries">Inline data directory entries</a></h3>
-<p>ext4 supports storing the directory entries as inline data when the inode flag
-EXT4_INLINE_DATA_FL is set.</p>
-<p>The inline data directory entries is of variable size, at most 60 bytes, and
-consists of:</p>
+<p>ext4 supports storing the directory entries as inline data when the inode flag EXT4_INLINE_DATA_FL
+is set.</p>
+<p>The inline data directory entries is of variable size, at most 60 bytes, and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1689,9 +1670,9 @@ consists of:</p>
 </div>
 
 <h3 id="hash-tree-directory-entries"><a class="header" href="#hash-tree-directory-entries">Hash tree directory entries</a></h3>
-<p>The data of the hash tree (HTree) is stored in the data blocs or extent defined
-by the directory inode. The hash-indexed directory entries are read-compatible
-with the <a href="#directory_entry">linear directory entry</a>.</p>
+<p>The data of the hash tree (HTree) is stored in the data blocs or extent defined by the directory
+inode. The hash-indexed directory entries are read-compatible with the
+<a href="#directory_entry">linear directory entry</a>.</p>
 <h4 id="hash-tree-root"><a class="header" href="#hash-tree-root">Hash tree root</a></h4>
 <p>The hash tree root consists of:</p>
 <ul>
@@ -1731,11 +1712,10 @@ with the <a href="#directory_entry">linear directory entry</a>.</p>
 };
 </code></pre>
 <h2 id="symbolic-links"><a class="header" href="#symbolic-links">Symbolic links</a></h2>
-<p>If the target path of a symbolic link is less than 60 characters long, it is
-stored in the 60 bytes in the inode that are normally used for the 12 direct
-and 3 indirect block numbers. If the target path is longer than 60 characters,
-a block is allocated, and the block contains the target path. The inode data
-size contains the length of the target path.</p>
+<p>If the target path of a symbolic link is less than 60 characters long, it is stored in the 60 bytes
+in the inode that are normally used for the 12 direct and 3 indirect block numbers. If the target
+path is longer than 60 characters, a block is allocated, and the block contains the target path.
+The inode data size contains the length of the target path.</p>
 <h2 id="extended_attributes"><a class="header" href="#extended_attributes">Extended attributes</a></h2>
 <p>Extended attributes can be stored:</p>
 <ul>
@@ -1751,9 +1731,8 @@ size contains the length of the target path.</p>
 <li>Extended attributes entries with a terminator</li>
 </ul>
 <h3 id="the-extended-attributes-inode-header"><a class="header" href="#the-extended-attributes-inode-header">The extended attributes inode header</a></h3>
-<p>The extended attributes inode header (ext2_xattr_ibody_header,
-ext3_xattr_ibody_header, ext4_xattr_ibody_header) is 4 bytes in size and
-consists of:</p>
+<p>The extended attributes inode header (ext2_xattr_ibody_header, ext3_xattr_ibody_header,
+ext4_xattr_ibody_header) is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1764,8 +1743,8 @@ consists of:</p>
 
 <h3 id="the-extended-attributes-block-header"><a class="header" href="#the-extended-attributes-block-header">The extended attributes block header</a></h3>
 <h4 id="the-ext2-and-ext3-extended-attributes-block-header"><a class="header" href="#the-ext2-and-ext3-extended-attributes-block-header">The ext2 and ext3 extended attributes block header</a></h4>
-<p>The ext2 and ext3 extended attributes block header (ext2_xattr_header,
-ext3_xattr_header) is 32 bytes in size and consists of:</p>
+<p>The ext2 and ext3 extended attributes block header (ext2_xattr_header, ext3_xattr_header) is 32
+bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1783,8 +1762,7 @@ ext3_xattr_header) is 32 bytes in size and consists of:</p>
 </div>
 
 <h4 id="the-ext4-extended-attributes-block-header"><a class="header" href="#the-ext4-extended-attributes-block-header">The ext4 extended attributes block header</a></h4>
-<p>The ext4 extended attributes block header (ext4_xattr_header) is 32 bytes of
-size and consists of:</p>
+<p>The ext4 extended attributes block header (ext4_xattr_header) is 32 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1804,8 +1782,8 @@ size and consists of:</p>
 </div>
 
 <h3 id="the-extended-attributes-entry"><a class="header" href="#the-extended-attributes-entry">The extended attributes entry</a></h3>
-<p>The extended attributes entry (ext2_xattr_entry, ext3_xattr_entry,
-ext4_xattr_entry) is of variable size and consists of:</p>
+<p>The extended attributes entry (ext2_xattr_entry, ext3_xattr_entry, ext4_xattr_entry) is of variable
+size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1828,11 +1806,11 @@ ext4_xattr_entry) is of variable size and consists of:</p>
 </table>
 </div>
 
-<p>The last extended attributes entry has the first 4 values set to 0 (8 bytes)
-and is used as a terminator.</p>
+<p>The last extended attributes entry has the first 4 values set to 0 (8 bytes) and is used as a
+terminator.</p>
 <blockquote>
-<p>Note that some implementations of older Android versions of ext appear to
-only set the first 4 bytes to 0 for the terminator.</p>
+<p>Note that some implementations of older Android versions of ext appear to only set the first 4
+bytes to 0 for the terminator.</p>
 </blockquote>
 <h3 id="the-extended-attribute-name-index"><a class="header" href="#the-extended-attribute-name-index">The extended attribute name index</a></h3>
 <p>The name index indicates the prefix of the extended attribute name.</p>
@@ -1870,8 +1848,7 @@ only set the first 4 bytes to 0 for the terminator.</p>
 </blockquote>
 <h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="file-entry-with-invalid-extents-header-signature"><a class="header" href="#file-entry-with-invalid-extents-header-signature">File entry with invalid extents header signature</a></h3>
-<p>File content inaccessible but file entry metadata and extended attributes
-accessible.</p>
+<p>File content inaccessible but file entry metadata and extended attributes accessible.</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <ul>
 <li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux

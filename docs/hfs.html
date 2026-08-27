@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1156,8 +1156,8 @@ padding is not included in the key data size.</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the characters ‘:’ and U+2400 are stored as ‘/’ and U+0 respectively
-and must be converted before comparision.</p>
+<p>Note that the characters ‘:’ and U+2400 are stored as ‘/’ and U+0 respectively and must be
+converted before comparision.</p>
 </blockquote>
 <h3 id="the-catalog-data"><a class="header" href="#the-catalog-data">The catalog data</a></h3>
 <p>A catalog leaf node can contain four different types of records:</p>
@@ -1644,10 +1644,9 @@ string in the search key is empty. E.g. to list the file entries in a directory:
 <li>use the thread record to look up the file or folder record</li>
 </ol>
 <h3 id="file-forks"><a class="header" href="#file-forks">File forks</a></h3>
-<p>Forks in HFS and HFS+ can be compared to data streams in NTFS. In HFS+ the fork
-values are grouped in a separate fork descriptor structure. HFS+ also defines
-extended attributes (named forks). These are not stored in the catalog file but
-in the attributes file.</p>
+<p>Forks in HFS and HFS+ can be compared to data streams in NTFS. In HFS+ the fork values are grouped
+in a separate fork descriptor structure. HFS+ also defines extended attributes (named forks). These
+are not stored in the catalog file but in the attributes file.</p>
 <h4 id="hfs_plus_fork_descriptor_structure"><a class="header" href="#hfs_plus_fork_descriptor_structure">HFS+ fork descriptor structure</a></h4>
 <p>HFS+ maintains information about file contents using the HFS+ fork descriptor structure
 (HFSPlusForkData).</p>
@@ -1904,8 +1903,8 @@ data record.</p>
 </div>
 
 <blockquote>
-<p>Note that at the moment it is unclear when an attribute record of type
-kHFSPlusAttrExtents is created and how it should be handled.</p>
+<p>Note that at the moment it is unclear when an attribute record of type kHFSPlusAttrExtents is
+created and how it should be handled.</p>
 </blockquote>
 <h4 id="the-inline-data-attribute-record"><a class="header" href="#the-inline-data-attribute-record">The inline data attribute record</a></h4>
 <p>The inline data attribute record is of variable size and consists of:</p>

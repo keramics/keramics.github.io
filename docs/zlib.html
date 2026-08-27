@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,9 +176,9 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="zlib-compressed-data"><a class="header" href="#zlib-compressed-data">Zlib compressed data</a></h1>
-<p>Zlib compression is commonly used in file formats. The zlib compressed data
-format, as defined in RFC1950, allows for multiple techniques but only the
-Deflate compression method, a variation of LZ77, is used.</p>
+<p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
+RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
+LZ77, is used.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
@@ -229,9 +229,8 @@ Deflate compression method, a variation of LZ77, is used.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<p>The check bits value must be such that when the first 2 bytes are represented
-as a 16-bit unsigned integer in big-endian byte order the value is a multiple
-of 31, such that:</p>
+<p>The check bits value must be such that when the first 2 bytes are represented as a 16-bit unsigned
+integer in big-endian byte order the value is a multiple of 31, such that:</p>
 <pre><code class="language-python">((first * 256) + second) % 31 = 0
 </code></pre>
 <h3 id="compression_method"><a class="header" href="#compression_method">Compression method</a></h3>
@@ -253,8 +252,8 @@ of 31, such that:</p>
 <h3 id="compression_information"><a class="header" href="#compression_information">Compression information</a></h3>
 <p>The value of the compression information is dependent on the compression method.</p>
 <h4 id="compression-information---compression-method-8-deflate"><a class="header" href="#compression-information---compression-method-8-deflate">Compression information - compression method 8 (Deflate)</a></h4>
-<p>For compression method 8 (Deflate) the compression information contains the
-base-2 logarithm of the LZ77 window size minus 8.</p>
+<p>For compression method 8 (Deflate) the compression information contains the base-2 logarithm of the
+LZ77 window size minus 8.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -266,9 +265,8 @@ base-2 logarithm of the LZ77 window size minus 8.</p>
 <p>To determine the corresponding window size:</p>
 <pre><code class="language-python">1 &lt;&lt; (7 + 8)
 </code></pre>
-<p>E.g. a compression information value of 7 indicates a 32768 bytes window size.
-Values larger than 7 are not allowed according to RFC1950 and thus the maximum
-window size is 32768 bytes.</p>
+<p>E.g. a compression information value of 7 indicates a 32768 bytes window size. Values larger than 7
+are not allowed according to RFC1950 and thus the maximum window size is 32768 bytes.</p>
 <h3 id="compression_level"><a class="header" href="#compression_level">Compression level</a></h3>
 <div class="table-wrapper">
 <table>
@@ -286,15 +284,14 @@ window size is 32768 bytes.</p>
 
 <h2 id="compressed-data"><a class="header" href="#compressed-data">Compressed data</a></h2>
 <h3 id="deflate_compressed_data"><a class="header" href="#deflate_compressed_data">Deflate compressed data</a></h3>
-<p>The deflate compressed data consists of one or more deflate compressed blocks.
-Each block consists of:</p>
+<p>The deflate compressed data consists of one or more deflate compressed blocks. Each block consists
+of:</p>
 <ul>
 <li>block header</li>
 <li>block data</li>
 </ul>
 <blockquote>
-<p>Note that a block can reference uncompressed data that is stored in a previous
-block.</p>
+<p>Note that a block can reference uncompressed data that is stored in a previous block.</p>
 </blockquote>
 <h4 id="block-header"><a class="header" href="#block-header">Block header</a></h4>
 <p>The block header is 3 bits in size and consists of:</p>
@@ -367,16 +364,16 @@ block.</p>
 </table>
 </div>
 
-<p>A single code size value is 3 bits of size. A value of 0 means the code size is
-not used in the Huffman encoding of the literal and distance codes.</p>
+<p>A single code size value is 3 bits of size. A value of 0 means the code size is not used in the
+Huffman encoding of the literal and distance codes.</p>
 <p>The codes size values are stored in the following sequence:</p>
 <pre><code class="language-text">16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
 </code></pre>
-<p>The first value applies to a code size of 16, the second to 17, etc. Code sizes
-that are not stored default to 0.</p>
-<p>The code size values are used to construct the code sizes Huffman table. This
-must be a complete Huffman table which is used to decode the literal and
-distance codes. The corresponding codes size Huffman encoding is defined as:</p>
+<p>The first value applies to a code size of 16, the second to 17, etc. Code sizes that are not stored
+default to 0.</p>
+<p>The code size values are used to construct the code sizes Huffman table. This must be a complete
+Huffman table which is used to decode the literal and distance codes. The corresponding codes size
+Huffman encoding is defined as:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -391,15 +388,13 @@ distance codes. The corresponding codes size Huffman encoding is defined as:</p>
 </table>
 </div>
 
-<p>Both the literal and distance Huffman codes are stored Huffman encoded using
-the code sizes Huffman table. Code sizes that are not stored default to 0.
-The code size for the literal code 256 (end-of-block) should be set and thus
-not 0.</p>
+<p>Both the literal and distance Huffman codes are stored Huffman encoded using the code sizes Huffman
+table. Code sizes that are not stored default to 0. The code size for the literal code 256
+(end-of-block) should be set and thus not 0.</p>
 <h5 id="encoded-bit-stream"><a class="header" href="#encoded-bit-stream">Encoded bit-stream</a></h5>
-<p>The encoded bit-stream is stored in 8-bit integers, where bit values are stored
-back-to-front. So that 3 least-significant bits (LSB) would represent a 3-bit
-value at the start of the -stream. Note that the LSB of the 3-bit value is the
-LSB of the byte value.</p>
+<p>The encoded bit-stream is stored in 8-bit integers, where bit values are stored back-to-front. So
+that 3 least-significant bits (LSB) would represent a 3-bit value at the start of the -stream. Note
+that the LSB of the 3-bit value is the LSB of the byte value.</p>
 <p>Deflate uses a Huffman tree of 288 Huffman codes (or symbols) where the values:</p>
 <ul>
 <li>0 - 255; represent the literal byte values: 0 - 255</li>
@@ -410,14 +405,13 @@ match length) of 3 - 258 bytes</li>
 the values are still part of the tree</li>
 </ul>
 <p>This document refers to this Huffman tree as the literals Huffman tree.</p>
-<p>The bits in the encoded bit-stream correspond to values in the literals
-Huffman tree. If a symbol is found that represents a compression size and
-offset tuple (or match length code) the bits following the literals symbol
-contains a distance (Huffman) code. The match length coedes might require
-additional (or extra) bits to store the length (or size).</p>
-<p>The distances Huffman tree contains space for 32 symbols. See section
-<a href="#deflate_distance_codes">Distance codes</a>. The distance code might require
-additional (or extra) bits to store the distance.</p>
+<p>The bits in the encoded bit-stream correspond to values in the literals Huffman tree. If a symbol
+is found that represents a compression size and offset tuple (or match length code) the bits
+following the literals symbol contains a distance (Huffman) code. The match length coedes might
+require additional (or extra) bits to store the length (or size).</p>
+<p>The distances Huffman tree contains space for 32 symbols. The
+<a href="#deflate_distance_codes">distance codes</a> might require additional (or extra) bits to store the
+distance.</p>
 <h5 id="literal-codes"><a class="header" href="#literal-codes">Literal codes</a></h5>
 <p>The literal codes consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -606,8 +600,8 @@ additional (or extra) bits to store the distance.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>TODO: complete this section</p>
 <h4 id="additional-bits"><a class="header" href="#additional-bits">Additional bits</a></h4>
-<p>The additional bits are stored in big-endian (MSB first) and indicate the index
-into the corresponding array of size values (or base size + additional size).</p>
+<p>The additional bits are stored in big-endian (MSB first) and indicate the index into the
+corresponding array of size values (or base size + additional size).</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>

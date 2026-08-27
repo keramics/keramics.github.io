@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,8 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="qemu-copy-on-write-qcow-image-file-format"><a class="header" href="#qemu-copy-on-write-qcow-image-file-format">QEMU Copy-On-Write (QCOW) image file format</a></h1>
-<p>The QEMU Copy-On-Write (QCOW) image file format is used by the QEMU Open Source
-Process Emulator to store disk images (storage media)</p>
+<p>The QEMU Copy-On-Write (QCOW) image file format is used by the QEMU Open Source Process Emulator to
+store disk images (storage media)</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A QCOW image file consists of:</p>
 <ul>
@@ -197,13 +197,12 @@ Process Emulator to store disk images (storage media)</p>
 </ul>
 </li>
 </ul>
-<p>The storage media data is stored in clusters. Each cluster is a multitude of
-512 bytes. The level 1 (L1) table contains level 1 reference of level 2 (L2)
-tables. The level 2 tables contain level 2 references of the storage media
-clusters.</p>
-<p>There are multiple versions of the QCOW image file format. QCOW (version 1)
-and QCOW2 (version 2 and later) are sometimes considered even as separate image
-formats. Version 3 is considered as an extended version of QCOW2.</p>
+<p>The storage media data is stored in clusters. Each cluster is a multitude of 512 bytes. The level 1
+(L1) table contains level 1 reference of level 2 (L2) tables. The level 2 tables contain level 2
+references of the storage media clusters.</p>
+<p>There are multiple versions of the QCOW image file format. QCOW (version 1) and QCOW2 (version 2
+and later) are sometimes considered even as separate image formats. Version 3 is considered as an
+extended version of QCOW2.</p>
 <h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
@@ -222,35 +221,32 @@ formats. Version 3 is considered as an extended version of QCOW2.</p>
 </blockquote>
 <p>The number of bytes per sector is 512.</p>
 <h3 id="encryption"><a class="header" href="#encryption">Encryption</a></h3>
-<p>The QCOW image format can encrypted the media data stored in the image format.
-Currently supported encryption methods are:</p>
+<p>The QCOW image format can encrypted the media data stored in the image format. Currently supported
+encryption methods are:</p>
 <ul>
 <li>AES-CBC 128-bit</li>
 <li>Linux Unified Key Setup (LUKS)</li>
 </ul>
-<p>If no encryption is used the encryption method in the file header is set to
-none (0).</p>
+<p>If no encryption is used the encryption method in the file header is set to none (0).</p>
 <blockquote>
-<p>Note it is currently unknown if the format supports compression and encryption
-at the same time. It does not appear to be supported by qemu-img.</p>
+<p>Note it is currently unknown if the format supports compression and encryption at the same time.
+It does not appear to be supported by qemu-img.</p>
 </blockquote>
 <h4 id="aes-cbc-128-bit"><a class="header" href="#aes-cbc-128-bit">AES-CBC 128-bit</a></h4>
 <p>Both encryption and decryption use:</p>
 <ul>
 <li>AES-CBC with a 128-bits key decryption of sector data</li>
 </ul>
-<p>The key is direct copy of the first 16 characters of a user provided (narrow
-character) password. If the password is smaller than 16 characters. The
-remaining key data is set to 0-byte values.</p>
+<p>The key is direct copy of the first 16 characters of a user provided (narrow character) password.
+If the password is smaller than 16 characters. The remaining key data is set to 0-byte values.</p>
 <blockquote>
-<p>Note that it is currently unclear which character sets are allowed and how
-characters outside the 7-bit ASCII set should be handled.</p>
+<p>Note that it is currently unclear which character sets are allowed and how characters outside the
+7-bit ASCII set should be handled.</p>
 </blockquote>
-<p>The initialization vector of the AES-CBC is using media data sector number
-(relative to the start of the disk) in little-endian format as the first 64
-bits of the 128 bit initialization vector. The remaining initialization vector
-data is set to 0-byte values. The first sector number is 0 and the bytes per
-sector are 512.</p>
+<p>The initialization vector of the AES-CBC is using media data sector number (relative to the start
+of the disk) in little-endian format as the first 64 bits of the 128 bit initialization vector. The
+remaining initialization vector data is set to 0-byte values. The first sector number is 0 and the
+bytes per sector are 512.</p>
 <h4 id="linux-unified-key-setup-luks"><a class="header" href="#linux-unified-key-setup-luks">Linux Unified Key Setup (LUKS)</a></h4>
 <p>TODO: complete section</p>
 <h2 id="file-header"><a class="header" href="#file-header">File header</a></h2>
@@ -299,8 +295,7 @@ if media_size % level1_table_entry_size != 0:
 
 level1_table_size *= 8
 </code></pre>
-<p>The backing file name is set in snapshot image files and is normally stored
-after the file header.</p>
+<p>The backing file name is set in snapshot image files and is normally stored after the file header.</p>
 <h3 id="file-header--version-2"><a class="header" href="#file-header--version-2">File header – version 2</a></h3>
 <p>The file header - version 2 is 72 bytes in size and consist of:</p>
 <div class="table-wrapper">
@@ -347,8 +342,7 @@ after the file header.</p>
 <p>The level 1 table size is calculated as:</p>
 <pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
-<p>The backing file name is set in snapshot image files and is normally stored
-after the file header.</p>
+<p>The backing file name is set in snapshot image files and is normally stored after the file header.</p>
 <h3 id="file-header--version-3"><a class="header" href="#file-header--version-3">File header – version 3</a></h3>
 <p>The file header - version 3 is 104 or 112 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -413,8 +407,7 @@ after the file header.</p>
 <p>The level 1 table size is calculated as:</p>
 <pre><code class="language-python">level1_table_size = number_of_level1_table_references * 8
 </code></pre>
-<p>The backing file name is set in snapshot image files and is normally stored
-after the file header.</p>
+<p>The backing file name is set in snapshot image files and is normally stored after the file header.</p>
 <h3 id="encryption-methods"><a class="header" href="#encryption-methods">Encryption methods</a></h3>
 <div class="table-wrapper">
 <table>
@@ -510,8 +503,7 @@ after the file header.</p>
 </div>
 
 <h4 id="backing-format-file-header-extension"><a class="header" href="#backing-format-file-header-extension">Backing format file header extension</a></h4>
-<p>The backing format file header extension header is of variable size and consist
-of:</p>
+<p>The backing format file header extension header is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -523,8 +515,7 @@ of:</p>
 <h4 id="bitmaps-file-header-extension"><a class="header" href="#bitmaps-file-header-extension">Bitmaps file header extension</a></h4>
 <p>TODO: complete section</p>
 <h4 id="crypto-header-file-header-extension"><a class="header" href="#crypto-header-file-header-extension">Crypto header file header extension</a></h4>
-<p>The crypto header file header extension header is 16 bytes in size and consist
-of:</p>
+<p>The crypto header file header extension header is 16 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -549,8 +540,8 @@ of:</p>
 <p>TODO: complete section</p>
 <h2 id="level-1-table"><a class="header" href="#level-1-table">Level 1 table</a></h2>
 <p>The level 1 table contains level 2 table references.</p>
-<p>A reference value of 0 represents unused or unallocated and is considered as
-sparse or stored in a corresponding backing file.</p>
+<p>A reference value of 0 represents unused or unallocated and is considered as sparse or stored in a
+corresponding backing file.</p>
 <h3 id="level-2-table-reference--version-1"><a class="header" href="#level-2-table-reference--version-1">Level 2 table reference – version 1</a></h3>
 <p>The level 2 table reference is 8-bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -577,15 +568,15 @@ sparse or stored in a corresponding backing file.</p>
 </table>
 </div>
 
-<p>The is copied flag indicates that the reference count of the corresponding
-level 2 table is exactly one.</p>
+<p>The is copied flag indicates that the reference count of the corresponding level 2 table is exactly
+one.</p>
 <h2 id="level-2-table"><a class="header" href="#level-2-table">Level 2 table</a></h2>
 <p>The level 2 table contains cluster block references.</p>
 <p>The level 2 table size is calculated as:</p>
 <pre><code class="language-python">level2_table_size = (1 &lt;&lt; number_of_level2_table_bits) * 8
 </code></pre>
-<p>A reference value of 0 represents unused or unallocated and is considered as
-sparse or stored in a corresponding backing file.</p>
+<p>A reference value of 0 represents unused or unallocated and is considered as sparse or stored in a
+corresponding backing file.</p>
 <h3 id="cluster-block-reference--version-1"><a class="header" href="#cluster-block-reference--version-1">Cluster block reference – version 1</a></h3>
 <p>The cluster block reference - version 1 is 8-bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -612,31 +603,14 @@ sparse or stored in a corresponding backing file.</p>
 </table>
 </div>
 
-<p>The is copied flag indicates that the reference count of the corresponding
-cluster block is exactly one.</p>
+<p>The is copied flag indicates that the reference count of the corresponding cluster block is exactly
+one.</p>
 <h2 id="reference-count-table"><a class="header" href="#reference-count-table">Reference count table</a></h2>
-<p>The cluster data blocks are referenced counted. For every cluster data block a
-16-bit reference count is stored in the reference count table.</p>
-<p>The reference count table is stored in cluster block sizes. The file header
-contains the number of blocks (or reference count table clusters).</p>
+<p>The cluster data blocks are referenced counted. For every cluster data block a 16-bit reference
+count is stored in the reference count table.</p>
+<p>The reference count table is stored in cluster block sizes. The file header contains the number of
+blocks (or reference count table clusters).</p>
 <p>TODO: complete section</p>
-<h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
-<pre><code class="language-text">reference count cluster block offset = cluster data block offset /
-reference count table offset = cluster data block /
-
-In order to obtain the reference count of a given cluster, you split the
-cluster offset into a refcount table offset and refcount block offset.
-
-Since a refcount block is a single cluster of 2 byte entries, the lower
-cluster_size - 1 bits is used as the block offset and the rest of the bits are
-used as the table offset.
-
-One optimization is that if any cluster pointed to by an L1 or L2 table entry
-has a refcount exactly equal to one, the most significant bit of the L1/L2
-entry is set as a "copied" flag. This indicates that no snapshots are using
-this cluster and it can be immediately written to without having to make a copy
-for any snapshots referencing it.
-</code></pre>
 <h2 id="cluster-data-block"><a class="header" href="#cluster-data-block">Cluster data block</a></h2>
 <p>To retrieve a cluster data block corresponding a certain storage media offset:</p>
 <p>Determine the level 1 table index from the offset:</p>
@@ -648,33 +622,34 @@ for any snapshots referencing it.
 <p>For version 2 and 3:</p>
 <pre><code class="language-python">level1_table_index = (offset &amp; 0x3fffffffffffffff) &gt;&gt; level1_table_index_bit_shift
 </code></pre>
-<p>Retrieve the level 2 table offset from the level 1 table. If the level 2 table
-offset is 0 and the image has a backing file the cluster data block is stored
-in the backing file otherwise the cluster block is considered sparse.</p>
+<p>Retrieve the level 2 table offset from the level 1 table. If the level 2 table offset is 0 and the
+image has a backing file the cluster data block is stored in the backing file otherwise the cluster
+block is considered sparse.</p>
 <p>Read the corresponding level 2 table.</p>
 <p>Determine the level 2 table index from the offset:</p>
 <pre><code class="language-python">level2_table_index_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_level2_table_bits)
 </code></pre>
 <pre><code class="language-python">level2_table_index = (offset &gt;&gt; number_of_cluster_block_bits) &gt;&gt; level2_table_index_bit_mask
 </code></pre>
-<p>Retrieve the cluster block offset from the level 2 table. If the cluster block
-offset is 0 and the image has a backing file the cluster data block is stored
-in the backing file otherwise the cluster block is considered sparse.</p>
+<p>Retrieve the cluster block offset from the level 2 table. If the cluster block offset is 0 and the
+image has a backing file the cluster data block is stored in the backing file otherwise the cluster
+block is considered sparse.</p>
 <h3 id="uncompressed-cluster-data-block"><a class="header" href="#uncompressed-cluster-data-block">Uncompressed cluster data block</a></h3>
 <p>If the is compressed flag (QCOW_OFLAG_COMPRESSED) is not set:</p>
 <pre><code class="language-python">cluster_block_bit_mask = ~(0xffffffffffffffff &lt;&lt; number_of_cluster_block_bits)
 </code></pre>
 <pre><code class="language-python">cluster_block_data_offset = (offset &amp; cluster_block_bit_mask) + cluster_block_offset
 </code></pre>
-<p>Note that in version 2 or 3 the last cluster block in the file can be smaller than
-the cluster block size defined by the number of cluster block bits in the file
-header. This does not seem to be the case for version 1.</p>
+<blockquote>
+<p>Note that in version 2 or 3 the last cluster block in the file can be smaller than the cluster
+block size defined by the number of cluster block bits in the file header. This does not seem to
+be the case for version 1.</p>
+</blockquote>
 <h3 id="compressed-cluster-data-block"><a class="header" href="#compressed-cluster-data-block">Compressed cluster data block</a></h3>
-<p>If the is compressed flag (QCOW_OFLAG_COMPRESSED) is set the cluster block data
-is stored using the compression method defined by the file header or DEFLATE by
-default.</p>
-<p>Multiple compressed cluster data blocks are stored together in cluster block
-sizes. The compressed cluster data blocks are sector (512 bytes) aligned.</p>
+<p>If the is compressed flag (QCOW_OFLAG_COMPRESSED) is set the cluster block data is stored using the
+compression method defined by the file header or DEFLATE by default.</p>
+<p>Multiple compressed cluster data blocks are stored together in cluster block sizes. The compressed
+cluster data blocks are sector (512 bytes) aligned.</p>
 <p>The compressed data uses a DEFLATE (inflate) window bits value of -12</p>
 <h4 id="compressed-chunk-data-block--version-1"><a class="header" href="#compressed-chunk-data-block--version-1">Compressed chunk data block – version 1</a></h4>
 <pre><code class="language-python">compressed_size_bit_shift = 63 - number_of_cluster_block_bits
@@ -692,22 +667,19 @@ as following:</p>
 <pre><code class="language-python">compressed_block_size = (
     (((cluster_block_offset &amp; 0x3fffffffffffffff) &gt;&gt; compressed_size_bit_shift) + 1) * 512)
 </code></pre>
-<p>Since the compressed block size is stored in 512 byte sectors this value does
-not contain the exact byte size of the compressed cluster block data. It
-sometimes lacks the size of the last partially filled sector and one sector
-should be added if possible within the bounds of the cluster blocks size and
-the file size.</p>
+<p>Since the compressed block size is stored in 512 byte sectors this value does not contain the exact
+byte size of the compressed cluster block data. It sometimes lacks the size of the last partially
+filled sector and one sector should be added if possible within the bounds of the cluster blocks
+size and the file size.</p>
 <pre><code class="language-python">cluster_block_offset &amp;= ~(0xffffffffffffffff &lt;&lt; compressed_size_bit_shift)
 </code></pre>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
-<p>As of version 1 QCOW can use the backing file name in the file header to point
-to a backing file (or parent image) that contains the snapshot image where the
-current image only contains the modifications. Version 2 adds support to store
-snapshot inside the image.</p>
+<p>As of version 1 QCOW can use the backing file name in the file header to point to a backing file
+(or parent image) that contains the snapshot image where the current image only contains the
+modifications. Version 2 adds support to store snapshot inside the image.</p>
 <h3 id="snapshot-header---version-2-or-3"><a class="header" href="#snapshot-header---version-2-or-3">Snapshot header - version 2 or 3</a></h3>
-<p>An in-image snapshot is created by adding a snapshot header, copying the L1
-table and incrementing the reference counts of all L2 tables and data clusters
-referenced by the L1 table.</p>
+<p>An in-image snapshot is created by adding a snapshot header, copying the L1 table and incrementing
+the reference counts of all L2 tables and data clusters referenced by the L1 table.</p>
 <p>The snapshot header is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>

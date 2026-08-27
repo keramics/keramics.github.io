@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -374,8 +374,8 @@ this will be referred to as the section header.</p>
 <p>Note Expert Witness 1.35 (for Windows) does not set the section size.</p>
 </blockquote>
 <blockquote>
-<p>Note that in EnCase 2 DOS version the padding itself does not contains 0-byte
-values but data, probably the memory is not filled with 0-byte values.</p>
+<p>Note that in EnCase 2 DOS version the padding itself does not contains 0-byte values but data,
+probably the memory is not filled with 0-byte values.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
 <h3 id="section-types"><a class="header" href="#section-types">Section types</a></h3>
@@ -630,8 +630,7 @@ line was observed. The number of values in the 3rd and 4th can differ.</p>
 <p>Line 9 consists of 2 values, namely the values are “0 0”.</p>
 <p>Line 10 contains the values defined by line 8.</p>
 <blockquote>
-<p>Note the default values of some of these values has changed around EnCase
-6.12.</p>
+<p>Note the default values of some of these values has changed around EnCase 6.12.</p>
 </blockquote>
 <p>If the “ha” value contains “00000000000000000000000000000000” this means the MD5 hash is not set.
 The same applies for the “sha” value when it contains “0000000000000000000000000000000000000000”
@@ -843,8 +842,8 @@ compression.</p>
 the chunks. This could mean compression level 0 which is no compression.</li>
 </ul>
 <blockquote>
-<p>The SMART format uses the FTK Imager (EWF-E01) specification for this section.
-Note that this could be something FTK Imager specific.</p>
+<p>The SMART format uses the FTK Imager (EWF-E01) specification for this section. Note that this
+could be something FTK Imager specific.</p>
 </blockquote>
 <h4 id="encase-2-and-3-ewf-e01"><a class="header" href="#encase-2-and-3-ewf-e01">EnCase 2 and 3 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
@@ -1050,8 +1049,8 @@ segment files.</li>
 </div>
 
 <blockquote>
-<p>Note as of linen 6.19 the acquire date and time is in UTC and the system date
-and time is in local time. Where as before both values were in local time.</p>
+<p>Note as of linen 6.19 the acquire date and time is in UTC and the system date and time is in
+local time. Where as before both values were in local time.</p>
 </blockquote>
 <p>Also see <a href="#header_values">header values</a></p>
 <h5 id="sources_category2"><a class="header" href="#sources_category2">Sources category</a></h5>
@@ -1161,8 +1160,8 @@ therefore the header looks uncompressed.</li>
 
 <p>Also see <a href="#header_values">header values</a></p>
 <h4 id="encase-5-to-7-ewf-l01-1"><a class="header" href="#encase-5-to-7-ewf-l01-1">EnCase 5 to 7 (EWF-L01)</a></h4>
-<p>The EnCase 4 to 7 (EWF-E01) header section specification is also used for the
-EnCase 5 to 7 (EWF-L01) format, with the following aspects:</p>
+<p>The EnCase 4 to 7 (EWF-E01) header section specification is also used for the EnCase 5 to 7
+(EWF-L01) format, with the following aspects:</p>
 <ul>
 <li>In EnCase 5 both the acquired and system date and time are set to 0.</li>
 <li>In EnCase 6 and 7 both the acquired and system date and time are set to Jan 1, 1970 00:00:00 (the
@@ -1459,8 +1458,8 @@ start of the segment files, except for the first.</li>
 (before version 3.3.3RC16)) the checksum is not calculated and set to 0.</p>
 </blockquote>
 <h3 id="sectors-section"><a class="header" href="#sectors-section">Sectors section</a></h3>
-<p>The sectors section is identified in the section data type field as “sectors”.
-Some aspects of this section are:</p>
+<p>The sectors section is identified in the section data type field as “sectors”. Some aspects of this
+section are:</p>
 <ul>
 <li>Not defined in “ASR Data - E01 Compression Format”.</li>
 <li>Found in EWF-E01 in EnCase 2 to 7, or linen 5 to 7 or FTK Imager, EWF-L01 in EnCase 5 to 7. Not
@@ -1825,8 +1824,8 @@ section header).</p>
 in which version this behavior was changed.</p>
 </blockquote>
 <h3 id="ltypes-section"><a class="header" href="#ltypes-section">Ltypes section</a></h3>
-<p>The ltypes section is identifier in the section data type field as “ltypes”.
-Some aspects of this section are:</p>
+<p>The ltypes section is identifier in the section data type field as “ltypes”. Some aspects of this
+section are:</p>
 <ul>
 <li>Found in EWF-L01 in of EnCase 7</li>
 <li>Found in the last segment file after table2 section before tree section.</li>

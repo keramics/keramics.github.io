@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8499fc6b.js";
+            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-98b8595d.js"></script>
+        <script src="toc-45901c2e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,9 +176,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="virtual-hard-disk-version-2-vhdx-image-format"><a class="header" href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX) image format</a></h1>
-<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft vitualization
-products as one of its image formats. It is both used the store hard disk images
-and snapshots.</p>
+<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft vitualization products as one of
+its image formats. It is both used the store hard disk images and snapshots.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A VHDX image file consist of:</p>
 <ul>
@@ -210,9 +209,8 @@ and snapshots.</p>
 </div>
 
 <p>The number of bytes per sector is 512 or 4096 depending on the logical sector size.</p>
-<h2 id="file-hader"><a class="header" href="#file-hader">File hader</a></h2>
-<p>The file header of (file type identifier) is 64 KiB (65536 bytes) in size and
-consists of:</p>
+<h2 id="file-header"><a class="header" href="#file-header">File header</a></h2>
+<p>The file header of (file type identifier) is 64 KiB (65536 bytes) in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -256,10 +254,10 @@ consists of:</p>
 </div>
 
 <h3 id="checksum-calculation"><a class="header" href="#checksum-calculation">Checksum calculation</a></h3>
-<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial
-value of 0 is used to calculate the checksum.</p>
-<p>The checksum is calculated over the 4 KiB bytes of data of the image header,
-where the image header checkum value is considered to be 0 during calculation.</p>
+<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
+calculate the checksum.</p>
+<p>The checksum is calculated over the 4 KiB bytes of data of the image header, where the image header
+checkum value is considered to be 0 during calculation.</p>
 <h2 id="region-table"><a class="header" href="#region-table">Region table</a></h2>
 <p>The region table is stored in a block of 64 KiB (65536 bytes) and consists of:</p>
 <ul>
@@ -284,10 +282,10 @@ where the image header checkum value is considered to be 0 during calculation.</
 </table>
 </div>
 
-<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial
-value of 0 is used to calculate the checksum.</p>
-<p>The checksum is calculated over the 64 KiB bytes of data of the region table
-where the image header checkum value is considered to be 0 during calculation.</p>
+<p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
+calculate the checksum.</p>
+<p>The checksum is calculated over the 64 KiB bytes of data of the region table where the image header
+checkum value is considered to be 0 during calculation.</p>
 <h3 id="region-table-entry"><a class="header" href="#region-table-entry">Region table entry</a></h3>
 <p>The region table entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -459,8 +457,8 @@ where the image header checkum value is considered to be 0 during calculation.</
 </div>
 
 <h5 id="parent-locator-key-and-value-data"><a class="header" href="#parent-locator-key-and-value-data">Parent locator key and value data</a></h5>
-<p>A parent locator key or value is stored as UCS-2 little-endian string without
-end-of-string character.</p>
+<p>A parent locator key or value is stored as UCS-2 little-endian string without end-of-string
+character.</p>
 <p>Known keys are:</p>
 <div class="table-wrapper">
 <table>
@@ -499,9 +497,8 @@ end-of-string character.</p>
 </div>
 
 <blockquote>
-<p>Note that in contrast to VHD (version 1) the virtual disk identifier does
-not change between a differential image and its parent. The data write
-identifier seems to be used instead.</p>
+<p>Note that in contrast to VHD (version 1) the virtual disk identifier does not change between a
+differential image and its parent. The data write identifier seems to be used instead.</p>
 </blockquote>
 <h4 id="virtual-disk-size-metadata-item"><a class="header" href="#virtual-disk-size-metadata-item">Virtual disk size metadata item</a></h4>
 <p>The virtual disk size metadata item is 8 bytes in size and consists of:</p>
@@ -514,13 +511,13 @@ identifier seems to be used instead.</p>
 </div>
 
 <h2 id="block-allocation-table-bat-region"><a class="header" href="#block-allocation-table-bat-region">Block allocation table (BAT) region</a></h2>
-<p>The block allocation table (BAT) region contains the block allocation table.
-The entries of this table describe the location of either blocks containing
-image content data (or payload blocks) or blocks containing a sector bitmap.</p>
-<p>The size of an individual sector bitmap block is 1 MiB which allows for <code>2^23</code>
-sectors to be represented by the bitmap.</p>
-<p>Block allocation table (BAT) entries are grouped in chunks. The size of a chunk
-can be calculated as following:</p>
+<p>The block allocation table (BAT) region contains the block allocation table. The entries of this
+table describe the location of either blocks containing image content data (or payload blocks) or
+blocks containing a sector bitmap.</p>
+<p>The size of an individual sector bitmap block is 1 MiB which allows for <code>2^23</code> sectors to be
+represented by the bitmap.</p>
+<p>Block allocation table (BAT) entries are grouped in chunks. The size of a chunk can be calculated
+as following:</p>
 <pre><code class="language-python">number_of_entries_per_chunk = (2^23 * logical_sector_size) / block_size
 </code></pre>
 <p>The block allocation table (BAT) consists of:</p>
@@ -590,15 +587,14 @@ MS-VHDX are not used;</li>
 </div>
 
 <h3 id="sector-bitmap"><a class="header" href="#sector-bitmap">Sector bitmap</a></h3>
-<p>In differential disk images the sector bitmap indicates which sectors are stored
-within the image (bit set to 1) or in the parent (bit set to 0).</p>
+<p>In differential disk images the sector bitmap indicates which sectors are stored within the image
+(bit set to 1) or in the parent (bit set to 0).</p>
 <p>The bitmap is stored in a 1 MiB block.</p>
-<p>The bitmap is stored on a per-byte basis with the LSB represents the first bit
-in the bitmap.</p>
+<p>The bitmap is stored on a per-byte basis with the LSB represents the first bit in the bitmap.</p>
 <h2 id="log-metadata-journal"><a class="header" href="#log-metadata-journal">Log (metadata journal)</a></h2>
 <p>TODO: complete section</p>
-<p>The log serves as metadata journal is of variable size and consist of contiguous
-circular (ring) buffer that contains log entries.</p>
+<p>The log serves as metadata journal is of variable size and consist of contiguous circular (ring)
+buffer that contains log entries.</p>
 <h3 id="log-entry"><a class="header" href="#log-entry">Log entry</a></h3>
 <p>TODO: complete section</p>
 <p>4 KiB (4096 bytes) in size</p>
