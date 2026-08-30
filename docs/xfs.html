@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
+            window.path_to_searchindex_js = "searchindex-27eeba56.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-45901c2e.js"></script>
@@ -187,13 +187,11 @@ given.</p>
 
 <tr><td>Date and time values</td><td>number of seconds since January 1, 1970 00:00:00 UTC (POSIX epoch) and fraction of second in number of nanoseconds, or in bigtime (number of nanoseconds since December 13, 1901 20:45:52 UTC)</td></tr>
 
-<tr><td>Character strings</td><td>UTF-8</td></tr>
+<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage</td></tr>
 
 </table>
 </div>
 
-<p>TODO: to confirm if on older systems the character strings is a narrow character (Single Byte
-Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage.</p>
 <h2 id="terminology"><a class="header" href="#terminology">Terminology</a></h2>
 <h3 id="absolute-and-relative-inode-numbers"><a class="header" href="#absolute-and-relative-inode-numbers">Absolute and relative inode numbers</a></h3>
 <p>A relative inode number is an inode number used within a specific allocation group. An absolute
@@ -233,7 +231,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 </li>
 </ul>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
-<p>The XFS superblock (xfs_sb_t) is 208 bytes of size and consists of:</p>
+<p>The XFS superblock (xfs_sb_t) is (at least) 512 bytes of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -252,7 +250,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 
 <tr><td>48</td><td>8</td><td></td><td>Journal block number, which contains a <a href="#file_system_block_number">file system block number</a> or 0 if the journal is stored on a separate device</td></tr>
 
-<tr><td>56</td><td>8</td><td></td><td>Root directory inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
+<tr><td>56</td><td>8</td><td></td><td>Root directory (absolute) inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
 
 <tr><td>64</td><td>8</td><td></td><td>Real-time bitmap extents inode number, which contains -1 (0xffffffffffffffff) if not set</td></tr>
 
@@ -268,7 +266,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 
 <tr><td>96</td><td>4</td><td></td><td>Journal size, in number of blocks</td></tr>
 
-<tr><td>100</td><td>2</td><td></td><td><a href="#version_and_feature_flags">Version and feature flags</a></td></tr>
+<tr><td>100</td><td>2</td><td></td><td><a href="#format_version_and_feature_flags">Format version and feature flags</a></td></tr>
 
 <tr><td>102</td><td>2</td><td></td><td>Sector size (in bytes)</td></tr>
 
@@ -328,7 +326,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 
 <tr><td>188</td><td>4</td><td></td><td>Stripe (or RAID) width, in number of blocks</td></tr>
 
-<tr><td>192</td><td>1</td><td></td><td>Directory block size in log2</td></tr>
+<tr><td>192</td><td>1</td><td></td><td>Directory block size in log2, in number of blocks</td></tr>
 
 <tr><td>193</td><td>1</td><td></td><td>Journal device sector size in log2</td></tr>
 
@@ -360,15 +358,17 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 
 <tr><td>232</td><td>4</td><td></td><td>Project quota inode number</td></tr>
 
-<tr><td>240</td><td>8</td><td></td><td>Journal log sequence number (LSN) of the last superblock update</td></tr>
+<tr><td>236</td><td>8</td><td></td><td>Journal log sequence number (LSN) of the last superblock update</td></tr>
 
 <tr><td colspan="4"><em>Only used if the XFS_SB_FEAT_INCOMPAT_META_UUID incompatible feature flag is set</em></td></tr>
 
-<tr><td>248</td><td>16</td><td></td><td>Metadata identifier, which contains an UUID</td></tr>
+<tr><td>244</td><td>16</td><td></td><td>Metadata identifier, which contains an UUID</td></tr>
 
 <tr><td colspan="4"><em>Only used if the XFS_SB_FEAT_RO_COMPAT_RMAPBT incompatible feature flag is set</em></td></tr>
 
-<tr><td>264</td><td>8</td><td></td><td>Real-time Reverse Mapping B+tree inode number</td></tr>
+<tr><td>260</td><td>8</td><td></td><td>Real-time Reverse Mapping B+tree inode number</td></tr>
+
+<tr><td>268</td><td>244</td><td></td><td>Unknown (empty values)</td></tr>
 
 </table>
 </div>
@@ -378,8 +378,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 <p>Note that the allocation group size and allocation group size in log2 are not necessarily
 equivalent.</p>
 </blockquote>
-<p>TODO: Determine if superblock format version 1 152 bytes in size?</p>
-<h3 id="version_and_feature_flags"><a class="header" href="#version_and_feature_flags">Version and feature flags</a></h3>
+<h3 id="format_version_and_feature_flags"><a class="header" href="#format_version_and_feature_flags">Format version and feature flags</a></h3>
 <p>The 4 LSB contain the version the remaining bits are used to store feature flags.</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -399,7 +398,7 @@ equivalent.</p>
 
 <tr><td colspan="3"><em>Third generation</em></td></tr>
 
-<tr><td>5</td><td>XFS_SB_VERSION_5</td><td>Intoduces in Linux 3.10</td></tr>
+<tr><td>5</td><td>XFS_SB_VERSION_5</td><td>Introduced in Linux 3.10</td></tr>
 
 </table>
 </div>
@@ -647,7 +646,7 @@ equivalent.</p>
 
 <p>TODO: describe sb_uuid or sb_meta_uuid</p>
 <h2 id="inode-information"><a class="header" href="#inode-information">Inode information</a></h2>
-<p>The inode information (xfs_agi_t) is 296 or 336 bytes of size and consists of:</p>
+<p>The inode information (xfs_agi_t) is (at least) 512 bytes of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -672,7 +671,7 @@ equivalent.</p>
 
 <tr><td>36</td><td>4</td><td>-1 (0xffffffff)</td><td>Unknown</td></tr>
 
-<tr><td>40</td><td>64 x 4</td><td></td><td>Hash table of unlinked (deleted) inodes that are still being referenced, which contains -1 (0xffffffff) if not set</td></tr>
+<tr><td>40</td><td>64 x 4</td><td></td><td>Hash table of 32-bit unlinked (deleted) inode numbers that are still being referenced, which contains -1 (0xffffffff) if not set</td></tr>
 
 <tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
 
@@ -687,6 +686,12 @@ equivalent.</p>
 <tr><td>328</td><td>4</td><td></td><td>Free inode B+ tree root block number, which contains a block number relative to the start of the allocation group</td></tr>
 
 <tr><td>332</td><td>4</td><td></td><td>Free inode B+ tree height/depth</td></tr>
+
+<tr><td>336</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>340</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>344</td><td>168</td><td></td><td>Unknown (empty values)</td></tr>
 
 </table>
 </div>
@@ -720,9 +725,9 @@ size and consist of:</p>
 
 <tr><td>6</td><td>2</td><td></td><td>Number of records</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Previous B+ tree block number, which contains a block number relative to the start of the allocation group or -1 (0xffffffff) if not set</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Previous B+ tree block number, which is relative to the start of the allocation group or contains -1 (0xffffffff) if not set</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Next B+ tree block number, which contains a block number relative to the start of the allocation group or -1 (0xffffffff) if not set</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Next B+ tree block number, which is relative to the start of the allocation group or contains -1 (0xffffffff) if not set</td></tr>
 
 <tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
 
@@ -741,7 +746,7 @@ size and consist of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h4 id="btree_block_header_64bit"><a class="header" href="#btree_block_header_64bit">B+ tree block header 64-bit</a></h4>
-<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 68 bytes of size and consist of:</p>
+<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 72 bytes of size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -752,9 +757,9 @@ size and consist of:</p>
 
 <tr><td>6</td><td>2</td><td></td><td>Number of records</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Previous B+ tree block number, which contains -1 (0xffffffff) if not set</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Previous B+ tree block number, which is relative to the start of the allocation group or contains -1 (0xffffffffffffffff) if not set</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Next B+ tree block number, which contains -1 (0xffffffff) if not set</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Next B+ tree block number, which is relative to the start of the allocation group or contains -1 (0xffffffffffffffff) if not set</td></tr>
 
 <tr><td colspan="4"><em>If superblock format version &gt;= 5 (XFS_SB_VERSION_5)</em></td></tr>
 
@@ -768,7 +773,7 @@ size and consist of:</p>
 
 <tr><td>64</td><td>4</td><td></td><td>Checksum</td></tr>
 
-<tr><td>64</td><td>4</td><td>0</td><td>Unknown (padding)</td></tr>
+<tr><td>68</td><td>4</td><td>0</td><td>Unknown (padding)</td></tr>
 
 </table>
 </div>
@@ -781,23 +786,23 @@ size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Signature</th><th>Description</th></thead>
-<tr><td>"AB3B"</td><td>File system version 5 free space block offset B+ tree</td></tr>
+<tr><td>"AB3B"</td><td>Free space block offset B+ tree (file system version 5)</td></tr>
 
-<tr><td>"AB3C"</td><td>File system version 5 free space block count B+ tree</td></tr>
+<tr><td>"AB3C"</td><td>Free space block count B+ tree (file system version 5)</td></tr>
 
 <tr><td>"ABTB"</td><td>Free space block offset B+ tree</td></tr>
 
 <tr><td>"ABTC"</td><td>Free space block count B+ tree</td></tr>
 
-<tr><td>"FIB3"</td><td>File system version 5 free inode B+tree</td></tr>
+<tr><td>"FIB3"</td><td>Free inode B+tree (file system version 5)</td></tr>
 
 <tr><td>"FIBT"</td><td>Free inode B+tree</td></tr>
 
-<tr><td>"IAB3"</td><td>File system version 5 (allocated) inode B+tree</td></tr>
+<tr><td>"IAB3"</td><td>(Allocated) inode B+tree (file system version 5)</td></tr>
 
 <tr><td>"IABT"</td><td>(Allocated) inode B+tree</td></tr>
 
-<tr><td>"R3FC"</td><td>File system version 5 reference count B+ tree</td></tr>
+<tr><td>"R3FC"</td><td>Reference count B+ tree (file system version 5)</td></tr>
 
 </table>
 </div>
@@ -861,7 +866,13 @@ size and consist of:</p>
 </table>
 </div>
 
-<h4 id="inode-b-tree-leaf-node-record"><a class="header" href="#inode-b-tree-leaf-node-record">Inode B+ tree leaf node record</a></h4>
+<h4 id="inode-b-tree-leaf-node"><a class="header" href="#inode-b-tree-leaf-node">Inode B+ tree leaf node</a></h4>
+<p>The inode B+ tree branch node consists of:</p>
+<ul>
+<li>node header</li>
+<li>array of inode B+ tree leaf node entry records</li>
+</ul>
+<h5 id="inode-b-tree-leaf-node-record"><a class="header" href="#inode-b-tree-leaf-node-record">Inode B+ tree leaf node record</a></h5>
 <p>The inode B+ tree leaf node record (xfs_inobt_rec_t) is 16 bytes of size and consist of:</p>
 <div class="table-wrapper">
 <table>
@@ -1231,7 +1242,7 @@ following:</p>
 
 <tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extent_list">an extent list</a></td></tr>
 
-<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extent_btree">an extents B+ tree</a></td></tr>
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extent_btree">an extent B+ tree</a></td></tr>
 
 <tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
 
@@ -1298,9 +1309,12 @@ following:</p>
 </table>
 </div>
 
+<blockquote>
+<p>Note that uninitialized extents are treated as sparse extents when read.</p>
+</blockquote>
 <h3 id="extent_btree"><a class="header" href="#extent_btree">Extent B+ tree</a></h3>
 <h4 id="extent-b-tree-root-node"><a class="header" href="#extent-b-tree-root-node">Extent B+ tree root node</a></h4>
-<p>The root node of the extents B+ tree is stored in the inode and equivalent to
+<p>The root node of the extent B+ tree is stored in the inode and equivalent to
 <a href="#extent_btree_branch_node">an extent B+ tree branch node</a>.</p>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = (node_data_size - 4) / 16
@@ -1309,7 +1323,7 @@ following:</p>
 otherwise the remaining inode block size.</p>
 <h4 id="extent-b-tree-sub-node-block"><a class="header" href="#extent-b-tree-sub-node-block">Extent B+ tree sub node block</a></h4>
 <p>An extent B+ tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
-<p>The inode B+ tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
+<p>The extent B+ tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
 <h5 id="extent-b-tree-sub-node-block-header"><a class="header" href="#extent-b-tree-sub-node-block-header">Extent B+ tree sub node block header</a></h5>
 <p>The sub node block header (xfs_bmbt_block_t) is equivalent to
 <a href="#btree_block_header">B+ tree block header</a>.</p>
@@ -1317,7 +1331,7 @@ otherwise the remaining inode block size.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Signature</th><th>Description</th></thead>
-<tr><td>"BMA3"</td><td>File system version 5 extent B+ tree sub node block</td></tr>
+<tr><td>"BMA3"</td><td>Extent B+ tree sub node block ((file system version 5)</td></tr>
 
 <tr><td>"BMAP"</td><td>Extent B+ tree sub node block</td></tr>
 
@@ -1473,10 +1487,12 @@ set.</p>
 <li>array of block values</li>
 <li>a block footer</li>
 </ul>
-<p>If the XFS_SB_VERSION_DIRV2BIT flag in the superblock is set the directory is stored using
-<a href="#block_directory">a block directory</a>.</p>
-<p>If more than one block is needed to store the extended attributes
+<p>If more than one block is needed to store the directory entries
 <a href="#directory_btree">a directory B+ tree</a> is used.</p>
+<blockquote>
+<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is set the directory is stored
+using <a href="#block_directory">a block directory</a> instead.</p>
+</blockquote>
 <h4 id="directory-leaf-block-header-version-1"><a class="header" href="#directory-leaf-block-header-version-1">Directory (leaf) block header version 1</a></h4>
 <p>A directory (leaf) block header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes of size and consists of:</p>
 <div class="table-wrapper">
@@ -1520,7 +1536,7 @@ version 1.</p>
 </div>
 
 <blockquote>
-<p>Note that s directory (leaf) block entry version 2 (xfs_dir2_leaf_entry_t) is equivalent to
+<p>Note that a directory (leaf) block entry version 2 (xfs_dir2_leaf_entry_t) is equivalent to
 version 1.</p>
 </blockquote>
 <h4 id="directory-leaf-block-values"><a class="header" href="#directory-leaf-block-values">Directory (leaf) block values</a></h4>
@@ -1546,7 +1562,7 @@ version 1.</p>
 </div>
 
 <blockquote>
-<p>Note that s directory (leaf) block footer version 2 (xfs_dir2_leaf_tail_t) is equivalent to
+<p>Note that a directory (leaf) block footer version 2 (xfs_dir2_leaf_tail_t) is equivalent to
 version 1.</p>
 </blockquote>
 <h3 id="block_directory"><a class="header" href="#block_directory">Block directory</a></h3>
@@ -1557,8 +1573,10 @@ version 1.</p>
 <li>hash values of the entries</li>
 <li>a block directory footer</li>
 </ul>
-<p>If the XFS_SB_VERSION_DIRV2BIT flag in the superblock is not set the directory is stored using
-<a href="#directory_leaf_block">a directory (leaf) block</a>.</p>
+<blockquote>
+<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is not set the directory is
+stored using <a href="#directory_leaf_block">a directory (leaf) block</a> instead.</p>
+</blockquote>
 <h4 id="block-directory-header"><a class="header" href="#block-directory-header">Block directory header</a></h4>
 <h5 id="block-directory-header-version-2"><a class="header" href="#block-directory-header-version-2">Block directory header version 2</a></h5>
 <p>The block directory header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist of:</p>
@@ -1573,12 +1591,12 @@ version 1.</p>
 </div>
 
 <h5 id="block-directory-header-version-3"><a class="header" href="#block-directory-header-version-3">Block directory header version 3</a></h5>
-<p>The block directory header version 3 (xfs_dir3_data_hdr_t) is 48 bytes of size and consist of:</p>
+<p>The block directory header version 3 (xfs_dir3_data_hdr_t) is 64 bytes of size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td colspan="4"><em>Block header</em></td></tr>
+<tr><td colspan="4"><em>Block header (xfs_dir3_blk_hdr_t)</em></td></tr>
 
 <tr><td>0</td><td>4</td><td>"XDB3" or "XDD3"</td><td>Signature</td></tr>
 
@@ -1612,11 +1630,11 @@ version 1.</p>
 
 <tr><td>"XD2F"</td><td>Version 2 directory free space B+ tree</td></tr>
 
-<tr><td>"XDB3"</td><td>Version 3 Directory entries B+ tree (single block)</td></tr>
+<tr><td>"XDB3"</td><td>Version 3 directory entries B+ tree (single block)</td></tr>
 
-<tr><td>"XDD3"</td><td>Version 3 Directory entries B+ tree (multi block)</td></tr>
+<tr><td>"XDD3"</td><td>Version 3 directory entries B+ tree (multi block)</td></tr>
 
-<tr><td>"XDF3"</td><td>Version 3 Directory free space B+ tree</td></tr>
+<tr><td>"XDF3"</td><td>Version 3 directory free space B+ tree</td></tr>
 
 </table>
 </div>
@@ -1628,7 +1646,7 @@ version 1.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td></td><td>Free region offset, which is relative to the start of the directory block</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Size</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Free region size</td></tr>
 
 </table>
 </div>
@@ -1668,7 +1686,7 @@ and consists of:</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td>0xffff</td><td>Signature (free tag)</td></tr>
 
-<tr><td>2</td><td>4</td><td></td><td>Entry size, which contains the size of the unused block including the size of the signature and entry size</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Entry size, which contains the size of the unused entry including the size of the signature and entry size</td></tr>
 
 <tr><td>4</td><td>2</td><td></td><td>Unknown (padding)</td></tr>
 
@@ -1696,23 +1714,23 @@ and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Number of directory entries</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Number of used entries</td></tr>
 
 <tr><td>4</td><td>4</td><td></td><td>Number of unused entries</td></tr>
 
 </table>
 </div>
 
-<h3 id="directory_btree"><a class="header" href="#directory_btree">Directory B+ tree</a></h3>
+<h3 id="directory_btree"><a class="header" href="#directory_btree">Directory or attributes B+ tree</a></h3>
 <p>The first block in the extents is the B+ tree root block.</p>
-<h3 id="directory-b-tree-branch-node-block"><a class="header" href="#directory-b-tree-branch-node-block">Directory B+ tree branch node block</a></h3>
-<p>An attributes B+ tree branch node block consist of:</p>
+<h4 id="directory_btree_branch_node_block"><a class="header" href="#directory_btree_branch_node_block">Directory or attributes B+ tree branch node block</a></h4>
+<p>A directory or attributes B+ tree branch node block consist of:</p>
 <ul>
-<li><a href="#directory_branch_node_block_header">a directory branch node block header</a></li>
-<li>array of directory branch node entry</li>
+<li><a href="#directory_branch_node_block_header">a directory or attributes branch node block header</a></li>
+<li>array of directory or attributes branch node entries</li>
 </ul>
-<h4 id="directory_branch_node_block_header"><a class="header" href="#directory_branch_node_block_header">Directory branch node block header</a></h4>
-<p>A directory branch node block header is 16 bytes of size and consist of:</p>
+<h5 id="directory_branch_node_block_header"><a class="header" href="#directory_branch_node_block_header">Directory or attributes branch node block header</a></h5>
+<p>A directory or attributes branch node block header is 16 bytes of size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1725,8 +1743,8 @@ and consists of:</p>
 </table>
 </div>
 
-<h4 id="directory-b-tree-branch-node-block-entry"><a class="header" href="#directory-b-tree-branch-node-block-entry">Directory B+ tree branch node block entry</a></h4>
-<p>A directory B+ tree branch node block entry is 8 bytes of size and consists of:</p>
+<h5 id="directory-or-attributes-b-tree-branch-node-block-entry"><a class="header" href="#directory-or-attributes-b-tree-branch-node-block-entry">Directory or attributes B+ tree branch node block entry</a></h5>
+<p>A directory or attributes B+ tree branch node block entry is 8 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1829,13 +1847,15 @@ system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes of size and consis
 
 <tr><td>0xfbee</td><td>XFS_ATTR_LEAF_MAGIC</td><td>Attributes B+ tree leaf block</td></tr>
 
-<tr><td>0xfebe</td><td>XFS_DA_NODE_MAGIC</td><td>Directory or attributes B+ tree branch block</td></tr>
+<tr><td>0xfebe</td><td>XFS_DA_NODE_MAGIC</td><td>Directory or attributes <a href="#directory_btree_branch_node_block">B+ tree branch block</a></td></tr>
 
 <tr><td>0xfeeb</td><td>XFS_DIR_LEAF_MAGIC</td><td>Directory B+ tree leaf block</td></tr>
 
 </table>
 </div>
 
+<h2 id="symbolic-links"><a class="header" href="#symbolic-links">Symbolic links</a></h2>
+<p>A symbolic link can be maximum 1024 bytes (XFS_SYMLINK_MAXLEN).</p>
 <h2 id="extended-attributes"><a class="header" href="#extended-attributes">Extended attributes</a></h2>
 <p>Extended attributes are stored in the attributes fork of an inode. The extended attributes can be
 stored in multiple ways:</p>
@@ -1850,11 +1870,11 @@ stored in multiple ways:</p>
 short-form attributes table (xfs_attr_shortform) inline in the attribtes fork. The short-form
 attributes table consist of:</p>
 <ul>
-<li>a short-form attribute table header</li>
-<li>one or more short-form attribute table entries</li>
+<li>a short-form attributes table header</li>
+<li>one or more short-form attributes table entries</li>
 </ul>
-<h4 id="the-short-form-attribute-table-header"><a class="header" href="#the-short-form-attribute-table-header">The short-form attribute table header</a></h4>
-<p>The short-form attribute table header (xfs_attr_sf_hdr) is 4 bytes of size and consists of:</p>
+<h4 id="the-short-form-attributes-table-header"><a class="header" href="#the-short-form-attributes-table-header">The short-form attributes table header</a></h4>
+<p>The short-form attributes table header (xfs_attr_sf_hdr) is 4 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1872,7 +1892,7 @@ attributes table consist of:</p>
 of test data.</p>
 </blockquote>
 <h4 id="the-short-form-attribute-entry"><a class="header" href="#the-short-form-attribute-entry">The short-form attribute entry</a></h4>
-<p>The short-form attribute table entry (xfs_attr_sf_entry) is variable of size and consists of:</p>
+<p>The short-form attributes table entry (xfs_attr_sf_entry) is variable of size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

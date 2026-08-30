@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5fcd5d7f.js";
+            window.path_to_searchindex_js = "searchindex-27eeba56.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-45901c2e.js"></script>
@@ -259,7 +259,7 @@ metadata files.</p>
 
 <tr><td>5</td><td>"."</td><td>Root directory</td></tr>
 
-<tr><td>6</td><td>"$Bitmap"</td><td>Cluster block allocation bitmap</td></tr>
+<tr><td>6</td><td>"$Bitmap"</td><td><a href="#cluster_block_allocation_bitmap">Cluster block allocation bitmap</a></td></tr>
 
 <tr><td>7</td><td>"$Boot"</td><td>Boot record (or boot code)</td></tr>
 
@@ -1351,7 +1351,8 @@ attribute.</p>
 </blockquote>
 <p>The index allocation attribute is accompanied by a bitmap attribute with the corresponding
 attribute name. The bitmap attribute defines the allocation of virtual cluster blocks within the
-index allocation attribute data stream.</p>
+index allocation attribute data stream. Every bit in the bitmap represents a block the size of an
+index entry.</p>
 <blockquote>
 <p>Note that the index allocation attribute can be present even though it is not used.</p>
 </blockquote>
@@ -1455,7 +1456,7 @@ in the volume header. The correct size seems to be the value in the index root h
 </div>
 
 <blockquote>
-<p>Note that there can be more fix-up value than supported by the index entry data size.</p>
+<p>Note that there can be more fix-up values than supported by the index entry data size.</p>
 </blockquote>
 <h3 id="the-index-node-header"><a class="header" href="#the-index-node-header">The index node header</a></h3>
 <p>The index node header is 16 bytes in size and consists of:</p>
@@ -2008,8 +2009,8 @@ of:</p>
 </table>
 </div>
 
-<h2 id="the-allocation-bitmap"><a class="header" href="#the-allocation-bitmap">The allocation bitmap</a></h2>
-<p>The metadata file $Bitmap contains the allocation bitmap.</p>
+<h2 id="cluster_block_allocation_bitmap"><a class="header" href="#cluster_block_allocation_bitmap">The cluster block allocation bitmap</a></h2>
+<p>The metadata file $Bitmap contains the cluster block allocation bitmap.</p>
 <p>Every bit in the allocation bitmap represents a block the size of the cluster block, where the LSB
 is the first bit in a byte.</p>
 <p>TODO: describe what the $SRAT data stream is used for.</p>
