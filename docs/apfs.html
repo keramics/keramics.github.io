@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-27eeba56.js";
+            window.path_to_searchindex_js = "searchindex-581b08c5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-45901c2e.js"></script>
@@ -313,9 +313,9 @@ stored.</li>
 
 <tr><td>0x00000001</td><td>OBJECT_TYPE_NX_SUPERBLOCK</td><td><a href="#container_superblock">Container superblock</a></td></tr>
 
-<tr><td>0x00000002</td><td>OBJECT_TYPE_BTREE</td><td>B-Tree (root)</td></tr>
+<tr><td>0x00000002</td><td>OBJECT_TYPE_BTREE</td><td>B-tree (root)</td></tr>
 
-<tr><td>0x00000003</td><td>OBJECT_TYPE_BTREE_NODE</td><td>B-Tree node</td></tr>
+<tr><td>0x00000003</td><td>OBJECT_TYPE_BTREE_NODE</td><td>B-tree node</td></tr>
 
 <tr><td>0x00000004</td><td></td><td>Unknown (MTree?)</td></tr>
 
@@ -414,8 +414,8 @@ stored.</li>
 <h3 id="object_subtypes"><a class="header" href="#object_subtypes">Object subtypes</a></h3>
 <p>The object subtype is used by specific object types such as:</p>
 <ul>
-<li>B-Tree root</li>
-<li>B-Tree node</li>
+<li>B-tree root</li>
+<li>B-tree node</li>
 </ul>
 <p>The object subtypes are the same as the <a href="#object_types">Object types</a>.</p>
 <h2 id="btree"><a class="header" href="#btree">B-tree</a></h2>
@@ -441,7 +441,7 @@ stored.</li>
 <li>Optional B-tree footer, which is only stored in the root node</li>
 </ul>
 <blockquote>
-<p>Note that the Apple File System Reference documentation combines the B-Tree object and B-tree
+<p>Note that the Apple File System Reference documentation combines the B-tree object and B-tree
 node header into a single structure referred to as btree_node_phys_t.</p>
 </blockquote>
 <h4 id="b-tree-root-object-header"><a class="header" href="#b-tree-root-object-header">B-tree root object header</a></h4>
@@ -560,7 +560,7 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>2</td><td></td><td>Key data offset (key_offs), which contains an offset relative to the end of the entries data</td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Value data offset (value_offs), which contains a reversed offset relative to the start of the B-Tree footer</td></tr>
+<tr><td>2</td><td>2</td><td></td><td>Value data offset (value_offs), which contains a reversed offset relative to the start of the B-tree footer</td></tr>
 
 </table>
 </div>
@@ -574,7 +574,7 @@ node header into a single structure referred to as btree_node_phys_t.</p>
 
 <tr><td>2</td><td>2</td><td></td><td>Key data size (key_len), in number of bytes</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>Value data offset (value_offs), which contains a reversed offset relative to the start of the B-Tree footer</td></tr>
+<tr><td>4</td><td>2</td><td></td><td>Value data offset (value_offs), which contains a reversed offset relative to the start of the B-tree footer</td></tr>
 
 <tr><td>6</td><td>2</td><td></td><td>Value data size (value_len), in number of bytes</td></tr>
 
@@ -2529,7 +2529,7 @@ Reference documentation does not indicate how to distinguish between the two, bu
 to compare calculated and stored size of the key data.</p>
 </blockquote>
 <blockquote>
-<p>Note that B-Tree branch nodes are sorted using the case-sensitive name, even when the file system
+<p>Note that B-tree branch nodes are sorted using the case-sensitive name, even when the file system
 is case-insensitive.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
