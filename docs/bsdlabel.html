@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-581b08c5.js";
+            window.path_to_searchindex_js = "searchindex-de1f83da.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-45901c2e.js"></script>
+        <script src="toc-e9f10c98.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -184,7 +184,7 @@
 <p>Note that BSD disklabel originally contained 8 entries for describing partitions and some BSD
 variants have since increased this to 16 partitions.</p>
 </blockquote>
-<p>Labels “a”, “b”, “c” and “d” have a predefined meaning:</p>
+<p>Certain labels have a predefined meaning, such as:</p>
 <ul>
 <li>“a” is the “root” partition</li>
 <li>“b” is the “swap” partition</li>
@@ -272,7 +272,7 @@ partition of type 0xa5 (FreeBSD).</p>
 
 <tr><td>144</td><td>4</td><td></td><td>Maximum superblock size in bytes</td></tr>
 
-<tr><td>148</td><td>number of partitions x 16</td><td></td><td>Array of partition entries</td></tr>
+<tr><td>148</td><td>number of partitions x 16</td><td></td><td>Array of <a href="#partition_entry">partition entries</a></td></tr>
 
 </table>
 </div>
@@ -287,7 +287,6 @@ the number of partitions in use.</p>
 <li>XOR every 16-bit value in the disklabel</li>
 </ul>
 <h3 id="drive_types"><a class="header" href="#drive_types">Drive types</a></h3>
-<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -307,14 +306,13 @@ the number of partitions in use.</p>
 
 <tr><td>8</td><td>DTYPE_HPFL</td><td>HP Fiber-link</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>10</td><td>DTYPE_FLOPPY</td><td>Floppy drive</td></tr>
 
 </table>
 </div>
 
-<!-- rumdl-enable MD033 MD056 -->
 <h3 id="flags"><a class="header" href="#flags">Flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -332,7 +330,7 @@ the number of partitions in use.</p>
 </table>
 </div>
 
-<h3 id="partition-entry"><a class="header" href="#partition-entry">Partition entry</a></h3>
+<h3 id="partition_entry"><a class="header" href="#partition_entry">Partition entry</a></h3>
 <p>The partition entry is 16 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>

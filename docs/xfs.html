@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-581b08c5.js";
+            window.path_to_searchindex_js = "searchindex-de1f83da.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-45901c2e.js"></script>
+        <script src="toc-e9f10c98.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -504,7 +504,7 @@ equivalent.</p>
 </div>
 
 <h3 id="compatible_feature_flags"><a class="header" href="#compatible_feature_flags">Compatible feature flags</a></h3>
-<p>Current no compatible feature flags are defined.</p>
+<p>Currently no compatible feature flags are defined.</p>
 <h3 id="read_only_compatible_feature_flags"><a class="header" href="#read_only_compatible_feature_flags">Read-only compatible feature flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -550,7 +550,7 @@ equivalent.</p>
 </div>
 
 <h3 id="journal_incompatible_feature_flags"><a class="header" href="#journal_incompatible_feature_flags">Journal incompatible feature flags</a></h3>
-<p>Current no journal incompatible feature flags are defined.</p>
+<p>Currently no journal incompatible feature flags are defined.</p>
 <h2 id="free-block-information"><a class="header" href="#free-block-information">Free block information</a></h2>
 <p>The free block information stores references:</p>
 <ul>
@@ -1345,7 +1345,6 @@ otherwise the remaining inode block size.</p>
 <li>array of extent tree branch node entry keys</li>
 <li>array of extent tree branch node entry values</li>
 </ul>
-<p>TODO: number of key-value pairs</p>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 16
 </code></pre>
@@ -1391,8 +1390,10 @@ otherwise the remaining inode block size.</p>
 stored in multiple ways:</p>
 <ul>
 <li>as a short-form directory table</li>
-<li>as an extent-based <a href="#directory_list">directory list</a></li>
-<li>as an extent-based <a href="#directory_tree">directory tree</a></li>
+<li>as an extent-based <a href="#directory_list">directory list</a> if the XFS_SB_VERSION_DIRV2BIT flag in the
+superblock is set</li>
+<li>as an extent-based <a href="#directory_tree">directory tree</a> if the XFS_SB_VERSION_DIRV2BIT flag in the
+superblock is not set</li>
 </ul>
 <h3 id="short-form-directory-table"><a class="header" href="#short-form-directory-table">Short-form directory table</a></h3>
 <p>The short-form directory table (xfs_dir_sf_t or xfs_dir2_sf_t) is stored in the inode (as inline
@@ -1487,10 +1488,6 @@ set.</p>
 <li>hash values of the entries</li>
 <li>a directory list element footer</li>
 </ul>
-<blockquote>
-<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is not set the directory is
-stored using <a href="#directory_tree">a directory tree</a> instead.</p>
-</blockquote>
 <h4 id="directory-list-element-header"><a class="header" href="#directory-list-element-header">Directory list element header</a></h4>
 <h5 id="directory-list-element-header-version-2"><a class="header" href="#directory-list-element-header-version-2">Directory list element header version 2</a></h5>
 <p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist
@@ -1641,10 +1638,6 @@ of:</p>
 
 <h3 id="directory_tree"><a class="header" href="#directory_tree">Directory tree</a></h3>
 <p>The first block in the extents is the root block.</p>
-<blockquote>
-<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is set the directory is stored
-using <a href="#directory_list">a directory list</a> instead.</p>
-</blockquote>
 <h4 id="directory_tree_branch_node"><a class="header" href="#directory_tree_branch_node">Directory tree branch node</a></h4>
 <p>A directory tree branch node consist of:</p>
 <ul>

@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-581b08c5.js";
+            window.path_to_searchindex_js = "searchindex-de1f83da.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-45901c2e.js"></script>
+        <script src="toc-e9f10c98.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -7024,6 +7024,7 @@ its usage is comparable to a volume.</p>
 <li><a href="#linux-logical-volume-manager-lvm-format">Linux Logical Volume Manager (LVM)</a></li>
 <li><a href="#linux-unified-key-setup-luks-disk-encryption-format">Linux Unified Key Setup (LUKS) Disk Encryption</a></li>
 <li><a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR)</a></li>
+<li><a href="#sgi-silicon-graphics-disklabel-format">SGI disklabel (sgilabel)</a></li>
 </ul>
 <p>Also see: <a href="#hybrid-volume-and-file-system-formats">hybrid volume and file system formats</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -7277,7 +7278,7 @@ therefore the first entry in the partition map describes the partition map itsel
 <p>Note that BSD disklabel originally contained 8 entries for describing partitions and some BSD
 variants have since increased this to 16 partitions.</p>
 </blockquote>
-<p>Labels “a”, “b”, “c” and “d” have a predefined meaning:</p>
+<p>Certain labels have a predefined meaning, such as:</p>
 <ul>
 <li>“a” is the “root” partition</li>
 <li>“b” is the “swap” partition</li>
@@ -7365,7 +7366,7 @@ partition of type 0xa5 (FreeBSD).</p>
 
 <tr><td>144</td><td>4</td><td></td><td>Maximum superblock size in bytes</td></tr>
 
-<tr><td>148</td><td>number of partitions x 16</td><td></td><td>Array of partition entries</td></tr>
+<tr><td>148</td><td>number of partitions x 16</td><td></td><td>Array of <a href="#partition_entry">partition entries</a></td></tr>
 
 </table>
 </div>
@@ -7380,7 +7381,6 @@ the number of partitions in use.</p>
 <li>XOR every 16-bit value in the disklabel</li>
 </ul>
 <h3 id="drive_types"><a class="header" href="#drive_types">Drive types</a></h3>
-<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -7400,14 +7400,13 @@ the number of partitions in use.</p>
 
 <tr><td>8</td><td>DTYPE_HPFL</td><td>HP Fiber-link</td></tr>
 
-<tr><td colspan="3"> </td></tr>
+<tr><td></td><td></td><td></td></tr>
 
 <tr><td>10</td><td>DTYPE_FLOPPY</td><td>Floppy drive</td></tr>
 
 </table>
 </div>
 
-<!-- rumdl-enable MD033 MD056 -->
 <h3 id="flags"><a class="header" href="#flags">Flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -7425,7 +7424,7 @@ the number of partitions in use.</p>
 </table>
 </div>
 
-<h3 id="partition-entry"><a class="header" href="#partition-entry">Partition entry</a></h3>
+<h3 id="partition_entry"><a class="header" href="#partition_entry">Partition entry</a></h3>
 <p>The partition entry is 16 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -9691,6 +9690,171 @@ start of the <strong>first</strong> extended partition record.</p>
 </table>
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="sgi-silicon-graphics-disklabel-format"><a class="header" href="#sgi-silicon-graphics-disklabel-format">SGI (Silicon Graphics) disklabel format</a></h1>
+<p>The SGI disklabel format is a partitioning schema mainly used by the SGI Irix operating system.</p>
+<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
+<p>A SGI disklabel consists of one or more partition entries.</p>
+<p>Certain paritions have a predefined meaning, such as:</p>
+<ul>
+<li>entry 9 the volume header (partition type 0);</li>
+<li>entry 11 the entire volume (partition type 6).</li>
+</ul>
+<h3 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td>N/A</td></tr>
+
+<tr><td>Character strings</td><td>ASCII</td></tr>
+
+</table>
+</div>
+
+<p>The number of bytes per sector is 512.</p>
+<h2 id="sgi-disklabel"><a class="header" href="#sgi-disklabel">SGI disklabel</a></h2>
+<p>The SGI disklabel is stored at offset 0.</p>
+<p>The SGI disklabel is 512 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"\x0b\xe5\xa9\x41"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Root partition number</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Swap partition number</td></tr>
+
+<tr><td>8</td><td>16</td><td></td><td>ARCS boot file name, with consists of an ASCII string</td></tr>
+
+<tr><td>24</td><td>48</td><td></td><td>Device parameters</td></tr>
+
+<tr><td>72</td><td>15 x 16 = 240</td><td></td><td>Array of <a href="#volume_descriptor">volume descriptors</a></td></tr>
+
+<tr><td>312</td><td>16 x 12 = 192</td><td></td><td>Array of <a href="#partition_entry-1">partition entries</a></td></tr>
+
+<tr><td>504</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>508</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<h3 id="device-parameters"><a class="header" href="#device-parameters">Device parameters</a></h3>
+<p>The device parameters are 48 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Skew</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Gap 1 size</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td>Gap 2 size</td></tr>
+
+<tr><td>3</td><td>1</td><td></td><td>Number of spare cylinders (per volume)</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Number of (physical) cylinders</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Heads per volume</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Tracks per cylinder</td></tr>
+
+<tr><td>10</td><td>1</td><td></td><td>Unknown (cmd_tag_queue_depth)</td></tr>
+
+<tr><td>11</td><td>3</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Sectors per track</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Unknown (ilfact)</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Unknown (flags)</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Unknown (datarate)</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Unknown (retries_on_error)</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Unknown (ms_per_word)</td></tr>
+
+<tr><td>36</td><td>2</td><td></td><td>Unknown (xylogics_gap1)</td></tr>
+
+<tr><td>38</td><td>2</td><td></td><td>Unknown (xylogics_syncdelay)</td></tr>
+
+<tr><td>40</td><td>2</td><td></td><td>Unknown (xylogics_readdelay)</td></tr>
+
+<tr><td>42</td><td>2</td><td></td><td>Unknown (xylogics_gap2)</td></tr>
+
+<tr><td>44</td><td>2</td><td></td><td>Unknown (xylogics_readgate)</td></tr>
+
+<tr><td>46</td><td>2</td><td></td><td>Unknown (xylogics_writecont)</td></tr>
+
+</table>
+</div>
+
+<h3 id="volume_descriptor"><a class="header" href="#volume_descriptor">Volume descriptor</a></h3>
+<p>The volume descriptor is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Volume name, with consists of an ASCII string</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+</table>
+</div>
+
+<h3 id="partition_entry-1"><a class="header" href="#partition_entry-1">Partition entry</a></h3>
+<p>The partition entry is 12 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Start block number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Partition type</td></tr>
+
+</table>
+</div>
+
+<h3 id="partition-types"><a class="header" href="#partition-types">Partition types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>SGI_VOLHDR</td><td>Volume header</td></tr>
+
+<tr><td>1</td><td>SGI_TRKREPL</td><td>Track Replacements</td></tr>
+
+<tr><td>2</td><td>SGI_SECREPL</td><td>Sector Replacements</td></tr>
+
+<tr><td>3</td><td>SGI_SWAP</td><td>IRIX Swap</td></tr>
+
+<tr><td>4</td><td>SGI_BSD or SGI_RAW</td><td>SGI BSD or raw</td></tr>
+
+<tr><td>5</td><td>SGI_SYSV or SGI_BOARD</td><td>SGI SystemV, board or overlay</td></tr>
+
+<tr><td>6</td><td>SGI_VOLUME</td><td>Entire Volume</td></tr>
+
+<tr><td>7</td><td>SGI_EFS</td><td>IRIX EFS</td></tr>
+
+<tr><td>8</td><td>SGI_LVOL</td><td>SGI Logical Volume</td></tr>
+
+<tr><td>9</td><td>SGI_RVOL</td><td>SGI raw logical volume</td></tr>
+
+<tr><td>10</td><td>SGI_XFS</td><td>XFS</td></tr>
+
+<tr><td>11</td><td>SGI_XFSLOG</td><td>XFS journal</td></tr>
+
+<tr><td>12</td><td>SGI_XLV</td><td>SGI XLV Volume Manager</td></tr>
+
+<tr><td>13</td><td>SGI_XVM</td><td>SGI XVM Volume Manager</td></tr>
+
+</table>
+</div>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
 <p>A file system format is used to manage the storage of files.</p>
 <h2 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h2>
@@ -9727,13 +9891,13 @@ sectors. Can be compressed, encrypted or sparse.</li>
 System Compression (decmpfs) to compress file contents.</p>
 <p>decmpfs is sometimes referred to as AFSC (Apple File System Compression) or HFS/HFS+ compression
 and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
-<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
+<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
 <li>compressed file content data</li>
 </ul>
-<h3 id="characteristics-15"><a class="header" href="#characteristics-15">Characteristics</a></h3>
+<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -10006,12 +10170,12 @@ otherwise the block should start with 0x78.</p>
 </table>
 </div>
 
-<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
 <p>An Extended File System (ext) consists of:</p>
 <ul>
 <li>one or more block groups</li>
 </ul>
-<h3 id="characteristics-16"><a class="header" href="#characteristics-16">Characteristics</a></h3>
+<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -11672,7 +11836,7 @@ kernel documentation</li>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
 <p>The Extensible File Allocation Table (exFAT) file system format is a successor of the
 <a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a> file system format.</p>
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
 <li>Main boot region (11 sectors)
@@ -11708,7 +11872,7 @@ kernel documentation</li>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
+<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12189,7 +12353,7 @@ and Windows.</p>
 <li>FAT-32</li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">exFAT</a></li>
 </ul>
-<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
+<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
 <p>A FAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -12205,7 +12369,7 @@ and Windows.</p>
 <blockquote>
 <p>Note that FAT-32 stores the root directory as part of the file and directory data.</p>
 </blockquote>
-<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
+<h3 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12842,7 +13006,7 @@ OS 10.0 or later.</p>
 HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
 case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
 volume.</p>
-<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
+<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
@@ -12874,7 +13038,7 @@ volume.</p>
 <li>optional backup (or alternate) <a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h4 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h4>
+<h4 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -15119,7 +15283,7 @@ by Apple Inc.</li>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
 <p>The Macintosh File System (MFS) is the first file system created for Mac OS, intended for 400 KiB
 floppy disks.</p>
-<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
+<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
 <p>A MFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">boot block</a></li>
@@ -15129,7 +15293,7 @@ floppy disks.</p>
 <li>optional backup (or alternate) <a href="#master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h3 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h3>
+<h3 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -15377,7 +15541,7 @@ multiple blocks</li>
 <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for Microsoft Windows
 versions that are based on Windows NT.</p>
-<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
+<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -15385,7 +15549,7 @@ versions that are based on Windows NT.</p>
 <li>Master File Table (MFT)</li>
 <li>Mirror Master File Table (MFT)</li>
 </ul>
-<h3 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h3>
+<h3 id="characteristics-22"><a class="header" href="#characteristics-22">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -18085,7 +18249,7 @@ by Microsoft</li>
 <p>The X File System (XFS) is a file system that originates from SGI but is used in various Linux
 distributions like RHEL. Some sources indicate that X was a a placeholder for a name that never
 given.</p>
-<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
+<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -18410,7 +18574,7 @@ equivalent.</p>
 </div>
 
 <h3 id="compatible_feature_flags-1"><a class="header" href="#compatible_feature_flags-1">Compatible feature flags</a></h3>
-<p>Current no compatible feature flags are defined.</p>
+<p>Currently no compatible feature flags are defined.</p>
 <h3 id="read_only_compatible_feature_flags-1"><a class="header" href="#read_only_compatible_feature_flags-1">Read-only compatible feature flags</a></h3>
 <div class="table-wrapper">
 <table>
@@ -18456,7 +18620,7 @@ equivalent.</p>
 </div>
 
 <h3 id="journal_incompatible_feature_flags"><a class="header" href="#journal_incompatible_feature_flags">Journal incompatible feature flags</a></h3>
-<p>Current no journal incompatible feature flags are defined.</p>
+<p>Currently no journal incompatible feature flags are defined.</p>
 <h2 id="free-block-information"><a class="header" href="#free-block-information">Free block information</a></h2>
 <p>The free block information stores references:</p>
 <ul>
@@ -19251,7 +19415,6 @@ otherwise the remaining inode block size.</p>
 <li>array of extent tree branch node entry keys</li>
 <li>array of extent tree branch node entry values</li>
 </ul>
-<p>TODO: number of key-value pairs</p>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 16
 </code></pre>
@@ -19297,8 +19460,10 @@ otherwise the remaining inode block size.</p>
 stored in multiple ways:</p>
 <ul>
 <li>as a short-form directory table</li>
-<li>as an extent-based <a href="#directory_list">directory list</a></li>
-<li>as an extent-based <a href="#directory_tree">directory tree</a></li>
+<li>as an extent-based <a href="#directory_list">directory list</a> if the XFS_SB_VERSION_DIRV2BIT flag in the
+superblock is set</li>
+<li>as an extent-based <a href="#directory_tree">directory tree</a> if the XFS_SB_VERSION_DIRV2BIT flag in the
+superblock is not set</li>
 </ul>
 <h3 id="short-form-directory-table"><a class="header" href="#short-form-directory-table">Short-form directory table</a></h3>
 <p>The short-form directory table (xfs_dir_sf_t or xfs_dir2_sf_t) is stored in the inode (as inline
@@ -19393,10 +19558,6 @@ set.</p>
 <li>hash values of the entries</li>
 <li>a directory list element footer</li>
 </ul>
-<blockquote>
-<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is not set the directory is
-stored using <a href="#directory_tree">a directory tree</a> instead.</p>
-</blockquote>
 <h4 id="directory-list-element-header"><a class="header" href="#directory-list-element-header">Directory list element header</a></h4>
 <h5 id="directory-list-element-header-version-2"><a class="header" href="#directory-list-element-header-version-2">Directory list element header version 2</a></h5>
 <p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist
@@ -19547,10 +19708,6 @@ of:</p>
 
 <h3 id="directory_tree"><a class="header" href="#directory_tree">Directory tree</a></h3>
 <p>The first block in the extents is the root block.</p>
-<blockquote>
-<p>Note that if the XFS_SB_VERSION_DIRV2BIT flag in the superblock is set the directory is stored
-using <a href="#directory_list">a directory list</a> instead.</p>
-</blockquote>
 <h4 id="directory_tree_branch_node"><a class="header" href="#directory_tree_branch_node">Directory tree branch node</a></h4>
 <p>A directory tree branch node consist of:</p>
 <ul>
@@ -20102,7 +20259,7 @@ blocks.</p>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
 iOS. APFS supersedes the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
-<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
+<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
 <p>APFS consists of:</p>
 <ul>
 <li>A container
@@ -20111,7 +20268,7 @@ Sierra (10.13) and iOS 10.3.</p>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-22"><a class="header" href="#characteristics-22">Characteristics</a></h3>
+<h3 id="characteristics-23"><a class="header" href="#characteristics-23">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -23053,7 +23210,7 @@ by Apple</li>
 <p>The property list (plist) formats are used to store various kinds of data, for example
 configuration data. The format is know to be used stand-alone as well as embedded in other data
 formats.</p>
-<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
+<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -23272,14 +23429,14 @@ of 1 will refer to the first object in the (object) offset table.</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
 RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
 LZ77, is used.</p>
-<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
+<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-23"><a class="header" href="#characteristics-23">Characteristics</a></h3>
+<h3 id="characteristics-24"><a class="header" href="#characteristics-24">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>

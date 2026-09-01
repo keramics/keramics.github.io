@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Expert Witness Compression Format version 2 (EWF2) - Keramics data format specifications</title>
+        <title>SGI disklabel (sgilabel) - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -175,18 +175,180 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="expert-witness-compression-format-version-2-ewf2"><a class="header" href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2 (EWF2)</a></h1>
-<p>TODO: add description</p>
+                        <h1 id="sgi-silicon-graphics-disklabel-format"><a class="header" href="#sgi-silicon-graphics-disklabel-format">SGI (Silicon Graphics) disklabel format</a></h1>
+<p>The SGI disklabel format is a partitioning schema mainly used by the SGI Irix operating system.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>A SGI disklabel consists of one or more partition entries.</p>
+<p>Certain paritions have a predefined meaning, such as:</p>
+<ul>
+<li>entry 9 the volume header (partition type 0);</li>
+<li>entry 11 the entire volume (partition type 6).</li>
+</ul>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+<tr><td>Date and time values</td><td>N/A</td></tr>
+
+<tr><td>Character strings</td><td>ASCII</td></tr>
+
+</table>
+</div>
+
+<p>The number of bytes per sector is 512.</p>
+<h2 id="sgi-disklabel"><a class="header" href="#sgi-disklabel">SGI disklabel</a></h2>
+<p>The SGI disklabel is stored at offset 0.</p>
+<p>The SGI disklabel is 512 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td>"\x0b\xe5\xa9\x41"</td><td>Signature</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Root partition number</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Swap partition number</td></tr>
+
+<tr><td>8</td><td>16</td><td></td><td>ARCS boot file name, with consists of an ASCII string</td></tr>
+
+<tr><td>24</td><td>48</td><td></td><td>Device parameters</td></tr>
+
+<tr><td>72</td><td>15 x 16 = 240</td><td></td><td>Array of <a href="#volume_descriptor">volume descriptors</a></td></tr>
+
+<tr><td>312</td><td>16 x 12 = 192</td><td></td><td>Array of <a href="#partition_entry">partition entries</a></td></tr>
+
+<tr><td>504</td><td>4</td><td></td><td>Checksum</td></tr>
+
+<tr><td>508</td><td>4</td><td></td><td>Unknown (padding)</td></tr>
+
+</table>
+</div>
+
+<h3 id="device-parameters"><a class="header" href="#device-parameters">Device parameters</a></h3>
+<p>The device parameters are 48 bytes of size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Skew</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Gap 1 size</td></tr>
+
+<tr><td>2</td><td>1</td><td></td><td>Gap 2 size</td></tr>
+
+<tr><td>3</td><td>1</td><td></td><td>Number of spare cylinders (per volume)</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Number of (physical) cylinders</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Heads per volume</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Tracks per cylinder</td></tr>
+
+<tr><td>10</td><td>1</td><td></td><td>Unknown (cmd_tag_queue_depth)</td></tr>
+
+<tr><td>11</td><td>3</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Sectors per track</td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Unknown (ilfact)</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Unknown (flags)</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Unknown (datarate)</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Unknown (retries_on_error)</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Unknown (ms_per_word)</td></tr>
+
+<tr><td>36</td><td>2</td><td></td><td>Unknown (xylogics_gap1)</td></tr>
+
+<tr><td>38</td><td>2</td><td></td><td>Unknown (xylogics_syncdelay)</td></tr>
+
+<tr><td>40</td><td>2</td><td></td><td>Unknown (xylogics_readdelay)</td></tr>
+
+<tr><td>42</td><td>2</td><td></td><td>Unknown (xylogics_gap2)</td></tr>
+
+<tr><td>44</td><td>2</td><td></td><td>Unknown (xylogics_readgate)</td></tr>
+
+<tr><td>46</td><td>2</td><td></td><td>Unknown (xylogics_writecont)</td></tr>
+
+</table>
+</div>
+
+<h3 id="volume_descriptor"><a class="header" href="#volume_descriptor">Volume descriptor</a></h3>
+<p>The volume descriptor is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Volume name, with consists of an ASCII string</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+</table>
+</div>
+
+<h3 id="partition_entry"><a class="header" href="#partition_entry">Partition entry</a></h3>
+<p>The partition entry is 12 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of blocks</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Start block number</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Partition type</td></tr>
+
+</table>
+</div>
+
+<h3 id="partition-types"><a class="header" href="#partition-types">Partition types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>SGI_VOLHDR</td><td>Volume header</td></tr>
+
+<tr><td>1</td><td>SGI_TRKREPL</td><td>Track Replacements</td></tr>
+
+<tr><td>2</td><td>SGI_SECREPL</td><td>Sector Replacements</td></tr>
+
+<tr><td>3</td><td>SGI_SWAP</td><td>IRIX Swap</td></tr>
+
+<tr><td>4</td><td>SGI_BSD or SGI_RAW</td><td>SGI BSD or raw</td></tr>
+
+<tr><td>5</td><td>SGI_SYSV or SGI_BOARD</td><td>SGI SystemV, board or overlay</td></tr>
+
+<tr><td>6</td><td>SGI_VOLUME</td><td>Entire Volume</td></tr>
+
+<tr><td>7</td><td>SGI_EFS</td><td>IRIX EFS</td></tr>
+
+<tr><td>8</td><td>SGI_LVOL</td><td>SGI Logical Volume</td></tr>
+
+<tr><td>9</td><td>SGI_RVOL</td><td>SGI raw logical volume</td></tr>
+
+<tr><td>10</td><td>SGI_XFS</td><td>XFS</td></tr>
+
+<tr><td>11</td><td>SGI_XFSLOG</td><td>XFS journal</td></tr>
+
+<tr><td>12</td><td>SGI_XLV</td><td>SGI XLV Volume Manager</td></tr>
+
+<tr><td>13</td><td>SGI_XVM</td><td>SGI XVM Volume Manager</td></tr>
+
+</table>
+</div>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="ewf.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="mbr.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="cdsaencr.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="file_system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -196,11 +358,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="ewf.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="mbr.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="cdsaencr.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="file_system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
