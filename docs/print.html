@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de1f83da.js";
+            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e9f10c98.js"></script>
+        <script src="toc-be09e687.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -7006,14 +7006,15 @@ by VMWare</li>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="volume-system-formats"><a class="header" href="#volume-system-formats">Volume system formats</a></h1>
 <p>A volume (or logical drive) is a single continous accessible storage area, typically containing a
-file system. A volume system format is used to manage the storage of one or more volumes.</p>
+file system. A volume system is used to manage the storage of one or more volumes.</p>
 <p>A partition is a part of (typically) storage media. A partition is different conceptually, but
 its usage is comparable to a volume.</p>
 <p>This documentation uses the term volume systems in a broad sense to describe:</p>
 <ul>
 <li>encrypted volumes;</li>
 <li>logical volume managers;</li>
-<li>and partitioning schemes.</li>
+<li>partitioning schemes;</li>
+<li>and volume snapshots.</li>
 </ul>
 <h2 id="formats-1"><a class="header" href="#formats-1">Formats</a></h2>
 <ul>
@@ -9712,9 +9713,8 @@ start of the <strong>first</strong> extended partition record.</p>
 </table>
 </div>
 
-<p>The number of bytes per sector is 512.</p>
 <h2 id="sgi-disklabel"><a class="header" href="#sgi-disklabel">SGI disklabel</a></h2>
-<p>The SGI disklabel is stored at offset 0.</p>
+<p>The SGI disklabel (or volume header) is stored at offset 0.</p>
 <p>The SGI disklabel is 512 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -9793,15 +9793,17 @@ start of the <strong>first</strong> extended partition record.</p>
 </div>
 
 <h3 id="volume_descriptor"><a class="header" href="#volume_descriptor">Volume descriptor</a></h3>
+<p>The volume descriptors contain a flat file system, where each individual descriptor describes a
+execute boot file. These execute boot files are stored within the volume header partition.</p>
 <p>The volume descriptor is 16 bytes of size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Volume name, with consists of an ASCII string</td></tr>
+<tr><td>0</td><td>8</td><td></td><td>File name, with consists of an ASCII string</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Start sector number, relative to the start of the volume header partition</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Size, in number of bytes</td></tr>
 
 </table>
 </div>
@@ -9811,9 +9813,9 @@ start of the <strong>first</strong> extended partition record.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td>Number of blocks</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Number of sectors, relative to the start of the SGI disklabel</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Start block number</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Start sector number</td></tr>
 
 <tr><td>8</td><td>4</td><td></td><td>Partition type</td></tr>
 
@@ -9855,6 +9857,579 @@ start of the <strong>first</strong> extended partition record.</p>
 </table>
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="volume-shadow-snapshot-volsnap-format"><a class="header" href="#volume-shadow-snapshot-volsnap-format">Volume Shadow Snapshot (volsnap) format</a></h1>
+<p>As of Windows Vista the Volume Shadow Snapshot (VSS) stores persistent shadow copies on the local
+NTFS volume.</p>
+<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<p>According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a volume. A shadow
+copy can be part of a set which contains a collection of shadow copies of various volumes, taken at
+the same time.</p>
+<p>Volume Shadow Snapshot (VSS) can use different providers to store shadow copies, this document
+focuses on the “Microsoft Software Shadow Copy provider 1.0” (GUID:
+b5946137-7b9f-4925-af80-51abd60b20d5) and will refer to it as volsnap. The volsnap provider stores
+the copies on the local volume using 16 KiB blocks.</p>
+<p>Volsnap uses the GUID 3808876b-c176-4e48-b7ae-04046e6cc752 to identify its data or metadata files.
+It leverages several metadata files in “\System Volume Information” directory:</p>
+<ul>
+<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
+<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+</ul>
+<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and
+%GUID% contains a time/MAC based GUID.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+<tr><td>Date and time values</td><td>FILETIME in UTC</td></tr>
+
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+
+</table>
+</div>
+
+<h2 id="volume-header-1"><a class="header" href="#volume-header-1">Volume header</a></h2>
+<p>The volsnap volume header is part of the NTFS volume header (or $Boot metadata file). The volsnap
+volume header data is stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in
+size, but presumably 512 bytes, and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Format version</td></tr>
+
+<tr><td>20</td><td>4</td><td>0x01</td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td>0x1e00</td><td>Current offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (Next offset?), which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Unknown (empty value)</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Catalog offset, which is relative to the start of the volume or contains 0 if there is no catalog</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Maximum size, in number of bytes or contains 0 if unbounded</td></tr>
+
+<tr><td>64</td><td>16</td><td></td><td>Volume identifierwhich contains a GUID</td></tr>
+
+<tr><td>80</td><td>16</td><td></td><td>Shadow copy storage volume identifier, which contains a GUID</td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>100</td><td>412</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h3 id="version"><a class="header" href="#version">Version</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>Windows Vista, Windows 7</td></tr>
+
+<tr><td>2</td><td></td><td>Windows 8</td></tr>
+
+</table>
+</div>
+
+<h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
+<p>The catalog contains information about the individual stores. The catalog consists of one or more
+catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists of:</p>
+<ul>
+<li>catalog block header</li>
+<li>an array of catalog entries</li>
+</ul>
+<p>The volsnap catalog metadata files contains the catalog blocks stored directly after one-and-other.</p>
+<p>If the volume does not contain a catalog when there are no snapshots (stored) but volsnap is
+enabled.</p>
+<h3 id="catalog-block-header"><a class="header" href="#catalog-block-header">Catalog block header</a></h3>
+<p>The catalog block header is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+
+<tr><td>20</td><td>4</td><td>0x02</td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Relative (catalog block) offset, which is relative to the start of the first catalog block</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Current (catalog block) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Next (catalog block) offset, which is relative to the start of the volume or contains 0 if this is the last block</td></tr>
+
+<tr><td>48</td><td>80</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h3 id="catalog-entry"><a class="header" href="#catalog-entry">Catalog entry</a></h3>
+<p>Each catalog entry consists of a catalog entry type 0x02. A corresponding type 0x03 is required if
+the shadow copy is stored in a store, which is the case as of Windows Vista.</p>
+<blockquote>
+<p>Note that a Windows 2003 R2 catalog does not contain catalog entry type 0x03.</p>
+</blockquote>
+<p>TODO: Determine how Windows 2003 R2 volumes store the snapshot data</p>
+<p>The type 0x02 and type 0x03 entries are not necessarily stored directly after one-and-other and can
+be scattered over the catalog. For now it is assumed that entry type 0x02 must be defined before
+entry type 0x03.</p>
+<p>Also these entries are not necessarily stored in order of age.</p>
+<p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
+entirely of 0-bytes.</p>
+<h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
+<p>An unused catalog entry (type 0x01) is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x01</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>120</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
+<p>A catalog entry type 0x02 is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x02</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Volume size</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID that is used in the store filename</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Unknown (Sequence number)</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Unknown (Flags?), seen 0x40 in Windows in Vista and 7 and 0x440 in Windows 8 (file backup?)</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Shadow copy creation time, which contains a FILETIME</td></tr>
+
+<tr><td>56</td><td>72</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
+<p>A catalog entry type 0x03 is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x03</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Store block list offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID, that is used in the store filename</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Store header offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Store block range list offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Store (current) bitmap offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>NTFS (metadata) file reference</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Unknown (Allocated size)</td></tr>
+
+<tr><td>72</td><td>8</td><td></td><td>Store previous bitmap offset, which is relative to the start of the volume or contains 0 if not used</td></tr>
+
+<tr><td>80</td><td>8</td><td></td><td>Unknown (store index?)</td></tr>
+
+<tr><td>88</td><td>40</td><td></td><td>Unknown (empty)</td></tr>
+
+</table>
+</div>
+
+<h2 id="store"><a class="header" href="#store">Store</a></h2>
+<p>The store contains information about the shadow volume; it actually contains copies of previous
+versions of data blocks on the volume.</p>
+<p>The stores must be applied starting with the most recent on top of the current volume. E.g. if
+there are 3 stores and we want to access the state of the oldest (number 1) we must first apply the
+changes in store 3 over the current volume, the changes in store 2 over the resulting volume, and
+finally the changes in store 1 over the resulting volume.</p>
+<p>The store consists of:</p>
+<ul>
+<li>store header</li>
+<li>store block list</li>
+<li>store block range list</li>
+<li>store bitmaps</li>
+<li>data blocks</li>
+</ul>
+<h3 id="store-block-header"><a class="header" href="#store-block-header">Store block header</a></h3>
+<p>The store block header is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Relative (block) offset, which is relative to the start of the store</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Current (block) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Next (block) offset, which is relative to the start of the volume or contains 0 if this is the last block</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Size of store information, whichis only used in first block header and should be 0 in successive block headers</td></tr>
+
+<tr><td>56</td><td>72</td><td></td><td>Unknown (empty value)</td></tr>
+
+</table>
+</div>
+
+<h4 id="store-block-record-types"><a class="header" href="#store-block-record-types">Store block record types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x0001</td><td></td><td>Volume header</td></tr>
+
+<tr><td>0x0002</td><td></td><td>Catalog block header</td></tr>
+
+<tr><td>0x0003</td><td></td><td>Block descriptor list (Diff area table)</td></tr>
+
+<tr><td>0x0004</td><td></td><td>Store header</td></tr>
+
+<tr><td>0x0005</td><td></td><td>Unknown (Store block ranges list)</td></tr>
+
+<tr><td>0x0006</td><td></td><td>Store bitmap</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-information"><a class="header" href="#store-information">Store information</a></h3>
+<p>The store information is stored directly after the store header.</p>
+<p>The store information is variable of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Unknown (identifier?), which contains a GUID</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Shadow copy identifier, which contains a GUID</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>Shadow copy set identifier, which contains a GUID</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td><a href="#store_snapshot_context">Snapshot context</a></td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Unknown (Provider?)</td></tr>
+
+<tr><td>56</td><td>4</td><td></td><td><a href="#store_attribute_flags">Attribute flags</a></td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>64</td><td>2</td><td></td><td>Operating machine string size, in number of bytes</td></tr>
+
+<tr><td>66</td><td>(size)</td><td></td><td>Operating machine string, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>2</td><td></td><td>Service machine string size, in number of bytes</td></tr>
+
+<tr><td>...</td><td>(size)</td><td></td><td>Service machine string, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (empty value)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the difference between the operating machine and the service machine is currently
+unknown.</p>
+</blockquote>
+<h4 id="store_snapshot_context"><a class="header" href="#store_snapshot_context">Store snapshot context</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000000</td><td>VSS_CTX_BACKUP (or Backup)</td><td>Standard backup context</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000009</td><td>VSS_CTX_APP_ROLLBACK (or ApplicationRollback)</td><td>Persistent shadow copy</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0000000d</td><td>VSS_CTX_CLIENT_ACCESSIBLE_WRITERS (or ClientAccessibleWriters)</td><td>Read-only shadow copy created with writer involvement</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000010</td><td>VSS_CTX_FILE_SHARE_BACKUP</td><td>Non-persistent shadow copy created</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000019</td><td>VSS_CTX_NAS_ROLLBACK</td><td>Persistent shadow copy of a NAS volume</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0000001d</td><td>VSS_CTX_CLIENT_ACCESSIBLE</td><td>Read-only shadow copy for Shared Folders</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0xffffffff</td><td>VSS_CTX_ALL</td><td>All types of shadow copy are available for administrative operations</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the store snapshot context value is a combination of (some of the) store attribute
+flags.</p>
+</blockquote>
+<h4 id="store_attribute_flags"><a class="header" href="#store_attribute_flags">Store attribute flags</a></h4>
+<p>“VSS_VOLUME_SNAPSHOT_ATTRIBUTES enumeration (vss.h)” refers to the store attribute flags as
+_VSS_VOLUME_SNAPSHOT_ATTRIBUTES.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>VSS_VOLSNAP_ATTR_PERSISTENT</td><td>The shadow copy is persistent across reboots</td></tr>
+
+<tr><td>0x00000002</td><td>VSS_VOLSNAP_ATTR_NO_AUTORECOVERY (or VSS_VOLSNAP_ATTR_READ_WRITE)</td><td>Auto-recovery is disabled, which appears to  not be shown by vssadmin</td></tr>
+
+<tr><td>0x00000004</td><td>VSS_VOLSNAP_ATTR_CLIENT_ACCESSIBLE</td><td>The specified shadow copy is a client-accessible</td></tr>
+
+<tr><td>0x00000008</td><td>VSS_VOLSNAP_ATTR_NO_AUTO_RELEASE</td><td>The shadow copy is not automatically deleted when the shadow copy requester process ends (no auto release)</td></tr>
+
+<tr><td>0x00000010</td><td>VSS_VOLSNAP_ATTR_NO_WRITERS</td><td>No writers are involved in creating the shadow copy</td></tr>
+
+<tr><td>0x00000020</td><td>VSS_VOLSNAP_ATTR_TRANSPORTABLE</td><td>The shadow copy is to be transported and therefore should not be exposed locally</td></tr>
+
+<tr><td>0x00000040</td><td>VSS_VOLSNAP_ATTR_NOT_SURFACED</td><td>The shadow copy is not currently exposed (surfaced)</td></tr>
+
+<tr><td>0x00000080</td><td>VSS_VOLSNAP_ATTR_NOT_TRANSACTED</td><td>Not transacted, which appears to not be shown by vssadmin</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00010000</td><td>VSS_VOLSNAP_ATTR_HARDWARE_ASSISTED</td><td>Indicates that a given provider is a hardware provider</td></tr>
+
+<tr><td>0x00020000</td><td>VSS_VOLSNAP_ATTR_DIFFERENTIAL</td><td>Indicates that a given provider uses differential data or a copy-on-write mechanism to implement shadow copies</td></tr>
+
+<tr><td>0x00040000</td><td>VSS_VOLSNAP_ATTR_PLEX</td><td>Indicates that a given provider uses a PLEX or mirrored split mechanism to implement shadow copies</td></tr>
+
+<tr><td>0x00080000</td><td>VSS_VOLSNAP_ATTR_IMPORTED</td><td>The shadow copy of the volume was imported onto this machine</td></tr>
+
+<tr><td>0x00100000</td><td>VSS_VOLSNAP_ATTR_EXPOSED_LOCALLY</td><td>The shadow copy is locally exposed</td></tr>
+
+<tr><td>0x00200000</td><td>VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY</td><td>The shadow copy is remotely exposed</td></tr>
+
+<tr><td>0x00400000</td><td>VSS_VOLSNAP_ATTR_AUTORECOVER</td><td>Indicates that the writer will need to auto-recover the on post snapshot</td></tr>
+
+<tr><td>0x00800000</td><td>VSS_VOLSNAP_ATTR_ROLLBACK_RECOVERY</td><td>Indicates that the writer will need to auto-recover the on post snapshot if the snapshot is used for rollback</td></tr>
+
+<tr><td>0x01000000</td><td>VSS_VOLSNAP_ATTR_DELAYED_POSTSNAPSHOT</td><td>Delayed post snapshot, which is reserved for system use and appears to not be shown by vssadmin</td></tr>
+
+<tr><td>0x02000000</td><td>VSS_VOLSNAP_ATTR_TXF_RECOVERY</td><td>Indicates that Transactional NTFS (TxF) recovery should be enforced during shadow copy creation, which appears to be not shown by vssadmin</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-block-list"><a class="header" href="#store-block-list">Store block list</a></h3>
+<p>The store block list contains information about the data block ranges used by the snapshot.</p>
+<p>The store block list is stored in blocks of 16384 (0x4000) bytes. Each store block list block
+consists of:</p>
+<ul>
+<li>a store block header of type 3</li>
+<li>an array of store block descriptors</li>
+</ul>
+<h4 id="block-descriptor"><a class="header" href="#block-descriptor">Block descriptor</a></h4>
+<p>The block descriptor is 32 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Original data block offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Relative store data block offset, which is relative to the start of the store. TODO: determine if the lower bits are used for different purpose</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Store data block offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Flags</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Allocation bitmap, which is used if flag 0x02 is set, otherwise is should contain a value of 0</td></tr>
+
+</table>
+</div>
+
+<h4 id="store-block-descriptor-flags"><a class="header" href="#store-block-descriptor-flags">Store block descriptor flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td></td><td>Is forwarder. The absolute offset is set to 0 and the relative offset maps to the original offset of the next block</td></tr>
+
+<tr><td>0x00000002</td><td></td><td>Overlay. The block descriptor is an overlay. The allocation bitmap value contains information about the block fill</td></tr>
+
+<tr><td>0x00000004</td><td></td><td>Not used. If set, the block is ignored</td></tr>
+
+<tr><td>0x00000008</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000010</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000020</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000040</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000080</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="successive-block-descriptors"><a class="header" href="#successive-block-descriptors">Successive block descriptors</a></h4>
+<blockquote>
+<p>Note that this section is not complete yet, since the meaning of several flags is unknown.</p>
+</blockquote>
+<p>Successive block descriptors with the same original offset are be handled differently based on
+their flags and position in the block list. The block list is scanned front to back.</p>
+<p>For the new block descriptor:</p>
+<pre><code class="language-text">* If the not used flag is set (0x04):
+    * Ignore the new block descriptor
+
+* If the overlay flag (0x02) is not set:
+    * If there is a corresponding block descriptor in the reverse block list:
+      Meaning that the original offset (of the new block descriptor) matches
+      the relative offset of a forwarder block descriptor in the reverse block
+      list.
+        * Replace the original offset with that of the forwarder block
+          descriptor in the reverse block list.
+        * Remove the forwarder block descriptor from the reverse block list.
+        * If the forwarder flag (0x01) (of the new block descriptor) is set:
+            * If the original offset (of the new block descriptor) is the same
+              as the relative offset:
+                * Ignore the new block descriptor
+
+* If no previous block descriptor was found:
+    * Add the new block descriptor to the block list.
+* Else:
+    * If the overlay flag (0x02) is set:
+      The new block descriptor contains an overlay. The allocation bitmap
+      contains information about which part of the block is used. Every bit
+      in the allocation bitmap signifies a block of 512 bytes. The LSB in
+      the allocation bitmap represent the first 512 bytes in the block.
+      Normally the relative offset is should not be 1, but this seems to be
+      ignored if it is.
+
+        * If an existing overlay block descriptor was defined:
+            * Extended the existing overlay.
+              Normally the relative offset should be 1 and the original offset
+              should match that of the existing overlay block descriptor. If
+              not these values seem to be ignored and the existing overlay
+              is extended with the allocation bitmap in the new block descriptor.
+        * Else:
+            * Replace the existing block descriptor. Existing overlay block
+              descriptors are applied to the new block descriptor.
+
+* If the forwarder flag (0x01) is set:
+    * If no previous reverse block descriptor was found:
+        * Add the new block descriptor to the reverse block list.
+    * Else:
+        * Replace the existing reverse block descriptor.
+</code></pre>
+<h3 id="store-block-range-list"><a class="header" href="#store-block-range-list">Store block range list</a></h3>
+<p>The store block range list contains information about the data block ranges used by the store
+itself. It is probably used to maintain these ranges on the volume layer, since the corresponding
+NTFS file entry data runs are applied on the file system layer.</p>
+<p>The store block range list is stored in blocks of 16384 (0x4000) bytes. Each store block range list
+block consists of:</p>
+<ul>
+<li>a store block header of type 5</li>
+<li>an array of store block range list entries</li>
+</ul>
+<h4 id="store-block-range-entry"><a class="header" href="#store-block-range-entry">Store block range entry</a></h4>
+<p>The store block range entry is 24 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Store (block range start) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Relative (block range start) offset, which is relative to the start of the store</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Block range size</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-bitmap"><a class="header" href="#store-bitmap">Store bitmap</a></h3>
+<p>The store bitmap contains information about the allocation of blocks.</p>
+<p>The store bitmap is stored in blocks of 16384 (0x4000) bytes. Each store bitmap block consists of:</p>
+<ul>
+<li>a store block header of type 6</li>
+<li>a bitmap</li>
+</ul>
+<h4 id="store-current-bitmap-data"><a class="header" href="#store-current-bitmap-data">Store (current) bitmap data</a></h4>
+<p>Every bit in the store (current) bitmap represents a block of 16384 (0x4000) bytes, where the LSB
+is the first bit in a byte.</p>
+<p>If a bit is set, the corresponding block is considered not in-use (or not allocated) by the store.</p>
+<p>The use of this bitmap is described in the section: <a href="#reading_snapshot_data">reading snapshot data</a>.</p>
+<h4 id="store-previous-bitmap-data"><a class="header" href="#store-previous-bitmap-data">Store previous bitmap data</a></h4>
+<p>Every bit in the store previous bitmap represents a block of 16384 (0x4000) bytes, where the LSB is
+the first bit in a byte.</p>
+<p>If a bit is set, the corresponding block is not in-use (or not allocated) by the previous store.</p>
+<p>Note that the first store can also contain a previous bitmap if an older store before it was
+removed.</p>
+<p>The use of this bitmap is described in the section: <a href="#reading_snapshot_data">reading snapshot data</a>.</p>
+<h3 id="store-data-block"><a class="header" href="#store-data-block">Store data block</a></h3>
+<p>The store data is stored in blocks of 16384 (0x4000) bytes.</p>
+<h3 id="reading_snapshot_data"><a class="header" href="#reading_snapshot_data">Reading snapshot data</a></h3>
+<p>For the size of the data that will fit in the buffer:</p>
+<pre><code class="language-text">* If the block offset has a corresponding block descriptor:
+    * The data is defined by block descriptor and has a maximum size accordingly
+    * If this is the active store and the block has an overlay:
+        * If the overlay applies:
+            * use the overlay block descriptor
+
+    * If the forwarder flag (0x01) is set
+      and there is a next store:
+        * read the block from the next store using the relative store offset
+    * Else:
+        * read the block from the current volume using the store offset
+
+* Else:
+    * If there is a next store:
+        * read the block from the next store
+    * Else if the block offset has a corresponding reverse block descriptor:
+        * read the block from the current volume
+    * Else if the active store is the most recent (last) store
+      and the block is flagged in the current bitmap
+      and ( the store has no previous bitmap
+            or the block is flagged in the previous bitmap ):
+        * zero-fill the block
+    * Else:
+        * read the block from the current volume
+
+    * Increment the block offset with the size of the block data that was read
+</code></pre>
+<blockquote>
+<p>Note that on Windows the actual behavior of unused block is undefined. A read of a corresponding
+block will return successful but will not alter the buffer passed to the read. For sanitation
+purposes Keramics will zero-fill the block.</p>
+</blockquote>
+<h2 id="format-edge-cases-and-corruption-scenarios-4"><a class="header" href="#format-edge-cases-and-corruption-scenarios-4">Format edge cases and corruption scenarios</a></h2>
+<p>This chapter contains several corruption scenarios that have been encountered “in the wild”.</p>
+<h3 id="catalog-volume-size-out-of-bounds"><a class="header" href="#catalog-volume-size-out-of-bounds">Catalog volume size out of bounds</a></h3>
+<blockquote>
+<p>Note that this currently considered a corruption scenario future findings may or may not prove
+otherwise.</p>
+</blockquote>
+<p>The volume size of one of the catalog entries exceeds the size of the underlying volume and does
+not corresponds with the volume size defined by the rest of the catalog entries.</p>
+<h3 id="scope-snapshots"><a class="header" href="#scope-snapshots">Scope snapshots</a></h3>
+<p>Technically scoped snaphots are a feature of volsnapa as of of Windows 8 or Windws Server 2012 and
+not a corruption scenario. It has been captured as a corruption scenario since it leads to some
+interesting side effects within file content of the snapshot.</p>
+<p>Scope snapshots functionality can be controlled via the Windows Registry value:</p>
+<pre><code class="language-text">Key path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore
+Value name: ScopeSnapshots
+</code></pre>
+<p>Per “Scoped Snapshots vmicvss Error 13 on Server 2012, Windows 8” a scope snapshot is a special
+volume snapshot for volsnap performance, which is mainly used by Windows critical updates. Scope
+means the volsnap only creates Copy on Write (Shadow) volume for the files that are involved in the
+updates instead of all the files on the volume.</p>
+<h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/vss/shadow-copies-and-shadow-copy-sets">Shadow Copies and Shadow Copy Sets</a></li>
+<li><a href="https://www.mcbsys.com/blog/2013/05/scoped-snapshots-vmicvss-error-13-on-server-2012-windows-8/">Scoped Snapshots vmicvss Error 13 on Server 2012, Windows 8</a>,
+by M. Berry</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/vss/ne-vss-vss_volume_snapshot_attributes">VSS_VOLUME_SNAPSHOT_ATTRIBUTES enumeration (vss.h)</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="file-system-formats"><a class="header" href="#file-system-formats">File system formats</a></h1>
 <p>A file system format is used to manage the storage of files.</p>
 <h2 id="terminology-5"><a class="header" href="#terminology-5">Terminology</a></h2>
@@ -9891,7 +10466,7 @@ sectors. Can be compressed, encrypted or sparse.</li>
 System Compression (decmpfs) to compress file contents.</p>
 <p>decmpfs is sometimes referred to as AFSC (Apple File System Compression) or HFS/HFS+ compression
 and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
-<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
@@ -10170,7 +10745,7 @@ otherwise the block should start with 0x78.</p>
 </table>
 </div>
 
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
 <p>An Extended File System (ext) consists of:</p>
 <ul>
 <li>one or more block groups</li>
@@ -11827,7 +12402,7 @@ bytes to 0 for the terminator.</p>
 <h2 id="corruption_scenarios"><a class="header" href="#corruption_scenarios">Format edge cases and corruption scenarios</a></h2>
 <h3 id="file-entry-with-invalid-extents-header-signature"><a class="header" href="#file-entry-with-invalid-extents-header-signature">File entry with invalid extents header signature</a></h3>
 <p>File content inaccessible but file entry metadata and extended attributes accessible.</p>
-<h2 id="references-8"><a class="header" href="#references-8">References</a></h2>
+<h2 id="references-9"><a class="header" href="#references-9">References</a></h2>
 <ul>
 <li><a href="https://docs.kernel.org/filesystems/ext4">ext4 Data Structures and Algorithms</a>, by the Linux
 kernel documentation</li>
@@ -11836,7 +12411,7 @@ kernel documentation</li>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
 <p>The Extensible File Allocation Table (exFAT) file system format is a successor of the
 <a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a> file system format.</p>
-<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
+<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
 <li>Main boot region (11 sectors)
@@ -12182,7 +12757,7 @@ for index in range(0, 11 * bytes_per_sector):
 
 <tr><td>1</td><td>3</td><td>0</td><td>Unknown (Reserved)</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Checksum</td></tr>
+<tr><td>4</td><td>4</td><td></td><td><a href="#checksum">Checksum</a> of the case folding mappings data</td></tr>
 
 <tr><td>8</td><td>12</td><td>0</td><td>Unknown (Reserved)</td></tr>
 
@@ -12335,7 +12910,15 @@ of the root directory.</p>
 </table>
 </div>
 
-<h2 id="references-9"><a class="header" href="#references-9">References</a></h2>
+<h2 id="checksum"><a class="header" href="#checksum">Checksum</a></h2>
+<p>The checksum calculation uses Rotate Right by 1 (ROR1).</p>
+<pre><code class="language-python">checksum = 0
+
+for byte_value in data:
+    msb = 0x80000000 if (checksum &amp; 1) else 0
+    checksum = (msb + (checksum &gt;&gt; 1) + byte_value) &amp; 0xffffffff
+</code></pre>
+<h2 id="references-10"><a class="header" href="#references-10">References</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-gb/windows/win32/fileio/exfat-specification">exFAT file system specification</a>,
 by Microsoft</li>
@@ -12353,7 +12936,7 @@ and Windows.</p>
 <li>FAT-32</li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">exFAT</a></li>
 </ul>
-<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
+<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
 <p>A FAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -12975,7 +13558,7 @@ character (0x0000) are padded with 0xffff.</p>
 </table>
 </div>
 
-<h2 id="references-10"><a class="header" href="#references-10">References</a></h2>
+<h2 id="references-11"><a class="header" href="#references-11">References</a></h2>
 <ul>
 <li><a href="http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/fatgen103.doc">Microsoft Extensible Firmware Initiative FAT32 File System Specification</a>,
 by Microsoft</li>
@@ -13006,7 +13589,7 @@ OS 10.0 or later.</p>
 HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
 case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
 volume.</p>
-<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
+<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
@@ -15270,7 +15853,7 @@ stored;</li>
     (data area start sector * 512) + (embedded volume block number * block size)
 )
 </code></pre>
-<h2 id="references-11"><a class="header" href="#references-11">References</a></h2>
+<h2 id="references-12"><a class="header" href="#references-12">References</a></h2>
 <!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://github.com/apple-oss-distributions/hfs/blob/main/core/hfs_format.h">hfs_format.h</a></li>
@@ -15283,7 +15866,7 @@ by Apple Inc.</li>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
 <p>The Macintosh File System (MFS) is the first file system created for Mac OS, intended for 400 KiB
 floppy disks.</p>
-<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
+<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
 <p>A MFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">boot block</a></li>
@@ -15541,7 +16124,7 @@ multiple blocks</li>
 <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for Microsoft Windows
 versions that are based on Windows NT.</p>
-<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
+<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -18211,7 +18794,7 @@ rest with with 0-byte values</li>
 <li>another implementation seems to provide the data that was already in its buffer</li>
 </ul>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
-<h2 id="references-12"><a class="header" href="#references-12">References</a></h2>
+<h2 id="references-13"><a class="header" href="#references-13">References</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc781134(v=ws.10)">How NTFS Works</a>,
 by Microsoft</li>
@@ -18249,7 +18832,7 @@ by Microsoft</li>
 <p>The X File System (XFS) is a file system that originates from SGI but is used in various Linux
 distributions like RHEL. Some sources indicate that X was a a placeholder for a name that never
 given.</p>
-<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
+<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -18967,15 +19550,15 @@ following:</p>
 <ul>
 <li>device identifier (fork type is XFS_DINODE_FMT_DEV)</li>
 <li>inline data fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extent list data fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
-<li>extent tree data fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+<li>extents list data fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extents tree data fork (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 </li>
 <li>optional (extended) attributes data fork (descriptor)
 <ul>
 <li>inline attributes fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extent list attributes fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
-<li>extent tree attributes fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+<li>extents list attributes fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extents tree attributes fork (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 </li>
 </ul>
@@ -19310,9 +19893,9 @@ following:</p>
 
 <tr><td>1</td><td>XFS_DINODE_FMT_LOCAL</td><td>Data is stored inline (in the inode)</td></tr>
 
-<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extent_list">an extent list</a></td></tr>
+<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
 
-<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extent_tree">an extent tree</a></td></tr>
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
 
 <tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
 
@@ -19358,8 +19941,8 @@ following:</p>
 </table>
 </div>
 
-<h3 id="extent_list"><a class="header" href="#extent_list">Extent list</a></h3>
-<p>The extent list consists of:</p>
+<h3 id="extents_list"><a class="header" href="#extents_list">Extents list</a></h3>
+<p>The extents list consists of:</p>
 <ul>
 <li>one or more <a href="#packed_extent">packed extents</a></li>
 </ul>
@@ -19382,43 +19965,43 @@ following:</p>
 <blockquote>
 <p>Note that uninitialized extents are treated as sparse extents when read.</p>
 </blockquote>
-<h3 id="extent_tree"><a class="header" href="#extent_tree">Extent tree</a></h3>
-<h4 id="extent-tree-root-node"><a class="header" href="#extent-tree-root-node">Extent tree root node</a></h4>
-<p>The root node of the extent tree is stored in the inode and equivalent to
-<a href="#extent_tree_branch_node">an extent tree branch node</a>.</p>
+<h3 id="extents_tree"><a class="header" href="#extents_tree">Extents tree</a></h3>
+<h4 id="extents-tree-root-node"><a class="header" href="#extents-tree-root-node">Extents tree root node</a></h4>
+<p>The root node of the extents tree is stored in the inode and equivalent to
+<a href="#extents_tree_branch_node">an extents tree branch node</a>.</p>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = (node_data_size - 4) / 16
 </code></pre>
 <p>Where “node data size” is <code>(attributes_fork_descriptor_offset * 8)</code> if the value is not 0, or
 otherwise the remaining inode block size.</p>
-<h4 id="extent-tree-sub-node-block"><a class="header" href="#extent-tree-sub-node-block">Extent tree sub node block</a></h4>
-<p>An extent tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
-<p>The extent tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
-<h5 id="extent-tree-sub-node-block-header"><a class="header" href="#extent-tree-sub-node-block-header">Extent tree sub node block header</a></h5>
+<h4 id="extents-tree-sub-node-block"><a class="header" href="#extents-tree-sub-node-block">Extents tree sub node block</a></h4>
+<p>An extents tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
+<p>The extents tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
+<h5 id="extents-tree-sub-node-block-header"><a class="header" href="#extents-tree-sub-node-block-header">Extents tree sub node block header</a></h5>
 <p>The sub node block header (xfs_bmbt_block_t) is equivalent to
 <a href="#btree_block_header">B+ tree block header</a>.</p>
-<h5 id="extent-tree-sub-node-block-header-signatures"><a class="header" href="#extent-tree-sub-node-block-header-signatures">Extent tree sub node block header signatures</a></h5>
+<h5 id="extents-tree-sub-node-block-header-signatures"><a class="header" href="#extents-tree-sub-node-block-header-signatures">Extents tree sub node block header signatures</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Signature</th><th>Description</th></thead>
-<tr><td>"BMA3"</td><td>Extent tree sub node block ((file system version 5)</td></tr>
+<tr><td>"BMA3"</td><td>Extents tree sub node block ((file system version 5)</td></tr>
 
-<tr><td>"BMAP"</td><td>Extent tree sub node block</td></tr>
+<tr><td>"BMAP"</td><td>Extents tree sub node block</td></tr>
 
 </table>
 </div>
 
-<h4 id="extent_tree_branch_node"><a class="header" href="#extent_tree_branch_node">Extent tree branch node</a></h4>
-<p>The extent tree branch node record consists of:</p>
+<h4 id="extents_tree_branch_node"><a class="header" href="#extents_tree_branch_node">Extents tree branch node</a></h4>
+<p>The extents tree branch node record consists of:</p>
 <ul>
 <li>node header</li>
-<li>array of extent tree branch node entry keys</li>
-<li>array of extent tree branch node entry values</li>
+<li>array of extents tree branch node entry keys</li>
+<li>array of extents tree branch node entry values</li>
 </ul>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 16
 </code></pre>
-<h5 id="extent-tree-branch-node-header"><a class="header" href="#extent-tree-branch-node-header">Extent tree branch node header</a></h5>
+<h5 id="extents-tree-branch-node-header"><a class="header" href="#extents-tree-branch-node-header">Extents tree branch node header</a></h5>
 <p>The branch node header (xfs_bmdr_block_t) is 4 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
@@ -19430,7 +20013,7 @@ otherwise the remaining inode block size.</p>
 </table>
 </div>
 
-<h5 id="extent-tree-branch-node-entry-key"><a class="header" href="#extent-tree-branch-node-entry-key">Extent tree branch node entry key</a></h5>
+<h5 id="extents-tree-branch-node-entry-key"><a class="header" href="#extents-tree-branch-node-entry-key">Extents tree branch node entry key</a></h5>
 <p>The branch node entry key (xfs_bmbt_key_t) is 8 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
@@ -19440,18 +20023,18 @@ otherwise the remaining inode block size.</p>
 </table>
 </div>
 
-<h5 id="extent-tree-branch-node-entry-value"><a class="header" href="#extent-tree-branch-node-entry-value">Extent tree branch node entry value</a></h5>
+<h5 id="extents-tree-branch-node-entry-value"><a class="header" href="#extents-tree-branch-node-entry-value">Extents tree branch node entry value</a></h5>
 <p>The branch node entry value (xfs_bmbt_ptr_t or xfs_bmdr_ptr_t) is 8 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Block number of the extent tree sub node, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Block number of the extents tree sub node, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
 
 </table>
 </div>
 
-<h4 id="extent-tree-leaf-block-node"><a class="header" href="#extent-tree-leaf-block-node">Extent tree leaf block node</a></h4>
-<p>The extent tree leaf block node consists of:</p>
+<h4 id="extents-tree-leaf-block-node"><a class="header" href="#extents-tree-leaf-block-node">Extents tree leaf block node</a></h4>
+<p>The extents tree leaf block node consists of:</p>
 <ul>
 <li>one or more <a href="#packed_extent">packed extents</a></li>
 </ul>
@@ -19854,7 +20437,7 @@ XFS_DINODE_FMT_DEV.</p>
 <p>XFS supports multiple ways to store file content:</p>
 <ul>
 <li>inline data (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extents defined by either an extent list (fork type is XFS_DINODE_FMT_EXTENTS) or an extent
+<li>extents defined by either an extents list (fork type is XFS_DINODE_FMT_EXTENTS) or an extent
 B+ tree (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 <h3 id="inline-data-1"><a class="header" href="#inline-data-1">Inline data</a></h3>
@@ -19991,7 +20574,7 @@ of test data.</p>
 
 <h3 id="attributes_tree"><a class="header" href="#attributes_tree">Attributes tree</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_BTREE the extended attributes are stored in an
-attributes tree. The attributes fork contains <a href="#extent_tree">an extent tree</a>.</p>
+attributes tree. The attributes fork contains <a href="#extents_tree">an extents tree</a>.</p>
 <p>The first block in the extents is the B+ tree root block.</p>
 <h3 id="attributes_tree_branch_node"><a class="header" href="#attributes_tree_branch_node">Attributes tree branch node</a></h3>
 <p>An attributes tree branch node consist of:</p>
@@ -20055,7 +20638,7 @@ consist of:</p>
 
 <h3 id="attributes-tree-leaf-node"><a class="header" href="#attributes-tree-leaf-node">Attributes tree leaf node</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_EXTENTS the extended attributes are stored as
-attributes tree. The attributes fork contains <a href="#extent_list">an extent list</a>.</p>
+attributes tree. The attributes fork contains <a href="#extents_list">an extents list</a>.</p>
 <p>Attributes tree (xfs_attr_leafblock_t or xfs_attr3_leafblock_t) consist of:</p>
 <ul>
 <li><a href="#attributes_tree_leaf_node_header">attributes tree leaf node header</a></li>
@@ -20241,7 +20824,7 @@ blocks.</p>
 </table>
 </div>
 
-<h2 id="references-13"><a class="header" href="#references-13">References</a></h2>
+<h2 id="references-14"><a class="header" href="#references-14">References</a></h2>
 <ul>
 <li><a href="https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/docs/xfs_filesystem_structure.pdf">XFS Filesystem Structure - 3rd Edition</a></li>
 <li><a href="https://kernel.googlesource.com/pub/scm/fs/xfs/xfs-documentation/+/master/design/XFS_Filesystem_Structure">XFS Filesystem Structure</a></li>
@@ -20259,7 +20842,7 @@ blocks.</p>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
 iOS. APFS supersedes the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
-<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
+<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
 <p>APFS consists of:</p>
 <ul>
 <li>A container
@@ -23186,13 +23769,13 @@ container.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
-<h2 id="format-edge-cases-and-corruption-scenarios-4"><a class="header" href="#format-edge-cases-and-corruption-scenarios-4">Format edge cases and corruption scenarios</a></h2>
+<h2 id="format-edge-cases-and-corruption-scenarios-5"><a class="header" href="#format-edge-cases-and-corruption-scenarios-5">Format edge cases and corruption scenarios</a></h2>
 <h3 id="container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted"><a class="header" href="#container-key-bag-is-hardware-encrypted-but-volume-is-not-encrypted">Container key bag is hardware encrypted but volume is not encrypted</a></h3>
 <p>Seen in APFS containers created by certain digital forensics tools. The container key bag is either
 hardware encrypted or contains random data but the volume is not encrypted.</p>
 <h2 id="notes-2-1"><a class="header" href="#notes-2-1">Notes</a></h2>
 <p>TODO describe evict_mapping_val_t</p>
-<h2 id="references-14"><a class="header" href="#references-14">References</a></h2>
+<h2 id="references-15"><a class="header" href="#references-15">References</a></h2>
 <!-- rumdl-disable MD013 -->
 <ul>
 <li><a href="https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf">Apple File System Reference</a>,
@@ -23210,7 +23793,7 @@ by Apple</li>
 <p>The property list (plist) formats are used to store various kinds of data, for example
 configuration data. The format is know to be used stand-alone as well as embedded in other data
 formats.</p>
-<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
+<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -23429,7 +24012,7 @@ of 1 will refer to the first object in the (object) offset table.</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
 RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
 LZ77, is used.</p>
-<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
+<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
@@ -23951,7 +24534,7 @@ while( block_header.last_block_flag == 0 );
     return( ( upper_word &lt;&lt; 16 ) | lower_word );
 }
 </code></pre>
-<h2 id="references-15"><a class="header" href="#references-15">References</a></h2>
+<h2 id="references-16"><a class="header" href="#references-16">References</a></h2>
 <ul>
 <li><a href="http://www.ietf.org/rfc/rfc1950.txt">RFC1950 - ZLIB Compressed Data Format Specification</a></li>
 <li><a href="http://www.ietf.org/rfc/rfc1951.txt">RFC1951 - DEFLATE Compressed Data Format Specification</a></li>

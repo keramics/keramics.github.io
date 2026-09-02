@@ -1,0 +1,807 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Volume Shadow Snapshot (volsnap) format - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-be09e687.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="volume-shadow-snapshot-volsnap-format"><a class="header" href="#volume-shadow-snapshot-volsnap-format">Volume Shadow Snapshot (volsnap) format</a></h1>
+<p>As of Windows Vista the Volume Shadow Snapshot (VSS) stores persistent shadow copies on the local
+NTFS volume.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a volume. A shadow
+copy can be part of a set which contains a collection of shadow copies of various volumes, taken at
+the same time.</p>
+<p>Volume Shadow Snapshot (VSS) can use different providers to store shadow copies, this document
+focuses on the “Microsoft Software Shadow Copy provider 1.0” (GUID:
+b5946137-7b9f-4925-af80-51abd60b20d5) and will refer to it as volsnap. The volsnap provider stores
+the copies on the local volume using 16 KiB blocks.</p>
+<p>Volsnap uses the GUID 3808876b-c176-4e48-b7ae-04046e6cc752 to identify its data or metadata files.
+It leverages several metadata files in “\System Volume Information” directory:</p>
+<ul>
+<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
+<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+</ul>
+<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and
+%GUID% contains a time/MAC based GUID.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+<tr><td>Date and time values</td><td>FILETIME in UTC</td></tr>
+
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+
+</table>
+</div>
+
+<h2 id="volume-header"><a class="header" href="#volume-header">Volume header</a></h2>
+<p>The volsnap volume header is part of the NTFS volume header (or $Boot metadata file). The volsnap
+volume header data is stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in
+size, but presumably 512 bytes, and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Format version</td></tr>
+
+<tr><td>20</td><td>4</td><td>0x01</td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td>0x1e00</td><td>Current offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (Next offset?), which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Unknown (empty value)</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Catalog offset, which is relative to the start of the volume or contains 0 if there is no catalog</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>Maximum size, in number of bytes or contains 0 if unbounded</td></tr>
+
+<tr><td>64</td><td>16</td><td></td><td>Volume identifierwhich contains a GUID</td></tr>
+
+<tr><td>80</td><td>16</td><td></td><td>Shadow copy storage volume identifier, which contains a GUID</td></tr>
+
+<tr><td>96</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>100</td><td>412</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h3 id="version"><a class="header" href="#version">Version</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>Windows Vista, Windows 7</td></tr>
+
+<tr><td>2</td><td></td><td>Windows 8</td></tr>
+
+</table>
+</div>
+
+<h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
+<p>The catalog contains information about the individual stores. The catalog consists of one or more
+catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists of:</p>
+<ul>
+<li>catalog block header</li>
+<li>an array of catalog entries</li>
+</ul>
+<p>The volsnap catalog metadata files contains the catalog blocks stored directly after one-and-other.</p>
+<p>If the volume does not contain a catalog when there are no snapshots (stored) but volsnap is
+enabled.</p>
+<h3 id="catalog-block-header"><a class="header" href="#catalog-block-header">Catalog block header</a></h3>
+<p>The catalog block header is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+
+<tr><td>20</td><td>4</td><td>0x02</td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Relative (catalog block) offset, which is relative to the start of the first catalog block</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Current (catalog block) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Next (catalog block) offset, which is relative to the start of the volume or contains 0 if this is the last block</td></tr>
+
+<tr><td>48</td><td>80</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h3 id="catalog-entry"><a class="header" href="#catalog-entry">Catalog entry</a></h3>
+<p>Each catalog entry consists of a catalog entry type 0x02. A corresponding type 0x03 is required if
+the shadow copy is stored in a store, which is the case as of Windows Vista.</p>
+<blockquote>
+<p>Note that a Windows 2003 R2 catalog does not contain catalog entry type 0x03.</p>
+</blockquote>
+<p>TODO: Determine how Windows 2003 R2 volumes store the snapshot data</p>
+<p>The type 0x02 and type 0x03 entries are not necessarily stored directly after one-and-other and can
+be scattered over the catalog. For now it is assumed that entry type 0x02 must be defined before
+entry type 0x03.</p>
+<p>Also these entries are not necessarily stored in order of age.</p>
+<p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
+entirely of 0-bytes.</p>
+<h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
+<p>An unused catalog entry (type 0x01) is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x01</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>120</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
+<p>A catalog entry type 0x02 is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x02</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Volume size</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID that is used in the store filename</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Unknown (Sequence number)</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Unknown (Flags?), seen 0x40 in Windows in Vista and 7 and 0x440 in Windows 8 (file backup?)</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Shadow copy creation time, which contains a FILETIME</td></tr>
+
+<tr><td>56</td><td>72</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
+<p>A catalog entry type 0x03 is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>0x03</td><td>Catalog entry type</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Store block list offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID, that is used in the store filename</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Store header offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Store block range list offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Store (current) bitmap offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>NTFS (metadata) file reference</td></tr>
+
+<tr><td>64</td><td>8</td><td></td><td>Unknown (Allocated size)</td></tr>
+
+<tr><td>72</td><td>8</td><td></td><td>Store previous bitmap offset, which is relative to the start of the volume or contains 0 if not used</td></tr>
+
+<tr><td>80</td><td>8</td><td></td><td>Unknown (store index?)</td></tr>
+
+<tr><td>88</td><td>40</td><td></td><td>Unknown (empty)</td></tr>
+
+</table>
+</div>
+
+<h2 id="store"><a class="header" href="#store">Store</a></h2>
+<p>The store contains information about the shadow volume; it actually contains copies of previous
+versions of data blocks on the volume.</p>
+<p>The stores must be applied starting with the most recent on top of the current volume. E.g. if
+there are 3 stores and we want to access the state of the oldest (number 1) we must first apply the
+changes in store 3 over the current volume, the changes in store 2 over the resulting volume, and
+finally the changes in store 1 over the resulting volume.</p>
+<p>The store consists of:</p>
+<ul>
+<li>store header</li>
+<li>store block list</li>
+<li>store block range list</li>
+<li>store bitmaps</li>
+<li>data blocks</li>
+</ul>
+<h3 id="store-block-header"><a class="header" href="#store-block-header">Store block header</a></h3>
+<p>The store block header is 128 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Record type</td></tr>
+
+<tr><td>24</td><td>8</td><td></td><td>Relative (block) offset, which is relative to the start of the store</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>Current (block) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Next (block) offset, which is relative to the start of the volume or contains 0 if this is the last block</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Size of store information, whichis only used in first block header and should be 0 in successive block headers</td></tr>
+
+<tr><td>56</td><td>72</td><td></td><td>Unknown (empty value)</td></tr>
+
+</table>
+</div>
+
+<h4 id="store-block-record-types"><a class="header" href="#store-block-record-types">Store block record types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x0001</td><td></td><td>Volume header</td></tr>
+
+<tr><td>0x0002</td><td></td><td>Catalog block header</td></tr>
+
+<tr><td>0x0003</td><td></td><td>Block descriptor list (Diff area table)</td></tr>
+
+<tr><td>0x0004</td><td></td><td>Store header</td></tr>
+
+<tr><td>0x0005</td><td></td><td>Unknown (Store block ranges list)</td></tr>
+
+<tr><td>0x0006</td><td></td><td>Store bitmap</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-information"><a class="header" href="#store-information">Store information</a></h3>
+<p>The store information is stored directly after the store header.</p>
+<p>The store information is variable of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Unknown (identifier?), which contains a GUID</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Shadow copy identifier, which contains a GUID</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>Shadow copy set identifier, which contains a GUID</td></tr>
+
+<tr><td>48</td><td>4</td><td></td><td><a href="#store_snapshot_context">Snapshot context</a></td></tr>
+
+<tr><td>52</td><td>4</td><td></td><td>Unknown (Provider?)</td></tr>
+
+<tr><td>56</td><td>4</td><td></td><td><a href="#store_attribute_flags">Attribute flags</a></td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Unknown (empty values)</td></tr>
+
+<tr><td>64</td><td>2</td><td></td><td>Operating machine string size, in number of bytes</td></tr>
+
+<tr><td>66</td><td>(size)</td><td></td><td>Operating machine string, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>2</td><td></td><td>Service machine string size, in number of bytes</td></tr>
+
+<tr><td>...</td><td>(size)</td><td></td><td>Service machine string, which contains an UCS-2 little-endian string without end-of-string character</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>Unknown (empty value)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the difference between the operating machine and the service machine is currently
+unknown.</p>
+</blockquote>
+<h4 id="store_snapshot_context"><a class="header" href="#store_snapshot_context">Store snapshot context</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000000</td><td>VSS_CTX_BACKUP (or Backup)</td><td>Standard backup context</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000009</td><td>VSS_CTX_APP_ROLLBACK (or ApplicationRollback)</td><td>Persistent shadow copy</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0000000d</td><td>VSS_CTX_CLIENT_ACCESSIBLE_WRITERS (or ClientAccessibleWriters)</td><td>Read-only shadow copy created with writer involvement</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000010</td><td>VSS_CTX_FILE_SHARE_BACKUP</td><td>Non-persistent shadow copy created</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00000019</td><td>VSS_CTX_NAS_ROLLBACK</td><td>Persistent shadow copy of a NAS volume</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0000001d</td><td>VSS_CTX_CLIENT_ACCESSIBLE</td><td>Read-only shadow copy for Shared Folders</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0xffffffff</td><td>VSS_CTX_ALL</td><td>All types of shadow copy are available for administrative operations</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the store snapshot context value is a combination of (some of the) store attribute
+flags.</p>
+</blockquote>
+<h4 id="store_attribute_flags"><a class="header" href="#store_attribute_flags">Store attribute flags</a></h4>
+<p>“VSS_VOLUME_SNAPSHOT_ATTRIBUTES enumeration (vss.h)” refers to the store attribute flags as
+_VSS_VOLUME_SNAPSHOT_ATTRIBUTES.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>VSS_VOLSNAP_ATTR_PERSISTENT</td><td>The shadow copy is persistent across reboots</td></tr>
+
+<tr><td>0x00000002</td><td>VSS_VOLSNAP_ATTR_NO_AUTORECOVERY (or VSS_VOLSNAP_ATTR_READ_WRITE)</td><td>Auto-recovery is disabled, which appears to  not be shown by vssadmin</td></tr>
+
+<tr><td>0x00000004</td><td>VSS_VOLSNAP_ATTR_CLIENT_ACCESSIBLE</td><td>The specified shadow copy is a client-accessible</td></tr>
+
+<tr><td>0x00000008</td><td>VSS_VOLSNAP_ATTR_NO_AUTO_RELEASE</td><td>The shadow copy is not automatically deleted when the shadow copy requester process ends (no auto release)</td></tr>
+
+<tr><td>0x00000010</td><td>VSS_VOLSNAP_ATTR_NO_WRITERS</td><td>No writers are involved in creating the shadow copy</td></tr>
+
+<tr><td>0x00000020</td><td>VSS_VOLSNAP_ATTR_TRANSPORTABLE</td><td>The shadow copy is to be transported and therefore should not be exposed locally</td></tr>
+
+<tr><td>0x00000040</td><td>VSS_VOLSNAP_ATTR_NOT_SURFACED</td><td>The shadow copy is not currently exposed (surfaced)</td></tr>
+
+<tr><td>0x00000080</td><td>VSS_VOLSNAP_ATTR_NOT_TRANSACTED</td><td>Not transacted, which appears to not be shown by vssadmin</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x00010000</td><td>VSS_VOLSNAP_ATTR_HARDWARE_ASSISTED</td><td>Indicates that a given provider is a hardware provider</td></tr>
+
+<tr><td>0x00020000</td><td>VSS_VOLSNAP_ATTR_DIFFERENTIAL</td><td>Indicates that a given provider uses differential data or a copy-on-write mechanism to implement shadow copies</td></tr>
+
+<tr><td>0x00040000</td><td>VSS_VOLSNAP_ATTR_PLEX</td><td>Indicates that a given provider uses a PLEX or mirrored split mechanism to implement shadow copies</td></tr>
+
+<tr><td>0x00080000</td><td>VSS_VOLSNAP_ATTR_IMPORTED</td><td>The shadow copy of the volume was imported onto this machine</td></tr>
+
+<tr><td>0x00100000</td><td>VSS_VOLSNAP_ATTR_EXPOSED_LOCALLY</td><td>The shadow copy is locally exposed</td></tr>
+
+<tr><td>0x00200000</td><td>VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY</td><td>The shadow copy is remotely exposed</td></tr>
+
+<tr><td>0x00400000</td><td>VSS_VOLSNAP_ATTR_AUTORECOVER</td><td>Indicates that the writer will need to auto-recover the on post snapshot</td></tr>
+
+<tr><td>0x00800000</td><td>VSS_VOLSNAP_ATTR_ROLLBACK_RECOVERY</td><td>Indicates that the writer will need to auto-recover the on post snapshot if the snapshot is used for rollback</td></tr>
+
+<tr><td>0x01000000</td><td>VSS_VOLSNAP_ATTR_DELAYED_POSTSNAPSHOT</td><td>Delayed post snapshot, which is reserved for system use and appears to not be shown by vssadmin</td></tr>
+
+<tr><td>0x02000000</td><td>VSS_VOLSNAP_ATTR_TXF_RECOVERY</td><td>Indicates that Transactional NTFS (TxF) recovery should be enforced during shadow copy creation, which appears to be not shown by vssadmin</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-block-list"><a class="header" href="#store-block-list">Store block list</a></h3>
+<p>The store block list contains information about the data block ranges used by the snapshot.</p>
+<p>The store block list is stored in blocks of 16384 (0x4000) bytes. Each store block list block
+consists of:</p>
+<ul>
+<li>a store block header of type 3</li>
+<li>an array of store block descriptors</li>
+</ul>
+<h4 id="block-descriptor"><a class="header" href="#block-descriptor">Block descriptor</a></h4>
+<p>The block descriptor is 32 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Original data block offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Relative store data block offset, which is relative to the start of the store. TODO: determine if the lower bits are used for different purpose</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Store data block offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Flags</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Allocation bitmap, which is used if flag 0x02 is set, otherwise is should contain a value of 0</td></tr>
+
+</table>
+</div>
+
+<h4 id="store-block-descriptor-flags"><a class="header" href="#store-block-descriptor-flags">Store block descriptor flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td></td><td>Is forwarder. The absolute offset is set to 0 and the relative offset maps to the original offset of the next block</td></tr>
+
+<tr><td>0x00000002</td><td></td><td>Overlay. The block descriptor is an overlay. The allocation bitmap value contains information about the block fill</td></tr>
+
+<tr><td>0x00000004</td><td></td><td>Not used. If set, the block is ignored</td></tr>
+
+<tr><td>0x00000008</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000010</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000020</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000040</td><td></td><td>Unknown</td></tr>
+
+<tr><td>0x00000080</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h4 id="successive-block-descriptors"><a class="header" href="#successive-block-descriptors">Successive block descriptors</a></h4>
+<blockquote>
+<p>Note that this section is not complete yet, since the meaning of several flags is unknown.</p>
+</blockquote>
+<p>Successive block descriptors with the same original offset are be handled differently based on
+their flags and position in the block list. The block list is scanned front to back.</p>
+<p>For the new block descriptor:</p>
+<pre><code class="language-text">* If the not used flag is set (0x04):
+    * Ignore the new block descriptor
+
+* If the overlay flag (0x02) is not set:
+    * If there is a corresponding block descriptor in the reverse block list:
+      Meaning that the original offset (of the new block descriptor) matches
+      the relative offset of a forwarder block descriptor in the reverse block
+      list.
+        * Replace the original offset with that of the forwarder block
+          descriptor in the reverse block list.
+        * Remove the forwarder block descriptor from the reverse block list.
+        * If the forwarder flag (0x01) (of the new block descriptor) is set:
+            * If the original offset (of the new block descriptor) is the same
+              as the relative offset:
+                * Ignore the new block descriptor
+
+* If no previous block descriptor was found:
+    * Add the new block descriptor to the block list.
+* Else:
+    * If the overlay flag (0x02) is set:
+      The new block descriptor contains an overlay. The allocation bitmap
+      contains information about which part of the block is used. Every bit
+      in the allocation bitmap signifies a block of 512 bytes. The LSB in
+      the allocation bitmap represent the first 512 bytes in the block.
+      Normally the relative offset is should not be 1, but this seems to be
+      ignored if it is.
+
+        * If an existing overlay block descriptor was defined:
+            * Extended the existing overlay.
+              Normally the relative offset should be 1 and the original offset
+              should match that of the existing overlay block descriptor. If
+              not these values seem to be ignored and the existing overlay
+              is extended with the allocation bitmap in the new block descriptor.
+        * Else:
+            * Replace the existing block descriptor. Existing overlay block
+              descriptors are applied to the new block descriptor.
+
+* If the forwarder flag (0x01) is set:
+    * If no previous reverse block descriptor was found:
+        * Add the new block descriptor to the reverse block list.
+    * Else:
+        * Replace the existing reverse block descriptor.
+</code></pre>
+<h3 id="store-block-range-list"><a class="header" href="#store-block-range-list">Store block range list</a></h3>
+<p>The store block range list contains information about the data block ranges used by the store
+itself. It is probably used to maintain these ranges on the volume layer, since the corresponding
+NTFS file entry data runs are applied on the file system layer.</p>
+<p>The store block range list is stored in blocks of 16384 (0x4000) bytes. Each store block range list
+block consists of:</p>
+<ul>
+<li>a store block header of type 5</li>
+<li>an array of store block range list entries</li>
+</ul>
+<h4 id="store-block-range-entry"><a class="header" href="#store-block-range-entry">Store block range entry</a></h4>
+<p>The store block range entry is 24 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Store (block range start) offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Relative (block range start) offset, which is relative to the start of the store</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Block range size</td></tr>
+
+</table>
+</div>
+
+<h3 id="store-bitmap"><a class="header" href="#store-bitmap">Store bitmap</a></h3>
+<p>The store bitmap contains information about the allocation of blocks.</p>
+<p>The store bitmap is stored in blocks of 16384 (0x4000) bytes. Each store bitmap block consists of:</p>
+<ul>
+<li>a store block header of type 6</li>
+<li>a bitmap</li>
+</ul>
+<h4 id="store-current-bitmap-data"><a class="header" href="#store-current-bitmap-data">Store (current) bitmap data</a></h4>
+<p>Every bit in the store (current) bitmap represents a block of 16384 (0x4000) bytes, where the LSB
+is the first bit in a byte.</p>
+<p>If a bit is set, the corresponding block is considered not in-use (or not allocated) by the store.</p>
+<p>The use of this bitmap is described in the section: <a href="#reading_snapshot_data">reading snapshot data</a>.</p>
+<h4 id="store-previous-bitmap-data"><a class="header" href="#store-previous-bitmap-data">Store previous bitmap data</a></h4>
+<p>Every bit in the store previous bitmap represents a block of 16384 (0x4000) bytes, where the LSB is
+the first bit in a byte.</p>
+<p>If a bit is set, the corresponding block is not in-use (or not allocated) by the previous store.</p>
+<p>Note that the first store can also contain a previous bitmap if an older store before it was
+removed.</p>
+<p>The use of this bitmap is described in the section: <a href="#reading_snapshot_data">reading snapshot data</a>.</p>
+<h3 id="store-data-block"><a class="header" href="#store-data-block">Store data block</a></h3>
+<p>The store data is stored in blocks of 16384 (0x4000) bytes.</p>
+<h3 id="reading_snapshot_data"><a class="header" href="#reading_snapshot_data">Reading snapshot data</a></h3>
+<p>For the size of the data that will fit in the buffer:</p>
+<pre><code class="language-text">* If the block offset has a corresponding block descriptor:
+    * The data is defined by block descriptor and has a maximum size accordingly
+    * If this is the active store and the block has an overlay:
+        * If the overlay applies:
+            * use the overlay block descriptor
+
+    * If the forwarder flag (0x01) is set
+      and there is a next store:
+        * read the block from the next store using the relative store offset
+    * Else:
+        * read the block from the current volume using the store offset
+
+* Else:
+    * If there is a next store:
+        * read the block from the next store
+    * Else if the block offset has a corresponding reverse block descriptor:
+        * read the block from the current volume
+    * Else if the active store is the most recent (last) store
+      and the block is flagged in the current bitmap
+      and ( the store has no previous bitmap
+            or the block is flagged in the previous bitmap ):
+        * zero-fill the block
+    * Else:
+        * read the block from the current volume
+
+    * Increment the block offset with the size of the block data that was read
+</code></pre>
+<blockquote>
+<p>Note that on Windows the actual behavior of unused block is undefined. A read of a corresponding
+block will return successful but will not alter the buffer passed to the read. For sanitation
+purposes Keramics will zero-fill the block.</p>
+</blockquote>
+<h2 id="format-edge-cases-and-corruption-scenarios"><a class="header" href="#format-edge-cases-and-corruption-scenarios">Format edge cases and corruption scenarios</a></h2>
+<p>This chapter contains several corruption scenarios that have been encountered “in the wild”.</p>
+<h3 id="catalog-volume-size-out-of-bounds"><a class="header" href="#catalog-volume-size-out-of-bounds">Catalog volume size out of bounds</a></h3>
+<blockquote>
+<p>Note that this currently considered a corruption scenario future findings may or may not prove
+otherwise.</p>
+</blockquote>
+<p>The volume size of one of the catalog entries exceeds the size of the underlying volume and does
+not corresponds with the volume size defined by the rest of the catalog entries.</p>
+<h3 id="scope-snapshots"><a class="header" href="#scope-snapshots">Scope snapshots</a></h3>
+<p>Technically scoped snaphots are a feature of volsnapa as of of Windows 8 or Windws Server 2012 and
+not a corruption scenario. It has been captured as a corruption scenario since it leads to some
+interesting side effects within file content of the snapshot.</p>
+<p>Scope snapshots functionality can be controlled via the Windows Registry value:</p>
+<pre><code class="language-text">Key path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore
+Value name: ScopeSnapshots
+</code></pre>
+<p>Per “Scoped Snapshots vmicvss Error 13 on Server 2012, Windows 8” a scope snapshot is a special
+volume snapshot for volsnap performance, which is mainly used by Windows critical updates. Scope
+means the volsnap only creates Copy on Write (Shadow) volume for the files that are involved in the
+updates instead of all the files on the volume.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/vss/shadow-copies-and-shadow-copy-sets">Shadow Copies and Shadow Copy Sets</a></li>
+<li><a href="https://www.mcbsys.com/blog/2013/05/scoped-snapshots-vmicvss-error-13-on-server-2012-windows-8/">Scoped Snapshots vmicvss Error 13 on Server 2012, Windows 8</a>,
+by M. Berry</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/api/vss/ne-vss-vss_volume_snapshot_attributes">VSS_VOLUME_SNAPSHOT_ATTRIBUTES enumeration (vss.h)</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="sgilabel.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="file_system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="sgilabel.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="file_system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

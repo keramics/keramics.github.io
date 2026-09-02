@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de1f83da.js";
+            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e9f10c98.js"></script>
+        <script src="toc-be09e687.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -897,15 +897,15 @@ following:</p>
 <ul>
 <li>device identifier (fork type is XFS_DINODE_FMT_DEV)</li>
 <li>inline data fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extent list data fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
-<li>extent tree data fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+<li>extents list data fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extents tree data fork (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 </li>
 <li>optional (extended) attributes data fork (descriptor)
 <ul>
 <li>inline attributes fork (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extent list attributes fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
-<li>extent tree attributes fork (fork type is XFS_DINODE_FMT_BTREE)</li>
+<li>extents list attributes fork (fork type is XFS_DINODE_FMT_EXTENTS)</li>
+<li>extents tree attributes fork (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 </li>
 </ul>
@@ -1240,9 +1240,9 @@ following:</p>
 
 <tr><td>1</td><td>XFS_DINODE_FMT_LOCAL</td><td>Data is stored inline (in the inode)</td></tr>
 
-<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extent_list">an extent list</a></td></tr>
+<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
 
-<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extent_tree">an extent tree</a></td></tr>
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
 
 <tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
 
@@ -1288,8 +1288,8 @@ following:</p>
 </table>
 </div>
 
-<h3 id="extent_list"><a class="header" href="#extent_list">Extent list</a></h3>
-<p>The extent list consists of:</p>
+<h3 id="extents_list"><a class="header" href="#extents_list">Extents list</a></h3>
+<p>The extents list consists of:</p>
 <ul>
 <li>one or more <a href="#packed_extent">packed extents</a></li>
 </ul>
@@ -1312,43 +1312,43 @@ following:</p>
 <blockquote>
 <p>Note that uninitialized extents are treated as sparse extents when read.</p>
 </blockquote>
-<h3 id="extent_tree"><a class="header" href="#extent_tree">Extent tree</a></h3>
-<h4 id="extent-tree-root-node"><a class="header" href="#extent-tree-root-node">Extent tree root node</a></h4>
-<p>The root node of the extent tree is stored in the inode and equivalent to
-<a href="#extent_tree_branch_node">an extent tree branch node</a>.</p>
+<h3 id="extents_tree"><a class="header" href="#extents_tree">Extents tree</a></h3>
+<h4 id="extents-tree-root-node"><a class="header" href="#extents-tree-root-node">Extents tree root node</a></h4>
+<p>The root node of the extents tree is stored in the inode and equivalent to
+<a href="#extents_tree_branch_node">an extents tree branch node</a>.</p>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = (node_data_size - 4) / 16
 </code></pre>
 <p>Where “node data size” is <code>(attributes_fork_descriptor_offset * 8)</code> if the value is not 0, or
 otherwise the remaining inode block size.</p>
-<h4 id="extent-tree-sub-node-block"><a class="header" href="#extent-tree-sub-node-block">Extent tree sub node block</a></h4>
-<p>An extent tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
-<p>The extent tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
-<h5 id="extent-tree-sub-node-block-header"><a class="header" href="#extent-tree-sub-node-block-header">Extent tree sub node block header</a></h5>
+<h4 id="extents-tree-sub-node-block"><a class="header" href="#extents-tree-sub-node-block">Extents tree sub node block</a></h4>
+<p>An extents tree sub nodes is stored in <a href="#btree_block">a B+ tree block</a>.</p>
+<p>The extents tree uses <a href="#btree_block_header_64bit">the B+ tree block header 64-bit</a>.</p>
+<h5 id="extents-tree-sub-node-block-header"><a class="header" href="#extents-tree-sub-node-block-header">Extents tree sub node block header</a></h5>
 <p>The sub node block header (xfs_bmbt_block_t) is equivalent to
 <a href="#btree_block_header">B+ tree block header</a>.</p>
-<h5 id="extent-tree-sub-node-block-header-signatures"><a class="header" href="#extent-tree-sub-node-block-header-signatures">Extent tree sub node block header signatures</a></h5>
+<h5 id="extents-tree-sub-node-block-header-signatures"><a class="header" href="#extents-tree-sub-node-block-header-signatures">Extents tree sub node block header signatures</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Signature</th><th>Description</th></thead>
-<tr><td>"BMA3"</td><td>Extent tree sub node block ((file system version 5)</td></tr>
+<tr><td>"BMA3"</td><td>Extents tree sub node block ((file system version 5)</td></tr>
 
-<tr><td>"BMAP"</td><td>Extent tree sub node block</td></tr>
+<tr><td>"BMAP"</td><td>Extents tree sub node block</td></tr>
 
 </table>
 </div>
 
-<h4 id="extent_tree_branch_node"><a class="header" href="#extent_tree_branch_node">Extent tree branch node</a></h4>
-<p>The extent tree branch node record consists of:</p>
+<h4 id="extents_tree_branch_node"><a class="header" href="#extents_tree_branch_node">Extents tree branch node</a></h4>
+<p>The extents tree branch node record consists of:</p>
 <ul>
 <li>node header</li>
-<li>array of extent tree branch node entry keys</li>
-<li>array of extent tree branch node entry values</li>
+<li>array of extents tree branch node entry keys</li>
+<li>array of extents tree branch node entry values</li>
 </ul>
 <p>The number of key-value pairs is calculated as following:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 16
 </code></pre>
-<h5 id="extent-tree-branch-node-header"><a class="header" href="#extent-tree-branch-node-header">Extent tree branch node header</a></h5>
+<h5 id="extents-tree-branch-node-header"><a class="header" href="#extents-tree-branch-node-header">Extents tree branch node header</a></h5>
 <p>The branch node header (xfs_bmdr_block_t) is 4 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
@@ -1360,7 +1360,7 @@ otherwise the remaining inode block size.</p>
 </table>
 </div>
 
-<h5 id="extent-tree-branch-node-entry-key"><a class="header" href="#extent-tree-branch-node-entry-key">Extent tree branch node entry key</a></h5>
+<h5 id="extents-tree-branch-node-entry-key"><a class="header" href="#extents-tree-branch-node-entry-key">Extents tree branch node entry key</a></h5>
 <p>The branch node entry key (xfs_bmbt_key_t) is 8 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
@@ -1370,18 +1370,18 @@ otherwise the remaining inode block size.</p>
 </table>
 </div>
 
-<h5 id="extent-tree-branch-node-entry-value"><a class="header" href="#extent-tree-branch-node-entry-value">Extent tree branch node entry value</a></h5>
+<h5 id="extents-tree-branch-node-entry-value"><a class="header" href="#extents-tree-branch-node-entry-value">Extents tree branch node entry value</a></h5>
 <p>The branch node entry value (xfs_bmbt_ptr_t or xfs_bmdr_ptr_t) is 8 byte of size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Block number of the extent tree sub node, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Block number of the extents tree sub node, which contains a <a href="#file_system_block_number">file system block number</a></td></tr>
 
 </table>
 </div>
 
-<h4 id="extent-tree-leaf-block-node"><a class="header" href="#extent-tree-leaf-block-node">Extent tree leaf block node</a></h4>
-<p>The extent tree leaf block node consists of:</p>
+<h4 id="extents-tree-leaf-block-node"><a class="header" href="#extents-tree-leaf-block-node">Extents tree leaf block node</a></h4>
+<p>The extents tree leaf block node consists of:</p>
 <ul>
 <li>one or more <a href="#packed_extent">packed extents</a></li>
 </ul>
@@ -1784,7 +1784,7 @@ XFS_DINODE_FMT_DEV.</p>
 <p>XFS supports multiple ways to store file content:</p>
 <ul>
 <li>inline data (fork type is XFS_DINODE_FMT_LOCAL)</li>
-<li>extents defined by either an extent list (fork type is XFS_DINODE_FMT_EXTENTS) or an extent
+<li>extents defined by either an extents list (fork type is XFS_DINODE_FMT_EXTENTS) or an extent
 B+ tree (fork type is XFS_DINODE_FMT_BTREE)</li>
 </ul>
 <h3 id="inline-data"><a class="header" href="#inline-data">Inline data</a></h3>
@@ -1921,7 +1921,7 @@ of test data.</p>
 
 <h3 id="attributes_tree"><a class="header" href="#attributes_tree">Attributes tree</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_BTREE the extended attributes are stored in an
-attributes tree. The attributes fork contains <a href="#extent_tree">an extent tree</a>.</p>
+attributes tree. The attributes fork contains <a href="#extents_tree">an extents tree</a>.</p>
 <p>The first block in the extents is the B+ tree root block.</p>
 <h3 id="attributes_tree_branch_node"><a class="header" href="#attributes_tree_branch_node">Attributes tree branch node</a></h3>
 <p>An attributes tree branch node consist of:</p>
@@ -1985,7 +1985,7 @@ consist of:</p>
 
 <h3 id="attributes-tree-leaf-node"><a class="header" href="#attributes-tree-leaf-node">Attributes tree leaf node</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_EXTENTS the extended attributes are stored as
-attributes tree. The attributes fork contains <a href="#extent_list">an extent list</a>.</p>
+attributes tree. The attributes fork contains <a href="#extents_list">an extents list</a>.</p>
 <p>Attributes tree (xfs_attr_leafblock_t or xfs_attr3_leafblock_t) consist of:</p>
 <ul>
 <li><a href="#attributes_tree_leaf_node_header">attributes tree leaf node header</a></li>
