@@ -1,0 +1,1272 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>BitLocker Drive Encryption (BDE) - Keramics data format specifications</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom-9a7a2c4d.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-7d8d51e4.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-8a494624.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Keramics data format specifications</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="bitlocker-drive-encryption-bde-format"><a class="header" href="#bitlocker-drive-encryption-bde-format">BitLocker Drive Encryption (BDE) format</a></h1>
+<p>The BitLocker Drive Encryption (BDE) format is used by Microsoft Windows to encrypt volumes.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>There are multiple versions of BitLocker Drive Encryption (BDE):</p>
+<ul>
+<li>BitLocker Windows Vista and Windows 7; used to encrypt NTFS volumes on fixed storage media, like
+harddisks.</li>
+<li>BitLocker To Go; introduced in Windows 7 and used to encrypt removable drives, which typically
+contain FAT file systems.</li>
+<li>BitLocker Used Disk Space Only encryption</li>
+</ul>
+<blockquote>
+<p>Note that Windows treats NTFS volumes on removable drives are treated as NTFS volumes on fixed
+storage media.</p>
+</blockquote>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+<tr><td>Date and time values</td><td>FILETIME in UTC</td></tr>
+
+<tr><td>Character strings</td><td>UCS-2 little-endian, which allows for unpaired Unicode surrogates such as "U+d800" and "U+dc00"</td></tr>
+
+</table>
+</div>
+
+<p>BitLocker is known to use the following identifiers:</p>
+<ul>
+<li>4967d63b-2e29-4ad8-8399-f6a339e3d001 (BitLocker and BitLocker To Go)</li>
+<li>92a84d3b-dd80-4d0e-9e4e-b1e3284eaed8 (BitLocker Used Disk Space Only encryption)</li>
+</ul>
+<h2 id="metadata-files"><a class="header" href="#metadata-files">Metadata files</a></h2>
+<p>BitLocker exposes various files in the “\System Volume Information” directory of the unencrypted
+volume that correspond to the BitLocker metadata areas.</p>
+<p>The contents of the metadata files, on an unencrypted volume, consists of 0-byte values. It is
+assumed that these files are used to prevent the BitLocker metadata to be overwritten.</p>
+<blockquote>
+<p>Note that not all tools zero out the metadata areas.</p>
+</blockquote>
+<h3 id="windows-vista"><a class="header" href="#windows-vista">Windows Vista</a></h3>
+<p>In Windows Vista the “\System Volume Information” directory contains the following BitLocker related
+files:</p>
+<ul>
+<li>“FVE.{%GUID%}.[123]” maps the blocks that contain the FVE metadata; typically 16384 bytes in size.</li>
+</ul>
+<h3 id="windows-7"><a class="header" href="#windows-7">Windows 7</a></h3>
+<p>In Windows 7 the “\System Volume Information” directory contains the following BitLocker related
+files:</p>
+<ul>
+<li>“FVE2.{%GUID%}” maps the block that contains the encrypted volume header; typically 8192 bytes in
+size.</li>
+<li>“FVE2.{%GUID%}.[123]” maps the blocks that contain the FVE metadata; typically 65536 bytes in
+size.</li>
+</ul>
+<h3 id="to-go"><a class="header" href="#to-go">To Go</a></h3>
+<p>BitLocker To Go uses a hybrid volume that has a encrypted and an unencrypted part. The unencrypted
+part contains various files. Application files for the BitLocker To Go helper application; which
+can also be found in:</p>
+<pre><code class="language-text">C:\Windows\BitLockerDiscoveryVolumeContents\
+</code></pre>
+<ul>
+<li>“COV 0000. BL” maps the block that contains the BitLocker To Go GUID and the offsets to the
+metadata; typically 32768 bytes in size.</li>
+<li>“COV 0000. ER” maps the encrypted data.</li>
+<li>“PAD 0000. PD” maps padding.</li>
+<li>“PAD 0000. NG” unknown; typically 0 bytes in size.</li>
+</ul>
+<p>It has been observed that the “COV 0000. ER” and “PAD 0000. NG” files can be split in multiple
+4294934528 byte (4 GiB - 32768) on a FAT32 volume, such as “COV 0001. ER”, “COV 0002. ER”, … or
+“PAD 0001. NG”, …</p>
+<p>The “PAD 0000. NG” are presumaly used to fill the root directory with entries so that no new files
+may be created on the volume.</p>
+<h2 id="keys"><a class="header" href="#keys">Keys</a></h2>
+<p>To encrypt storage media BitLocker uses different kind of keys.</p>
+<h3 id="volume-master-key-vmk"><a class="header" href="#volume-master-key-vmk">Volume Master Key (VMK)</a></h3>
+<p>The Volume Master Key (VMK) is 256-bit of size and is stored in multiple FVE Volume Master Key
+(VMK) structures. The VMK is stored encrypted with either the recovery key, external key, or the
+TPM.</p>
+<p>It is also possible that the VMK is stored unencrypted which is referred to as clear key.</p>
+<h3 id="full-volume-encryption-key-fvek"><a class="header" href="#full-volume-encryption-key-fvek">Full Volume Encryption Key (FVEK)</a></h3>
+<p>The Full Volume Encryption Key (FVEK) is stored encrypted with the Volume Master Key (VMK). The
+size of the FVEK is dependent on the encryption method used:</p>
+<ul>
+<li>For AES 128-bit the key is 128-bit of size</li>
+<li>For AES 256-bit the key is 256-bit of size</li>
+</ul>
+<p>When Elephant Diffuser is used the key data of the structure that hold the FVEK is always 512-bit
+of size. The First 256-bit are reserved for the FVEK and the other 256-bit for the TWEAK key. Only
+128-bit of the 256-bits are used when the encryption method is AES 128-bit.</p>
+<h3 id="tweak-key"><a class="header" href="#tweak-key">TWEAK key</a></h3>
+<p>The TWEAK is stored encrypted with the Volume Master Key (VMK). The size of the TWEAK key is
+dependent on the encryption method used:</p>
+<ul>
+<li>For AES 128-bit the key is 128-bit of size</li>
+<li>For AES 256-bit the key is 256-bit of size</li>
+</ul>
+<p>The TWEAK key is only present when Elephant Diffuser is used. The TWEAK key is stored in the key
+data of the structure that hold the Full Volume Encryption Key (FVEK) is always 512-bit of size.
+The First 256-bit are reserved for the FVEK and the other 256-bit for the TWEAK key. Only 128-bit
+of the 256-bits are used when the encryption method is AES 128-bit.</p>
+<h3 id="recovery-key"><a class="header" href="#recovery-key">Recovery key</a></h3>
+<p>BitLocker provides for a recovery (or numerical) password to unlock the encrypted data. The
+recovery password is used to determine a recovery key.</p>
+<p>Example recovery password:</p>
+<pre><code class="language-text">471207-278498-422125-177177-561902-537405-468006-693451
+</code></pre>
+<p>A valid recovery password consists of 48 digits where every number is dividable by 11 with a
+remainder of 0. The result of a division by 11 of a number is a 16-bit value. The individual 16-bit
+values make up a 128-bit key.</p>
+<p>The corresponding recovery key is calculated using the following approach, written partially in
+pseudo C:</p>
+<p>Initialize a structure consisting of:</p>
+<pre><code class="language-text">uint8_t last_sha256[ 32 ];
+uint8_t initial_sha256[ 32 ];
+uint8_t salt[ 16 ];
+uint64_t count;
+</code></pre>
+<p>Initialize both the last SHA256 and the count to 0.</p>
+<p>Calculate the SHA256 of the 128-bit key and update the initial SHA256 value.</p>
+<p>The salt is stored on disk in the stretch key which is stored in the recovery key protected Volume
+Master Key (VMK).</p>
+<p>Loop for 1048576 (0x100000) times:</p>
+<ul>
+<li>calculate the SHA256 of the structure and update the last SHA256 value</li>
+<li>increment the count by 1</li>
+</ul>
+<p>The last SHA256 value contains the 256-bit key which is recovery key that can unlock the recovery
+key protected Volume Master Key (VMK).</p>
+<h3 id="clear-key"><a class="header" href="#clear-key">Clear key</a></h3>
+<p>The clear key is an unprotected 256-bit key stored on the volume to decrypt the VMK. It is used
+when the encrypted volume is being decrypted.</p>
+<h3 id="startup-key"><a class="header" href="#startup-key">Startup key</a></h3>
+<p>The startup key (or external key) is stored in a file named “{%GUID%}.BEK”. The GUID in the filename
+equals the key identifier in the BitLocker metadata.</p>
+<p>There can be multiple startup keys for a single BitLocker volume. Each key is identified a by a
+different key identifier.</p>
+<h3 id="user-key"><a class="header" href="#user-key">User key</a></h3>
+<p>BitLocker To Go provides for a user password (or passphrase) to unlock the encrypted data. The user
+password is used to determine a user key.</p>
+<p>TODO: check if the password can be maximal 49 characters in size.</p>
+<p>Convert the user password into a UTF16 little-endian string.</p>
+<p>Initialize a structure consisting of:</p>
+<pre><code class="language-text">uint8_t last_sha256[ 32 ];
+uint8_t initial_sha256[ 32 ];
+uint8_t salt[ 16 ];
+uint64_t count;
+</code></pre>
+<p>Initialize both the last SHA256 and the count to 0.</p>
+<p>Calculate the SHA256 of the user password.</p>
+<p>Calculate the SHA256 of the SHA256 of the user password, and set it as the initial SHA256 value.</p>
+<p>The salt is stored on disk in the stretch key which is stored in the user key (or password)
+protected Volume Master Key (VMK).</p>
+<p>Loop for 1048576 (0x100000) times:</p>
+<ul>
+<li>calculate the SHA256 of the structure and update the last SHA256 value</li>
+<li>increment the count by 1</li>
+</ul>
+<p>The last SHA256 value contains the 256-bit key which is user key that can unlock the user key (or
+password) protected Volume Master Key (VMK).</p>
+<h2 id="encryption-methods"><a class="header" href="#encryption-methods">Encryption methods</a></h2>
+<p>BitLocker uses different kind of encryption methods. To encrypt the sector data it either uses
+AES-CBC with or without Elephant Elephant Diffuser. To encrypt the key data BitLocker uses AES-CCM.</p>
+<h3 id="aes-cbc"><a class="header" href="#aes-cbc">AES-CBC</a></h3>
+<p>Both encryption and decryption use:</p>
+<ul>
+<li>AES-CBC with FVEK decryption of sector data</li>
+</ul>
+<p>The initialization vector of the AES-CBC is the sector offset AES-ECB encrypted with the FVEK
+stored as a 16-byte little-endian value. The sector offset is the offset of the sector relative
+from the start of the volume.</p>
+<h3 id="aes-cbc-with-elephant-diffuser"><a class="header" href="#aes-cbc-with-elephant-diffuser">AES-CBC with Elephant Diffuser</a></h3>
+<p>Encryption:</p>
+<ul>
+<li>XOR with sector key</li>
+<li>Elephant Elephant Diffuser A</li>
+<li>Elephant Elephant Diffuser B</li>
+<li>AES-CBC with FVEK</li>
+</ul>
+<p>Decryption:</p>
+<ul>
+<li>AES-CBC with FVEK</li>
+<li>Elephant Elephant Diffuser B</li>
+<li>Elephant Elephant Diffuser A</li>
+<li>XOR with sector key</li>
+</ul>
+<p>The initialization vector of the AES-CBC is the sector offset AES-ECB encrypted with the FVEK
+stored as a 16-byte little-endian value. The sector offset is the offset of the sector relative
+from the start of the volume.</p>
+<p>The sector key 32-byte of size and contains:</p>
+<ul>
+<li>the lower 16-byte contain a little-endian version of the offset of the sector, relative from the
+start of the volume, AES-ECB encrypted with the TWEAK key</li>
+<li>the upper 16-byte contain a 16-byte little-endian version of the offset of the sector, relative
+from the start of the volume, with the most upper bit set (or upper byte set to 0x80) AES-ECB
+encrypted with the TWEAK key</li>
+</ul>
+<h3 id="aes-ccm"><a class="header" href="#aes-ccm">AES-CCM</a></h3>
+<p>The key data is encrypted using AES-CCM with an initialization vector of 0.</p>
+<h3 id="aes-xts"><a class="header" href="#aes-xts">AES-XTS</a></h3>
+<p>The FVEK contains both XTS keys.</p>
+<p>Both encryption and decryption use:</p>
+<ul>
+<li>AES-XTS with FVEK decryption of sector data</li>
+</ul>
+<p>The initialization vector of the AES-XTS is the sector number stored as a 16-byte little-endian
+value. The sector number is the offset of the sector relative from the start of the volume divided
+by the sector size.</p>
+<h3 id="elephant-diffuser"><a class="header" href="#elephant-diffuser">Elephant Diffuser</a></h3>
+<p>The Elephant Diffuser A and B variants are described in “AES-CBC + Elephant diffuser - A Disk
+Encryption Algorithm for Windows Vista”.</p>
+<h3 id="virtual-sectors"><a class="header" href="#virtual-sectors">Virtual sector(s)</a></h3>
+<p>In BitLocker the certain sector(s) of the encrypted storage media are handled in a specific manner.
+These are sectors to store:</p>
+<ul>
+<li>the unencrypted volume header</li>
+<li>the BitLocker metadata</li>
+</ul>
+<h4 id="bitlocker-windows-vista"><a class="header" href="#bitlocker-windows-vista">BitLocker Windows Vista</a></h4>
+<p>In BitLocker Windows Vista the first sector of the unencrypted volume header sector is
+reconstructed by replacing values in the BitLocker Volume header, namely</p>
+<ul>
+<li>replacing the “File system signature” with “NTFS\x20\x20\x20\x20”</li>
+<li>replacing the “FVE metadata block 1 cluster block number” with the “MTF mirror cluster block
+number”</li>
+</ul>
+<p>The 15 sectors directly following the first sector are also unencrypted.</p>
+<p>The sectors that contain the BDE metadata are shown as empty sectors; containing 0-byte values.</p>
+<h4 id="bitlocker-windows-7-and-to-go"><a class="header" href="#bitlocker-windows-7-and-to-go">BitLocker Windows 7 and To Go</a></h4>
+<p>Both BitLocker Windows 7 and To Go store an encrypted version of the unencrypted first sectors in a
+specific location. This location is defined in the
+<a href="#fve_volume_header_block">FVE Volume header block</a>. It is commonly 8192 bytes an size, entailing
+the first 16 sectors.</p>
+<p>The sectors that contain the encrypted volume header and the BDE metadata are shown as empty
+sectors; containing 0-byte values.</p>
+<h4 id="bitlocker-windows-10"><a class="header" href="#bitlocker-windows-10">BitLocker Windows 10</a></h4>
+<p>In later versions of Bitlocker Windows 10 the <a href="#fve_volume_header_block">FVE Volume header block</a>
+no longer is present. The number of volume header sectors in the
+<a href="#fve_metadata_block_header2">FVE metadata block header</a> can be used to determine the volume header
+size. It is commonly 8192 bytes an size, entailing the first 16 sectors.</p>
+<h2 id="volume-header"><a class="header" href="#volume-header">Volume header</a></h2>
+<h3 id="bitlocker-windows-vista-1"><a class="header" href="#bitlocker-windows-vista-1">BitLocker Windows Vista</a></h3>
+<p>The BitLocker Windows Vista volume header is similar to NTFS volume header. The differences have
+been emphasized in bold. The volume header is 512 bytes of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>3</td><td>"\xeb\x52\x90"</td><td>Boot entry point</td></tr>
+
+<tr><td><strong>3</strong></td><td><strong>8</strong></td><td><strong>"-FVE-FS-"</strong></td><td><strong>File system signature</strong></td></tr>
+
+<tr><td colspan="4"><em>DOS version 2.0 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block</td></tr>
+
+<tr><td>14</td><td>2</td><td>0x00</td><td>Reserved Sectors</td></tr>
+
+<tr><td>16</td><td>1</td><td>0x00</td><td>Number of File Allocation Tables (FATs)</td></tr>
+
+<tr><td>17</td><td>2</td><td>0</td><td>Root directory entries</td></tr>
+
+<tr><td>19</td><td>2</td><td></td><td>Total number of sectors (16-bit)</td></tr>
+
+<tr><td>21</td><td>1</td><td></td><td>Media descriptor</td></tr>
+
+<tr><td>22</td><td>2</td><td>0x00</td><td>Sectors Per File Allocation Table (FAT)</td></tr>
+
+<tr><td colspan="4"><em>DOS version 3.4 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+
+<tr><td>32</td><td>4</td><td>0x00</td><td>Total number of sectors (32-bit)</td></tr>
+
+<tr><td colspan="4"><em>NTFS version 8.0 BIOS parameter block (BPB) or extended BPB</em></td></tr>
+
+<tr><td>36</td><td>1</td><td>0x80</td><td>Unknown (Disc unit number)</td></tr>
+
+<tr><td>37</td><td>1</td><td>0x00</td><td>Unknown (Flags)</td></tr>
+
+<tr><td>38</td><td>1</td><td>0x80</td><td>Unknown (BPB version signature byte)</td></tr>
+
+<tr><td>39</td><td>1</td><td>0x00</td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Total number of sectors (64-bit)</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>Master File Table (MFT) cluster block number</td></tr>
+
+<tr><td><strong>56</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 1 cluster block number</strong></td></tr>
+
+<tr><td>64</td><td>1</td><td></td><td>MFT entry size</td></tr>
+
+<tr><td>65</td><td>3</td><td></td><td>Unknown</td></tr>
+
+<tr><td>68</td><td>1</td><td></td><td>Index entry size</td></tr>
+
+<tr><td>69</td><td>3</td><td></td><td>Unknown</td></tr>
+
+<tr><td>72</td><td>8</td><td></td><td>NTFS volume serial number</td></tr>
+
+<tr><td>80</td><td>4</td><td>0x00</td><td>Checksum</td></tr>
+
+<tr><td>84</td><td>426</td><td></td><td>Bootcode</td></tr>
+
+<tr><td>510</td><td>2</td><td>0x55 0xaa</td><td>Sector signature</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the number of sectors can be 1 less then the value indicated in the partition table.</p>
+</blockquote>
+<h3 id="bitlocker-windows-7-and-later"><a class="header" href="#bitlocker-windows-7-and-later">BitLocker Windows 7 and later</a></h3>
+<p>The BitLocker Windows 7 (and later) volume header less similar to NTFS volume header than the
+BitLocker Windows Vista volume header. The differences between the versions have been emphasized in
+bold. The volume header is 512 bytes of size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td><strong>0</strong></td><td><strong>3</strong></td><td><strong>"\xeb\x58\x90"</strong></td><td><strong>Boot entry point</strong></td></tr>
+
+<tr><td>3</td><td>8</td><td>"-FVE-FS-"</td><td>File system signature</td></tr>
+
+<tr><td colspan="4"><em>DOS version 2.0 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block</td></tr>
+
+<tr><td>14</td><td>2</td><td>0x00</td><td>Reserved Sectors</td></tr>
+
+<tr><td>16</td><td>1</td><td>0x00</td><td>Number of File Allocation Tables (FATs)</td></tr>
+
+<tr><td>17</td><td>2</td><td>0</td><td>Root directory entries</td></tr>
+
+<tr><td>19</td><td>2</td><td></td><td>Total number of sectors (16-bit)</td></tr>
+
+<tr><td>21</td><td>1</td><td></td><td>Media descriptor</td></tr>
+
+<tr><td>22</td><td>2</td><td>0x00</td><td>Sectors Per File Allocation Table (FAT)</td></tr>
+
+<tr><td colspan="4"><em>DOS version 3.4 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+
+<tr><td><strong>28</strong></td><td><strong>4</strong></td><td></td><td><strong>Number of hidden sectors</strong>, which contains the volume start sector number</td></tr>
+
+<tr><td>32</td><td>4</td><td>0x00</td><td>Total number of sectors (32-bit)</td></tr>
+
+<tr><td colspan="4"><em>Unknown</em></td></tr>
+
+<tr><td><strong>36</strong></td><td><strong>4</strong></td><td><strong>0x1fe0</strong></td><td><strong>Sectors per file allocation table</strong></td></tr>
+
+<tr><td><strong>40</strong></td><td><strong>2</strong></td><td></td><td><strong>FAT Flags (Only used during a conversion from a FAT12/16 volume)</strong></td></tr>
+
+<tr><td><strong>42</strong></td><td><strong>2</strong></td><td></td><td><strong>Version (Defined as 0)</strong></td></tr>
+
+<tr><td><strong>44</strong></td><td><strong>4</strong></td><td></td><td><strong>Cluster number of root directory start</strong></td></tr>
+
+<tr><td><strong>48</strong></td><td><strong>2</strong></td><td><strong>0x0001</strong></td><td><strong>Sector number of FS Information Sector</strong></td></tr>
+
+<tr><td><strong>50</strong></td><td><strong>2</strong></td><td><strong>0x0006</strong></td><td><strong>Sector number of a copy of this boot sector (0 if no backup copy exists)</strong></td></tr>
+
+<tr><td><strong>52</strong></td><td><strong>12</strong></td><td></td><td><strong>Unknown (Reserved)</strong></td></tr>
+
+<tr><td><strong>64</strong></td><td><strong>1</strong></td><td><strong>0x80</strong></td><td><strong>Physical Drive Number (see FAT12/16 BPB at offset 0x24)</strong></td></tr>
+
+<tr><td><strong>65</strong></td><td><strong>1</strong></td><td></td><td><strong>Unknown (Reserved) (see FAT12/16 BPB at offset 0x25)</strong></td></tr>
+
+<tr><td><strong>66</strong></td><td><strong>1</strong></td><td><strong>0x29</strong></td><td><strong>Extended boot signature (see FAT12/16 BPB at offset 0x26)</strong></td></tr>
+
+<tr><td><strong>67</strong></td><td><strong>4</strong></td><td></td><td><strong>Volume serial number</strong></td></tr>
+
+<tr><td><strong>71</strong></td><td><strong>11</strong></td><td><strong>"NO NAME\x20\x20\x20\x20"</strong></td><td><strong>Volume label</strong></td></tr>
+
+<tr><td><strong>82</strong></td><td><strong>8</strong></td><td><strong>"FAT32\x20\x20\x20"</strong></td><td><strong>File system signature</strong></td></tr>
+
+<tr><td><strong>90</strong></td><td><strong>70</strong></td><td></td><td><strong>Bootcode</strong></td></tr>
+
+<tr><td><strong>160</strong></td><td><strong>16</strong></td><td></td><td><strong>BitLocker identifier</strong>, which contains a GUID</td></tr>
+
+<tr><td><strong>176</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 1 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>184</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 2 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>192</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 3 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>200</strong></td><td><strong>307</strong></td><td></td><td><strong>Unknown (part of bootcode)</strong></td></tr>
+
+<tr><td><strong>507</strong></td><td><strong>3</strong></td><td></td><td><strong>Unknown</strong></td></tr>
+
+<tr><td>510</td><td>2</td><td>0x55 0xaa</td><td>Sector signature</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the number of sectors can be 1 less then the value indicated in the partition table.</p>
+</blockquote>
+<h3 id="bitlocker-to-go"><a class="header" href="#bitlocker-to-go">BitLocker To Go</a></h3>
+<p>BitLocker To Go on an NTFS volume is similar to BitLocker Windows 7. The BitLocker Windows To Go
+volume header for a FAT volume is similar to FAT32 volume header. The differences have been
+emphasized in bold. The volume header is 512 bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>3</td><td>"\xeb\x58\x90"</td><td>Boot entry point</td></tr>
+
+<tr><td><strong>3</strong></td><td><strong>8</strong></td><td><strong>"MSWIN4.1"</strong></td><td><strong>Signature</strong></td></tr>
+
+<tr><td colspan="4"><em>DOS version 2.0 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>11</td><td>2</td><td></td><td>Bytes per sector</td></tr>
+
+<tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block</td></tr>
+
+<tr><td>14</td><td>2</td><td>0x00</td><td>Reserved Sectors</td></tr>
+
+<tr><td>16</td><td>1</td><td>0x00</td><td>Number of File Allocation Tables (FATs)</td></tr>
+
+<tr><td>17</td><td>2</td><td>0</td><td>Root directory entries</td></tr>
+
+<tr><td>19</td><td>2</td><td></td><td>Total number of sectors (16-bit)</td></tr>
+
+<tr><td>21</td><td>1</td><td></td><td>Media descriptor</td></tr>
+
+<tr><td>22</td><td>2</td><td>0x00</td><td>Sectors Per File Allocation Table (FAT)</td></tr>
+
+<tr><td colspan="4"><em>DOS version 3.4 BIOS parameter block (BPB)</em></td></tr>
+
+<tr><td>24</td><td>2</td><td>0x3f</td><td>Sectors per track</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+
+<tr><td colspan="4"><em>Unknown</em></td></tr>
+
+<tr><td>36</td><td>4</td><td>0x1fe0</td><td>Sectors per file allocation table</td></tr>
+
+<tr><td>40</td><td>2</td><td></td><td>FAT Flags (Only used during a conversion from a FAT12/16 volume)</td></tr>
+
+<tr><td>42</td><td>2</td><td></td><td>Version (Defined as 0)</td></tr>
+
+<tr><td>44</td><td>4</td><td></td><td>Cluster number of root directory start</td></tr>
+
+<tr><td>48</td><td>2</td><td>0x0001</td><td>Sector number of FS Information Sector</td></tr>
+
+<tr><td>50</td><td>2</td><td>0x0006</td><td>Sector number of a copy of this boot sector (0 if no backup copy exists)</td></tr>
+
+<tr><td>52</td><td>12</td><td></td><td>Unknown (Reserved)</td></tr>
+
+<tr><td>64</td><td>1</td><td>0x80</td><td>Physical Drive Number (see FAT12/16 BPB at offset 0x24)</td></tr>
+
+<tr><td>65</td><td>1</td><td></td><td>Unknown (Reserved) (see FAT12/16 BPB at offset 0x25)</td></tr>
+
+<tr><td>66</td><td>1</td><td>0x29</td><td>Extended boot signature (see FAT12/16 BPB at offset 0x26)</td></tr>
+
+<tr><td>67</td><td>4</td><td></td><td>Volume serial number</td></tr>
+
+<tr><td>71</td><td>11</td><td>"NO NAME\x20\x20\x20\x20"</td><td>Volume label</td></tr>
+
+<tr><td>82</td><td>8</td><td>"FAT32\x20\x20\x20"</td><td>File system signature</td></tr>
+
+<tr><td>90</td><td>334</td><td></td><td>Bootcode</td></tr>
+
+<tr><td><strong>424</strong></td><td><strong>16</strong></td><td></td><td><strong>BitLocker identifier</strong>, which contains a GUID</td></tr>
+
+<tr><td><strong>440</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 1 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>448</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 2 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>456</strong></td><td><strong>8</strong></td><td></td><td><strong>FVE metadata block 3 offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td>464</td><td>46</td><td></td><td>Unknown</td></tr>
+
+<tr><td>510</td><td>2</td><td>0x55 0xaa</td><td>Sector signature</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h2 id="fve-metadata-block"><a class="header" href="#fve-metadata-block">FVE metadata block</a></h2>
+<p>A BitLocker volume contains 3 FVE metadata blocks. Each FVE metadata block consists of:</p>
+<ul>
+<li>a block header</li>
+<li>a metadata header</li>
+<li>an array of metadata entries</li>
+<li>padding (0-byte values) (seen in Windows 8)</li>
+</ul>
+<h3 id="fve-metadata-block-header"><a class="header" href="#fve-metadata-block-header">FVE metadata block header</a></h3>
+<h4 id="fve-metadata-block-header-version-1---windows-vista"><a class="header" href="#fve-metadata-block-header-version-1---windows-vista">FVE metadata block header version 1 - Windows Vista</a></h4>
+<p>The FVE metadata block header version 1 is 64 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"-FVE-FS-"</td><td>Signature</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Unknown (Size)</td></tr>
+
+<tr><td>10</td><td>2</td><td>1</td><td>Version</td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Unknown, which is commonly 0x04</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Unknown, which is commonly 0x04</td></tr>
+
+<tr><td>16</td><td>16</td><td>0</td><td>Unknown (empty values)</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>FVE metadata block 1 offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>FVE metadata block 2 offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>FVE metadata block 3 offset, which is relative to the start of the volume</td></tr>
+
+<tr><td>56</td><td>8</td><td></td><td>MFT mirror cluster block number</td></tr>
+
+</table>
+</div>
+
+<h4 id="fve_metadata_block_header2"><a class="header" href="#fve_metadata_block_header2">FVE metadata block header version 2 – Windows 7 and later</a></h4>
+<p>The FVE metadata block header version 2 is 64 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"-FVE-FS-"</td><td>Signature</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Unknown (Size)</td></tr>
+
+<tr><td>10</td><td>2</td><td>2</td><td>Version</td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Unknown, which is commonly 0x04, but 0x05 has been observed in a partial decrypted volume (protection status?)</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Unknown, which is commonly 0x04, but 0x01 has been observed in a partial decrypted volume</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Encrypted volume size, in number of bytes</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Number of volume header sectors</td></tr>
+
+<tr><td>32</td><td>8</td><td></td><td>FVE metadata block 1 offset, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>FVE metadata block 2 offset, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td>48</td><td>8</td><td></td><td>FVE metadata block 3 offset, which contains an offset relative to the start of the volume</td></tr>
+
+<tr><td><strong>56</strong></td><td><strong>8</strong></td><td></td><td><strong>Volume header offset</strong>, which contains an offset relative to the start of the volume</td></tr>
+
+</table>
+</div>
+
+<p>When decrypting BitLocker will decrypt from the back to the front. The encrypted volume size
+therefore contains the number of bytes of the volume that are still encrypted (or need to be
+decrypted).</p>
+<h3 id="fve-metadata-header-version-1"><a class="header" href="#fve-metadata-header-version-1">FVE metadata header (version 1)</a></h3>
+<p>The FVE metadata header (version 1) is 48 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Metadata size, which includes the size value</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Version</td></tr>
+
+<tr><td>8</td><td>4</td><td>48</td><td>Metadata header size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Metadata size copy</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Volume identifier, which contains a GUID</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Next nonce counter</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Creation time, which contains a FILETIME</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that it is currently unknown what the upper 16-bit of the encryption method value is used
+for. The MSB has been observed to be used or is this value actually 2x 16-bit values.</p>
+</blockquote>
+<h4 id="encryption_methods"><a class="header" href="#encryption_methods">Encryption methods</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>Unknown (Not encrypted/External Key)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x1000</td><td></td><td>Unknown (Stretch key)</td></tr>
+
+<tr><td>0x1001</td><td></td><td>Unknown (Stretch key)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x2000</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td>0x2001</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td>0x2002</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td>0x2003</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td>0x2004</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td>0x2005</td><td></td><td>Unknown (AES-CCM 256 bit encryption)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x8000</td><td></td><td>AES-CBC 128-bit encryption with Elephant Diffuser</td></tr>
+
+<tr><td>0x8001</td><td></td><td>AES-CBC 256-bit encryption with Elephant Diffuser</td></tr>
+
+<tr><td>0x8002</td><td></td><td>AES-CBC 128-bit encryption</td></tr>
+
+<tr><td>0x8003</td><td></td><td>AES-CBC 256-bit encryption</td></tr>
+
+<tr><td>0x8004</td><td></td><td>AES-XTS 128-bit encryption</td></tr>
+
+<tr><td>0x8005</td><td></td><td>Unknown (AES-XTS 256-bit encryption)</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-metadata-entry"><a class="header" href="#fve-metadata-entry">FVE metadata entry</a></h3>
+<p>The FVE metadata entry is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td></td><td>Entry size, which includes the size value</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Entry type</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Value type</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td>Version (Seen: 1 and 3)</td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Data</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the version is typically 1 but 3 has been seen for VMK FVE metadata entry in
+combination with clear key.</p>
+</blockquote>
+<h4 id="fve-metadata-entry-types"><a class="header" href="#fve-metadata-entry-types">FVE metadata entry types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>None, entry is a property</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0002</td><td></td><td>Volume Master Key (VMK)</td></tr>
+
+<tr><td>0x0003</td><td></td><td>Full Volume Encryption Key (FVEK)</td></tr>
+
+<tr><td>0x0004</td><td></td><td>Unknown (Validation)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0006</td><td></td><td>Startup key</td></tr>
+
+<tr><td>0x0007</td><td></td><td>Description (Drive label), which contains computer name, volume name and date</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x000b</td><td></td><td>Unknown (Backup of the Full Volume Encryption Key (FVEK)?)</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x000f</td><td></td><td>Volume header block</td></tr>
+
+</table>
+</div>
+
+<p>TODO: determine if the date format of the description is dependent on the locale, observed
+“MM/DD/YYYY”</p>
+<h4 id="fve-metadata-value-types"><a class="header" href="#fve-metadata-value-types">FVE metadata value types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>Erased</td></tr>
+
+<tr><td>0x0001</td><td></td><td>Key</td></tr>
+
+<tr><td>0x0002</td><td></td><td>String, which contains an UCS-2 little-endian string with end-of-string character</td></tr>
+
+<tr><td>0x0003</td><td></td><td>Stretch Key</td></tr>
+
+<tr><td>0x0004</td><td></td><td>Use Key</td></tr>
+
+<tr><td>0x0005</td><td></td><td>AES-CCM encrypted key</td></tr>
+
+<tr><td>0x0006</td><td></td><td>TPM encoded key</td></tr>
+
+<tr><td>0x0007</td><td></td><td>Validation</td></tr>
+
+<tr><td>0x0008</td><td></td><td>Volume master key</td></tr>
+
+<tr><td>0x0009</td><td></td><td>External key</td></tr>
+
+<tr><td>0x000a</td><td></td><td>Update</td></tr>
+
+<tr><td>0x000b</td><td></td><td>Error</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x000f</td><td></td><td>Unknown (Offset and size), contains a tuple of 2 x 64-bit values</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-key"><a class="header" href="#fve-key">FVE key</a></h3>
+<p>The FVE Stretch encrypted key has value type 0x0001. It is variable in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+
+<tr><td>4</td><td>...</td><td></td><td>Key data</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-stretch-encrypted-key"><a class="header" href="#fve-stretch-encrypted-key">FVE Stretch encrypted key</a></h3>
+<p>The FVE Stretch encrypted key has value type 0x0003. It is variable in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+
+<tr><td>4</td><td>16</td><td></td><td>Salt</td></tr>
+
+<tr><td>20</td><td>...</td><td></td><td>FVE metadata entry, which contains an AES-CCM encrypted key</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-aes-ccm-encrypted-key"><a class="header" href="#fve-aes-ccm-encrypted-key">FVE AES-CCM encrypted key</a></h3>
+<p>The FVE AES-CCM encrypted key has value type 0x0005. It is variable in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Nonce date and time, which contains a FILETIME</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Nonce counter</td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td>AES-CCM encrypted data</td></tr>
+
+</table>
+</div>
+
+<h4 id="unencrypted-data"><a class="header" href="#unencrypted-data">Unencrypted data</a></h4>
+<p>The unencrypted data is of variable size and consist of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Message Authentication Code (MAC)</td></tr>
+
+<tr><td colspan="4"><em>Key container</em></td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Size, which does not include the size of the MAC</td></tr>
+
+<tr><td>20</td><td>2</td><td>1</td><td>Unknown (Version)</td></tr>
+
+<tr><td>22</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+
+<tr><td>28</td><td>...</td><td></td><td>Unencrypted key data</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="fve-tpm-encoded-key"><a class="header" href="#fve-tpm-encoded-key">FVE TPM encoded key</a></h3>
+<p>The FVE TPM encoded key has value type 0x0006. It is variable in size and consists of:</p>
+<p>TODO: complete section</p>
+<h3 id="fve-validation"><a class="header" href="#fve-validation">FVE Validation</a></h3>
+<p>The FVE Validation has value type 0x0007. It is variable in size and consists of:</p>
+<p>TODO: complete section</p>
+<h3 id="fve-volume-master-key-vmk"><a class="header" href="#fve-volume-master-key-vmk">FVE Volume Master Key (VMK)</a></h3>
+<p>The FVE Volume Master Key has value type 0x0008. It is variable in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Key identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Last modification date and time, which contains a FILETIME</td></tr>
+
+<tr><td>24</td><td>2</td><td></td><td>Unknown</td></tr>
+
+<tr><td>26</td><td>2</td><td></td><td><a href="#key_protection_types">Protection type</a></td></tr>
+
+<tr><td>28</td><td>...</td><td></td><td>Properties, which contains an array of FVE metadata entries where the entry type is set to 0</td></tr>
+
+</table>
+</div>
+
+<p>The available properties depend on the VMK type.</p>
+<p>The clear key protected VMK consists of:</p>
+<ul>
+<li>key (with 256-bit of key data)</li>
+<li>AES-CCM encrypted key</li>
+</ul>
+<p>The recovery key protected VMK consists of:</p>
+<ul>
+<li>optional description string containing “DiskPassword\x00”</li>
+<li>stretch key</li>
+<li>AES-CCM encrypted key</li>
+</ul>
+<p>The startup key protected VMK consists of:</p>
+<ul>
+<li>optional description string containing “ExternalKey\x00”</li>
+<li>stretch key</li>
+<li>AES-CCM encrypted key</li>
+</ul>
+<p>The password protected VMK consists of:</p>
+<ul>
+<li>optional description string containing “ExternalKey\x00”</li>
+<li>stretch key</li>
+<li>AES-CCM encrypted key</li>
+</ul>
+<h4 id="key_protection_types"><a class="header" href="#key_protection_types">Key protection types</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0000</td><td></td><td>VMK protected with clear key, which basically is an unprotected VMK</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0100</td><td></td><td>VMK protected with TPM</td></tr>
+
+<tr><td>0x0200</td><td></td><td>VMK protected with startup key</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0500</td><td></td><td>VMK protected with TPM and PIN</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0800</td><td></td><td>VMK protected with recovery password</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x2000</td><td></td><td>VMK protected with password</td></tr>
+
+</table>
+</div>
+
+<h5 id="notes"><a class="header" href="#notes">Notes</a></h5>
+<p>Key protector types defined by the GetKeyProtectorType function documentation:</p>
+<pre><code class="language-text">0 Unknown or other protector type
+1 Trusted Platform Module (TPM)
+2 External key
+3 Numerical password
+4 TPM And PIN
+5 TPM And Startup Key
+6 TPM And PIN And Startup Key
+7 Public Key
+8 Passphrase
+9 TPM Certificate
+10 CryptoAPI Next Generation (CNG) Protector
+</code></pre>
+<h3 id="fve-external-key"><a class="header" href="#fve-external-key">FVE External Key</a></h3>
+<p>The FVE External Key has value type 0x0009. It is variable in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>Key identifier, which contains a GUID</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Last modification date and time, which contains a FILETIME</td></tr>
+
+<tr><td>24</td><td>...</td><td></td><td>Properties, which contains an array of FVE metadata entries where the entry type is set to 0</td></tr>
+
+</table>
+</div>
+
+<p>The available properties:</p>
+<ul>
+<li>optional description string containing “ExternalKey\x00”</li>
+<li>key</li>
+</ul>
+<h3 id="fve_volume_header_block"><a class="header" href="#fve_volume_header_block">FVE Volume header block</a></h3>
+<p>The FVE Volume header block has value type 0x000f. It is 16 or more bytes in size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Block offset</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Block size</td></tr>
+
+<tr><td colspan="4"><em>Unknown additional data</em></td></tr>
+
+<tr><td>16</td><td>2</td><td></td><td>Unknown (number of entries?)</td></tr>
+
+<tr><td>18</td><td>2</td><td></td><td>Unknown (size of additional data?)</td></tr>
+
+<tr><td>28</td><td>...</td><td></td><td>Unknown (array of 14 byte sized entries)</td></tr>
+
+<tr><td>...</td><td>2</td><td></td><td>Unknown (empty values)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Unknown (seen combination of block offset +  block size)</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+The FVE Volume header block seems to have been introduced in Windows 7. It specifies the location
+in the encrypted volume where the unencrypted volume header is stored.
+<p>The FVE Volume header block is commonly 8192 bytes in size for Windows 7 and 5365760 bytes for a
+BitLocker To Go.</p>
+<h2 id="bitlocker-external-key-bek-file"><a class="header" href="#bitlocker-external-key-bek-file">BitLocker External Key (BEK) file</a></h2>
+<p>A BitLocker External Key (BEK) file is commonly 156 bytes in size and consists of:</p>
+<ul>
+<li>a file header</li>
+<li>an array of metadata entries</li>
+</ul>
+<h3 id="bek-file-header-version-1"><a class="header" href="#bek-file-header-version-1">BEK file header (version 1)</a></h3>
+<p>The BEK file header is similar to the FVE metadata header (version 1). The BEK file header
+(version 1) is 48 bytes in size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Metadata size, which includes the size value</td></tr>
+
+<tr><td>4</td><td>4</td><td>1</td><td>Version</td></tr>
+
+<tr><td>8</td><td>4</td><td>48</td><td>Metadata header size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Unknown (Metadata size copy)</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Volume identifier, which contains a GUID</td></tr>
+
+<tr><td>32</td><td>4</td><td></td><td>Next nonce counter</td></tr>
+
+<tr><td>36</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+
+<tr><td>40</td><td>8</td><td></td><td>Creation time, which contains a FILETIME</td></tr>
+
+</table>
+</div>
+
+<p>The key identifier in the file must match the key identifier in the FVE Volume Master Key (VMK).</p>
+<h3 id="bek-metadata-entry-version-1"><a class="header" href="#bek-metadata-entry-version-1">BEK metadata entry (version 1)</a></h3>
+<p>The format of a BEK metadata entry (version 1) is similar to the format of a FVE metadata entry
+(version 1).</p>
+<p>The metadata in a BEK file consists of an FVE external key, which contains 256-bits of unprotected
+key data.</p>
+<p>The identifier of the VMK should match the identifier in the BEK file header.</p>
+<h2 id="notes-1"><a class="header" href="#notes-1">Notes</a></h2>
+<p>Seen on an unencrypted BDE volume (password was set shorted then 8 chars to bdetest).</p>
+<h3 id="fve-eow-block"><a class="header" href="#fve-eow-block">FVE-EOW block</a></h3>
+<p>The FVE-EOW block has …</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"FVE-EOW\x00"</td><td>Signature</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-eowbm-block"><a class="header" href="#fve-eowbm-block">FVE-EOWBM block</a></h3>
+<p>The FVE-EOWBM block has …</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>10</td><td>"FVE-EOWBM\x00"</td><td>Signature</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Block size, which includes the signature and size value</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h3 id="fve-eowbr-block"><a class="header" href="#fve-eowbr-block">FVE-EOWBR block</a></h3>
+<p>The FVE-EOWBR block has …</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>10</td><td>"FVE-EOWBR\x00"</td><td>Signature</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Block size, which includes the signature and size value</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h3 id="olrdhevf2-block"><a class="header" href="#olrdhevf2-block">OLRDHEVF2 block</a></h3>
+<p>The OLRDHEVF2 block has …</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>10</td><td>"OLRDHEVF2\x00"</td><td>Signature</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Unknown</td></tr>
+
+</table>
+</div>
+
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="http://download.microsoft.com/download/0/2/3/0238acaf-d3bf-4a6d-b3d6-0a0be4bbb36e/bitlockercipher200608.pdf">AES-CBC + Elephant diffuser - A Disk Encryption Algorithm for Windows Vista</a>,
+by N. Ferguson</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="apm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="bsdlabel.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="apm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="bsdlabel.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
