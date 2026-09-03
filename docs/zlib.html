@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
+            window.path_to_searchindex_js = "searchindex-275113e9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-be09e687.js"></script>
@@ -627,7 +627,7 @@ corresponding array of size values (or base size + additional size).</p>
 <p>TODO: complete this section</p>
 <h4 id="decompression"><a class="header" href="#decompression">Decompression</a></h4>
 <p>The decompression in pseudo code:</p>
-<pre><code class="language-text">if block_header.type == HUFFMANN_FIXED:
+<pre><code class="language-text">if( block_header.type == HUFFMANN_FIXED )
 {
     initialize the fixed Huffman trees
 }
@@ -651,6 +651,7 @@ do
         loop (until end of block code recognized)
         {
             decode literal/length value from input stream
+
             if( value &lt; 256 )
             {
                 copy value (literal byte) to output stream
@@ -658,9 +659,9 @@ do
             else if value = end of block (256)
             {
                  break from loop
-             }
-             else (value = 257..285)
-             {
+            }
+            else (value = 257..285)
+            {
                  decode distance from input stream
 
                  move backwards distance bytes in the output

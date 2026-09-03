@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
+            window.path_to_searchindex_js = "searchindex-275113e9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-be09e687.js"></script>
@@ -885,9 +885,7 @@ identifier. The device identifier can be stored in different formats, such as: â
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>1</td><td></td><td>Major device number</td></tr>
 
-<tr><td>1</td><td>2</td><td>0</td><td>Unknown</td></tr>
-
-<tr><td>3</td><td>1</td><td></td><td>Minor device number</td></tr>
+<tr><td>1</td><td>3</td><td></td><td>Minor device number</td></tr>
 
 </table>
 </div>
@@ -1827,22 +1825,16 @@ byte, the most significant bit holds information about the block with the lowest
 significant bit holds information about the block with the highest number. Listing 1 shows how you
 would test whether an block is in use, assuming that youâ€™ve read the entire allocation file into
 memory.</p>
-<pre><code class="language-text">Determining whether a block is in use.
+<p>Method to determine whether a block is used:</p>
+<pre><code class="language-python">byte_value = allocation_file_data[block_number // 8]
 
-static Boolean IsAllocationBlockUsed(UInt32 thisAllocationBlock,
-                                     UInt8 *allocationFileContents)
-{
-    UInt8 thisByte;
-
-    thisByte = allocationFileContents[thisAllocationBlock / 8];
-    return (thisByte &amp; (1 &lt;&lt; (7 - (thisAllocationBlock % 8)))) != 0;
-}
+is_used = (byte_value &amp; (1 &lt;&lt; (7 - (block_number % 8)))) != 0
 </code></pre>
 <h2 id="hfs_plus_attributes_file"><a class="header" href="#hfs_plus_attributes_file">Attributes file</a></h2>
 <p>The attributes file is a B-tree file used to store extended attributes.</p>
 <p>The location of the attributes file can be found in the HFS+ and HFSX volume header.</p>
 <h3 id="attributes-file-keys"><a class="header" href="#attributes-file-keys">Attributes file keys</a></h3>
-<p>An attributes file key is of variable size and consists of:</p>
+<p>An attributes file key (HFSPlusAttrKey) is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1851,11 +1843,11 @@ static Boolean IsAllocationBlockUsed(UInt32 thisAllocationBlock,
 
 <tr><td colspan="4"><em>If key data size &gt;= 12</em></td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Unknown</td></tr>
+<tr><td>2</td><td>2</td><td>0</td><td>Unknown (padding)</td></tr>
 
 <tr><td>4</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
 
 <tr><td>12</td><td>2</td><td></td><td>Number of characters in the name string</td></tr>
 
@@ -1897,7 +1889,7 @@ data record.</p>
 
 <tr><td>0x00000020</td><td>kHFSPlusAttrForkData</td><td>Attribute record with fork descriptor</td></tr>
 
-<tr><td>0x00000030</td><td>kHFSPlusAttrExtents</td><td>Attribute record with extents overflow</td></tr>
+<tr><td>0x00000030</td><td>kHFSPlusAttrExtents</td><td>Extents overflow record for a kHFSPlusAttrForkData record</td></tr>
 
 </table>
 </div>
@@ -1907,15 +1899,13 @@ data record.</p>
 created and how it should be handled.</p>
 </blockquote>
 <h4 id="the-inline-data-attribute-record"><a class="header" href="#the-inline-data-attribute-record">The inline data attribute record</a></h4>
-<p>The inline data attribute record is of variable size and consists of:</p>
+<p>The inline data attribute record (HFSPlusAttrData) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000010</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>4</td><td>2 x 4 = 8</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Attribute data size</td></tr>
 
@@ -1924,14 +1914,18 @@ created and how it should be handled.</p>
 </table>
 </div>
 
+<blockquote>
+<p>Note that is also a HFSPlusAttrInlineData record, which is obsolete and has not been observed
+to be used.</p>
+</blockquote>
 <h4 id="the-fork-descriptor-attribute-record"><a class="header" href="#the-fork-descriptor-attribute-record">The fork descriptor attribute record</a></h4>
-<p>The fork descriptor attribute record is 88 bytes in size and consists of:</p>
+<p>The fork descriptor attribute record (HFSPlusAttrForkData) is 88 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000020</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>8</td><td>80</td><td></td><td>Attribute <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
 
@@ -1939,13 +1933,13 @@ created and how it should be handled.</p>
 </div>
 
 <h4 id="the-extents-attribute-record"><a class="header" href="#the-extents-attribute-record">The extents attribute record</a></h4>
-<p>The extents attribute record is 72 bytes in size and consists of:</p>
+<p>The extents attribute record (HFSPlusAttrExtents) is 72 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000030</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>8</td><td>64</td><td></td><td>Attribute <a href="#hfs_plus_extents_record">extents record</a></td></tr>
 

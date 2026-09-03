@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2674ceaf.js";
+            window.path_to_searchindex_js = "searchindex-275113e9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-be09e687.js"></script>
@@ -4272,20 +4272,20 @@ store disk images (storage media)</p>
 <li>optional file header extensions</li>
 </ul>
 </li>
-<li>the level 1 table (cluster aligned)</li>
-<li>the reference count table (cluster aligned)</li>
+<li>the level 1 table (cluster block aligned)</li>
+<li>the reference count table (cluster block aligned)</li>
 <li>reference count blocks</li>
-<li>snapshot headers (8-byte aligned on cluster boundary)</li>
-<li>clusters containing:
+<li>snapshot headers (8-byte aligned on cluster block boundary)</li>
+<li>cluster blocks containing:
 <ul>
 <li>level 2 tables</li>
 <li>storage media data</li>
 </ul>
 </li>
 </ul>
-<p>The storage media data is stored in clusters. Each cluster is a multitude of 512 bytes. The level 1
-(L1) table contains level 1 reference of level 2 (L2) tables. The level 2 tables contain level 2
-references of the storage media clusters.</p>
+<p>The storage media data is stored in cluster blocks. Each cluster block is a multitude of 512 bytes.
+The level 1 (L1) table contains level 1 reference of level 2 (L2) tables. The level 2 tables contain
+level 2 references of the storage media.</p>
 <p>There are multiple versions of the QCOW image file format. QCOW (version 1) and QCOW2 (version 2
 and later) are sometimes considered even as separate image formats. Version 3 is considered as an
 extended version of QCOW2.</p>
@@ -4303,7 +4303,7 @@ extended version of QCOW2.</p>
 </div>
 
 <blockquote>
-<p>Note that this docuement assumes that character strings are stored in UTF-8</p>
+<p>Note that this document assumes that character strings are stored in UTF-8.</p>
 </blockquote>
 <p>The number of bytes per sector is 512.</p>
 <h3 id="encryption-1"><a class="header" href="#encryption-1">Encryption</a></h3>
@@ -4511,15 +4511,15 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>QCOW2_INCOMPAT_DIRTY</td><td></td></tr>
+<tr><td>0x0000000000000001</td><td>QCOW2_INCOMPAT_DIRTY</td><td>Is dirty (or in use)</td></tr>
 
-<tr><td>0x00000002</td><td>QCOW2_INCOMPAT_CORRUPT</td><td></td></tr>
+<tr><td>0x0000000000000002</td><td>QCOW2_INCOMPAT_CORRUPT</td><td>Is corrupt</td></tr>
 
-<tr><td>0x00000004</td><td>QCOW2_INCOMPAT_DATA_FILE</td><td></td></tr>
+<tr><td>0x0000000000000004</td><td>QCOW2_INCOMPAT_DATA_FILE</td><td>Uses data file</td></tr>
 
-<tr><td>0x00000008</td><td>QCOW2_INCOMPAT_COMPRESSION</td><td></td></tr>
+<tr><td>0x0000000000000008</td><td>QCOW2_INCOMPAT_COMPRESSION</td><td>Uses non-standard compression, where "standard compression" refers to zlib</td></tr>
 
-<tr><td>0x00000010</td><td>QCOW2_INCOMPAT_EXTL2</td><td></td></tr>
+<tr><td>0x0000000000000010</td><td>QCOW2_INCOMPAT_EXTL2</td><td>Has extended L2 (table) entries</td></tr>
 
 </table>
 </div>
@@ -4528,7 +4528,7 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>QCOW2_COMPAT_LAZY_REFCOUNTS</td><td></td></tr>
+<tr><td>0x0000000000000001</td><td>QCOW2_COMPAT_LAZY_REFCOUNTS</td><td>Uses lazy reference counting</td></tr>
 
 </table>
 </div>
@@ -4537,9 +4537,9 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00000001</td><td>QCOW2_AUTOCLEAR_BITMAPS</td><td></td></tr>
+<tr><td>0x0000000000000001</td><td>QCOW2_AUTOCLEAR_BITMAPS</td><td></td></tr>
 
-<tr><td>0x00000002</td><td>QCOW2_AUTOCLEAR_DATA_FILE_RAW</td><td></td></tr>
+<tr><td>0x0000000000000002</td><td>QCOW2_AUTOCLEAR_DATA_FILE_RAW</td><td></td></tr>
 
 </table>
 </div>
@@ -4548,7 +4548,9 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td></td><td>ZLIB compression</td></tr>
+<tr><td>0</td><td></td><td><a href="#zlib-compressed-data-1">zlib compression</a></td></tr>
+
+<tr><td>1</td><td></td><td>zstd compression (RFC 8878)</td></tr>
 
 </table>
 </div>
@@ -14277,9 +14279,7 @@ identifier. The device identifier can be stored in different formats, such as: â
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>1</td><td></td><td>Major device number</td></tr>
 
-<tr><td>1</td><td>2</td><td>0</td><td>Unknown</td></tr>
-
-<tr><td>3</td><td>1</td><td></td><td>Minor device number</td></tr>
+<tr><td>1</td><td>3</td><td></td><td>Minor device number</td></tr>
 
 </table>
 </div>
@@ -15219,22 +15219,16 @@ byte, the most significant bit holds information about the block with the lowest
 significant bit holds information about the block with the highest number. Listing 1 shows how you
 would test whether an block is in use, assuming that youâ€™ve read the entire allocation file into
 memory.</p>
-<pre><code class="language-text">Determining whether a block is in use.
+<p>Method to determine whether a block is used:</p>
+<pre><code class="language-python">byte_value = allocation_file_data[block_number // 8]
 
-static Boolean IsAllocationBlockUsed(UInt32 thisAllocationBlock,
-                                     UInt8 *allocationFileContents)
-{
-    UInt8 thisByte;
-
-    thisByte = allocationFileContents[thisAllocationBlock / 8];
-    return (thisByte &amp; (1 &lt;&lt; (7 - (thisAllocationBlock % 8)))) != 0;
-}
+is_used = (byte_value &amp; (1 &lt;&lt; (7 - (block_number % 8)))) != 0
 </code></pre>
 <h2 id="hfs_plus_attributes_file"><a class="header" href="#hfs_plus_attributes_file">Attributes file</a></h2>
 <p>The attributes file is a B-tree file used to store extended attributes.</p>
 <p>The location of the attributes file can be found in the HFS+ and HFSX volume header.</p>
 <h3 id="attributes-file-keys"><a class="header" href="#attributes-file-keys">Attributes file keys</a></h3>
-<p>An attributes file key is of variable size and consists of:</p>
+<p>An attributes file key (HFSPlusAttrKey) is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -15243,11 +15237,11 @@ static Boolean IsAllocationBlockUsed(UInt32 thisAllocationBlock,
 
 <tr><td colspan="4"><em>If key data size &gt;= 12</em></td></tr>
 
-<tr><td>2</td><td>2</td><td></td><td>Unknown</td></tr>
+<tr><td>2</td><td>2</td><td>0</td><td>Unknown (padding)</td></tr>
 
 <tr><td>4</td><td>4</td><td></td><td>Identifier (CNID)</td></tr>
 
-<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>8</td><td>4</td><td></td><td>Logical block number</td></tr>
 
 <tr><td>12</td><td>2</td><td></td><td>Number of characters in the name string</td></tr>
 
@@ -15289,7 +15283,7 @@ data record.</p>
 
 <tr><td>0x00000020</td><td>kHFSPlusAttrForkData</td><td>Attribute record with fork descriptor</td></tr>
 
-<tr><td>0x00000030</td><td>kHFSPlusAttrExtents</td><td>Attribute record with extents overflow</td></tr>
+<tr><td>0x00000030</td><td>kHFSPlusAttrExtents</td><td>Extents overflow record for a kHFSPlusAttrForkData record</td></tr>
 
 </table>
 </div>
@@ -15299,15 +15293,13 @@ data record.</p>
 created and how it should be handled.</p>
 </blockquote>
 <h4 id="the-inline-data-attribute-record"><a class="header" href="#the-inline-data-attribute-record">The inline data attribute record</a></h4>
-<p>The inline data attribute record is of variable size and consists of:</p>
+<p>The inline data attribute record (HFSPlusAttrData) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000010</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
-
-<tr><td>8</td><td>4</td><td></td><td>Unknown</td></tr>
+<tr><td>4</td><td>2 x 4 = 8</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>12</td><td>4</td><td></td><td>Attribute data size</td></tr>
 
@@ -15316,14 +15308,18 @@ created and how it should be handled.</p>
 </table>
 </div>
 
+<blockquote>
+<p>Note that is also a HFSPlusAttrInlineData record, which is obsolete and has not been observed
+to be used.</p>
+</blockquote>
 <h4 id="the-fork-descriptor-attribute-record"><a class="header" href="#the-fork-descriptor-attribute-record">The fork descriptor attribute record</a></h4>
-<p>The fork descriptor attribute record is 88 bytes in size and consists of:</p>
+<p>The fork descriptor attribute record (HFSPlusAttrForkData) is 88 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000020</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>8</td><td>80</td><td></td><td>Attribute <a href="#hfs_plus_fork_descriptor_structure">fork descriptor</a></td></tr>
 
@@ -15331,13 +15327,13 @@ created and how it should be handled.</p>
 </div>
 
 <h4 id="the-extents-attribute-record"><a class="header" href="#the-extents-attribute-record">The extents attribute record</a></h4>
-<p>The extents attribute record is 72 bytes in size and consists of:</p>
+<p>The extents attribute record (HFSPlusAttrExtents) is 72 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>0x00000030</td><td><a href="#attributes_file_data_record_types">Record type</a></td></tr>
 
-<tr><td>4</td><td>4</td><td>0</td><td>Unknown (Reserved)</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Unknown (reserved)</td></tr>
 
 <tr><td>8</td><td>64</td><td></td><td>Attribute <a href="#hfs_plus_extents_record">extents record</a></td></tr>
 
@@ -24460,7 +24456,7 @@ corresponding array of size values (or base size + additional size).</p>
 <p>TODO: complete this section</p>
 <h4 id="decompression"><a class="header" href="#decompression">Decompression</a></h4>
 <p>The decompression in pseudo code:</p>
-<pre><code class="language-text">if block_header.type == HUFFMANN_FIXED:
+<pre><code class="language-text">if( block_header.type == HUFFMANN_FIXED )
 {
     initialize the fixed Huffman trees
 }
@@ -24484,6 +24480,7 @@ do
         loop (until end of block code recognized)
         {
             decode literal/length value from input stream
+
             if( value &lt; 256 )
             {
                 copy value (literal byte) to output stream
@@ -24491,9 +24488,9 @@ do
             else if value = end of block (256)
             {
                  break from loop
-             }
-             else (value = 257..285)
-             {
+            }
+            else (value = 257..285)
+            {
                  decode distance from input stream
 
                  move backwards distance bytes in the output
