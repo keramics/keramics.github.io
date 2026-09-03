@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-275113e9.js";
+            window.path_to_searchindex_js = "searchindex-4c9c911d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-be09e687.js"></script>
+        <script src="toc-10238d0d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -231,7 +231,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 </li>
 </ul>
 <h2 id="the-superblock"><a class="header" href="#the-superblock">The superblock</a></h2>
-<p>The XFS superblock (xfs_sb_t) is (at least) 512 bytes of size and consists of:</p>
+<p>The XFS superblock (xfs_sb_t) is (at least) 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -557,7 +557,7 @@ equivalent.</p>
 <li>the block offset B+ tree, that tracks the free space by block number</li>
 <li>the block count B+ tree, that tracks the size of the free space block</li>
 </ul>
-<p>The free block information (xfs_agf_t) is 64 or 224 bytes of size and consists of:</p>
+<p>The free block information (xfs_agf_t) is 64 or 224 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -627,7 +627,7 @@ equivalent.</p>
 <li>Array of free block numbers</li>
 </ul>
 <h3 id="free-list-header"><a class="header" href="#free-list-header">Free list header</a></h3>
-<p>The free list header is 36 bytes of size and consist of:</p>
+<p>The free list header is 36 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -646,7 +646,7 @@ equivalent.</p>
 
 <p>TODO: describe sb_uuid or sb_meta_uuid</p>
 <h2 id="inode-information"><a class="header" href="#inode-information">Inode information</a></h2>
-<p>The inode information (xfs_agi_t) is (at least) 512 bytes of size and consists of:</p>
+<p>The inode information (xfs_agi_t) is (at least) 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -746,7 +746,7 @@ size and consist of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h4 id="btree_block_header_64bit"><a class="header" href="#btree_block_header_64bit">B+ tree block header 64-bit</a></h4>
-<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 72 bytes of size and consist of:</p>
+<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 72 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -810,7 +810,7 @@ size and consist of:</p>
 <h3 id="free-space-b-tree"><a class="header" href="#free-space-b-tree">Free space B+ tree</a></h3>
 <p>TODO: complete section</p>
 <h4 id="free-space-b-tree-branch-node-record"><a class="header" href="#free-space-b-tree-branch-node-record">Free space B+ tree branch node record</a></h4>
-<p>The free space B+ tree branch node record (xfs_alloc_ptr_t) is 4 bytes of size and consist of:</p>
+<p>The free space B+ tree branch node record (xfs_alloc_ptr_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -820,7 +820,7 @@ size and consist of:</p>
 </div>
 
 <h4 id="free-space-b-tree-leaf-node-record"><a class="header" href="#free-space-b-tree-leaf-node-record">Free space B+ tree leaf node record</a></h4>
-<p>The free space B+ tree leaf node record (xfs_alloc_key_t) is 8 bytes of size and consist of:</p>
+<p>The free space B+ tree leaf node record (xfs_alloc_key_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -844,7 +844,7 @@ size and consist of:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 8
 </code></pre>
 <h5 id="inode-tree-branch-node-key"><a class="header" href="#inode-tree-branch-node-key">Inode tree branch node key</a></h5>
-<p>The inode tree branch node key (xfs_inobt_key_t) is 4 bytes of size and consist of:</p>
+<p>The inode tree branch node key (xfs_inobt_key_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -857,7 +857,7 @@ size and consist of:</p>
 <p>Note that the inode number of the last key can be 0.</p>
 </blockquote>
 <h5 id="inode-tree-branch-node-value"><a class="header" href="#inode-tree-branch-node-value">Inode tree branch node value</a></h5>
-<p>The inode tree branch node key is 4 bytes of size and consist of:</p>
+<p>The inode tree branch node key is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -873,7 +873,7 @@ size and consist of:</p>
 <li>array of inode tree leaf node entry records</li>
 </ul>
 <h5 id="inode-tree-leaf-node-record"><a class="header" href="#inode-tree-leaf-node-record">Inode tree leaf node record</a></h5>
-<p>The inode tree leaf node record (xfs_inobt_rec_t) is 16 bytes of size and consist of:</p>
+<p>The inode tree leaf node record (xfs_inobt_rec_t) is 16 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -910,7 +910,7 @@ following:</p>
 </li>
 </ul>
 <h3 id="inode-version-1"><a class="header" href="#inode-version-1">Inode version 1</a></h3>
-<p>The inode version 1 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<p>The inode version 1 (xfs_dinode_core_t) is 100 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -976,7 +976,7 @@ following:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode-version-2"><a class="header" href="#inode-version-2">Inode version 2</a></h3>
-<p>The inode version 2 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<p>The inode version 2 (xfs_dinode_core_t) is 100 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1046,7 +1046,7 @@ following:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode-version-3"><a class="header" href="#inode-version-3">Inode version 3</a></h3>
-<p>The inode version 3 (xfs_dinode_core_t) is 176 bytes of size and consist of:</p>
+<p>The inode version 3 (xfs_dinode_core_t) is 176 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1404,7 +1404,7 @@ data), where fork type is XFS_DINODE_FMT_LOCAL. The short-form directory table c
 </ul>
 <p>The XFS_SB_VERSION_DIRV2BIT flag in the superblock indicates if version 2 is used.</p>
 <h4 id="short-form-directory-table-header-version-1"><a class="header" href="#short-form-directory-table-header-version-1">Short-form directory table header version 1</a></h4>
-<p>The short-form directory table header version 1 (xfs_dir_sf_hdr_t) is 9 bytes of size and consists
+<p>The short-form directory table header version 1 (xfs_dir_sf_hdr_t) is 9 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -1417,7 +1417,7 @@ of:</p>
 </div>
 
 <h4 id="short-form-directory-table-header-version-2"><a class="header" href="#short-form-directory-table-header-version-2">Short-form directory table header version 2</a></h4>
-<p>The short-form directory table header version 2 (xfs_dir2_sf_hdr_t) is 6 or 10 bytes of size and
+<p>The short-form directory table header version 2 (xfs_dir2_sf_hdr_t) is 6 or 10 bytes in size and
 consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1437,7 +1437,7 @@ and number of 64-bit entries must be 0. If the inode numbers are stored as 64-bi
 number of 64-bit entries is set and number of 32-bit entries must be 0.</p>
 </blockquote>
 <h4 id="short-form-directory-table-entry-version-1"><a class="header" href="#short-form-directory-table-entry-version-1">Short-form directory table entry version 1</a></h4>
-<p>The short-form directory table entry version 1 (xfs_dir_sf_entry_t) is variable of size and
+<p>The short-form directory table entry version 1 (xfs_dir_sf_entry_t) is of variable size and
 consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1452,7 +1452,7 @@ consists of:</p>
 </div>
 
 <h4 id="short-form-directory-table-entry-version-2"><a class="header" href="#short-form-directory-table-entry-version-2">Short-form directory table entry version 2</a></h4>
-<p>The short-form directory table entry version 2 (xfs_dir2_sf_entry_t) is variable of size and
+<p>The short-form directory table entry version 2 (xfs_dir2_sf_entry_t) is of variable size and
 consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1490,7 +1490,7 @@ set.</p>
 </ul>
 <h4 id="directory-list-element-header"><a class="header" href="#directory-list-element-header">Directory list element header</a></h4>
 <h5 id="directory-list-element-header-version-2"><a class="header" href="#directory-list-element-header-version-2">Directory list element header version 2</a></h5>
-<p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist
+<p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes in size and consist
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -1503,7 +1503,7 @@ of:</p>
 </div>
 
 <h5 id="directory-list-element-header-version-3"><a class="header" href="#directory-list-element-header-version-3">Directory list element header version 3</a></h5>
-<p>The directory list element header version 3 (xfs_dir3_data_hdr_t) is 64 bytes of size and consist
+<p>The directory list element header version 3 (xfs_dir3_data_hdr_t) is 64 bytes in size and consist
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1553,7 +1553,7 @@ of:</p>
 </div>
 
 <h5 id="block_free_region_v2"><a class="header" href="#block_free_region_v2">Block free region version 2</a></h5>
-<p>The block free region version 2 (xfs_dir2_data_free_t) is 4 bytes of size and consist of:</p>
+<p>The block free region version 2 (xfs_dir2_data_free_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1566,7 +1566,7 @@ of:</p>
 
 <h4 id="directory-list-element-entries"><a class="header" href="#directory-list-element-entries">Directory list element entries</a></h4>
 <h5 id="directory-list-element-entry-version-2"><a class="header" href="#directory-list-element-entry-version-2">Directory list element entry version 2</a></h5>
-<p>The directory list element entry version 2 (xfs_dir2_data_entry_t) is variable of size and consists
+<p>The directory list element entry version 2 (xfs_dir2_data_entry_t) is of variable size and consists
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1593,7 +1593,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="unused-directory-list-element-entry-version-2"><a class="header" href="#unused-directory-list-element-entry-version-2">Unused directory list element entry version 2</a></h5>
-<p>The unused directory list element entry version 2 (xfs_dir2_data_unused_t) is variable of size
+<p>The unused directory list element entry version 2 (xfs_dir2_data_unused_t) is of variable size
 and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -1624,7 +1624,7 @@ size and consists of:</p>
 
 <h4 id="directory-list-element-footer"><a class="header" href="#directory-list-element-footer">Directory list element footer</a></h4>
 <h5 id="directory-list-element-footer-version-2"><a class="header" href="#directory-list-element-footer-version-2">Directory list element footer version 2</a></h5>
-<p>The directory list element footer version 2 (xfs_dir2_block_tail_t) is 8 bytes of size and consists
+<p>The directory list element footer version 2 (xfs_dir2_block_tail_t) is 8 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -1645,7 +1645,7 @@ of:</p>
 <li>array of directory tree branch node entries</li>
 </ul>
 <h5 id="directory_tree_branch_node_header"><a class="header" href="#directory_tree_branch_node_header">Directory tree branch node header</a></h5>
-<p>A directory tree branch node header is 16 bytes of size and consist of:</p>
+<p>A directory tree branch node header is 16 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -1663,7 +1663,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="directory-tree-branch-node-entry"><a class="header" href="#directory-tree-branch-node-entry">Directory tree branch node entry</a></h5>
-<p>A directory tree branch node entry is 8 bytes of size and consists of:</p>
+<p>A directory tree branch node entry is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1689,7 +1689,7 @@ of:</p>
 <li>a directory tree leaf node footer</li>
 </ul>
 <h5 id="directory-tree-leaf-node-header-version-1"><a class="header" href="#directory-tree-leaf-node-header-version-1">Directory tree leaf node header version 1</a></h5>
-<p>A directory tree leaf node header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes of size and consists
+<p>A directory tree leaf node header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes in size and consists
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1720,7 +1720,7 @@ of:</p>
 version 1.</p>
 </blockquote>
 <h5 id="directory-tree-leaf-node-entry-version-1"><a class="header" href="#directory-tree-leaf-node-entry-version-1">Directory tree leaf node entry version 1</a></h5>
-<p>The directory tree leaf node entry (xfs_dir_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<p>The directory tree leaf node entry (xfs_dir_leaf_entry_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1740,7 +1740,7 @@ version 1.</p>
 version 1.</p>
 </blockquote>
 <h5 id="directory-tree-leaf-node-value"><a class="header" href="#directory-tree-leaf-node-value">Directory tree leaf node value</a></h5>
-<p>The directory tree leaf node value (xfs_dir_leaf_name_t) is variable of size and consist of:</p>
+<p>The directory tree leaf node value (xfs_dir_leaf_name_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1752,7 +1752,7 @@ version 1.</p>
 </div>
 
 <h5 id="directory-tree-leaf-node-footer-version-1"><a class="header" href="#directory-tree-leaf-node-footer-version-1">Directory tree leaf node footer version 1</a></h5>
-<p>A directory tree leaf node footer version 1 (xfs_dir_leaf_tail_t) is 4 bytes of size and consists
+<p>A directory tree leaf node footer version 1 (xfs_dir_leaf_tail_t) is 4 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -1769,7 +1769,7 @@ version 1.</p>
 <h2 id="device-identifier"><a class="header" href="#device-identifier">Device identifier</a></h2>
 <p>Character and block devices identifiers are stored as inline data with fork type is
 XFS_DINODE_FMT_DEV.</p>
-<p>The device identifier (xfs_dev_t) is 4 bytes of size and consists of:</p>
+<p>The device identifier (xfs_dev_t) is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1799,7 +1799,7 @@ data has an implicit sparse extent (or hole).</p>
 <h3 id="file_system_block_header"><a class="header" href="#file_system_block_header">File system block header</a></h3>
 <h4 id="file_system_block_header_version_1"><a class="header" href="#file_system_block_header_version_1">File system block header version 1</a></h4>
 <p>If the superblock format version &lt;= 4 the file system block header version 1 is used. The file
-system block header version 1 (xfs_da_blkinfo_t) is 12 bytes of size and consist of:</p>
+system block header version 1 (xfs_da_blkinfo_t) is 12 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1819,7 +1819,7 @@ system block header version 1 (xfs_da_blkinfo_t) is 12 bytes of size and consist
 </blockquote>
 <h4 id="file_system_block_header_version_3"><a class="header" href="#file_system_block_header_version_3">File system block header version 3</a></h4>
 <p>If the superblock format version &gt;= 5 the file system block header version 3 is used. The file
-system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes of size and consist of:</p>
+system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1884,7 +1884,7 @@ attributes table consist of:</p>
 <li>one or more short-form attributes table entries</li>
 </ul>
 <h4 id="the-short-form-attributes-table-header"><a class="header" href="#the-short-form-attributes-table-header">The short-form attributes table header</a></h4>
-<p>The short-form attributes table header (xfs_attr_sf_hdr) is 4 bytes of size and consists of:</p>
+<p>The short-form attributes table header (xfs_attr_sf_hdr) is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1902,7 +1902,7 @@ attributes table consist of:</p>
 of test data.</p>
 </blockquote>
 <h4 id="the-short-form-attribute-entry"><a class="header" href="#the-short-form-attribute-entry">The short-form attribute entry</a></h4>
-<p>The short-form attributes table entry (xfs_attr_sf_entry) is variable of size and consists of:</p>
+<p>The short-form attributes table entry (xfs_attr_sf_entry) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -1932,7 +1932,7 @@ attributes tree. The attributes fork contains <a href="#extents_tree">an extents
 <h4 id="attributes_branch_node_block_header"><a class="header" href="#attributes_branch_node_block_header">Attributes tree branch node header</a></h4>
 <h5 id="attributes-tree-branch-node-header-version-2"><a class="header" href="#attributes-tree-branch-node-header-version-2">Attributes tree branch node header version 2</a></h5>
 <p>If the superblock format version &lt;= 4 the attributes tree branch node header version 2 is used.
-The attributes tree branch node header version 2 (xfs_da_blkinfo_t) is 16 bytes of size and
+The attributes tree branch node header version 2 (xfs_da_blkinfo_t) is 16 bytes in size and
 consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -1952,7 +1952,7 @@ consist of:</p>
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="attributes-tree-branch-node-header-version-3"><a class="header" href="#attributes-tree-branch-node-header-version-3">Attributes tree branch node header version 3</a></h5>
 <p>If the superblock format version &gt;= 5 the attributes tree branch node header version 3 is used.
-The attributes tree branch node header version 3 (xfs_da3_blkinfo_t) is 64 bytes of size and
+The attributes tree branch node header version 3 (xfs_da3_blkinfo_t) is 64 bytes in size and
 consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -2001,7 +2001,7 @@ version 1 structures.</p>
 <h4 id="attributes_tree_leaf_node_header"><a class="header" href="#attributes_tree_leaf_node_header">Attributes tree leaf node header</a></h4>
 <h5 id="attributes-tree-leaf-node-header-version-2"><a class="header" href="#attributes-tree-leaf-node-header-version-2">Attributes tree leaf node header version 2</a></h5>
 <p>If the superblock format version &lt;= 4 the attributes tree leaf node header version 2 is used. The
-attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes of size and consist of:</p>
+attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -2028,7 +2028,7 @@ attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes of 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="attributes-tree-leaf-node-header-version-3"><a class="header" href="#attributes-tree-leaf-node-header-version-3">Attributes tree leaf node header version 3</a></h5>
 <p>If the superblock format version &gt;= 5 the attributes tree leaf node header version 3 is used. The
-attributes tree leaf node header version 3 (xfs_attr3_leaf_hdr_t) is 80 bytes of size and consist
+attributes tree leaf node header version 3 (xfs_attr3_leaf_hdr_t) is 80 bytes in size and consist
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -2057,7 +2057,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h4 id="attributes-tree-leaf-node-entry"><a class="header" href="#attributes-tree-leaf-node-entry">Attributes tree leaf node entry</a></h4>
-<p>The attributes tree leaf node entry (xfs_attr_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<p>The attributes tree leaf node entry (xfs_attr_leaf_entry_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2077,7 +2077,7 @@ of:</p>
 as local attribute value otherwise as remote attribute value. The value data of remote attribute
 value are stored in <a href="#remote_attribute_value_data_block">a remote attribute value data block</a>.</p>
 <h5 id="local-attribute-value"><a class="header" href="#local-attribute-value">Local attribute value</a></h5>
-<p>The local attributes value (xfs_attr_leaf_name_local_t) is variable of size and consist of:</p>
+<p>The local attributes value (xfs_attr_leaf_name_local_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2091,7 +2091,7 @@ value are stored in <a href="#remote_attribute_value_data_block">a remote attrib
 </div>
 
 <h5 id="remote-attribute-value"><a class="header" href="#remote-attribute-value">Remote attribute value</a></h5>
-<p>The remote attributes value (xfs_attr_leaf_name_remote_t) is variable of size and consist of:</p>
+<p>The remote attributes value (xfs_attr_leaf_name_remote_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2136,7 +2136,7 @@ with a remote attribute value data block header version 3 followed by attribute 
 <p>The attributes extents contain the physical location of the individual remote attribute value data
 blocks.</p>
 <h5 id="remote-attribute-value-data-block-header-version-3"><a class="header" href="#remote-attribute-value-data-block-header-version-3">Remote attribute value data block header version 3</a></h5>
-<p>The remote attribute value data block header (xfs_attr3_rmt_hdr) is 52 bytes of size and consist of:</p>
+<p>The remote attribute value data block header (xfs_attr3_rmt_hdr) is 52 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -2160,7 +2160,7 @@ blocks.</p>
 </div>
 
 <h5 id="parent_directory_attribute_value_data"><a class="header" href="#parent_directory_attribute_value_data">Parent directory attribute value data</a></h5>
-<p>The parent directory attribute value data (xfs_parent_rec) is 12 bytes of size and consist of:</p>
+<p>The parent directory attribute value data (xfs_parent_rec) is 12 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

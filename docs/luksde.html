@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-275113e9.js";
+            window.path_to_searchindex_js = "searchindex-4c9c911d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-be09e687.js"></script>
+        <script src="toc-10238d0d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -299,19 +299,19 @@ header.</p>
 <li>The initialization vector of the AES-CBC is dependent on the initialization vector mode defined
 in the volume header. In recent versions of Linux, AES-CBC is combined with the ESSIV
 initialization vector mode by default.</li>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="aes-ecb"><a class="header" href="#aes-ecb">AES-ECB</a></h3>
 <p>Decryption uses:</p>
 <ul>
 <li>AES-ECB with Master Key (MK) decryption of sector data</li>
 <li>No initialization vector is used.</li>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="aes-xts"><a class="header" href="#aes-xts">AES-XTS</a></h3>
 <p>TODO: complete section</p>
 <ul>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="anubis"><a class="header" href="#anubis">Anubis</a></h3>
 <p>TODO: complete section</p>
@@ -410,7 +410,7 @@ Size of initialization vector?</p>
 
 <h2 id="json_area"><a class="header" href="#json_area">JSON area</a></h2>
 <p>The JSON area is stored directly after the volume header and must be 4096-byte aligned. The JSON
-area is variable of size and constists of:</p>
+area is of variable size and constists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

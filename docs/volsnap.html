@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-275113e9.js";
+            window.path_to_searchindex_js = "searchindex-4c9c911d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-be09e687.js"></script>
+        <script src="toc-10238d0d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -253,7 +253,7 @@ size, but presumably 512 bytes, and consists of:</p>
 
 <h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
 <p>The catalog contains information about the individual stores. The catalog consists of one or more
-catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists of:</p>
+catalog blocks. Each catalog block is 16384 (0x4000) bytes in size and consists of:</p>
 <ul>
 <li>catalog block header</li>
 <li>an array of catalog entries</li>
@@ -262,7 +262,7 @@ catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists 
 <p>If the volume does not contain a catalog when there are no snapshots (stored) but volsnap is
 enabled.</p>
 <h3 id="catalog-block-header"><a class="header" href="#catalog-block-header">Catalog block header</a></h3>
-<p>The catalog block header is 128 bytes of size and consists of:</p>
+<p>The catalog block header is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -297,7 +297,7 @@ entry type 0x03.</p>
 <p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
 entirely of 0-bytes.</p>
 <h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
-<p>An unused catalog entry (type 0x01) is 128 bytes of size and consists of:</p>
+<p>An unused catalog entry (type 0x01) is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -309,7 +309,7 @@ entirely of 0-bytes.</p>
 </div>
 
 <h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
-<p>A catalog entry type 0x02 is 128 bytes of size and consists of:</p>
+<p>A catalog entry type 0x02 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -331,7 +331,7 @@ entirely of 0-bytes.</p>
 </div>
 
 <h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
-<p>A catalog entry type 0x03 is 128 bytes of size and consists of:</p>
+<p>A catalog entry type 0x03 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -376,7 +376,7 @@ finally the changes in store 1 over the resulting volume.</p>
 <li>data blocks</li>
 </ul>
 <h3 id="store-block-header"><a class="header" href="#store-block-header">Store block header</a></h3>
-<p>The store block header is 128 bytes of size and consists of:</p>
+<p>The store block header is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -422,7 +422,7 @@ finally the changes in store 1 over the resulting volume.</p>
 
 <h3 id="store-information"><a class="header" href="#store-information">Store information</a></h3>
 <p>The store information is stored directly after the store header.</p>
-<p>The store information is variable of size and consists of:</p>
+<p>The store information is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -550,7 +550,7 @@ consists of:</p>
 <li>an array of store block descriptors</li>
 </ul>
 <h4 id="block-descriptor"><a class="header" href="#block-descriptor">Block descriptor</a></h4>
-<p>The block descriptor is 32 bytes of size and consists of:</p>
+<p>The block descriptor is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -651,7 +651,7 @@ block consists of:</p>
 <li>an array of store block range list entries</li>
 </ul>
 <h4 id="store-block-range-entry"><a class="header" href="#store-block-range-entry">Store block range entry</a></h4>
-<p>The store block range entry is 24 bytes of size and consists of:</p>
+<p>The store block range entry is 24 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

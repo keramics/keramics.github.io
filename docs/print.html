@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-275113e9.js";
+            window.path_to_searchindex_js = "searchindex-4c9c911d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-be09e687.js"></script>
+        <script src="toc-10238d0d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -449,7 +449,7 @@ section are:</p>
 </table>
 </div>
 
-<p>The information about the acquired media consists of <a href="#zlib-compressed-data-1">zlib compressed data</a>. It contains
+<p>The information about the acquired media consists of <a href="#zlib-compressed-data-format">zlib compressed data</a>. It contains
 text in UTF16 format specifying information about the acquired media. The text multiple lines
 separated by an end of line character(s).</p>
 <p>The first 2 bytes of the UTF16 string are the byte order mark (BOM):</p>
@@ -764,7 +764,7 @@ Dossier generated EWF-E01 files.</li>
 </table>
 </div>
 
-<p>The information about the acquired media consists of <a href="#zlib-compressed-data-1">zlib compressed data</a>. It contains
+<p>The information about the acquired media consists of <a href="#zlib-compressed-data-format">zlib compressed data</a>. It contains
 text in ASCII format specifying information about the acquired media. The text multiple lines
 separated by an end of line character(s).</p>
 <p>In the next paragraphs the various variants of the header section are described. In all cases the
@@ -1520,7 +1520,7 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="optical-disc-images"><a class="header" href="#optical-disc-images">Optical disc images</a></h4>
 <p>For a MODE-1 CD-ROM optical disc image EnCase only seems to support 2048 bytes per sector (the
@@ -1612,7 +1612,7 @@ The resulting size of the “compressed” chunk can therefore be larger than th
 <blockquote>
 <p>Note that this was deducted from the behavior of FTK Imager for SMART (EWF-S01).</p>
 </blockquote>
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="smart-ewf-s01-3"><a class="header" href="#smart-ewf-s01-3">SMART (EWF-S01)</a></h4>
 <p>The table section in the SMART (EWF-S01) format is equivalent to that of the EWF specification.</p>
@@ -1687,7 +1687,7 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-1">zlib compressed data</a>. The checksum of the
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
 compressed data chunk is part the zlib compressed data format.</p>
 <h4 id="ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01">FTK Imager and EnCase 2 to 5 and linen 5 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
@@ -3013,7 +3013,7 @@ format. EWF-X does not limit the table entries to 16375. EWF-X is not the same a
 <li>xhash</li>
 </ul>
 <h4 id="xheader"><a class="header" href="#xheader">Xheader</a></h4>
-<p>The xheader section contains <a href="#zlib-compressed-data-1">zlib compressed data</a> containing XML data containing the
+<p>The xheader section contains <a href="#zlib-compressed-data-format">zlib compressed data</a> containing XML data containing the
 header values.</p>
 <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xheader&gt;
@@ -3029,7 +3029,7 @@ header values.</p>
 &lt;/xheader&gt;
 </code></pre>
 <h4 id="xhash"><a class="header" href="#xhash">Xhash</a></h4>
-<p>The xhash section contains <a href="#zlib-compressed-data-1">zlib compressed data</a> containing XML data containing the hash
+<p>The xhash section contains <a href="#zlib-compressed-data-format">zlib compressed data</a> containing XML data containing the hash
 values.</p>
 <pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;xhash&gt;
@@ -3048,7 +3048,7 @@ values.</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
 <p>In this corruption scenarion the copy of uncompressed data size value of the
-<a href="#zlib-compressed-data-1">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
+<a href="#zlib-compressed-data-format">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
 uncompressed data size.</p>
 <p>Keramics currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
@@ -4548,7 +4548,7 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td></td><td><a href="#zlib-compressed-data-1">zlib compression</a></td></tr>
+<tr><td>0</td><td></td><td><a href="#zlib-compressed-data-format">zlib compression</a></td></tr>
 
 <tr><td>1</td><td></td><td>zstd compression (RFC 8878)</td></tr>
 
@@ -5358,13 +5358,13 @@ item.</p>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x80000004</td><td></td><td>ADC compressed data</td></tr>
+<tr><td>0x80000004</td><td></td><td><a href="#apple-data-compression-adc-data-format">ADC compressed data</a></td></tr>
 
-<tr><td>0x80000005</td><td></td><td>zlib compressed data</td></tr>
+<tr><td>0x80000005</td><td></td><td><a href="#zlib-compressed-data-format">zlib compressed data</a></td></tr>
 
 <tr><td>0x80000006</td><td></td><td>bzip2 compressed data</td></tr>
 
-<tr><td>0x80000007</td><td></td><td>LZFSE compressed data</td></tr>
+<tr><td>0x80000007</td><td></td><td><a href="#lzfse-compressed-data-format">LZFSE compressed data</a></td></tr>
 
 <tr><td>0x80000008</td><td></td><td>LZMA compressed data</td></tr>
 
@@ -6848,7 +6848,7 @@ is set, a sector number of 1 indicates the grain table is sparse.</p>
 
 <tr><td colspan="4"> </td></tr>
 
-<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="#zlib-compressed-data-1">zlib compressed data</a></td></tr>
+<tr><td>12</td><td>...</td><td></td><td>Compressed data, which contains <a href="#zlib-compressed-data-format">zlib compressed data</a></td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>Unknown (Padding)</td></tr>
 
@@ -7428,7 +7428,7 @@ the number of partitions in use.</p>
 </div>
 
 <h3 id="partition_entry"><a class="header" href="#partition_entry">Partition entry</a></h3>
-<p>The partition entry is 16 bytes of size and consists of:</p>
+<p>The partition entry is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -8042,7 +8042,7 @@ with 0xffffffff, using the polynominal 0xedb88320 and initial value 0xf597a6cf.<
 </ul>
 <h3 id="physical-volume-label"><a class="header" href="#physical-volume-label">Physical volume label</a></h3>
 <p>The physical volume label is stored in the second sector of the physical volume. The physical
-volume label is currently 512 bytes of size and consists of:</p>
+volume label is currently 512 bytes in size and consists of:</p>
 <ul>
 <li>physical volume label header</li>
 <li>physical volume header</li>
@@ -8682,19 +8682,19 @@ header.</p>
 <li>The initialization vector of the AES-CBC is dependent on the initialization vector mode defined
 in the volume header. In recent versions of Linux, AES-CBC is combined with the ESSIV
 initialization vector mode by default.</li>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="aes-ecb"><a class="header" href="#aes-ecb">AES-ECB</a></h3>
 <p>Decryption uses:</p>
 <ul>
 <li>AES-ECB with Master Key (MK) decryption of sector data</li>
 <li>No initialization vector is used.</li>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="aes-xts"><a class="header" href="#aes-xts">AES-XTS</a></h3>
 <p>TODO: complete section</p>
 <ul>
-<li>The initialization vector is 16 bytes of size.</li>
+<li>The initialization vector is 16 bytes in size.</li>
 </ul>
 <h3 id="anubis"><a class="header" href="#anubis">Anubis</a></h3>
 <p>TODO: complete section</p>
@@ -8793,7 +8793,7 @@ Size of initialization vector?</p>
 
 <h2 id="json_area"><a class="header" href="#json_area">JSON area</a></h2>
 <p>The JSON area is stored directly after the volume header and must be 4096-byte aligned. The JSON
-area is variable of size and constists of:</p>
+area is of variable size and constists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9717,7 +9717,7 @@ start of the <strong>first</strong> extended partition record.</p>
 
 <h2 id="sgi-disklabel"><a class="header" href="#sgi-disklabel">SGI disklabel</a></h2>
 <p>The SGI disklabel (or volume header) is stored at offset 0.</p>
-<p>The SGI disklabel is 512 bytes of size and consists of:</p>
+<p>The SGI disklabel is 512 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9743,7 +9743,7 @@ start of the <strong>first</strong> extended partition record.</p>
 </div>
 
 <h3 id="device-parameters"><a class="header" href="#device-parameters">Device parameters</a></h3>
-<p>The device parameters are 48 bytes of size and consist of:</p>
+<p>The device parameters are 48 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9797,7 +9797,7 @@ start of the <strong>first</strong> extended partition record.</p>
 <h3 id="volume_descriptor"><a class="header" href="#volume_descriptor">Volume descriptor</a></h3>
 <p>The volume descriptors contain a flat file system, where each individual descriptor describes a
 execute boot file. These execute boot files are stored within the volume header partition.</p>
-<p>The volume descriptor is 16 bytes of size and consists of:</p>
+<p>The volume descriptor is 16 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9811,7 +9811,7 @@ execute boot file. These execute boot files are stored within the volume header 
 </div>
 
 <h3 id="partition_entry-1"><a class="header" href="#partition_entry-1">Partition entry</a></h3>
-<p>The partition entry is 12 bytes of size and consists of:</p>
+<p>The partition entry is 12 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9937,7 +9937,7 @@ size, but presumably 512 bytes, and consists of:</p>
 
 <h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
 <p>The catalog contains information about the individual stores. The catalog consists of one or more
-catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists of:</p>
+catalog blocks. Each catalog block is 16384 (0x4000) bytes in size and consists of:</p>
 <ul>
 <li>catalog block header</li>
 <li>an array of catalog entries</li>
@@ -9946,7 +9946,7 @@ catalog blocks. Each catalog block is 16384 (0x4000) bytes of size and consists 
 <p>If the volume does not contain a catalog when there are no snapshots (stored) but volsnap is
 enabled.</p>
 <h3 id="catalog-block-header"><a class="header" href="#catalog-block-header">Catalog block header</a></h3>
-<p>The catalog block header is 128 bytes of size and consists of:</p>
+<p>The catalog block header is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9981,7 +9981,7 @@ entry type 0x03.</p>
 <p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
 entirely of 0-bytes.</p>
 <h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
-<p>An unused catalog entry (type 0x01) is 128 bytes of size and consists of:</p>
+<p>An unused catalog entry (type 0x01) is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -9993,7 +9993,7 @@ entirely of 0-bytes.</p>
 </div>
 
 <h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
-<p>A catalog entry type 0x02 is 128 bytes of size and consists of:</p>
+<p>A catalog entry type 0x02 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10015,7 +10015,7 @@ entirely of 0-bytes.</p>
 </div>
 
 <h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
-<p>A catalog entry type 0x03 is 128 bytes of size and consists of:</p>
+<p>A catalog entry type 0x03 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10060,7 +10060,7 @@ finally the changes in store 1 over the resulting volume.</p>
 <li>data blocks</li>
 </ul>
 <h3 id="store-block-header"><a class="header" href="#store-block-header">Store block header</a></h3>
-<p>The store block header is 128 bytes of size and consists of:</p>
+<p>The store block header is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10106,7 +10106,7 @@ finally the changes in store 1 over the resulting volume.</p>
 
 <h3 id="store-information"><a class="header" href="#store-information">Store information</a></h3>
 <p>The store information is stored directly after the store header.</p>
-<p>The store information is variable of size and consists of:</p>
+<p>The store information is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10234,7 +10234,7 @@ consists of:</p>
 <li>an array of store block descriptors</li>
 </ul>
 <h4 id="block-descriptor"><a class="header" href="#block-descriptor">Block descriptor</a></h4>
-<p>The block descriptor is 32 bytes of size and consists of:</p>
+<p>The block descriptor is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10335,7 +10335,7 @@ block consists of:</p>
 <li>an array of store block range list entries</li>
 </ul>
 <h4 id="store-block-range-entry"><a class="header" href="#store-block-range-entry">Store block range entry</a></h4>
-<p>The store block range entry is 24 bytes of size and consists of:</p>
+<p>The store block range entry is 24 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -10600,7 +10600,7 @@ content data in the resource fork of the file.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZFSE compressed data</td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>LZFSE compressed data blocks</td></tr>
+<tr><td>...</td><td>...</td><td></td><td><a href="#lzfse-compressed-data-format">LZFSE compressed data</a> blocks</td></tr>
 
 </table>
 </div>
@@ -10614,7 +10614,7 @@ otherwise the block should start with a LZFSE block marker.</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4 x ...</td><td></td><td>Array of compressed data block offsets, where an offset is relative from the start of the LZVN compressed data</td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>LZVN compressed data blocks</td></tr>
+<tr><td>...</td><td>...</td><td></td><td><a href="#lzvn-compressed-data-format">LZVN compressed data</a> blocks</td></tr>
 
 </table>
 </div>
@@ -12317,7 +12317,7 @@ bytes in size and consists of:</p>
 </div>
 
 <h4 id="the-ext4-extended-attributes-block-header"><a class="header" href="#the-ext4-extended-attributes-block-header">The ext4 extended attributes block header</a></h4>
-<p>The ext4 extended attributes block header (ext4_xattr_header) is 32 bytes of size and consists of:</p>
+<p>The ext4 extended attributes block header (ext4_xattr_header) is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -18880,7 +18880,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 </li>
 </ul>
 <h2 id="the-superblock-1"><a class="header" href="#the-superblock-1">The superblock</a></h2>
-<p>The XFS superblock (xfs_sb_t) is (at least) 512 bytes of size and consists of:</p>
+<p>The XFS superblock (xfs_sb_t) is (at least) 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19206,7 +19206,7 @@ equivalent.</p>
 <li>the block offset B+ tree, that tracks the free space by block number</li>
 <li>the block count B+ tree, that tracks the size of the free space block</li>
 </ul>
-<p>The free block information (xfs_agf_t) is 64 or 224 bytes of size and consists of:</p>
+<p>The free block information (xfs_agf_t) is 64 or 224 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19276,7 +19276,7 @@ equivalent.</p>
 <li>Array of free block numbers</li>
 </ul>
 <h3 id="free-list-header"><a class="header" href="#free-list-header">Free list header</a></h3>
-<p>The free list header is 36 bytes of size and consist of:</p>
+<p>The free list header is 36 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19295,7 +19295,7 @@ equivalent.</p>
 
 <p>TODO: describe sb_uuid or sb_meta_uuid</p>
 <h2 id="inode-information"><a class="header" href="#inode-information">Inode information</a></h2>
-<p>The inode information (xfs_agi_t) is (at least) 512 bytes of size and consists of:</p>
+<p>The inode information (xfs_agi_t) is (at least) 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19395,7 +19395,7 @@ size and consist of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h4 id="btree_block_header_64bit"><a class="header" href="#btree_block_header_64bit">B+ tree block header 64-bit</a></h4>
-<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 72 bytes of size and consist of:</p>
+<p>The B+ tree block header 64-bit (xfs_btree_lblock_t) is 24 or 72 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19459,7 +19459,7 @@ size and consist of:</p>
 <h3 id="free-space-b-tree"><a class="header" href="#free-space-b-tree">Free space B+ tree</a></h3>
 <p>TODO: complete section</p>
 <h4 id="free-space-b-tree-branch-node-record"><a class="header" href="#free-space-b-tree-branch-node-record">Free space B+ tree branch node record</a></h4>
-<p>The free space B+ tree branch node record (xfs_alloc_ptr_t) is 4 bytes of size and consist of:</p>
+<p>The free space B+ tree branch node record (xfs_alloc_ptr_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19469,7 +19469,7 @@ size and consist of:</p>
 </div>
 
 <h4 id="free-space-b-tree-leaf-node-record"><a class="header" href="#free-space-b-tree-leaf-node-record">Free space B+ tree leaf node record</a></h4>
-<p>The free space B+ tree leaf node record (xfs_alloc_key_t) is 8 bytes of size and consist of:</p>
+<p>The free space B+ tree leaf node record (xfs_alloc_key_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19493,7 +19493,7 @@ size and consist of:</p>
 <pre><code class="language-python">number_of_key_value_pairs = node_records_data_size / 8
 </code></pre>
 <h5 id="inode-tree-branch-node-key"><a class="header" href="#inode-tree-branch-node-key">Inode tree branch node key</a></h5>
-<p>The inode tree branch node key (xfs_inobt_key_t) is 4 bytes of size and consist of:</p>
+<p>The inode tree branch node key (xfs_inobt_key_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19506,7 +19506,7 @@ size and consist of:</p>
 <p>Note that the inode number of the last key can be 0.</p>
 </blockquote>
 <h5 id="inode-tree-branch-node-value"><a class="header" href="#inode-tree-branch-node-value">Inode tree branch node value</a></h5>
-<p>The inode tree branch node key is 4 bytes of size and consist of:</p>
+<p>The inode tree branch node key is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19522,7 +19522,7 @@ size and consist of:</p>
 <li>array of inode tree leaf node entry records</li>
 </ul>
 <h5 id="inode-tree-leaf-node-record"><a class="header" href="#inode-tree-leaf-node-record">Inode tree leaf node record</a></h5>
-<p>The inode tree leaf node record (xfs_inobt_rec_t) is 16 bytes of size and consist of:</p>
+<p>The inode tree leaf node record (xfs_inobt_rec_t) is 16 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -19559,7 +19559,7 @@ following:</p>
 </li>
 </ul>
 <h3 id="inode-version-1"><a class="header" href="#inode-version-1">Inode version 1</a></h3>
-<p>The inode version 1 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<p>The inode version 1 (xfs_dinode_core_t) is 100 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19625,7 +19625,7 @@ following:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode-version-2"><a class="header" href="#inode-version-2">Inode version 2</a></h3>
-<p>The inode version 2 (xfs_dinode_core_t) is 100 bytes of size and consist of:</p>
+<p>The inode version 2 (xfs_dinode_core_t) is 100 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -19695,7 +19695,7 @@ following:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="inode-version-3"><a class="header" href="#inode-version-3">Inode version 3</a></h3>
-<p>The inode version 3 (xfs_dinode_core_t) is 176 bytes of size and consist of:</p>
+<p>The inode version 3 (xfs_dinode_core_t) is 176 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -20053,7 +20053,7 @@ data), where fork type is XFS_DINODE_FMT_LOCAL. The short-form directory table c
 </ul>
 <p>The XFS_SB_VERSION_DIRV2BIT flag in the superblock indicates if version 2 is used.</p>
 <h4 id="short-form-directory-table-header-version-1"><a class="header" href="#short-form-directory-table-header-version-1">Short-form directory table header version 1</a></h4>
-<p>The short-form directory table header version 1 (xfs_dir_sf_hdr_t) is 9 bytes of size and consists
+<p>The short-form directory table header version 1 (xfs_dir_sf_hdr_t) is 9 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -20066,7 +20066,7 @@ of:</p>
 </div>
 
 <h4 id="short-form-directory-table-header-version-2"><a class="header" href="#short-form-directory-table-header-version-2">Short-form directory table header version 2</a></h4>
-<p>The short-form directory table header version 2 (xfs_dir2_sf_hdr_t) is 6 or 10 bytes of size and
+<p>The short-form directory table header version 2 (xfs_dir2_sf_hdr_t) is 6 or 10 bytes in size and
 consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -20086,7 +20086,7 @@ and number of 64-bit entries must be 0. If the inode numbers are stored as 64-bi
 number of 64-bit entries is set and number of 32-bit entries must be 0.</p>
 </blockquote>
 <h4 id="short-form-directory-table-entry-version-1"><a class="header" href="#short-form-directory-table-entry-version-1">Short-form directory table entry version 1</a></h4>
-<p>The short-form directory table entry version 1 (xfs_dir_sf_entry_t) is variable of size and
+<p>The short-form directory table entry version 1 (xfs_dir_sf_entry_t) is of variable size and
 consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -20101,7 +20101,7 @@ consists of:</p>
 </div>
 
 <h4 id="short-form-directory-table-entry-version-2"><a class="header" href="#short-form-directory-table-entry-version-2">Short-form directory table entry version 2</a></h4>
-<p>The short-form directory table entry version 2 (xfs_dir2_sf_entry_t) is variable of size and
+<p>The short-form directory table entry version 2 (xfs_dir2_sf_entry_t) is of variable size and
 consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20139,7 +20139,7 @@ set.</p>
 </ul>
 <h4 id="directory-list-element-header"><a class="header" href="#directory-list-element-header">Directory list element header</a></h4>
 <h5 id="directory-list-element-header-version-2"><a class="header" href="#directory-list-element-header-version-2">Directory list element header version 2</a></h5>
-<p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes of size and consist
+<p>The directory list element header version 2 (xfs_dir2_data_hdr_t) is 16 bytes in size and consist
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -20152,7 +20152,7 @@ of:</p>
 </div>
 
 <h5 id="directory-list-element-header-version-3"><a class="header" href="#directory-list-element-header-version-3">Directory list element header version 3</a></h5>
-<p>The directory list element header version 3 (xfs_dir3_data_hdr_t) is 64 bytes of size and consist
+<p>The directory list element header version 3 (xfs_dir3_data_hdr_t) is 64 bytes in size and consist
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20202,7 +20202,7 @@ of:</p>
 </div>
 
 <h5 id="block_free_region_v2"><a class="header" href="#block_free_region_v2">Block free region version 2</a></h5>
-<p>The block free region version 2 (xfs_dir2_data_free_t) is 4 bytes of size and consist of:</p>
+<p>The block free region version 2 (xfs_dir2_data_free_t) is 4 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20215,7 +20215,7 @@ of:</p>
 
 <h4 id="directory-list-element-entries"><a class="header" href="#directory-list-element-entries">Directory list element entries</a></h4>
 <h5 id="directory-list-element-entry-version-2"><a class="header" href="#directory-list-element-entry-version-2">Directory list element entry version 2</a></h5>
-<p>The directory list element entry version 2 (xfs_dir2_data_entry_t) is variable of size and consists
+<p>The directory list element entry version 2 (xfs_dir2_data_entry_t) is of variable size and consists
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20242,7 +20242,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="unused-directory-list-element-entry-version-2"><a class="header" href="#unused-directory-list-element-entry-version-2">Unused directory list element entry version 2</a></h5>
-<p>The unused directory list element entry version 2 (xfs_dir2_data_unused_t) is variable of size
+<p>The unused directory list element entry version 2 (xfs_dir2_data_unused_t) is of variable size
 and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -20273,7 +20273,7 @@ size and consists of:</p>
 
 <h4 id="directory-list-element-footer"><a class="header" href="#directory-list-element-footer">Directory list element footer</a></h4>
 <h5 id="directory-list-element-footer-version-2"><a class="header" href="#directory-list-element-footer-version-2">Directory list element footer version 2</a></h5>
-<p>The directory list element footer version 2 (xfs_dir2_block_tail_t) is 8 bytes of size and consists
+<p>The directory list element footer version 2 (xfs_dir2_block_tail_t) is 8 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -20294,7 +20294,7 @@ of:</p>
 <li>array of directory tree branch node entries</li>
 </ul>
 <h5 id="directory_tree_branch_node_header"><a class="header" href="#directory_tree_branch_node_header">Directory tree branch node header</a></h5>
-<p>A directory tree branch node header is 16 bytes of size and consist of:</p>
+<p>A directory tree branch node header is 16 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -20312,7 +20312,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="directory-tree-branch-node-entry"><a class="header" href="#directory-tree-branch-node-entry">Directory tree branch node entry</a></h5>
-<p>A directory tree branch node entry is 8 bytes of size and consists of:</p>
+<p>A directory tree branch node entry is 8 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20338,7 +20338,7 @@ of:</p>
 <li>a directory tree leaf node footer</li>
 </ul>
 <h5 id="directory-tree-leaf-node-header-version-1"><a class="header" href="#directory-tree-leaf-node-header-version-1">Directory tree leaf node header version 1</a></h5>
-<p>A directory tree leaf node header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes of size and consists
+<p>A directory tree leaf node header version 1 (xfs_dir_leaf_hdr_t) is 16 bytes in size and consists
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20369,7 +20369,7 @@ of:</p>
 version 1.</p>
 </blockquote>
 <h5 id="directory-tree-leaf-node-entry-version-1"><a class="header" href="#directory-tree-leaf-node-entry-version-1">Directory tree leaf node entry version 1</a></h5>
-<p>The directory tree leaf node entry (xfs_dir_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<p>The directory tree leaf node entry (xfs_dir_leaf_entry_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20389,7 +20389,7 @@ version 1.</p>
 version 1.</p>
 </blockquote>
 <h5 id="directory-tree-leaf-node-value"><a class="header" href="#directory-tree-leaf-node-value">Directory tree leaf node value</a></h5>
-<p>The directory tree leaf node value (xfs_dir_leaf_name_t) is variable of size and consist of:</p>
+<p>The directory tree leaf node value (xfs_dir_leaf_name_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20401,7 +20401,7 @@ version 1.</p>
 </div>
 
 <h5 id="directory-tree-leaf-node-footer-version-1"><a class="header" href="#directory-tree-leaf-node-footer-version-1">Directory tree leaf node footer version 1</a></h5>
-<p>A directory tree leaf node footer version 1 (xfs_dir_leaf_tail_t) is 4 bytes of size and consists
+<p>A directory tree leaf node footer version 1 (xfs_dir_leaf_tail_t) is 4 bytes in size and consists
 of:</p>
 <div class="table-wrapper">
 <table>
@@ -20418,7 +20418,7 @@ version 1.</p>
 <h2 id="device-identifier-1"><a class="header" href="#device-identifier-1">Device identifier</a></h2>
 <p>Character and block devices identifiers are stored as inline data with fork type is
 XFS_DINODE_FMT_DEV.</p>
-<p>The device identifier (xfs_dev_t) is 4 bytes of size and consists of:</p>
+<p>The device identifier (xfs_dev_t) is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20448,7 +20448,7 @@ data has an implicit sparse extent (or hole).</p>
 <h3 id="file_system_block_header"><a class="header" href="#file_system_block_header">File system block header</a></h3>
 <h4 id="file_system_block_header_version_1"><a class="header" href="#file_system_block_header_version_1">File system block header version 1</a></h4>
 <p>If the superblock format version &lt;= 4 the file system block header version 1 is used. The file
-system block header version 1 (xfs_da_blkinfo_t) is 12 bytes of size and consist of:</p>
+system block header version 1 (xfs_da_blkinfo_t) is 12 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20468,7 +20468,7 @@ system block header version 1 (xfs_da_blkinfo_t) is 12 bytes of size and consist
 </blockquote>
 <h4 id="file_system_block_header_version_3"><a class="header" href="#file_system_block_header_version_3">File system block header version 3</a></h4>
 <p>If the superblock format version &gt;= 5 the file system block header version 3 is used. The file
-system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes of size and consist of:</p>
+system block header version 3 (xfs_da3_blkinfo_t) is 56 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20533,7 +20533,7 @@ attributes table consist of:</p>
 <li>one or more short-form attributes table entries</li>
 </ul>
 <h4 id="the-short-form-attributes-table-header"><a class="header" href="#the-short-form-attributes-table-header">The short-form attributes table header</a></h4>
-<p>The short-form attributes table header (xfs_attr_sf_hdr) is 4 bytes of size and consists of:</p>
+<p>The short-form attributes table header (xfs_attr_sf_hdr) is 4 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20551,7 +20551,7 @@ attributes table consist of:</p>
 of test data.</p>
 </blockquote>
 <h4 id="the-short-form-attribute-entry"><a class="header" href="#the-short-form-attribute-entry">The short-form attribute entry</a></h4>
-<p>The short-form attributes table entry (xfs_attr_sf_entry) is variable of size and consists of:</p>
+<p>The short-form attributes table entry (xfs_attr_sf_entry) is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20581,7 +20581,7 @@ attributes tree. The attributes fork contains <a href="#extents_tree">an extents
 <h4 id="attributes_branch_node_block_header"><a class="header" href="#attributes_branch_node_block_header">Attributes tree branch node header</a></h4>
 <h5 id="attributes-tree-branch-node-header-version-2"><a class="header" href="#attributes-tree-branch-node-header-version-2">Attributes tree branch node header version 2</a></h5>
 <p>If the superblock format version &lt;= 4 the attributes tree branch node header version 2 is used.
-The attributes tree branch node header version 2 (xfs_da_blkinfo_t) is 16 bytes of size and
+The attributes tree branch node header version 2 (xfs_da_blkinfo_t) is 16 bytes in size and
 consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20601,7 +20601,7 @@ consist of:</p>
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="attributes-tree-branch-node-header-version-3"><a class="header" href="#attributes-tree-branch-node-header-version-3">Attributes tree branch node header version 3</a></h5>
 <p>If the superblock format version &gt;= 5 the attributes tree branch node header version 3 is used.
-The attributes tree branch node header version 3 (xfs_da3_blkinfo_t) is 64 bytes of size and
+The attributes tree branch node header version 3 (xfs_da3_blkinfo_t) is 64 bytes in size and
 consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20650,7 +20650,7 @@ version 1 structures.</p>
 <h4 id="attributes_tree_leaf_node_header"><a class="header" href="#attributes_tree_leaf_node_header">Attributes tree leaf node header</a></h4>
 <h5 id="attributes-tree-leaf-node-header-version-2"><a class="header" href="#attributes-tree-leaf-node-header-version-2">Attributes tree leaf node header version 2</a></h5>
 <p>If the superblock format version &lt;= 4 the attributes tree leaf node header version 2 is used. The
-attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes of size and consist of:</p>
+attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes in size and consist of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -20677,7 +20677,7 @@ attributes tree leaf node header version 2 (xfs_attr_leaf_hdr_t) is 32 bytes of 
 <!-- rumdl-enable MD033 MD056 -->
 <h5 id="attributes-tree-leaf-node-header-version-3"><a class="header" href="#attributes-tree-leaf-node-header-version-3">Attributes tree leaf node header version 3</a></h5>
 <p>If the superblock format version &gt;= 5 the attributes tree leaf node header version 3 is used. The
-attributes tree leaf node header version 3 (xfs_attr3_leaf_hdr_t) is 80 bytes of size and consist
+attributes tree leaf node header version 3 (xfs_attr3_leaf_hdr_t) is 80 bytes in size and consist
 of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -20706,7 +20706,7 @@ of:</p>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h4 id="attributes-tree-leaf-node-entry"><a class="header" href="#attributes-tree-leaf-node-entry">Attributes tree leaf node entry</a></h4>
-<p>The attributes tree leaf node entry (xfs_attr_leaf_entry_t) is 8 bytes of size and consist of:</p>
+<p>The attributes tree leaf node entry (xfs_attr_leaf_entry_t) is 8 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20726,7 +20726,7 @@ of:</p>
 as local attribute value otherwise as remote attribute value. The value data of remote attribute
 value are stored in <a href="#remote_attribute_value_data_block">a remote attribute value data block</a>.</p>
 <h5 id="local-attribute-value"><a class="header" href="#local-attribute-value">Local attribute value</a></h5>
-<p>The local attributes value (xfs_attr_leaf_name_local_t) is variable of size and consist of:</p>
+<p>The local attributes value (xfs_attr_leaf_name_local_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20740,7 +20740,7 @@ value are stored in <a href="#remote_attribute_value_data_block">a remote attrib
 </div>
 
 <h5 id="remote-attribute-value"><a class="header" href="#remote-attribute-value">Remote attribute value</a></h5>
-<p>The remote attributes value (xfs_attr_leaf_name_remote_t) is variable of size and consist of:</p>
+<p>The remote attributes value (xfs_attr_leaf_name_remote_t) is of variable size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20785,7 +20785,7 @@ with a remote attribute value data block header version 3 followed by attribute 
 <p>The attributes extents contain the physical location of the individual remote attribute value data
 blocks.</p>
 <h5 id="remote-attribute-value-data-block-header-version-3"><a class="header" href="#remote-attribute-value-data-block-header-version-3">Remote attribute value data block header version 3</a></h5>
-<p>The remote attribute value data block header (xfs_attr3_rmt_hdr) is 52 bytes of size and consist of:</p>
+<p>The remote attribute value data block header (xfs_attr3_rmt_hdr) is 52 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -20809,7 +20809,7 @@ blocks.</p>
 </div>
 
 <h5 id="parent_directory_attribute_value_data"><a class="header" href="#parent_directory_attribute_value_data">Parent directory attribute value data</a></h5>
-<p>The parent directory attribute value data (xfs_parent_rec) is 12 bytes of size and consist of:</p>
+<p>The parent directory attribute value data (xfs_parent_rec) is 12 bytes in size and consist of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -23782,14 +23782,369 @@ by Apple</li>
 <h1 id="assorted-formats"><a class="header" href="#assorted-formats">Assorted formats</a></h1>
 <ul>
 <li><a href="#property-list-plist-format">Property list (plist)</a></li>
-<li><a href="#zlib-compressed-data-1">Zlib compressed data</a></li>
+<li><a href="#zlib-compressed-data-format">Zlib compressed data</a></li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="apple-data-compression-adc-data-format"><a class="header" href="#apple-data-compression-adc-data-format">Apple Data Compression (ADC) data format</a></h1>
+<p>ADC compression is used in various data formats used on Mac OS, including
+<a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg).</p>
+<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
+<p>ADC compressed data consist of:</p>
+<ul>
+<li>one or more <a href="#adc_chunk">chunks</a></li>
+</ul>
+<h3 id="characteristics-24"><a class="header" href="#characteristics-24">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+</table>
+</div>
+
+<h2 id="adc_chunk"><a class="header" href="#adc_chunk">ADC chunk</a></h2>
+<p>An ADC chunk is of variable size and consists of consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0.0</td><td>1 bit</td><td></td><td>Literal chunk flag</td></tr>
+
+<tr><td colspan="4"><em>If literal chunk flag is set (1)</em></td></tr>
+
+<tr><td>0.1</td><td>7 bits</td><td></td><td>Literal data size, in number of bytes, where <code>size = value + 1</code></td></tr>
+
+<tr><td>1.0</td><td>...</td><td></td><td>Literal (uncompressed) data</td></tr>
+
+<tr><td colspan="4"><em>If literal chunk flag is not set (0)</em></td></tr>
+
+<tr><td>0.1</td><td>1 bit</td><td></td><td>Extended-size chunk flags</td></tr>
+
+<tr><td colspan="4"><em>If extended-size chunk flag is not set (0)</em></td></tr>
+
+<tr><td>0.2</td><td>4 bits</td><td></td><td>Compressed data size, in number of bytes, where <code>size = value + 3</code></td></tr>
+
+<tr><td>0.6</td><td>10 bits</td><td></td><td>Compressed data distance, where 0 is the offset of the last previously uncompressed byte</td></tr>
+
+<tr><td colspan="4"><em>If extended-size chunk flag is set (1)</em></td></tr>
+
+<tr><td>0.2</td><td>6 bits</td><td></td><td>Compressed data size, in number of bytes, where <code>size = value + 4</code></td></tr>
+
+<tr><td>1.0</td><td>16 bits</td><td></td><td>Compressed data distance, where 0 is the offset of the last previously uncompressed byte</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="lzfse-compressed-data-format"><a class="header" href="#lzfse-compressed-data-format">LZFSE compressed data format</a></h1>
+<p>LZFSE compression is used in various data formats used on Mac OS, including
+<a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg) and
+<a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
+<a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
+<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
+<p>LZFSE compressed data stream consist of:</p>
+<ul>
+<li>one or more <a href="#lzfse_block">blocks</a></li>
+</ul>
+<h3 id="characteristics-25"><a class="header" href="#characteristics-25">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>little-endian</td></tr>
+
+</table>
+</div>
+
+<h2 id="lzfse_block"><a class="header" href="#lzfse_block">LZFSE block</a></h2>
+<p>A LZFSE block is of variable size and consits of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>...</td><td></td><td>Block data</td></tr>
+
+</table>
+</div>
+
+<h3 id="block-signatures"><a class="header" href="#block-signatures">Block signatures</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000000</td><td>LZFSE_NO_BLOCK_MAGIC</td><td>Invalid</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x24787662 ("bvx$")</td><td>LZFSE_ENDOFSTREAM_BLOCK_MAGIC</td><td>End-of-stream block (marker)</td></tr>
+
+<tr><td>0x2d787662 ("bvx-")</td><td>LZFSE_UNCOMPRESSED_BLOCK_MAGIC</td><td>Uncompressed (raw) block</td></tr>
+
+<tr><td>0x31787662 ("bvx1")</td><td>LZFSE_COMPRESSEDV1_BLOCK_MAGIC</td><td>LZFSE compressed block with uncompressed tables</td></tr>
+
+<tr><td>0x32787662 ("bvx2")</td><td>LZFSE_COMPRESSEDV2_BLOCK_MAGIC</td><td>LZFSE compressed block with compressed tables</td></tr>
+
+<tr><td>0x6e787662 ("bvxn")</td><td>LZFSE_COMPRESSEDLZVN_BLOCK_MAGIC</td><td>LZVN compressed block</td></tr>
+
+</table>
+</div>
+
+<h3 id="end-of-stream-block"><a class="header" href="#end-of-stream-block">End-of-stream block</a></h3>
+<p>An end-of-stream block is 4 bytes in size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx$"</td><td>Block signature</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="uncompressed-block"><a class="header" href="#uncompressed-block">Uncompressed block</a></h3>
+<p>An uncompressed block is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx-"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Uncompressed data</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse-compressed-block-with-uncompressed-tables"><a class="header" href="#lzfse-compressed-block-with-uncompressed-tables">LZFSE compressed block with uncompressed tables</a></h3>
+<p>A LZFSE compressed block with uncompressed tables (lzfse_compressed_block_header_v1) is of variable
+size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx1"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Number of literals</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Number of L, M, D values</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Number of bytes used to encode literals</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Number of bytes used to encode matches</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Unknown (Final accum_nbits for literals stream)</td></tr>
+
+<tr><td>32</td><td>2</td><td></td><td>First literal state</td></tr>
+
+<tr><td>34</td><td>2</td><td></td><td>Second literal state</td></tr>
+
+<tr><td>36</td><td>2</td><td></td><td>Third literal state</td></tr>
+
+<tr><td>38</td><td>2</td><td></td><td>Fourth literal state</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown (accum_nbits for the l, m, d stream)</td></tr>
+
+<tr><td>44</td><td>2</td><td></td><td>L value state</td></tr>
+
+<tr><td>46</td><td>2</td><td></td><td>M value state</td></tr>
+
+<tr><td>48</td><td>2</td><td></td><td>D value state</td></tr>
+
+<tr><td>50</td><td>720</td><td></td><td><a href="#lzfse_frequency_table">Frequency table</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>770</td><td>...</td><td></td><td>encoded literals</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded L, M, D values</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse-compressed-block-with-compressed-tables"><a class="header" href="#lzfse-compressed-block-with-compressed-tables">LZFSE compressed block with compressed tables</a></h3>
+<p>A LZFSE compressed block with compressed tables (lzfse_compressed_block_header_v2)
+is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx2"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td colspan="4"><em>3 x 64-bit packed fields</em></td></tr>
+
+<tr><td>8.0</td><td>20 bits</td><td></td><td>Number of literals</td></tr>
+
+<tr><td>10.4</td><td>20 bits</td><td></td><td>Number of bytes used to encode literals</td></tr>
+
+<tr><td>13.0</td><td>20 bits</td><td></td><td>Number of L, M, D values</td></tr>
+
+<tr><td>15.4</td><td>3 bits</td><td></td><td>Unknown (Final accum_nbits for literals stream)</td></tr>
+
+<tr><td>14.7</td><td>1 bit</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>16.0</td><td>10 bits</td><td></td><td>First literal state</td></tr>
+
+<tr><td>17.2</td><td>10 bits</td><td></td><td>Second literal state</td></tr>
+
+<tr><td>18.4</td><td>10 bits</td><td></td><td>Third literal state</td></tr>
+
+<tr><td>19.6</td><td>10 bits</td><td></td><td>Fourth literal state</td></tr>
+
+<tr><td>21.0</td><td>20 bits</td><td></td><td>Number of bytes used to encode matches</td></tr>
+
+<tr><td>22.4</td><td>3 bits</td><td></td><td>Unknown (accum_nbits for the l, m, d stream)</td></tr>
+
+<tr><td>23.7</td><td>1 bit</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>24.0</td><td>32 bits</td><td></td><td>Block header size</td></tr>
+
+<tr><td>28.0</td><td>10 bits</td><td></td><td>L value state</td></tr>
+
+<tr><td>29.2</td><td>10 bits</td><td></td><td>M value state</td></tr>
+
+<tr><td>30.4</td><td>10 bits</td><td></td><td>D value state</td></tr>
+
+<tr><td>31.6</td><td>2 bits</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td colspan="4"><em>If block header size &gt; 32</em></td></tr>
+
+<tr><td>32</td><td>...</td><td></td><td>Bit stream containing Huffman encoded <a href="#lzfse_frequency_table">frequency table</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded literals</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded L, M, D values</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that if the block header size is 32 the block does not contain frequency tables.</p>
+</blockquote>
+<h3 id="lzvn-compressed-block"><a class="header" href="#lzvn-compressed-block">LZVN compressed block</a></h3>
+<p>A LZVN compressed block is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvxn"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td><a href="#lzvn-compressed-data-format">LZVN compressed data</a></td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse_frequency_table"><a class="header" href="#lzfse_frequency_table">LZFSE frequency table</a></h3>
+<p>A LZFSE frequency table consist of 360 16-bit values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>20</td><td></td><td>Literal run-lengths (L stream) frequency values</td></tr>
+
+<tr><td>20</td><td>20</td><td></td><td>Match sizes (M stream) frequency values</td></tr>
+
+<tr><td>40</td><td>64</td><td></td><td>Match distances (D stream) frequency values</td></tr>
+
+<tr><td>104</td><td>256</td><td></td><td>Literal frequency values</td></tr>
+
+</table>
+</div>
+
+<h4 id="decoding-the-huffman-encoded-frequency-table"><a class="header" href="#decoding-the-huffman-encoded-frequency-table">Decoding the Huffman encoded frequency table</a></h4>
+<p>TODO: describe how to decode the Huffman encoded frequency table.</p>
+<pre><code class="language-text">5-bits encoded value, special cases 8 and 14
+
+lzfse_freq_nbits_table[32] = {
+    2, 3, 2, 5, 2, 3, 2, 8, 2, 3, 2, 5, 2, 3, 2, 14,
+    2, 3, 2, 5, 2, 3, 2, 8, 2, 3, 2, 5, 2, 3, 2, 14};
+lzfse_freq_value_table[32] = {
+    0, 2, 1, 4, 0, 3, 1, -1, 0, 2, 1, 5, 0, 3, 1, -1,
+    0, 2, 1, 6, 0, 3, 1, -1, 0, 2, 1, 7, 0, 3, 1, -1};
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="lzvn-compressed-data-format"><a class="header" href="#lzvn-compressed-data-format">LZVN compressed data format</a></h1>
+<p>LZVN compression is used in various data formats used on Mac OS, including
+<a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
+<a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
+<h2 id="overview-29"><a class="header" href="#overview-29">Overview</a></h2>
+<p>LZVN compressed data consist of:</p>
+<ul>
+<li>a stream of <a href="#lzvn_opcodes">opcodes</a></li>
+</ul>
+<h3 id="characteristics-26"><a class="header" href="#characteristics-26">Characteristics</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>big-endian</td></tr>
+
+</table>
+</div>
+
+<h2 id="lzvn_opcodes"><a class="header" href="#lzvn_opcodes">Opcodes</a></h2>
+<p>The opcodes consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Oppcode</th><th>Data</th><th>Description</th></thead>
+<tr><td>0xe0</td><td>11100000 LLLLLLLL &lt;literal&gt;</td><td>Large literal of size: <code>L + 16</code></td></tr>
+
+<tr><td>0xe1 - 0xef</td><td>1110LLLL &lt;literal&gt;</td><td>Small literal of size: <code>L</code></td></tr>
+
+<tr><td>0x00 - 0x05, 0x08 - 0x0d, 0x10 - 0x15, 0x18 - 0x1d, 0x20 - 0x25, 0x28 - 0x2d, 0x30 - 0x35, 0x38 - 0x3d, 0x40 - 0x45, 0x48 - 0x4d, 0x50 - 0x55, 0x58 - 0x5d, 0x60 - 0x65, 0x68 - 0x6d, 0x80 - 0x85, 0x88 - 0x8d, 0x90 - 0x95, 0x98 - 0x9d, 0xc0 - 0xc5, 0xc8 - 0xcd</td><td>LLMMMDDD DDDDDDDD &lt;literal&gt;</td><td>Small distance: <code>M + 3</code></td></tr>
+
+<tr><td>0xa0 - 0xbf</td><td>101LLMMM DDDDDDMM DDDDDDDD &lt;literal&gt;</td><td>Medium distance: <code>M + 3</code></td></tr>
+
+<tr><td>0x07, 0x0f, 0x17, 0x1f, 0x27, 0x2f, 0x37, 0x3f, 0x47, 0x4f, 0x57, 0x5f, 0x67, 0x6f, 0x87, 0x8f, 0x97, 0x9f, 0xc7, 0xcf</td><td>LLMMM111 DDDDDDDD DDDDDDDD &lt;literal&gt;</td><td>Large distance: <code>M + 3</code></td></tr>
+
+<tr><td>0x46, 0x4e, 0x56, 0x5e, 0x66, 0x6e, 0x86, 0x8e, 0x96, 0x9e, 0xc6, 0xce</td><td>LLMMM110</td><td>Previous distance</td></tr>
+
+<tr><td>0x0e, 0x16</td><td></td><td>None (nop)</td></tr>
+
+<tr><td>0x06</td><td></td><td>End of stream (eos)</td></tr>
+
+<tr><td>0xf1 - 0xff</td><td>1111MMMM</td><td>Small match</td></tr>
+
+<tr><td>0xf0</td><td>11110000 MMMMMMMM</td><td>Large match: <code>M + 16</code></td></tr>
+
+<tr><td>0x1e, 0x26, 0x2e, 0x36, 0x3e, 0x70 - 0x7f, 0xd0 - 0xdf</td><td></td><td>Invalid</td></tr>
+
+</table>
+</div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="property-list-plist-format"><a class="header" href="#property-list-plist-format">Property list (plist) format</a></h1>
 <p>The property list (plist) formats are used to store various kinds of data, for example
 configuration data. The format is know to be used stand-alone as well as embedded in other data
 formats.</p>
-<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
+<h2 id="overview-30"><a class="header" href="#overview-30">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -24004,18 +24359,18 @@ of 1 will refer to the first object in the (object) offset table.</p>
 &lt;/plist&gt;
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="zlib-compressed-data-1"><a class="header" href="#zlib-compressed-data-1">Zlib compressed data</a></h1>
+<h1 id="zlib-compressed-data-format"><a class="header" href="#zlib-compressed-data-format">Zlib compressed data format</a></h1>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
 RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
 LZ77, is used.</p>
-<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
+<h2 id="overview-31"><a class="header" href="#overview-31">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-24"><a class="header" href="#characteristics-24">Characteristics</a></h3>
+<h3 id="characteristics-27"><a class="header" href="#characteristics-27">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>

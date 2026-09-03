@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Property list (plist) - Keramics data format specifications</title>
+        <title>LZFSE compressed data - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -175,234 +175,270 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="property-list-plist-format"><a class="header" href="#property-list-plist-format">Property list (plist) format</a></h1>
-<p>The property list (plist) formats are used to store various kinds of data, for example
-configuration data. The format is know to be used stand-alone as well as embedded in other data
-formats.</p>
+                        <h1 id="lzfse-compressed-data-format"><a class="header" href="#lzfse-compressed-data-format">LZFSE compressed data format</a></h1>
+<p>LZFSE compression is used in various data formats used on Mac OS, including
+<a href="udif.html">Universal Disk Image Format (UDIF)</a> files (.dmg) and
+<a href="decmpfs.html">Apple File System Compression (decmpfs)</a>, which is used in
+<a href="hfs.html">Hierarchical File System (HFS)</a> and <a href="apfs.html">Apple File System (APFS)</a>.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>Known plist formats are:</p>
+<p>LZFSE compressed data stream consist of:</p>
 <ul>
-<li>ASCII plist format</li>
-<li>Binary plist format</li>
-<li>XML plist format</li>
+<li>one or more <a href="#lzfse_block">blocks</a></li>
 </ul>
-<p>TODO: What about other plist formats like JSON?</p>
-<h3 id="value-types"><a class="header" href="#value-types">Value types</a></h3>
-<div class="table-wrapper">
-<table>
-<thead><th>Type</th><th>Description</th></thead>
-<tr><td>array</td><td>Collection of plist values without key</td></tr>
-
-<tr><td>boolean</td><td>Boolean value</td></tr>
-
-<tr><td>data</td><td>Binary data</td></tr>
-
-<tr><td>date</td><td>Date and time value</td></tr>
-
-<tr><td>dictionary</td><td>Collection of plist values with key</td></tr>
-
-<tr><td>integer</td><td>Signed integer value</td></tr>
-
-<tr><td>real</td><td>Floating-point value</td></tr>
-
-<tr><td>string</td><td>String value</td></tr>
-
-</table>
-</div>
-
-<h2 id="ascii-plist-format"><a class="header" href="#ascii-plist-format">ASCII plist format</a></h2>
-<p>TODO: complete section</p>
-<h2 id="binary-plist-format"><a class="header" href="#binary-plist-format">Binary plist format</a></h2>
-<p>A binary plist file consists of:</p>
-<ul>
-<li>header</li>
-<li>object table</li>
-<li>offset table</li>
-<li>trailer</li>
-</ul>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
-<tr><td>Byte order</td><td>big-endian</td></tr>
-
-<tr><td>Date and time values</td><td>Number of seconds since Jan 1, 2001 00:00:00 UTC</td></tr>
-
-<tr><td>Character strings</td><td>UTF-16 big-endian</td></tr>
+<tr><td>Byte order</td><td>little-endian</td></tr>
 
 </table>
 </div>
 
-<h3 id="binary-plist-header"><a class="header" href="#binary-plist-header">Binary plist header</a></h3>
-<p>The binary plist header (CFBinaryPlistHeader) is 8 bytes in size and consists of:</p>
+<h2 id="lzfse_block"><a class="header" href="#lzfse_block">LZFSE block</a></h2>
+<p>A LZFSE block is of variable size and consits of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>6</td><td>"bplist"</td><td>Signature</td></tr>
+<tr><td>0</td><td>4</td><td></td><td>Block signature</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Format version</td></tr>
-
-</table>
-</div>
-
-<h4 id="format-versions"><a class="header" href="#format-versions">Format versions</a></h4>
-<div class="table-wrapper">
-<table>
-<thead><th>Version</th><th>Description</th></thead>
-<tr><td>"00"</td><td>Supported as of Tiger</td></tr>
-
-<tr><td>"01"</td><td>Supported as of Leopard</td></tr>
-
-<tr><td>"0x"</td><td>Supported as of Snow Leopard, where x is any character</td></tr>
+<tr><td>4</td><td>...</td><td></td><td>Block data</td></tr>
 
 </table>
 </div>
 
-<h3 id="object-table"><a class="header" href="#object-table">Object table</a></h3>
-<p>The object table consists of:</p>
-<ul>
-<li>zero or more objects</li>
-</ul>
-<p>Objects are of variable size and consist of:</p>
-<ul>
-<li>an object maker byte</li>
-<li>(optional) object data</li>
-</ul>
-<h4 id="object-marker-byte"><a class="header" href="#object-marker-byte">Object marker byte</a></h4>
+<h3 id="block-signatures"><a class="header" href="#block-signatures">Block signatures</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x00</td><td>kCFBinaryPlistMarkerNull</td><td>Empty value (NULL)</td></tr>
+<tr><td>0x00000000</td><td>LZFSE_NO_BLOCK_MAGIC</td><td>Invalid</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>0x08</td><td>kCFBinaryPlistMarkerFalse</td><td>Boolean False</td></tr>
+<tr><td>0x24787662 ("bvx$")</td><td>LZFSE_ENDOFSTREAM_BLOCK_MAGIC</td><td>End-of-stream block (marker)</td></tr>
 
-<tr><td>0x09</td><td>kCFBinaryPlistMarkerTrue</td><td>Boolean True</td></tr>
+<tr><td>0x2d787662 ("bvx-")</td><td>LZFSE_UNCOMPRESSED_BLOCK_MAGIC</td><td>Uncompressed (raw) block</td></tr>
 
-<tr><td></td><td></td><td></td></tr>
+<tr><td>0x31787662 ("bvx1")</td><td>LZFSE_COMPRESSEDV1_BLOCK_MAGIC</td><td>LZFSE compressed block with uncompressed tables</td></tr>
 
-<tr><td>0x0f</td><td>kCFBinaryPlistMarkerFill</td><td>Unknown (Fill byte?)</td></tr>
+<tr><td>0x32787662 ("bvx2")</td><td>LZFSE_COMPRESSEDV2_BLOCK_MAGIC</td><td>LZFSE compressed block with compressed tables</td></tr>
 
-<tr><td>0x1#</td><td>kCFBinaryPlistMarkerInt</td><td>Integer, where 2^# is the number of bytes</td></tr>
-
-<tr><td>0x2#</td><td>kCFBinaryPlistMarkerInt</td><td>Floating point, where 2^# is the number of bytes</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x33</td><td>kCFBinaryPlistMarkerDate</td><td>Date and time value, which is stored as a 64-bits floating point that contains the number of seconds since Jan 1, 2001 00:00:00 UTC</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>0x4#</td><td>kCFBinaryPlistMarkerData</td><td>Binary data, where # is the number of bytes. If # is 15 then the object marker byte is followed by a 32-bit integer that contains the size of the data</td></tr>
-
-<tr><td>0x5#</td><td>kCFBinaryPlistMarkerASCIIString</td><td>ASCII string, where # is the number of characters. If # is 15 then the object marker byte is followed by an integer object that contains the number of characters in the string. The string is stored in ASCII (with codepage?) without an end-of-string marker</td></tr>
-
-<tr><td>0x6#</td><td>kCFBinaryPlistMarkerUnicode16String</td><td>Unicode string, where # is the number of characters. If # is 15 then the object marker byte is followed by an integer object that contains the number of characters in the string. The string is stored in UTF-16 big-endian without an end-of-string marker</td></tr>
-
-<tr><td>0x7#</td><td></td><td>Unused</td></tr>
-
-<tr><td>0x8#</td><td>kCFBinaryPlistMarkerUID</td><td>UID, where # + 1 is the number of bytes</td></tr>
-
-<tr><td>0x9#</td><td></td><td>Unused</td></tr>
-
-<tr><td>0xa#</td><td>kCFBinaryPlistMarkerArray</td><td>Array of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of elements in the array</td></tr>
-
-<tr><td>0xb#</td><td></td><td>Unused</td></tr>
-
-<tr><td>0xc#</td><td>kCFBinaryPlistMarkerSet</td><td>Set of objects, where # is the number of elements. If # is 15 then the object marker byte is followed by an integer object that contains the number of ele,emts in the set</td></tr>
-
-<tr><td>0xd#</td><td>kCFBinaryPlistMarkerDict</td><td>Dictionary of key value pairs, where # is the number of key value pairs. If # is 15 then the object marker byte is followed by an integer object that contains the number of key value pairs in the dictionary</td></tr>
-
-<tr><td>0xe#</td><td></td><td>Unused</td></tr>
-
-<tr><td>0xf#</td><td></td><td>Unused</td></tr>
+<tr><td>0x6e787662 ("bvxn")</td><td>LZFSE_COMPRESSEDLZVN_BLOCK_MAGIC</td><td>LZVN compressed block</td></tr>
 
 </table>
 </div>
 
-<h4 id="array-object"><a class="header" href="#array-object">Array object</a></h4>
-<p>The array object consists of:</p>
-<ul>
-<li>array object marker with number of elements</li>
-<li>array of object references that identify the element objects.</li>
-<li>the element object data</li>
-</ul>
-<p>The byte size of the object reference is defined in the trailer. An object reference of 1 will
-refer to the first object in the (object) offset table.</p>
-<h4 id="set-object"><a class="header" href="#set-object">Set object</a></h4>
-<p>The set object consists of:</p>
-<ul>
-<li>set object marker with number of elements</li>
-<li>array of object references that identify the element objects.</li>
-<li>the element object data</li>
-</ul>
-<p>The byte size of the object reference is defined in the trailer. An object reference of 1 will
-refer to the first object in the (object) offset table.</p>
-<h4 id="dictionary-object"><a class="header" href="#dictionary-object">Dictionary object</a></h4>
-<p>The dictionary object consists of:</p>
-<ul>
-<li>dictionary object marker with number of key and value pairs</li>
-<li>array of key references that identify key objects.</li>
-<li>array of object references that identify the value objects.</li>
-<li>the key/value object data</li>
-</ul>
-<p>The byte size of the key and object reference is defined in the trailer. A key and object reference
-of 1 will refer to the first object in the (object) offset table.</p>
-<h3 id="object-offset-table"><a class="header" href="#object-offset-table">(Object) offset table</a></h3>
-<p>The offset table consists of an array of offsets. The trailer defines:</p>
-<ul>
-<li>The location of the offset table</li>
-<li>The offset byte size</li>
-<li>The number of offsets in the table</li>
-</ul>
-<p>The offset values are relative from the start of the file.</p>
-<h3 id="binary-plist-trailer"><a class="header" href="#binary-plist-trailer">Binary plist trailer</a></h3>
-<p>The binary plist trailer (CFBinaryPlistTrailer) is 32 bytes in size and consists of:</p>
+<h3 id="end-of-stream-block"><a class="header" href="#end-of-stream-block">End-of-stream block</a></h3>
+<p>An end-of-stream block is 4 bytes in size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>5 x 1</td><td>0</td><td>Unknown (0-byte values)</td></tr>
+<tr><td colspan="4"><em>Block header</em></td></tr>
 
-<tr><td>5</td><td>1</td><td>0</td><td>Unknown (Sort version)</td></tr>
-
-<tr><td>6</td><td>1</td><td></td><td>Offset byte size</td></tr>
-
-<tr><td>7</td><td>1</td><td></td><td>Key and object reference byte size</td></tr>
-
-<tr><td>8</td><td>8</td><td></td><td>Number of objects</td></tr>
-
-<tr><td>16</td><td>8</td><td></td><td>Root (or top-level) object</td></tr>
-
-<tr><td>24</td><td>8</td><td></td><td>Offset table offset, where the offset is relative to the start of the file</td></tr>
+<tr><td>0</td><td>4</td><td>"bvx$"</td><td>Block signature</td></tr>
 
 </table>
 </div>
 
-<h2 id="xml-plist-format"><a class="header" href="#xml-plist-format">XML plist format</a></h2>
-<p>A XML plist file consists of:</p>
-<ul>
-<li>optional XML declaration</li>
-<li>optional Document Type Definition (DTD)</li>
-<li>plist root XML element</li>
-<li>key-value pair XML elements</li>
-</ul>
-<p>For example:</p>
-<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd"&gt;
-&lt;plist version="1.0"&gt;
-...
-&lt;/plist&gt;
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="uncompressed-block"><a class="header" href="#uncompressed-block">Uncompressed block</a></h3>
+<p>An uncompressed block is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx-"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>8</td><td>...</td><td></td><td>Uncompressed data</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse-compressed-block-with-uncompressed-tables"><a class="header" href="#lzfse-compressed-block-with-uncompressed-tables">LZFSE compressed block with uncompressed tables</a></h3>
+<p>A LZFSE compressed block with uncompressed tables (lzfse_compressed_block_header_v1) is of variable
+size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx1"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Number of literals</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Number of L, M, D values</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Number of bytes used to encode literals</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Number of bytes used to encode matches</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>Unknown (Final accum_nbits for literals stream)</td></tr>
+
+<tr><td>32</td><td>2</td><td></td><td>First literal state</td></tr>
+
+<tr><td>34</td><td>2</td><td></td><td>Second literal state</td></tr>
+
+<tr><td>36</td><td>2</td><td></td><td>Third literal state</td></tr>
+
+<tr><td>38</td><td>2</td><td></td><td>Fourth literal state</td></tr>
+
+<tr><td>40</td><td>4</td><td></td><td>Unknown (accum_nbits for the l, m, d stream)</td></tr>
+
+<tr><td>44</td><td>2</td><td></td><td>L value state</td></tr>
+
+<tr><td>46</td><td>2</td><td></td><td>M value state</td></tr>
+
+<tr><td>48</td><td>2</td><td></td><td>D value state</td></tr>
+
+<tr><td>50</td><td>720</td><td></td><td><a href="#lzfse_frequency_table">Frequency table</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>770</td><td>...</td><td></td><td>encoded literals</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded L, M, D values</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse-compressed-block-with-compressed-tables"><a class="header" href="#lzfse-compressed-block-with-compressed-tables">LZFSE compressed block with compressed tables</a></h3>
+<p>A LZFSE compressed block with compressed tables (lzfse_compressed_block_header_v2)
+is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvx2"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td colspan="4"><em>3 x 64-bit packed fields</em></td></tr>
+
+<tr><td>8.0</td><td>20 bits</td><td></td><td>Number of literals</td></tr>
+
+<tr><td>10.4</td><td>20 bits</td><td></td><td>Number of bytes used to encode literals</td></tr>
+
+<tr><td>13.0</td><td>20 bits</td><td></td><td>Number of L, M, D values</td></tr>
+
+<tr><td>15.4</td><td>3 bits</td><td></td><td>Unknown (Final accum_nbits for literals stream)</td></tr>
+
+<tr><td>14.7</td><td>1 bit</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>16.0</td><td>10 bits</td><td></td><td>First literal state</td></tr>
+
+<tr><td>17.2</td><td>10 bits</td><td></td><td>Second literal state</td></tr>
+
+<tr><td>18.4</td><td>10 bits</td><td></td><td>Third literal state</td></tr>
+
+<tr><td>19.6</td><td>10 bits</td><td></td><td>Fourth literal state</td></tr>
+
+<tr><td>21.0</td><td>20 bits</td><td></td><td>Number of bytes used to encode matches</td></tr>
+
+<tr><td>22.4</td><td>3 bits</td><td></td><td>Unknown (accum_nbits for the l, m, d stream)</td></tr>
+
+<tr><td>23.7</td><td>1 bit</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td>24.0</td><td>32 bits</td><td></td><td>Block header size</td></tr>
+
+<tr><td>28.0</td><td>10 bits</td><td></td><td>L value state</td></tr>
+
+<tr><td>29.2</td><td>10 bits</td><td></td><td>M value state</td></tr>
+
+<tr><td>30.4</td><td>10 bits</td><td></td><td>D value state</td></tr>
+
+<tr><td>31.6</td><td>2 bits</td><td></td><td>Unknown (unused)</td></tr>
+
+<tr><td colspan="4"><em>If block header size &gt; 32</em></td></tr>
+
+<tr><td>32</td><td>...</td><td></td><td>Bit stream containing Huffman encoded <a href="#lzfse_frequency_table">frequency table</a></td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded literals</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>encoded L, M, D values</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that if the block header size is 32 the block does not contain frequency tables.</p>
+</blockquote>
+<h3 id="lzvn-compressed-block"><a class="header" href="#lzvn-compressed-block">LZVN compressed block</a></h3>
+<p>A LZVN compressed block is of variable size and consits of:</p>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Block header</em></td></tr>
+
+<tr><td>0</td><td>4</td><td>"bvxn"</td><td>Block signature</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Uncompressed data size</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Compressed data size</td></tr>
+
+<tr><td colspan="4"> </td></tr>
+
+<tr><td>12</td><td>...</td><td></td><td><a href="lzvn.html">LZVN compressed data</a></td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h3 id="lzfse_frequency_table"><a class="header" href="#lzfse_frequency_table">LZFSE frequency table</a></h3>
+<p>A LZFSE frequency table consist of 360 16-bit values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>20</td><td></td><td>Literal run-lengths (L stream) frequency values</td></tr>
+
+<tr><td>20</td><td>20</td><td></td><td>Match sizes (M stream) frequency values</td></tr>
+
+<tr><td>40</td><td>64</td><td></td><td>Match distances (D stream) frequency values</td></tr>
+
+<tr><td>104</td><td>256</td><td></td><td>Literal frequency values</td></tr>
+
+</table>
+</div>
+
+<h4 id="decoding-the-huffman-encoded-frequency-table"><a class="header" href="#decoding-the-huffman-encoded-frequency-table">Decoding the Huffman encoded frequency table</a></h4>
+<p>TODO: describe how to decode the Huffman encoded frequency table.</p>
+<pre><code class="language-text">5-bits encoded value, special cases 8 and 14
+
+lzfse_freq_nbits_table[32] = {
+    2, 3, 2, 5, 2, 3, 2, 8, 2, 3, 2, 5, 2, 3, 2, 14,
+    2, 3, 2, 5, 2, 3, 2, 8, 2, 3, 2, 5, 2, 3, 2, 14};
+lzfse_freq_value_table[32] = {
+    0, 2, 1, 4, 0, 3, 1, -1, 0, 2, 1, 5, 0, 3, 1, -1,
+    0, 2, 1, 6, 0, 3, 1, -1, 0, 2, 1, 7, 0, 3, 1, -1};
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="lzvn.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="adc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="zlib.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="lzvn.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -412,11 +448,11 @@ of 1 will refer to the first object in the (object) offset table.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="lzvn.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="adc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="zlib.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="lzvn.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
