@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7d8d51e4.js";
+            window.path_to_searchindex_js = "searchindex-3e9469dc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8a494624.js"></script>
@@ -327,7 +327,7 @@ fixed.</p>
 </table>
 </div>
 
-<h2 id="the-boot-record"><a class="header" href="#the-boot-record">The boot record</a></h2>
+<h2 id="boot_record"><a class="header" href="#boot_record">The boot record</a></h2>
 <p>The boot record is stored at the start of the volume (in the $Boot metadata file) and contains:</p>
 <ul>
 <li>the file system signature</li>
@@ -404,6 +404,9 @@ fixed.</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note that the number of sectors can be 1 less then the value indicated in the partition table.</p>
+</blockquote>
 <h3 id="boot-entry-point"><a class="header" href="#boot-entry-point">Boot entry point</a></h3>
 <p>The boot entry point often contains a jump instruction to the boot code at offset 84 followed by a
 no-operation, e.g.</p>
@@ -474,11 +477,6 @@ number. This can be determined by comparing the output of:</p>
 <pre><code class="language-text">fsutil fsinfo volumeinfo C:
 fsutil fsinfo ntfsinfo C:
 </code></pre>
-<p>Often the total number of sectors in the boot record will be smaller than the underlying partition.
-A (nearly identical) backup of the boot record is stored in last sector of cluster block, that
-follows the last cluster block of the volume. Often this is the 512 bytes after the last sector of
-the volume, but not necessarily. The backup boot record is not included in the total number of
-sectors.</p>
 <h3 id="master-file-table-mft-and-index-entry-size"><a class="header" href="#master-file-table-mft-and-index-entry-size">Master File Table (MFT) and index entry size</a></h3>
 <p>The Master File Table (MFT) entry size and index entry size are defined as following:</p>
 <ul>

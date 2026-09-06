@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7d8d51e4.js";
+            window.path_to_searchindex_js = "searchindex-3e9469dc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8a494624.js"></script>
@@ -248,6 +248,8 @@ and Windows.</p>
 
 <tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
 
+<tr><td colspan="4"><em>DOS version 2.0 BIOS parameter block (BPB)</em></td></tr>
+
 <tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
 
 <tr><td>13</td><td>1</td><td></td><td>Sectors per cluster block, which must be 1, 2, 4, 8, 16, 32, 64 or 128</td></tr>
@@ -264,6 +266,8 @@ and Windows.</p>
 
 <tr><td>22</td><td>2</td><td></td><td>Cluster block allocation table size (16-bit), in number of sectors</td></tr>
 
+<tr><td colspan="4"><em>DOS version 3.4 BIOS parameter block (BPB)</em></td></tr>
+
 <tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
 
 <tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
@@ -271,6 +275,8 @@ and Windows.</p>
 <tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+
+<tr><td colspan="4"> </td></tr>
 
 <tr><td>36</td><td>1</td><td></td><td>Drive number</td></tr>
 
@@ -304,7 +310,7 @@ and Windows.</p>
 <p>Note that the sector signature must be set at offset 512 but in addition can be set in the last 2
 bytes of the sector.</p>
 </blockquote>
-<h3 id="fat-32-boot-record"><a class="header" href="#fat-32-boot-record">FAT-32 boot record</a></h3>
+<h3 id="fat32_boot_record"><a class="header" href="#fat32_boot_record">FAT-32 boot record</a></h3>
 <p>The FAT-32 boot record is at least 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
@@ -313,6 +319,8 @@ bytes of the sector.</p>
 <tr><td>0</td><td>3</td><td>"\xeb\x58\x90"</td><td>Boot entry point (JMP +90, NOP)</td></tr>
 
 <tr><td>3</td><td>8</td><td></td><td>File system signature (or OEM name)</td></tr>
+
+<tr><td colspan="4"><em>DOS version 2.0 BIOS parameter block (BPB)</em></td></tr>
 
 <tr><td>11</td><td>2</td><td></td><td>Bytes per sector, which must be 512, 1024, 2048 or 4096</td></tr>
 
@@ -330,6 +338,8 @@ bytes of the sector.</p>
 
 <tr><td>22</td><td>2</td><td>0</td><td>Cluster block allocation table size (16-bit), in number of sectors, which must be 0 for FAT-32</td></tr>
 
+<tr><td colspan="4"><em>DOS version 3.4 BIOS parameter block (BPB)</em></td></tr>
+
 <tr><td>24</td><td>2</td><td></td><td>Number of sectors per track</td></tr>
 
 <tr><td>26</td><td>2</td><td></td><td>Number of heads</td></tr>
@@ -337,6 +347,8 @@ bytes of the sector.</p>
 <tr><td>28</td><td>4</td><td></td><td>Number of hidden sectors</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td>Total number of sectors (32-bit)</td></tr>
+
+<tr><td colspan="4"> </td></tr>
 
 <tr><td>36</td><td>4</td><td></td><td>Cluster block allocation table size (32-bit), in number of sectors, which must be non 0 for FAT-32</td></tr>
 
