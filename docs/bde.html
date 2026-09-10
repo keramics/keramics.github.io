@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-19f8a97f.js";
+            window.path_to_searchindex_js = "searchindex-8bdda408.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8a494624.js"></script>
@@ -1448,11 +1448,11 @@ consists of:</p>
 
 <tr><td>12</td><td>4</td><td></td><td>Physical sector size</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Unknown (bitmap size, in number of bits?)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Number of bits</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Sequence number</td></tr>
 
-<tr><td>24</td><td>4</td><td>0</td><td>Unknown</td></tr>
+<tr><td>24</td><td>4</td><td>0</td><td>Unknown (part of sequence number?)</td></tr>
 
 <tr><td>28</td><td>4</td><td></td><td>Unknown (flags?, seen 0 and 1)</td></tr>
 
@@ -1468,8 +1468,16 @@ consists of:</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
+<p>The bitmap is stored on a per-byte basis with the LSB represents the first bit in the bitmap. Each
+bit represents a “reallocation block”, where a set bit (1) indicates the block has been encrypted.</p>
+<blockquote>
+<p>Note that the volume region size in the block map can be smaller than
+<code>number_of_bits * relocation_block_size</code>.</p>
+</blockquote>
+<p>Since a block map contains multiple records, the block (map) record with the largest sequence
+number is authoritative.</p>
 <h3 id="encrypt_on_write_relocation_log_area"><a class="header" href="#encrypt_on_write_relocation_log_area">Encrypt-on-Write relocation log area</a></h3>
-<p>The Encrypt-on-Write Encrypt-on-Write relocation log area is variable of size and consists of:</p>
+<p>The Encrypt-on-Write relocation log area is variable of size and consists of:</p>
 <ul>
 <li>Encrypt-on-Write relocation log area (OLRDHEVF2) header</li>
 <li>Encrypt-on-Write relocation log entries
@@ -1525,19 +1533,17 @@ sector, and consists of:</p>
 
 <tr><td>2</td><td>2</td><td>1</td><td>Unknown</td></tr>
 
-<tr><td>4</td><td>2</td><td></td><td>Unknown (0 if unencrypted region?)</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Sequence number</td></tr>
 
-<tr><td>6</td><td>2</td><td>0</td><td>Unknown</td></tr>
+<tr><td>8</td><td>4</td><td>0</td><td>Unknown (part of sequence number?)</td></tr>
 
-<tr><td>8</td><td>4</td><td>0</td><td>Unknown</td></tr>
-
-<tr><td>12</td><td>8</td><td></td><td>Volume region offset, region (or area) of the volume this relocation log entry represents, or 0 if the region is not used by the relocation log</td></tr>
+<tr><td>12</td><td>8</td><td></td><td>Encrypted sector data sector offset, used for the encryption as the block key</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>(Used) encrypted sector data size</td></tr>
 
-<tr><td>38</td><td>4</td><td></td><td>Checksum of the encrypted sectors data</td></tr>
+<tr><td>24</td><td>4</td><td></td><td>Checksum of the (used) encrypted sectors data</td></tr>
 
-<tr><td>42</td><td>4</td><td></td><td>Unknown (checksum of the unencrypted sectors data?)</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Unknown (checksum of the unencrypted sectors data?), does 0xbecff11a have a special meaning?</td></tr>
 
 </table>
 </div>
@@ -1548,8 +1554,8 @@ values).</p>
 </blockquote>
 <h4 id="encrypt-on-write-encrypted-sector-data"><a class="header" href="#encrypt-on-write-encrypted-sector-data">Encrypt-on-Write encrypted sector data</a></h4>
 <ul>
-<li>16 bytes of encrypted sector data per sector? decryption sector key is the corresponding volume
-region offset</li>
+<li>16 bytes of encrypted sector data per sector using the encrypted sector data sector offset as
+block key</li>
 </ul>
 <p>TODO: determine if 32 is a compression factor, given 16 x 32 = 512</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
