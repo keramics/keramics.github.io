@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8bdda408.js";
+            window.path_to_searchindex_js = "searchindex-cb26422e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8a494624.js"></script>
@@ -180,14 +180,14 @@
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>There are multiple versions of BitLocker Drive Encryption (BDE):</p>
 <ul>
-<li>BitLocker Windows Vista, Windows 7 and 10; used to encrypt volumes on fixed storage media, like
-harddisks, which typically contain NTFS file systems.</li>
+<li>BitLocker Version 1.0 (in Windows Vista) or Version 2.0 (in Windows 7 and later); used to encrypt
+volumes on fixed storage media, like harddisks, which typically contain NTFS file systems.</li>
 <li>BitLocker To Go; introduced in Windows 7; used to encrypt removable drives, which typically
 contain FAT file systems.</li>
 <li>BitLocker Used Disk Space Only encryption; used to encrypt only the used space of volumes, which
 presumably was introduced in Windows 8.</li>
-<li>BitLocker Encrypt-on-Write (EOW), which presumably was introduced in Windows 10 (1511).</li>
 </ul>
+<p>The BitLocker Encrypt-on-Write (EOW), feature was presumably introduced in Windows 10 (1511).</p>
 <blockquote>
 <p>Note that Windows treats NTFS volumes on removable drives are treated as NTFS volumes on fixed
 storage media.</p>
@@ -219,16 +219,16 @@ assumed that these files are used to prevent the BitLocker metadata to be overwr
 <blockquote>
 <p>Note that not all tools zero out the metadata areas.</p>
 </blockquote>
-<h3 id="bitlocker-windows-vista"><a class="header" href="#bitlocker-windows-vista">BitLocker Windows Vista</a></h3>
-<p>In BitLocker Windows Vista the “\System Volume Information” directory contains the following
-BitLocker related files:</p>
+<h3 id="bitlocker-version-10"><a class="header" href="#bitlocker-version-10">BitLocker Version 1.0</a></h3>
+<p>In BitLocker Version 1.0 the “\System Volume Information” directory contains the following BitLocker
+related files:</p>
 <ul>
 <li>“FVE.{e40ad34d-dae9-4bc7-95bd-b16218c10f72}.[123]” maps <a href="#metadata_block">a metadata block</a>;
 typically 16384 bytes in size.</li>
 </ul>
-<h3 id="bitlocker-windows-windows-7-and-later"><a class="header" href="#bitlocker-windows-windows-7-and-later">BitLocker Windows Windows 7 and later</a></h3>
-<p>In BitLocker Windows 7 and later the “\System Volume Information” directory contains the following
-BitLocker related files:</p>
+<h3 id="bitlocker-version-20"><a class="header" href="#bitlocker-version-20">BitLocker Version 2.0</a></h3>
+<p>In BitLocker Version 2.0 the “\System Volume Information” directory contains the following BitLocker
+related files:</p>
 <ul>
 <li>“FVE2.{09cf57b8-9e6c-43d4-ae1f-0408882a397d}.[1-6]”, maps
 <a href="#encrypt_on_write_block_map_area">an Encrypt-on-Write (EOW) block map area</a>, used by “Used
@@ -413,34 +413,41 @@ Encryption Algorithm for Windows Vista”.</p>
 These are sectors to store:</p>
 <ul>
 <li>the unencrypted boot record</li>
-<li>the BitLocker metadata</li>
+<li>BitLocker metadata</li>
 </ul>
-<h4 id="bitlocker-windows-vista-1"><a class="header" href="#bitlocker-windows-vista-1">BitLocker Windows Vista</a></h4>
-<p>In BitLocker Windows Vista the first sector of the unencrypted boot recored sector is
-reconstructed by replacing values in the BitLocker boot record, namely</p>
+<h4 id="bitlocker-version-10-1"><a class="header" href="#bitlocker-version-10-1">BitLocker Version 1.0</a></h4>
+<p>In BitLocker version 1.0 the first sector of the unencrypted boot recored sector is reconstructed
+by replacing values in the BitLocker boot record, namely:</p>
 <ul>
 <li>replacing the “File system signature” with “NTFS\x20\x20\x20\x20”</li>
 <li>replacing the “metadata block 1 cluster block number” with the “MTF mirror cluster block number”</li>
 </ul>
 <p>The 15 sectors directly following the first sector are also unencrypted.</p>
 <p>The sectors that contain the BDE metadata are shown as empty sectors; containing 0-byte values.</p>
-<h4 id="bitlocker-windows-7-and-to-go"><a class="header" href="#bitlocker-windows-7-and-to-go">BitLocker Windows 7 and To Go</a></h4>
-<p>Both BitLocker Windows 7 and To Go store an encrypted version of the unencrypted boot record in a
-specific location. This location is defined in the
-<a href="#metadata_area_descriptors">metadata area descriptors</a>.</p>
+<h4 id="bitlocker-version-20-1"><a class="header" href="#bitlocker-version-20-1">BitLocker Version 2.0</a></h4>
+<p>In BitLocker Version 2.0 stores an encrypted version of the unencrypted boot record in a specific
+location. This location is defined in the <a href="#metadata_area_descriptors">metadata area descriptors</a>.</p>
 <p>The encrypted boot record is commonly 8192 bytes an size, entailing the first 16 sectors.</p>
 <p>The sectors that contain the encrypted boot recored and the BDE metadata are shown as empty sectors;
 containing 0-byte values.</p>
-<h4 id="bitlocker-windows-10"><a class="header" href="#bitlocker-windows-10">BitLocker Windows 10</a></h4>
-<p>In later versions of Bitlocker Windows 10 the
-<a href="#metadata_area_descriptors">metadata area descriptors</a> is not always present.</p>
+<blockquote>
+<p>Note that in later versions of Bitlocker Windows 10 the metadata area descriptors are not always
+present.</p>
+</blockquote>
 <p>The number of boot record sectors in the <a href="#metadata_block_header_v2">metadata block header</a> can be
 used to determine the boot record size.</p>
-<p>The encrypted boot record is commonly 8192 bytes an size, entailing the first 16 sectors.</p>
+<h3 id="unencrypted-sectors"><a class="header" href="#unencrypted-sectors">Unencrypted sector(s)</a></h3>
+<p>A BitLocker encrypted volume can be partially encrypted and therefore contain unencrypted regions.</p>
+<p>In “BitLocker Used Disk Space Only encryption” information of unencrypted regions is stored in the
+Encrypt-on-Write metadata.</p>
+<p>Prior to “BitLocker Used Disk Space Only encryption” a partial encrypted volume would have a single
+unencrypted region which can be derived from the encrypted volume size in the
+<a href="#metadata_block_header_v2">metadata block header</a>.</p>
+<p>It is currently unknown if BitLocker Version 1.0 supports partial encrypted volumes.</p>
 <h2 id="boot-record"><a class="header" href="#boot-record">Boot record</a></h2>
-<h3 id="bitlocker-windows-vista-2"><a class="header" href="#bitlocker-windows-vista-2">BitLocker Windows Vista</a></h3>
-<p>The BitLocker Windows Vista boot record is similar to <a href="ntfs.html#boot_record">a NTFS boot record</a>.
-The differences have been emphasized in bold. The boot record is 512 bytes of size and consists of:</p>
+<h3 id="bitlocker-version-10-2"><a class="header" href="#bitlocker-version-10-2">BitLocker Version 1.0</a></h3>
+<p>The BitLocker Version 1.0 boot record is similar to <a href="ntfs.html#boot_record">a NTFS boot record</a>. The
+differences have been emphasized in bold. The boot record is 512 bytes of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -514,8 +521,8 @@ The differences have been emphasized in bold. The boot record is 512 bytes of si
 <blockquote>
 <p>Note that the number of sectors can be 1 less then the value indicated in the partition table.</p>
 </blockquote>
-<h3 id="boot_record"><a class="header" href="#boot_record">BitLocker Windows 7 and later</a></h3>
-<p>The BitLocker Windows 7 boot record for a NTFS volume is similar to
+<h3 id="boot_record"><a class="header" href="#boot_record">BitLocker Version 2.0</a></h3>
+<p>The BitLocker Version 2.0 boot record for a NTFS volume is similar to
 <a href="fat.html#fat32_boot_record">a FAT32 boot record</a>. The differences have been emphasized in bold. The
 boot record is 512 bytes of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -610,10 +617,13 @@ boot record is 512 bytes of size and consists of:</p>
 </div>
 
 <!-- rumdl-enable MD033 MD056 -->
+<blockquote>
+<p>Note bytes per sector can be 0, which is typical for an encrypted exFAT file system.</p>
+</blockquote>
 <h3 id="bitlocker-to-go-1"><a class="header" href="#bitlocker-to-go-1">BitLocker To Go</a></h3>
-<p>BitLocker To Go on an NTFS volume is similar to BitLocker Windows 7. The BitLocker Windows To Go
-boot record for a FAT volume is similar to <a href="fat.html#fat32_boot_record">FAT32 boot record</a>. The
-differences have been emphasized in bold. The boot record is 512 bytes in size and consists of:</p>
+<p>The BitLocker Windows To Go boot record is similar to
+<a href="fat.html#fat32_boot_record">FAT32 boot record</a>. The differences have been emphasized in bold. The
+boot record is 512 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -708,8 +718,8 @@ differences have been emphasized in bold. The boot record is 512 bytes in size a
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="bitlocker-used-disk-space-only-encryption"><a class="header" href="#bitlocker-used-disk-space-only-encryption">BitLocker Used Disk Space Only encryption</a></h3>
 <p>The BitLocker Used Disk Space Only encryption boot record for a NTFS volume is similar to a
-<a href="#boot_record">BitLocker Windows 7 and later boot record</a>. The differences have been emphasized
-in bold. The boot record is 512 bytes of size and consists of:</p>
+<a href="#boot_record">BitLocker Version 2.0 boot record</a>. The differences have been emphasized in bold.
+The boot record is 512 bytes of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -814,8 +824,8 @@ encrypting the volume.</p>
 <h2 id="metadata_block"><a class="header" href="#metadata_block">Metadata block</a></h2>
 <p>A BitLocker encrypted volume contains 3 metadata blocks. Which is typically:</p>
 <ul>
-<li>12384 bytes in size for BitLocker Windows Vista;</li>
-<li>65536 bytes in size for BitLocker Windows 7 and later.</li>
+<li>12384 bytes in size for BitLocker Version 1.0;</li>
+<li>65536 bytes in size for BitLocker Version 2.0.</li>
 </ul>
 <p>A metadata block consists of:</p>
 <ul>
@@ -1274,8 +1284,8 @@ such as “MM/DD/YYYY”. Recent versions of BitLocker use “YYYY-MM-DD”.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <p>The metadata area descriptors seems to have been introduced in Windows 7. They specify the location,
 within the encrypted volume, where certain metadata is stored, such as the unencrypted boot record.</p>
-<p>The unencrypted boot record is commonly 8192 bytes in size for BitLocker Windows 7 (and later)
-and 5365760 bytes for BitLocker To Go.</p>
+<p>The unencrypted boot record is commonly 8192 bytes in size for BitLocker Version 2.0 and 5365760
+bytes for BitLocker To Go.</p>
 <h4 id="unknown-flags"><a class="header" href="#unknown-flags">Unknown flags</a></h4>
 <div class="table-wrapper">
 <table>
@@ -1362,7 +1372,7 @@ data.</p>
 
 <tr><td>28</td><td>4</td><td></td><td>Encrypt-on-Write relocation log entry size</td></tr>
 
-<tr><td>32</td><td>4</td><td></td><td>Number of block map offsets</td></tr>
+<tr><td>32</td><td>4</td><td></td><td>Number of block map area offsets</td></tr>
 
 <tr><td>36</td><td>4</td><td></td><td>Checksum of the data from the start of the Encrypt-on-Write descriptor upto data size with the checksum value set to 0</td></tr>
 
@@ -1448,7 +1458,7 @@ consists of:</p>
 
 <tr><td>12</td><td>4</td><td></td><td>Physical sector size</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Number of bits</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Number of bits (in the bitmap)</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Sequence number</td></tr>
 
