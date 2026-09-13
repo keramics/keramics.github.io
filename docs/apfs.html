@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cb26422e.js";
+            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-8a494624.js"></script>
@@ -1537,7 +1537,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>Volume identifer (ke_uuid), which contains a big-endian UUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Volume identifier (ke_uuid), which contains a big-endian UUID</td></tr>
 
 <tr><td>16</td><td>2</td><td></td><td><a href="#key_bag_entry_types">Entry type</a> (ke_tag)</td></tr>
 
@@ -1557,7 +1557,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td>0x01</td><td>KB_TAG_WRAPPING_KEY (or KB_TAG_RESERVED_1)</td><td>Wrapping key</td></tr>
 
-<tr><td>0x02</td><td>KB_TAG_VOLUME_KEY</td><td>Volume master key, which contains a <a href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></td></tr>
+<tr><td>0x02</td><td>KB_TAG_VOLUME_KEY</td><td>Volume master key, which contains a <a href="#key_bag_kek_packed_object">Key encryption key (KEK) packed object</a></td></tr>
 
 <tr><td>0x03</td><td>KB_TAG_VOLUME_UNLOCK_RECORDS</td><td>Volume <a href="#key_bag_data_extent">key bag extent</a></td></tr>
 
@@ -1579,7 +1579,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>3</td><td></td><td>Volume key, which contains a <a href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></td></tr>
+<tr><td>3</td><td></td><td>Volume key, which contains a <a href="#key_bag_kek_packed_object">Key encryption key (KEK) packed object</a></td></tr>
 
 <tr><td>4</td><td></td><td>Password hint, which contains a string without end-of-string character</td></tr>
 
@@ -1588,27 +1588,41 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <p>The volume key is encryped with an user key.</p>
 <h4 id="key_bag_packed_object"><a class="header" href="#key_bag_packed_object">Key bag packed object</a></h4>
-<p>The packed object consist of an object packed value that embeds attribute packed values.</p>
+<p>The packed object consist of:</p>
+<ul>
+<li>an object packed value that embeds attribute packed values.</li>
+</ul>
+<p>A packed value with a tag and size of 0 signifies the end of the attribute packed values.</p>
 <h5 id="key-bag-packed-value"><a class="header" href="#key-bag-packed-value">Key bag packed value</a></h5>
 <p>The key bag packed value is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>1</td><td></td><td>Value tag (or value type), where the most-significant bit represents a flag</td></tr>
 
-<tr><td>1</td><td>1</td><td></td><td>Value data size, in number of bytes, where the most-significant bit represents a flag</td></tr>
+<tr><td>1</td><td>1</td><td></td><td>Value data size, in number of bytes, where the most-significant bit represents an extended size flag</td></tr>
+
+<tr><td colspan="4"><em>If extended size flag is set</em></td></tr>
+
+<tr><td>2</td><td>...</td><td></td><td>Extended value data size</td></tr>
+
+<tr><td colspan="4"><em> </em></td></tr>
 
 <tr><td>...</td><td>...</td><td></td><td>Value data</td></tr>
 
 </table>
 </div>
 
-<p>A packed value with a tag and size of 0 signifies the end of the packed values.</p>
+<!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the meaning of the value tags differ per packed object type.</p>
 </blockquote>
-<h5 id="key_bag_kek_packed_object"><a class="header" href="#key_bag_kek_packed_object">Key encrypted key (KEK) packed object</a></h5>
-<p>The packed object value tag of a key encrypted key is 0x30 and contains the following attribute
+<p>If the most-significant bit is set the value data size is stored in the next <code>(value &amp; 0x7f)</code> bytes.
+E.g. if value data size is 0x82 the first 2 bytes of the extened value data size contain the value
+data size.</p>
+<h5 id="key_bag_kek_packed_object"><a class="header" href="#key_bag_kek_packed_object">Key encryption key (KEK) packed object</a></h5>
+<p>The packed object value tag of a key encryption key is 0x30 and contains the following attribute
 value tags:</p>
 <div class="table-wrapper">
 <table>
@@ -1627,14 +1641,14 @@ value tags:</p>
 </div>
 
 <h5 id="key_bag_wrapped_kek_packed_object"><a class="header" href="#key_bag_wrapped_kek_packed_object">Wrapped Key Encryption Key (KEK) packed object</a></h5>
-<p>The packed object value tag of a wrapped kek encrypted key is 0xa3 and contains the following
+<p>The packed object value tag of a wrapped kek encryption key is 0xa3 and contains the following
 attribute value tags:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x80</td><td></td><td>Unknown</td></tr>
 
-<tr><td>0x81</td><td></td><td>Volume identifer, which contains a big-endian UUID</td></tr>
+<tr><td>0x81</td><td></td><td>Volume identifier, which contains a big-endian UUID</td></tr>
 
 <tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></td></tr>
 
@@ -1648,34 +1662,36 @@ attribute value tags:</p>
 </div>
 
 <h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></h4>
-<p>The Wrapped Key Encryption Key (KEK) metadata is 8 bytes in size and consists of:</p>
+<p>The Wrapped Key Encryption Key (KEK) metadata is of variable size and consists of:</p>
+<!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>4</td><td></td><td><a href="#encryption_methods">Encryption method</a></td></tr>
+<tr><td>0</td><td>4</td><td></td><td><a href="#wrapped_kek_metadata_flags">Flags</a></td></tr>
 
 <tr><td>4</td><td>2</td><td></td><td>Unknown</td></tr>
 
-<tr><td>6</td><td>1</td><td></td><td>Unknown</td></tr>
+<tr><td colspan="4"><em>If data size is 8</em></td></tr>
 
-<tr><td>7</td><td>1</td><td></td><td>Unknown</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Unknown (numeric identifier?)</td></tr>
+
+<tr><td colspan="4"><em>If data size is 22</em></td></tr>
+
+<tr><td>6</td><td>16</td><td></td><td>Unknown (UUID)</td></tr>
 
 </table>
 </div>
 
-<h5 id="encryption_methods"><a class="header" href="#encryption_methods">Encryption methods</a></h5>
+<!-- rumdl-enable MD033 MD056 -->
+<h5 id="wrapped_kek_metadata_flags"><a class="header" href="#wrapped_kek_metadata_flags">Wrapped Key Encryption Key (KEK) metadata flags</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td></td><td>Unknown (AES-256)</td></tr>
+<tr><td>0x000000002</td><td></td><td>AES-128 CoreStorage FileVault compatible mode if set (1), AES-256 if not set (0)</td></tr>
 
 <tr><td></td><td></td><td></td></tr>
 
-<tr><td>2</td><td></td><td>Unknown (AES-128 FVDE (CoreStorage FileVault) compatible)</td></tr>
-
-<tr><td></td><td></td><td></td></tr>
-
-<tr><td>16</td><td></td><td>Unknown (AES-256), which has been observed in combination with recovery password protected volume key</td></tr>
+<tr><td>0x000000010</td><td></td><td>Unknown (AES-256), which has been observed in combination with recovery password protected volume key</td></tr>
 
 </table>
 </div>
