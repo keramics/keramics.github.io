@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -199,7 +199,7 @@
 
 <p>According to “RHEL 5 - Logical Volume Manager Administration” the number of bytes per sector is 512.</p>
 <p>Checksums use a “weak” CRC-32, which is a CRC-32 without the initial and final XOR with 0xffffffff,
-using the polynominal 0xedb88320 and initial value 0xf597a6cf.</p>
+using the polynomial 0xedb88320 and initial value 0xf597a6cf.</p>
 <h3 id="terminology"><a class="header" href="#terminology">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
@@ -483,7 +483,7 @@ values.</p>
 
 <tr><td>"creation_host"</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
 
-<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an integer containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
 <tr><td>"description"</td><td>Unknown (Description of the metadata area?)</td></tr>
 
@@ -499,10 +499,10 @@ values.</p>
 </blockquote>
 <h3 id="metadata_names"><a class="header" href="#metadata_names">Volume group and logical volume names</a></h3>
 <ul>
-<li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hypen)</li>
-<li>A volume group name should not start with a hypen</li>
-<li>A logical volume name can start with a hypen, but it is reserved for logical volumes that have
-been removed but are stil being tracked by the format</li>
+<li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hyphen)</li>
+<li>A volume group name should not start with a hyphen</li>
+<li>A logical volume name can start with a hyphen, but it is reserved for logical volumes that have
+been removed but are still being tracked by the format</li>
 </ul>
 <blockquote>
 <p>Note that some implementations use lv_ as the prefix for a logical volume, however this is not
@@ -591,7 +591,7 @@ enforced by the format.</p>
 <thead><th>Value</th><th>Description</th></thead>
 <tr><td>"creation_host"</td><td>The hostname of the system on which the logical volume was created</td></tr>
 
-<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an integer containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
 <tr><td>"flags"</td><td><a href="#flags">Flags</a></td></tr>
 

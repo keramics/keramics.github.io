@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -829,7 +829,7 @@ where the runlist can contain both sparse and non-sparse data runs.</p>
 <p>Note that $BadClus:$Bad also defines a data run with a cluster block number value size of 0,
 without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 </blockquote>
-<h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
+<h5 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data runs</a></h5>
 <p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed or not.</p>
 <p>Windows supports compressed data runs for NTFS file systems with a cluster block size of 4096 bytes
 or less.</p>
@@ -966,7 +966,7 @@ of:</p>
 <p>Note that MFT entries have been observed without a $STANDARD_INFORMATION attribute, but with
 other attributes such as $FILE_NAME and an $I30 index.</p>
 </blockquote>
-<p>Recent version of NTFS support case-sentive file names. If a directory is case-sensitive the
+<p>Recent version of NTFS support case-sensitive file names. If a directory is case-sensitive the
 corresponding $STANDARD_INFORMATION attribute will have a maximum number of versions of 0 and a
 version number of 1.</p>
 <h3 id="the-attribute-list-attribute"><a class="header" href="#the-attribute-list-attribute">The attribute list attribute</a></h3>
@@ -1234,7 +1234,7 @@ the attribute is of variable size.</p>
 <h3 id="the-reparse-point-attribute"><a class="header" href="#the-reparse-point-attribute">The reparse point attribute</a></h3>
 <p>The reparse point attribute ($REPARSE_POINT) contains information about a file system-level link.
 It is stored as a resident MFT attribute.</p>
-<p>Als see <a href="#reparse_point">the reparse point</a>.</p>
+<p>Also see <a href="#reparse_point">the reparse point</a>.</p>
 <h3 id="the-hpfs-extended-attribute-information"><a class="header" href="#the-hpfs-extended-attribute-information">The (HPFS) extended attribute information</a></h3>
 <p>The (HPFS) extended attribute information ($EA_INFORMATION) contains information about the extended
 attribute ($EA).</p>
@@ -1551,7 +1551,7 @@ be used by the $Secure metadata file.</p>
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
 <!-- rumdl-enable MD013 -->
 <h2 id="compression"><a class="header" href="#compression">Compression</a></h2>
-<h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
+<h3 id="compressed-data-runs-1"><a class="header" href="#compressed-data-runs-1">Compressed data-runs</a></h3>
 <p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster blocks also named a
 compression unit, which is either “compressed” or uncompressed.</p>
 <p>The term compressed is quoted here because the group of cluster blocks can also contain
@@ -2805,7 +2805,7 @@ compressed chunk size                     : 1
 signature value                           : 0
 is compressed flag                        : 0
 </code></pre>
-<p>It was observed in 2 differnt NTFS implementations that the entire block is filled with 0-byte
+<p>It was observed in 2 different NTFS implementations that the entire block is filled with 0-byte
 values.</p>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
 <h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
@@ -2839,7 +2839,7 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
 <pre><code class="language-text">compressed data offset                    : 16384 (0x00004000)
 compression flag byte                     : 0x00
 </code></pre>
-<p>Different behavior was observed in 2 differnt NTFS implementations:</p>
+<p>Different behavior was observed in 2 different NTFS implementations:</p>
 <ul>
 <li>one implementation fills the compressed block with the uncompressed data it could read and the
 rest with with 0-byte values</li>

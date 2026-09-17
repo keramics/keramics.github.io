@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,7 +176,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="virtual-hard-disk-version-2-vhdx-image-format"><a class="header" href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX) image format</a></h1>
-<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft vitualization products as one of
+<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft visualization products as one of
 its image formats. It is both used the store hard disk images and snapshots.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A VHDX image file consist of:</p>
@@ -257,7 +257,7 @@ its image formats. It is both used the store hard disk images and snapshots.</p>
 <p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
 calculate the checksum.</p>
 <p>The checksum is calculated over the 4 KiB bytes of data of the image header, where the image header
-checkum value is considered to be 0 during calculation.</p>
+checksum value is considered to be 0 during calculation.</p>
 <h2 id="region-table"><a class="header" href="#region-table">Region table</a></h2>
 <p>The region table is stored in a block of 64 KiB (65536 bytes) and consists of:</p>
 <ul>
@@ -285,7 +285,7 @@ checkum value is considered to be 0 during calculation.</p>
 <p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
 calculate the checksum.</p>
 <p>The checksum is calculated over the 64 KiB bytes of data of the region table where the image header
-checkum value is considered to be 0 during calculation.</p>
+checksum value is considered to be 0 during calculation.</p>
 <h3 id="region-table-entry"><a class="header" href="#region-table-entry">Region table entry</a></h3>
 <p>The region table entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -344,11 +344,11 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h4 id="metadata-table-entry"><a class="header" href="#metadata-table-entry">Metadata table entry</a></h4>
-<p>The metdata table entry is 32 bytes in size and consists of:</p>
+<p>The metadata table entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td><a href="#metdata_item_identifiers">Metadata item identifier</a>, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td><a href="#metadata_item_identifiers">Metadata item identifier</a>, which contains a GUID</td></tr>
 
 <tr><td>16</td><td>4</td><td></td><td>Metadata item offset, which contains an offset relative to the start of the metadata region. According to MS-VHDX this value must be greater than 64 KiB</td></tr>
 
@@ -373,7 +373,7 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h3 id="metadata-items"><a class="header" href="#metadata-items">Metadata items</a></h3>
-<h4 id="metdata_item_identifiers"><a class="header" href="#metdata_item_identifiers">Metadata item identifiers</a></h4>
+<h4 id="metadata_item_identifiers"><a class="header" href="#metadata_item_identifiers">Metadata item identifiers</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -419,7 +419,7 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h4 id="parent-locator-metadata-item"><a class="header" href="#parent-locator-metadata-item">Parent locator metadata item</a></h4>
-<p>The parent locator metadata item is of variable size and consits of:</p>
+<p>The parent locator metadata item is of variable size and consists of:</p>
 <ul>
 <li>parent locator header</li>
 <li>0 or more parent locator entry</li>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -248,7 +248,7 @@ and corresponding locations of backups.</p>
 <p>Successive group descriptor tables, for example [16384, 16447], are stored in the first block
 group of a meta block group and backups in the second and last block groups of the meta block group.</p>
 <h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
-<p>The volume is devided in blocks:</p>
+<p>The volume is divided in blocks:</p>
 <pre><code class="language-python">block offset = block number * block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
@@ -306,7 +306,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -396,7 +396,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -512,7 +512,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -751,7 +751,7 @@ should be used instead of calculating it based on the file system identifier.</p
 </table>
 </div>
 
-<h3 id="format_revisision"><a class="header" href="#format_revisision">Format revision</a></h3>
+<h3 id="format_revision"><a class="header" href="#format_revision">Format revision</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -1060,7 +1060,7 @@ than the total data size defined by the extent descriptors.</p>
 
 <tr><td>4</td><td>2</td><td></td><td>Maximum number of entries</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 represents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
 
 <tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4</td></tr>
 
@@ -1149,7 +1149,7 @@ combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.
 
 <tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
 
@@ -1216,7 +1216,7 @@ extension.</p>
 
 <tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
 
@@ -1456,9 +1456,9 @@ correct one being accessed.</p>
 
 <tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
 
-<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifier (GID) on execution</td></tr>
 
-<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifier (UID) on execution</td></tr>
 
 <tr><td colspan="3"><em>Type of file, Bitmask: 0xf000 (S_IFMT)</em></td></tr>
 

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -860,13 +860,13 @@ NX stands for.</p>
 
 <blockquote>
 <p>Note that according to the Apple File System Reference documentation the pre-release version 1
-and release version 2 are incompatble.</p>
+and release version 2 are incompatible.</p>
 </blockquote>
 <h4 id="container_counters"><a class="header" href="#container_counters">Container counters</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>NX_CNTR_OBJ_CKSUM_SET</td><td>Number of times a checksum has been calculated when wrting to disk</td></tr>
+<tr><td>0</td><td>NX_CNTR_OBJ_CKSUM_SET</td><td>Number of times a checksum has been calculated when writing to disk</td></tr>
 
 <tr><td>1</td><td>NX_CNTR_OBJ_CKSUM_FAIL</td><td>Number of checksum errors when reading from disk</td></tr>
 
@@ -1574,7 +1574,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 </table>
 </div>
 
-<p>The volume master key is encryped with a volume key.</p>
+<p>The volume master key is encrypted with a volume key.</p>
 <h5 id="volume-key-bag-entry-types"><a class="header" href="#volume-key-bag-entry-types">Volume key bag entry types</a></h5>
 <div class="table-wrapper">
 <table>
@@ -1586,7 +1586,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 </table>
 </div>
 
-<p>The volume key is encryped with an user key.</p>
+<p>The volume key is encrypted with an user key.</p>
 <h4 id="key_bag_packed_object"><a class="header" href="#key_bag_packed_object">Key bag packed object</a></h4>
 <p>The packed object consist of:</p>
 <ul>
@@ -1605,7 +1605,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td colspan="4"><em>If extended size flag is set</em></td></tr>
 
-<tr><td>2</td><td>...</td><td></td><td>Extended value data size</td></tr>
+<tr><td>2</td><td>...</td><td></td><td>Extended value data size, in big-endian</td></tr>
 
 <tr><td colspan="4"><em> </em></td></tr>
 
@@ -1619,7 +1619,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <p>Note that the meaning of the value tags differ per packed object type.</p>
 </blockquote>
 <p>If the most-significant bit is set the value data size is stored in the next <code>(value &amp; 0x7f)</code> bytes.
-E.g. if value data size is 0x82 the first 2 bytes of the extened value data size contain the value
+E.g. if value data size is 0x82 the first 2 bytes of the extended value data size contain the value
 data size.</p>
 <h5 id="key_bag_kek_packed_object"><a class="header" href="#key_bag_kek_packed_object">Key encryption key (KEK) packed object</a></h5>
 <p>The packed object value tag of a key encryption key is 0x30 and contains the following attribute
@@ -1648,7 +1648,7 @@ attribute value tags:</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x80</td><td></td><td>Unknown</td></tr>
 
-<tr><td>0x81</td><td></td><td>Volume identifier, which contains a big-endian UUID</td></tr>
+<tr><td>0x81</td><td></td><td>Identifier, which contains a big-endian UUID</td></tr>
 
 <tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></td></tr>
 
@@ -1658,9 +1658,21 @@ attribute value tags:</p>
 
 <tr><td>0x85</td><td></td><td>Salt for the PBKDF2 algorithm</td></tr>
 
+<tr><td>0x86</td><td></td><td>Unknown (16 bytes in size)</td></tr>
+
+<tr><td>0x87</td><td></td><td>Unknown (16 bytes in size)</td></tr>
+
+<tr><td>0x88</td><td></td><td>Unknown</td></tr>
+
 </table>
 </div>
 
+<blockquote>
+<p>Note that the Wrapped Key Encryption Key (KEK) packed object can represent multiple different
+keys, e.g. in the container key bag it will contain the Volume Master Key (VMK) and in a volume
+key bag a user key, where identifier (0x81) corresponds with the the identifier shown by:
+<code>diskutil apfs listCryptoGraphicUsers /</code></p>
+</blockquote>
 <h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></h4>
 <p>The Wrapped Key Encryption Key (KEK) metadata is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -1819,7 +1831,7 @@ directly read.</p>
 
 <tr><td>992</td><td>8</td><td></td><td>Largest clone transaction identifier (apfs_cloneinfo_xid)</td></tr>
 
-<tr><td>1000</td><td>8</td><td></td><td>Extended snapsnot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
+<tr><td>1000</td><td>8</td><td></td><td>Extended snapshot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
 
 <tr><td>1008</td><td>16</td><td></td><td>Volume group identifier (apfs_volume_group_id), which contains a big-endian UUID</td></tr>
 
@@ -2318,7 +2330,7 @@ file system B-tree key represents the first key in the branch.</p>
 </div>
 
 <blockquote>
-<p>Note that the name of an extended attribute appears to be case senstive even on a case
+<p>Note that the name of an extended attribute appears to be case sensitive even on a case
 insensitive file system.</p>
 </blockquote>
 <h4 id="extended-attribute-value-data"><a class="header" href="#extended-attribute-value-data">Extended attribute value data</a></h4>
@@ -2540,7 +2552,7 @@ interchangeably.</p>
 </ul>
 <!-- rumdl-disable MD028 -->
 <blockquote>
-<p>Note that apprears that current APFS file system use a key with name and hash. Apple File System
+<p>Note that appears that current APFS file system use a key with name and hash. Apple File System
 Reference documentation does not indicate how to distinguish between the two, but one method is
 to compare calculated and stored size of the key data.</p>
 </blockquote>
@@ -2705,7 +2717,7 @@ calculation, which is also referred to as weak CRC-32 calculation.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>60 bits</td><td></td><td>Snapshot metdata object identifier</td></tr>
+<tr><td>0</td><td>60 bits</td><td></td><td>Snapshot metadata object identifier</td></tr>
 
 <tr><td>7.4</td><td>4 bits</td><td>0x1</td><td><a href="#file_system_data_types">File system data type</a></td></tr>
 
@@ -3144,7 +3156,7 @@ by Apple</li>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="assorted.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="archive.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -3158,7 +3170,7 @@ by Apple</li>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="assorted.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="archive.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,16 +176,17 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="volume-system-formats"><a class="header" href="#volume-system-formats">Volume system formats</a></h1>
-<p>A volume (or logical drive) is a single continous accessible storage area, typically containing a
+<p>A volume (or logical drive) is a single continuous accessible storage area, typically containing a
 file system. A volume system is used to manage the storage of one or more volumes.</p>
 <p>A partition is a part of (typically) storage media. A partition is different conceptually, but
 its usage is comparable to a volume.</p>
-<p>This documentation uses the term volume systems in a broad sense to describe:</p>
+<p>This documentation uses the term volume systems in a broad sense to describe a format that
+contains other volumes, e.g.</p>
 <ul>
-<li>encrypted volumes;</li>
-<li>logical volume managers;</li>
-<li>partitioning schemes;</li>
-<li>and volume snapshots.</li>
+<li>encrypted volumes, such as BDE and LUKS;</li>
+<li>logical volume managers, such as Linux LVM;</li>
+<li>partitioning schemes, such as APM, GPT and MBR;</li>
+<li>and volume snapshots, such as volsnap.</li>
 </ul>
 <h2 id="formats"><a class="header" href="#formats">Formats</a></h2>
 <ul>
@@ -198,6 +199,7 @@ its usage is comparable to a volume.</p>
 <li><a href="luksde.html">Linux Unified Key Setup (LUKS) Disk Encryption</a></li>
 <li><a href="mbr.html">Master Boot Record (MBR)</a></li>
 <li><a href="sgilabel.html">SGI disklabel (sgilabel)</a></li>
+<li><a href="volsnap.html">Volume Shadow Snapshot (volsnap)</a></li>
 </ul>
 <p>Also see: <a href="hybrid.html">hybrid volume and file system formats</a></p>
 

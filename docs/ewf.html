@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -427,7 +427,7 @@ text in UTF16 format specifying information about the acquired media. The text m
 separated by an end of line character(s).</p>
 <p>The first 2 bytes of the UTF16 string are the byte order mark (BOM):</p>
 <ul>
-<li>0xff 0xfe for UTF-16 litte-endian</li>
+<li>0xff 0xfe for UTF-16 little-endian</li>
 <li>0xfe 0xff for UTF-16 big-endian</li>
 </ul>
 <p>In the next paragraphs the various variants of the header2 section are described.</p>
@@ -585,7 +585,7 @@ savings.</p>
 </blockquote>
 <!-- rumdl-enable MD064 -->
 <blockquote>
-<p>Note that in a Logicube Dossier generated header2 section an additional emtpy value in the 4th
+<p>Note that in a Logicube Dossier generated header2 section an additional empty value in the 4th
 line was observed. The number of values in the 3rd and 4th can differ.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
@@ -2540,7 +2540,7 @@ the SHA1 has is not set.</p>
 <ul>
 <li>can contain path segment separator characters like “\” and “/”</li>
 <li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name
-seperator</li>
+separator</li>
 </ul>
 <blockquote>
 <p>Note that a regular “MIDDLE DOT” Unicode character will be encoded in the same way so no real way
@@ -3020,7 +3020,7 @@ values.</p>
 <p>TODO: add description</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
-<p>In this corruption scenarion the copy of uncompressed data size value of the
+<p>In this corruption scenario the copy of uncompressed data size value of the
 <a href="zlib.html">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
 uncompressed data size.</p>
 <p>Keramics currently does not handle this corruption scenario.</p>

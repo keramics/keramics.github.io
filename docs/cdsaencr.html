@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -188,7 +188,7 @@
 <p>A version 1 encrypted container consist of:</p>
 <ul>
 <li>Encrypted data</li>
-<li><a href="#encypted_container_footer">Encrypted container footer</a> at the end of the file</li>
+<li><a href="#encrypted_container_footer">Encrypted container footer</a> at the end of the file</li>
 </ul>
 <p>Format version 1 supports the following key protectors:</p>
 <ul>
@@ -197,7 +197,7 @@
 <h3 id="encrypted-encoding-version-2"><a class="header" href="#encrypted-encoding-version-2">Encrypted Encoding version 2</a></h3>
 <p>A version 2 encrypted container consist of:</p>
 <ul>
-<li><a href="#encypted_container_header">Encrypted container header</a> at the start of the file</li>
+<li><a href="#encrypted_container_header">Encrypted container header</a> at the start of the file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
 <li>Encrypted data, typically at offset 122368</li>
@@ -222,7 +222,7 @@
 </div>
 
 <h2 id="encrypted-container"><a class="header" href="#encrypted-container">Encrypted container</a></h2>
-<h3 id="encypted_container_footer"><a class="header" href="#encypted_container_footer">Encrypted container footer</a></h3>
+<h3 id="encrypted_container_footer"><a class="header" href="#encrypted_container_footer">Encrypted container footer</a></h3>
 <p>The encrypted container footer is 1276 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -310,7 +310,7 @@ on RFC 3537):</p>
 <li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
 determine the key encryption key (KEK) based on a passphrase.</li>
 <li>Pad the initialization vector [0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05] with 0-byte values
-if necessesary, e.g. if initialization vector is 8 bytes but the encryption method (AES) requires
+if necessary, e.g. if initialization vector is 8 bytes but the encryption method (AES) requires
 an initialization vector of 16 bytes.</li>
 <li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
 of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
@@ -329,13 +329,13 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 </div>
 
 <ul>
-<li>Pad the initialization vector of the intermediate key data with 0-byte values if necessesary.</li>
+<li>Pad the initialization vector of the intermediate key data with 0-byte values if necessary.</li>
 <li>Decrypt the wrapped key data (of the intermediate key data) using the encryption method and mode,
 e.g. DES3-CBC, with the number of bits of the KEK (defined by encryption key size) and the
 initialization vector (of the intermediate key data) if applicable.</li>
 <li>Remove the padding, specified by the padding type.</li>
 </ul>
-<p>The decypted key data is of variable size and consists of:</p>
+<p>The decrypted key data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -346,7 +346,7 @@ initialization vector (of the intermediate key data) if applicable.</li>
 </table>
 </div>
 
-<h3 id="encypted_container_header"><a class="header" href="#encypted_container_header">Encrypted container header</a></h3>
+<h3 id="encrypted_container_header"><a class="header" href="#encrypted_container_header">Encrypted container header</a></h3>
 <p>The encrypted container header is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -447,13 +447,13 @@ initialization vector (of the intermediate key data) if applicable.</li>
 <ul>
 <li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
 determine the key encryption key (KEK) based on a passphrase.</li>
-<li>Pad the initialization vector with 0-byte values if necessesary, e.g. if initialization vector
+<li>Pad the initialization vector with 0-byte values if necessary, e.g. if initialization vector
 is 8 bytes but the encryption method (AES) requires an initialization vector of 16 bytes.</li>
 <li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
 of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
 <li>Remove the padding, specified by the padding type.</li>
 </ul>
-<p>The decypted key data is of variable size and consists of:</p>
+<p>The decrypted key data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>

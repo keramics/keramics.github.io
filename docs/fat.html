@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,7 +176,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="file-allocation-table-fat-file-system-format"><a class="header" href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT) file system format</a></h1>
-<p>The File Allocation Table (FAT) is widely used a file sytem and is the default file system for DOS
+<p>The File Allocation Table (FAT) is widely used a file system and is the default file system for DOS
 and Windows.</p>
 <p>There are multiple known variants or derivatives of FAT, such as:</p>
 <ul>
@@ -192,7 +192,7 @@ and Windows.</p>
 <li>One or more reserved sectors
 <ul>
 <li>a boot record (or boot sector)</li>
-<li>file system informartion for FAT-32</li>
+<li>file system information for FAT-32</li>
 </ul>
 </li>
 <li>One or more cluster block allocation tables</li>
@@ -224,7 +224,7 @@ and Windows.</p>
 </table>
 </div>
 
-<h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
+<h3 id="determining-the-fat-format-version"><a class="header" href="#determining-the-fat-format-version">Determining the FAT format version</a></h3>
 <p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters in the data area:</p>
 <pre><code class="language-python">data_area_size = total_number_of_sectors - (number_of_reserved_sectors + (
     number_of_allocation_tables * allocation_table_size) + size_of_root_directory)

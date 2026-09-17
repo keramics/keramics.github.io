@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Volume Shadow Snapshot (volsnap) format - Keramics data format specifications</title>
+        <title>Volume Shadow Snapshot (volsnap) - Keramics data format specifications</title>
 
 
         <!-- Custom HTML head -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -177,23 +177,24 @@
                     <main>
                         <h1 id="volume-shadow-snapshot-volsnap-format"><a class="header" href="#volume-shadow-snapshot-volsnap-format">Volume Shadow Snapshot (volsnap) format</a></h1>
 <p>As of Windows Vista the Volume Shadow Snapshot (VSS) stores persistent shadow copies on the local
-NTFS volume.</p>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a volume. A shadow
-copy can be part of a set which contains a collection of shadow copies of various volumes, taken at
-the same time.</p>
+NTFS volume. According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a
+volume. A shadow copy can be part of a set which contains a collection of shadow copies of various
+volumes, taken at the same time.</p>
 <p>Volume Shadow Snapshot (VSS) can use different providers to store shadow copies, this document
 focuses on the “Microsoft Software Shadow Copy provider 1.0” (GUID:
-b5946137-7b9f-4925-af80-51abd60b20d5) and will refer to it as volsnap. The volsnap provider stores
-the copies on the local volume using 16 KiB blocks.</p>
-<p>Volsnap uses the GUID 3808876b-c176-4e48-b7ae-04046e6cc752 to identify its data or metadata files.
-It leverages several metadata files in “\System Volume Information” directory:</p>
+b5946137-7b9f-4925-af80-51abd60b20d5) which relies on volsnap.sys.</p>
+<p>The volsnap driver manages the metadata and copies of 16 KiB blocks of volume data.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>A volsnap backing volume consists of:</p>
 <ul>
-<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
-<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+<li><a href="#backing_volume_header">Backing volume header</a></li>
+<li><a href="#catalog">Catalog</a></li>
+<li>Optional <a href="#block_store">(block) store</a></li>
 </ul>
-<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and
-%GUID% contains a time/MAC based GUID.</p>
+<blockquote>
+<p>Note that a volsnap backing volume can be a snapshot and/or storage volume.</p>
+</blockquote>
+<h3 id="characteristics"><a class="header" href="#characteristics">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -206,22 +207,35 @@ It leverages several metadata files in “\System Volume Information” director
 </table>
 </div>
 
-<h2 id="volume-header"><a class="header" href="#volume-header">Volume header</a></h2>
-<p>The volsnap volume header is part of the NTFS volume header (or $Boot metadata file). The volsnap
-volume header data is stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in
-size, but presumably 512 bytes, and consists of:</p>
+<h3 id="identifiers"><a class="header" href="#identifiers">Identifiers</a></h3>
+<p>Volsnap is known to use the following identifiers:</p>
+<ul>
+<li>3808876b-c176-4e48-b7ae-04046e6cc752, which this document refers to as {%VOLSNAPGUID%}</li>
+</ul>
+<h2 id="metadata-files"><a class="header" href="#metadata-files">Metadata files</a></h2>
+<p>Volsnap exposes various files in the “\System Volume Information” directory:</p>
+<ul>
+<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
+<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+</ul>
+<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and %GUID% contains
+a time/MAC based GUID.</p>
+<h2 id="backing_volume_header"><a class="header" href="#backing_volume_header">Backing volume header</a></h2>
+<p>The volsnap volume header is part of the NTFS $Boot metadata file. The volsnap volume header is
+stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in size, but presumably 512
+bytes, and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Signature (or format identifier), which contains a volsnap GUID</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Format version</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1 and 2)</td></tr>
 
-<tr><td>20</td><td>4</td><td>0x01</td><td>Record type</td></tr>
+<tr><td>20</td><td>4</td><td>1</td><td>Block (or record) type</td></tr>
 
-<tr><td>24</td><td>8</td><td>0x1e00</td><td>Current offset, which is relative to the start of the volume</td></tr>
+<tr><td>24</td><td>8</td><td>0x1e00</td><td>Unknown (offset?)</td></tr>
 
-<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (Next offset?), which is relative to the start of the volume</td></tr>
+<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (offset?)</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Unknown (empty value)</td></tr>
 
@@ -229,9 +243,9 @@ size, but presumably 512 bytes, and consists of:</p>
 
 <tr><td>56</td><td>8</td><td></td><td>Maximum size, in number of bytes or contains 0 if unbounded</td></tr>
 
-<tr><td>64</td><td>16</td><td></td><td>Volume identifierwhich contains a GUID</td></tr>
+<tr><td>64</td><td>16</td><td></td><td>(Snapshot backing) volume identifier, which contains a GUID</td></tr>
 
-<tr><td>80</td><td>16</td><td></td><td>Shadow copy storage volume identifier, which contains a GUID</td></tr>
+<tr><td>80</td><td>16</td><td></td><td>Storage (backing) volume identifier, which contains a GUID</td></tr>
 
 <tr><td>96</td><td>4</td><td></td><td>Unknown</td></tr>
 
@@ -240,17 +254,12 @@ size, but presumably 512 bytes, and consists of:</p>
 </table>
 </div>
 
-<h3 id="version"><a class="header" href="#version">Version</a></h3>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>1</td><td></td><td>Windows Vista, Windows 7</td></tr>
-
-<tr><td>2</td><td></td><td>Windows 8</td></tr>
-
-</table>
-</div>
-
+<blockquote>
+<p>Note that the storage volume identifier can be different from the (snapshot) volume identifier,
+which means that the volsnap (block) store is stored on a different volsnap volume. In such a
+case the source volume will contain the catalog type 2 entries and the storage volume the catalog
+type 3 entries.</p>
+</blockquote>
 <h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
 <p>The catalog contains information about the individual stores. The catalog consists of one or more
 catalog blocks. Each catalog block is 16384 (0x4000) bytes in size and consists of:</p>
@@ -266,11 +275,11 @@ enabled.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Signature (or format identifier), which contains a volsnap GUID</td></tr>
 
-<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1)</td></tr>
 
-<tr><td>20</td><td>4</td><td>0x02</td><td>Record type</td></tr>
+<tr><td>20</td><td>4</td><td>2</td><td>Block (or record) type</td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Relative (catalog block) offset, which is relative to the start of the first catalog block</td></tr>
 
@@ -284,20 +293,16 @@ enabled.</p>
 </div>
 
 <h3 id="catalog-entry"><a class="header" href="#catalog-entry">Catalog entry</a></h3>
-<p>Each catalog entry consists of a catalog entry type 0x02. A corresponding type 0x03 is required if
+<p>Each catalog entry consists of a catalog type 2 entry. A corresponding type 3 entry is required if
 the shadow copy is stored in a store, which is the case as of Windows Vista.</p>
-<blockquote>
-<p>Note that a Windows 2003 R2 catalog does not contain catalog entry type 0x03.</p>
-</blockquote>
-<p>TODO: Determine how Windows 2003 R2 volumes store the snapshot data</p>
-<p>The type 0x02 and type 0x03 entries are not necessarily stored directly after one-and-other and can
-be scattered over the catalog. For now it is assumed that entry type 0x02 must be defined before
-entry type 0x03.</p>
+<p>The type 2 and type 3 entries are not necessarily stored directly after one-and-other and can be
+scattered over the catalog. For now it is assumed that entry type 2 must be defined before entry
+type 3.</p>
 <p>Also these entries are not necessarily stored in order of age.</p>
-<p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
+<p>There can be unused catalog entries (of type 1) as well. Empty catalog entries seem to consist
 entirely of 0-bytes.</p>
-<h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
-<p>An unused catalog entry (type 0x01) is 128 bytes in size and consists of:</p>
+<h4 id="unused-catalog-entry-type-1"><a class="header" href="#unused-catalog-entry-type-1">Unused catalog entry (type 1)</a></h4>
+<p>An unused catalog entry (type 1) is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -308,12 +313,12 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
-<p>A catalog entry type 0x02 is 128 bytes in size and consists of:</p>
+<h4 id="catalog-entry-type-2"><a class="header" href="#catalog-entry-type-2">Catalog entry type 2</a></h4>
+<p>A catalog entry type 2 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td>0x02</td><td>Catalog entry type</td></tr>
+<tr><td>0</td><td>8</td><td>2</td><td>Catalog entry type</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Volume size</td></tr>
 
@@ -330,12 +335,12 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
-<p>A catalog entry type 0x03 is 128 bytes in size and consists of:</p>
+<h4 id="catalog-entry-type-3"><a class="header" href="#catalog-entry-type-3">Catalog entry type 3</a></h4>
+<p>A catalog entry type 3 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td>0x03</td><td>Catalog entry type</td></tr>
+<tr><td>0</td><td>8</td><td>3</td><td>Catalog entry type</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Store block list offset, which is relative to the start of the volume</td></tr>
 
@@ -360,13 +365,13 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h2 id="store"><a class="header" href="#store">Store</a></h2>
-<p>The store contains information about the shadow volume; it actually contains copies of previous
-versions of data blocks on the volume.</p>
+<h2 id="block_store"><a class="header" href="#block_store">Block store</a></h2>
+<p>The block store (or diff area) contains information about the volume snapshot; it contains copies
+of previous versions of data blocks of the snapshot volume.</p>
 <p>The stores must be applied starting with the most recent on top of the current volume. E.g. if
-there are 3 stores and we want to access the state of the oldest (number 1) we must first apply the
-changes in store 3 over the current volume, the changes in store 2 over the resulting volume, and
-finally the changes in store 1 over the resulting volume.</p>
+there are 3 stores and we want to access the snapshot of the oldest (number 1) we must first apply
+the changes in store 3 over the current volume, the changes in store 2 over the resulting volume,
+and finally the changes in store 1 over the resulting volume.</p>
 <p>The store consists of:</p>
 <ul>
 <li>store header</li>
@@ -729,7 +734,7 @@ otherwise.</p>
 <p>The volume size of one of the catalog entries exceeds the size of the underlying volume and does
 not corresponds with the volume size defined by the rest of the catalog entries.</p>
 <h3 id="scope-snapshots"><a class="header" href="#scope-snapshots">Scope snapshots</a></h3>
-<p>Technically scoped snaphots are a feature of volsnapa as of of Windows 8 or Windws Server 2012 and
+<p>Technically scoped snapshots are a feature of volsnapa as of of Windows 8 or Windows Server 2012 and
 not a corruption scenario. It has been captured as a corruption scenario since it leads to some
 interesting side effects within file content of the snapshot.</p>
 <p>Scope snapshots functionality can be controlled via the Windows Registry value:</p>

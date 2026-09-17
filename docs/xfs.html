@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -238,7 +238,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>"XFSB"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Block size, which is typicaly 4096 bytes (4 KiB) and can range from 512 to 65536 bytes</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Block size, which is typically 4096 bytes (4 KiB) and can range from 512 to 65536 bytes</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Total number of blocks</td></tr>
 
@@ -1208,9 +1208,9 @@ following:</p>
 
 <tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
 
-<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifier (GID) on execution</td></tr>
 
-<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifier (UID) on execution</td></tr>
 
 <tr><td colspan="3"><em>Type of file, bitmask: 0xf000 (S_IFMT)</em></td></tr>
 
@@ -1240,13 +1240,13 @@ following:</p>
 
 <tr><td>1</td><td>XFS_DINODE_FMT_LOCAL</td><td>Data is stored inline (in the inode)</td></tr>
 
-<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
+<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
 
-<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is reference by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
 
 <tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
 
-<tr><td>5</td><td>XFS_DINODE_FMT_RMAP</td><td>Data is referrence by a reverse mapping</td></tr>
+<tr><td>5</td><td>XFS_DINODE_FMT_RMAP</td><td>Data is reference by a reverse mapping</td></tr>
 
 </table>
 </div>
@@ -1877,7 +1877,7 @@ stored in multiple ways:</p>
 <p>The start of the attributes fork can be determined using the attributes fork descriptor offset.</p>
 <h3 id="short-form-attributes-table"><a class="header" href="#short-form-attributes-table">Short-form attributes table</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_LOCAL the extended attributes are stored in a
-short-form attributes table (xfs_attr_shortform) inline in the attribtes fork. The short-form
+short-form attributes table (xfs_attr_shortform) inline in the attributes fork. The short-form
 attributes table consist of:</p>
 <ul>
 <li>a short-form attributes table header</li>

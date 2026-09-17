@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -519,7 +519,7 @@ second 2 bytes before that, e.g. 508, etc.</p>
 
 <tr><td>36</td><td>1</td><td></td><td><a href="#btree_header_record_file_types">B-tree file type</a></td></tr>
 
-<tr><td>37</td><td>1</td><td></td><td><a href="#btree_header_record_key_comparion_method">Key comparision method</a></td></tr>
+<tr><td>37</td><td>1</td><td></td><td><a href="#btree_header_record_key_comparison_method">Key comparison method</a></td></tr>
 
 <tr><td>38</td><td>4</td><td></td><td><a href="#btree_header_record_flags">Flags</a> (or attributes)</td></tr>
 
@@ -543,7 +543,7 @@ second 2 bytes before that, e.g. 508, etc.</p>
 </table>
 </div>
 
-<h5 id="btree_header_record_key_comparion_method"><a class="header" href="#btree_header_record_key_comparion_method">Key comparision methodtype</a></h5>
+<h5 id="btree_header_record_key_comparison_method"><a class="header" href="#btree_header_record_key_comparison_method">Key comparison methodtype</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -633,7 +633,7 @@ to the type of B-tree.</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Number of blocks, where a volume can contain at most 65535 blocks</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Block size (drAlBlkSiz), in bytes, must be a multitude of 512</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Block size (<!-- typos:disable -->drAlBlkSiz<!-- typos:enable -->), in bytes, must be a multitude of 512</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
 
@@ -1155,7 +1155,7 @@ padding is not included in the key data size.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the characters ‘:’ and U+2400 are stored as ‘/’ and U+0 respectively and must be
-converted before comparision.</p>
+converted before comparison.</p>
 </blockquote>
 <h3 id="the-catalog-data"><a class="header" href="#the-catalog-data">The catalog data</a></h3>
 <p>A catalog leaf node can contain four different types of records:</p>
@@ -1796,7 +1796,7 @@ is represented by an extent descriptor.</p>
 </code></pre>
 <p>An unused extent descriptor should have both the block number and number of blocks set to 0.</p>
 <h3 id="bad-block-file"><a class="header" href="#bad-block-file">Bad Block File</a></h3>
-<p>The extents overflow file is also used to hold information about the bad blocks; refered to as the
+<p>The extents overflow file is also used to hold information about the bad blocks; referred to as the
 bad block file. The bad block file is used to mark areas on the disk as bad, unable to be used for
 storing data; typically to map out bad sectors on the storage medium.</p>
 <p>Typically, blocks are larger than sectors. If a single sector is found to be bad, the entire block
@@ -1858,8 +1858,8 @@ is_used = (byte_value &amp; (1 &lt;&lt; (7 - (block_number % 8)))) != 0
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the name of an extended attribute appears to be case senstive even on a case insensitive
-file system.</p>
+<p>Note that the name of an extended attribute appears to be case sensitive even on a case
+insensitive file system.</p>
 </blockquote>
 <h3 id="the-attributes-file-data"><a class="header" href="#the-attributes-file-data">The attributes file data</a></h3>
 <p>The attributes file defines two types of attributes:</p>
@@ -1957,7 +1957,7 @@ the purpose of the startup file is defeated.</p>
 <p>The next block number is used by Mac OS as a hint for where to start searching for available blocks
 when allocating space for a file.</p>
 <h2 id="metadata-zone-and-hot-files"><a class="header" href="#metadata-zone-and-hot-files">Metadata zone and hot files</a></h2>
-<p>In Mac OS X 10.3 a metadata zone was instroduced to store certain file system metadata, such as
+<p>In Mac OS X 10.3 a metadata zone was introduced to store certain file system metadata, such as
 allocation bitmap file, extents overflow file, and the catalog file, the journal file and
 frequently used small files (also referred to as “hot files”) near each other to reduces seek time
 for typical accesses.</p>
@@ -1971,7 +1971,7 @@ made. The journal makes it quick and easy to restore the volume structures to a 
 without having to scan all of the structures. The journal is used only for the volume structures
 and metadata; it does not protect the contents of a fork.</p>
 <p>The volume header specifies if journalling is activated.</p>
-<p>The journal data stuctures consist of:</p>
+<p>The journal data structures consist of:</p>
 <ul>
 <li>a journal information block, contains the location and size of the journal header and journal
 buffer;</li>

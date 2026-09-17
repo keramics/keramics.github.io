@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -416,7 +416,7 @@ These are sectors to store:</p>
 <li>BitLocker metadata</li>
 </ul>
 <h4 id="bitlocker-version-10-1"><a class="header" href="#bitlocker-version-10-1">BitLocker Version 1.0</a></h4>
-<p>In BitLocker version 1.0 the first sector of the unencrypted boot recored sector is reconstructed
+<p>In BitLocker version 1.0 the first sector of the unencrypted boot record sector is reconstructed
 by replacing values in the BitLocker boot record, namely:</p>
 <ul>
 <li>replacing the “File system signature” with “NTFS\x20\x20\x20\x20”</li>
@@ -428,7 +428,7 @@ by replacing values in the BitLocker boot record, namely:</p>
 <p>In BitLocker Version 2.0 stores an encrypted version of the unencrypted boot record in a specific
 location. This location is defined in the <a href="#metadata_area_descriptors">metadata area descriptors</a>.</p>
 <p>The encrypted boot record is commonly 8192 bytes an size, entailing the first 16 sectors.</p>
-<p>The sectors that contain the encrypted boot recored and the BDE metadata are shown as empty sectors;
+<p>The sectors that contain the encrypted boot record and the BDE metadata are shown as empty sectors;
 containing 0-byte values.</p>
 <blockquote>
 <p>Note that in later versions of Bitlocker Windows 10 the metadata area descriptors are not always
@@ -1347,7 +1347,7 @@ consists of:</p>
 data.</p>
 <p>The identifier of the VMK should match the identifier in the BEK file header.</p>
 <h2 id="encrypt-on-write-eow"><a class="header" href="#encrypt-on-write-eow">Encrypt-on-Write (EOW)</a></h2>
-<p>Checksums use a CRC-32 with the polynominal 0xedb88320 and initial value 0.</p>
+<p>Checksums use a CRC-32 with the polynomial 0xedb88320 and initial value 0.</p>
 <h3 id="encrypt_on_write_descriptor"><a class="header" href="#encrypt_on_write_descriptor">Encrypt-on-Write (FVE-EOW) descriptor</a></h3>
 <p>The Encrypt-on-Write (FVE-EOW) descriptor is variable of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -1402,7 +1402,7 @@ areas.</p>
 </ul>
 <blockquote>
 <p>Note that “FVE2.{09cf57b8-9e6c-43d4-ae1f-0408882a397d}.[1-6]” masks the Encrypt-on-Write block
-map area, with a 4096 aligment size.</p>
+map area, with a 4096 alignment size.</p>
 </blockquote>
 <h4 id="encrypt-on-write-block-map-fve-eowbm"><a class="header" href="#encrypt-on-write-block-map-fve-eowbm">Encrypt-on-Write block map (FVE-EOWBM)</a></h4>
 <p>The Encrypt-on-Write block map (FVE-EOWBM) is variable of size, stored as a (physical) sector, and
@@ -1502,7 +1502,7 @@ number is authoritative.</p>
 </ul>
 <blockquote>
 <p>Note that “FVE2.{c9ca54a3-6983-46b7-8684-a7e5e23499e3}.[1-6]” masks the Encrypt-on-Write
-relocation log area, with a 4096 aligment size.</p>
+relocation log area, with a 4096 alignment size.</p>
 </blockquote>
 <h4 id="encrypt-on-write-relocation-log-area-olrdhevf2-header"><a class="header" href="#encrypt-on-write-relocation-log-area-olrdhevf2-header">Encrypt-on-Write relocation log area (OLRDHEVF2) header</a></h4>
 <p>The Encrypt-on-Write relocation log area (OLRDHEVF2) header is variable of size, stored as a

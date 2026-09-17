@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34bdff2e.js";
+            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8a494624.js"></script>
+        <script src="toc-6538e4b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -182,7 +182,7 @@
 Keramics project. These specifications are based on available documentation and analysis of data
 samples.</p>
 <blockquote>
-<p>Note that these might differ from authorative format specifications and are works in progress.</p>
+<p>Note that these might differ from authoritative format specifications and are works in progress.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="storage-media-image-formats"><a class="header" href="#storage-media-image-formats">Storage media image formats</a></h1>
@@ -454,7 +454,7 @@ text in UTF16 format specifying information about the acquired media. The text m
 separated by an end of line character(s).</p>
 <p>The first 2 bytes of the UTF16 string are the byte order mark (BOM):</p>
 <ul>
-<li>0xff 0xfe for UTF-16 litte-endian</li>
+<li>0xff 0xfe for UTF-16 little-endian</li>
 <li>0xfe 0xff for UTF-16 big-endian</li>
 </ul>
 <p>In the next paragraphs the various variants of the header2 section are described.</p>
@@ -612,7 +612,7 @@ savings.</p>
 </blockquote>
 <!-- rumdl-enable MD064 -->
 <blockquote>
-<p>Note that in a Logicube Dossier generated header2 section an additional emtpy value in the 4th
+<p>Note that in a Logicube Dossier generated header2 section an additional empty value in the 4th
 line was observed. The number of values in the 3rd and 4th can differ.</p>
 </blockquote>
 <!-- rumdl-enable MD028 -->
@@ -2567,7 +2567,7 @@ the SHA1 has is not set.</p>
 <ul>
 <li>can contain path segment separator characters like “\” and “/”</li>
 <li>uses the “MIDDLE DOT” Unicode character (U+00b7) as a (NTFS) alternative data stream (ADS) name
-seperator</li>
+separator</li>
 </ul>
 <blockquote>
 <p>Note that a regular “MIDDLE DOT” Unicode character will be encoded in the same way so no real way
@@ -3047,7 +3047,7 @@ values.</p>
 <p>TODO: add description</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
-<p>In this corruption scenarion the copy of uncompressed data size value of the
+<p>In this corruption scenario the copy of uncompressed data size value of the
 <a href="#zlib-compressed-data-format">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
 uncompressed data size.</p>
 <p>Keramics currently does not handle this corruption scenario.</p>
@@ -3134,7 +3134,7 @@ passphrase or a certificate.</p>
 <p>A version 1 encrypted container consist of:</p>
 <ul>
 <li>Encrypted data</li>
-<li><a href="#encypted_container_footer">Encrypted container footer</a> at the end of the file</li>
+<li><a href="#encrypted_container_footer">Encrypted container footer</a> at the end of the file</li>
 </ul>
 <p>Format version 1 supports the following key protectors:</p>
 <ul>
@@ -3143,7 +3143,7 @@ passphrase or a certificate.</p>
 <h3 id="encrypted-encoding-version-2"><a class="header" href="#encrypted-encoding-version-2">Encrypted Encoding version 2</a></h3>
 <p>A version 2 encrypted container consist of:</p>
 <ul>
-<li><a href="#encypted_container_header">Encrypted container header</a> at the start of the file</li>
+<li><a href="#encrypted_container_header">Encrypted container header</a> at the start of the file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
 <li>Encrypted data, typically at offset 122368</li>
@@ -3168,7 +3168,7 @@ passphrase or a certificate.</p>
 </div>
 
 <h2 id="encrypted-container"><a class="header" href="#encrypted-container">Encrypted container</a></h2>
-<h3 id="encypted_container_footer"><a class="header" href="#encypted_container_footer">Encrypted container footer</a></h3>
+<h3 id="encrypted_container_footer"><a class="header" href="#encrypted_container_footer">Encrypted container footer</a></h3>
 <p>The encrypted container footer is 1276 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -3256,7 +3256,7 @@ on RFC 3537):</p>
 <li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
 determine the key encryption key (KEK) based on a passphrase.</li>
 <li>Pad the initialization vector [0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05] with 0-byte values
-if necessesary, e.g. if initialization vector is 8 bytes but the encryption method (AES) requires
+if necessary, e.g. if initialization vector is 8 bytes but the encryption method (AES) requires
 an initialization vector of 16 bytes.</li>
 <li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
 of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
@@ -3275,13 +3275,13 @@ of bits of the KEK (defined by encryption key size) and the initialization vecto
 </div>
 
 <ul>
-<li>Pad the initialization vector of the intermediate key data with 0-byte values if necessesary.</li>
+<li>Pad the initialization vector of the intermediate key data with 0-byte values if necessary.</li>
 <li>Decrypt the wrapped key data (of the intermediate key data) using the encryption method and mode,
 e.g. DES3-CBC, with the number of bits of the KEK (defined by encryption key size) and the
 initialization vector (of the intermediate key data) if applicable.</li>
 <li>Remove the padding, specified by the padding type.</li>
 </ul>
-<p>The decypted key data is of variable size and consists of:</p>
+<p>The decrypted key data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -3292,7 +3292,7 @@ initialization vector (of the intermediate key data) if applicable.</li>
 </table>
 </div>
 
-<h3 id="encypted_container_header"><a class="header" href="#encypted_container_header">Encrypted container header</a></h3>
+<h3 id="encrypted_container_header"><a class="header" href="#encrypted_container_header">Encrypted container header</a></h3>
 <p>The encrypted container header is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
@@ -3393,13 +3393,13 @@ initialization vector (of the intermediate key data) if applicable.</li>
 <ul>
 <li>Use the specified key derivation method, e.g. PDBKDF2, with salt and number of iterations to
 determine the key encryption key (KEK) based on a passphrase.</li>
-<li>Pad the initialization vector with 0-byte values if necessesary, e.g. if initialization vector
+<li>Pad the initialization vector with 0-byte values if necessary, e.g. if initialization vector
 is 8 bytes but the encryption method (AES) requires an initialization vector of 16 bytes.</li>
 <li>Decrypt the wrapped key data using the encryption method and mode, e.g. DES3-CBC, with the number
 of bits of the KEK (defined by encryption key size) and the initialization vector if applicable.</li>
 <li>Remove the padding, specified by the padding type.</li>
 </ul>
-<p>The decypted key data is of variable size and consists of:</p>
+<p>The decrypted key data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -3802,7 +3802,7 @@ vector if applicable.</li>
 <h1 id="mac-os-sparse-bundle-sparsebundle-format"><a class="header" href="#mac-os-sparse-bundle-sparsebundle-format">Mac OS sparse bundle (.sparsebundle) format</a></h1>
 <p>The Mac OS sparse bundle (.sparsebundle) format is one of the disk image formats supported natively
 by Mac OS.</p>
-<p>Mac OS referers to the sparse image format as CSparseBundleDiskImage and was introduced in Mac OS X
+<p>Mac OS refers to the sparse image format as CSparseBundleDiskImage and was introduced in Mac OS X
 Leopard (10.5).</p>
 <h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>A sparse bundle consists of a directory (bundle) with the .sparsbundle suffix containing:</p>
@@ -3869,9 +3869,9 @@ the following key-value pairs.</p>
 </code></pre>
 <h2 id="token-file"><a class="header" href="#token-file">Token file</a></h2>
 <p>The token file of an unencrypted sparse bundle is empty.</p>
-<p>The token file of an encryped spase bundle contains either an
-<a href="#encypted_container_footer">Encrypted Encoding container footer</a> or an
-<a href="#encypted_container_header">Encrypted Encoding container header</a>.</p>
+<p>The token file of an encrypted spase bundle contains either an
+<a href="#encrypted_container_footer">Encrypted Encoding container footer</a> or an
+<a href="#encrypted_container_header">Encrypted Encoding container header</a>.</p>
 <h2 id="bands-directory"><a class="header" href="#bands-directory">Bands directory</a></h2>
 <p>The bands directory contains files containing the actual data of the bands. The files are named
 using a hexadecimal naming scheme where “0” is the 1st band, “a” the 10th, “f” the 15th, “10”
@@ -3880,7 +3880,7 @@ the 16th, etc.</p>
 <h1 id="mac-os-sparse-image-sparseimage-format"><a class="header" href="#mac-os-sparse-image-sparseimage-format">Mac OS sparse image (.sparseimage) format</a></h1>
 <p>The Mac OS sparse image (.sparseimage) format is one of the disk image formats supported natively
 by Mac OS.</p>
-<p>Mac OS referers to the sparse image format as CSparseDiskImage.</p>
+<p>Mac OS refers to the sparse image format as CSparseDiskImage.</p>
 <h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
 <p>Sparse images can be encrypted. An encrypted sparse image uses a
 <a href="#mac-os-encrypted-encoding">Encrypted Encoding container</a>.</p>
@@ -3911,16 +3911,16 @@ by Mac OS.</p>
 <li>bands data</li>
 </ul>
 <h4 id="encrypted-encoding-version-1-encrypted-sparse-image-file"><a class="header" href="#encrypted-encoding-version-1-encrypted-sparse-image-file">Encrypted Encoding version 1 encrypted sparse image file</a></h4>
-<p>An Encrypted Encoding version 1 encryped sparse image file consists of:</p>
+<p>An Encrypted Encoding version 1 encrypted sparse image file consists of:</p>
 <ul>
 <li>Data fork, containing encrypted sparse image data</li>
-<li><a href="#encypted_container_footer">Encrypted Encoding container footer</a> at the end of the
+<li><a href="#encrypted_container_footer">Encrypted Encoding container footer</a> at the end of the
 file</li>
 </ul>
 <h4 id="encrypted-image-format-version-2-encrypted-sparse-image-file"><a class="header" href="#encrypted-image-format-version-2-encrypted-sparse-image-file">Encrypted image format version 2 encrypted sparse image file</a></h4>
-<p>An Encrypted Encoding version 2 encryped sparse image file consists of:</p>
+<p>An Encrypted Encoding version 2 encrypted sparse image file consists of:</p>
 <ul>
-<li><a href="#encypted_container_header">Encrypted Encoding container header</a> at the start of the
+<li><a href="#encrypted_container_header">Encrypted Encoding container header</a> at the start of the
 file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
@@ -4021,7 +4021,7 @@ formats. It is both used the store hard disk images and snapshots.</p>
 <p>The number of bytes per sector is 512.</p>
 <h2 id="descriptor-file"><a class="header" href="#descriptor-file">Descriptor file</a></h2>
 <p>The DiskDescriptor.xml and its backup (DiskDescriptor.xml.Backup) contain the
-“Parallels_disk_image” XML element tha consists of the following values:</p>
+“Parallels_disk_image” XML element that consists of the following values:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Identifier</th><th>Description</th></thead>
@@ -4230,7 +4230,7 @@ values.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td>"WithoutFreeSpace" or "WithouFreSpacExt"</td><td>Signature</td></tr>
+<tr><td>0</td><td>16</td><td>"WithoutFreeSpace" or <!-- typos:disable -->"WithouFreSpacExt"<!-- typos:enable --></td><td>Signature</td></tr>
 
 <tr><td>16</td><td>4</td><td>2</td><td>Format version</td></tr>
 
@@ -4812,7 +4812,7 @@ by Mark McLoughlin</li>
 <p>The Universal Disk Image Format (UDIF) (.dmg) is one of the disk image formats supported natively
 by Mac OS. UDIF supersedes the New Disk Image Format (NDIF) format and was introduced in Max OS
 X 10.0 (Cheetah).</p>
-<p>Mac OS referers to the UDIF image format as CUDIFEncoding.</p>
+<p>Mac OS refers to the UDIF image format as CUDIFEncoding.</p>
 <h2 id="overview-6"><a class="header" href="#overview-6">Overview</a></h2>
 <p>An UDIF image can consists of one or more segment files, where:</p>
 <ul>
@@ -4887,19 +4887,19 @@ image (CRawDiskImage).</p>
 <li><a href="#file_footer">File footer</a> at the end of the file</li>
 </ul>
 <h4 id="encrypted-encoding-version-1-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-1-encrypted-udif-segment-file">Encrypted Encoding version 1 encrypted UDIF segment file</a></h4>
-<p>An Encrypted Encoding version 1 encryped UDIF segment file consists of:</p>
+<p>An Encrypted Encoding version 1 encrypted UDIF segment file consists of:</p>
 <ul>
 <li>Data fork, containing encrypted UDIF data</li>
-<li><a href="#encypted_container_footer">Encrypted Encoding container footer</a> at the end of the
+<li><a href="#encrypted_container_footer">Encrypted Encoding container footer</a> at the end of the
 file</li>
 </ul>
 <blockquote>
 <p>Note that the encrypted UDIF data can contain an uncompressed UDIF image without file footer.</p>
 </blockquote>
 <h4 id="encrypted-encoding-version-2-encrypted-udif-segment-file"><a class="header" href="#encrypted-encoding-version-2-encrypted-udif-segment-file">Encrypted Encoding version 2 encrypted UDIF segment file</a></h4>
-<p>An Encrypted Encoding version 2 encryped UDIF segment file consists of:</p>
+<p>An Encrypted Encoding version 2 encrypted UDIF segment file consists of:</p>
 <ul>
-<li><a href="#encypted_container_header">Encrypted Encoding container header</a> at the start of the
+<li><a href="#encrypted_container_header">Encrypted Encoding container header</a> at the start of the
 file</li>
 <li>Key protectors</li>
 <li>Unknown (empty values), probably reserved for the key protectors</li>
@@ -5026,7 +5026,7 @@ image.</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>1</td><td>kUDIFDeviceImageType</td><td>Device image</td></tr>
 
-<tr><td>2</td><td>kUDIFPartitionImageType</td><td>Paritition image</td></tr>
+<tr><td>2</td><td>kUDIFPartitionImageType</td><td>Partition image</td></tr>
 
 </table>
 </div>
@@ -5391,7 +5391,7 @@ contain multiple images.</p>
 <p>The XML plist and/or resource fork could be used in non-first segment files.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="virtual-hard-disk-vhd-image-format"><a class="header" href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD) image format</a></h1>
-<p>The Virtual Hard Disk (VHD) format is used by Microsoft vitualization products as one of its image
+<p>The Virtual Hard Disk (VHD) format is used by Microsoft visualization products as one of its image
 formats. It is both used the store hard disk images and snapshots.</p>
 <h2 id="overview-7"><a class="header" href="#overview-7">Overview</a></h2>
 <p>There are multiple types of VHD images, namely:</p>
@@ -5575,7 +5575,7 @@ parent image.</p>
 
 <tr><td>8</td><td>8</td><td></td><td>Next offset, which contains the offset to the next (metadata) structure. The offset is relative from the start of the file. Currently this is unused and should be set to 0xffffffffffffffff (-1)</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, whic contains the offset to the block allocation table structure. The offset is relative from the start of the file</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Block allocation table offset, which contains the offset to the block allocation table structure. The offset is relative from the start of the file</td></tr>
 
 <tr><td>24</td><td>4</td><td>0x00010000</td><td>Format version, where the upper 16-bit are the major version and the lower 16-bit the minor version</td></tr>
 
@@ -5684,7 +5684,7 @@ sparse (bit set to 0).</p>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="virtual-hard-disk-version-2-vhdx-image-format"><a class="header" href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX) image format</a></h1>
-<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft vitualization products as one of
+<p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft visualization products as one of
 its image formats. It is both used the store hard disk images and snapshots.</p>
 <h2 id="overview-8"><a class="header" href="#overview-8">Overview</a></h2>
 <p>A VHDX image file consist of:</p>
@@ -5765,7 +5765,7 @@ its image formats. It is both used the store hard disk images and snapshots.</p>
 <p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
 calculate the checksum.</p>
 <p>The checksum is calculated over the 4 KiB bytes of data of the image header, where the image header
-checkum value is considered to be 0 during calculation.</p>
+checksum value is considered to be 0 during calculation.</p>
 <h2 id="region-table"><a class="header" href="#region-table">Region table</a></h2>
 <p>The region table is stored in a block of 64 KiB (65536 bytes) and consists of:</p>
 <ul>
@@ -5793,7 +5793,7 @@ checkum value is considered to be 0 during calculation.</p>
 <p>The CRC32-C algorithm with the Castagnoli polynomial (0x1edc6f41) and initial value of 0 is used to
 calculate the checksum.</p>
 <p>The checksum is calculated over the 64 KiB bytes of data of the region table where the image header
-checkum value is considered to be 0 during calculation.</p>
+checksum value is considered to be 0 during calculation.</p>
 <h3 id="region-table-entry"><a class="header" href="#region-table-entry">Region table entry</a></h3>
 <p>The region table entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
@@ -5852,11 +5852,11 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h4 id="metadata-table-entry"><a class="header" href="#metadata-table-entry">Metadata table entry</a></h4>
-<p>The metdata table entry is 32 bytes in size and consists of:</p>
+<p>The metadata table entry is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td><a href="#metdata_item_identifiers">Metadata item identifier</a>, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td><a href="#metadata_item_identifiers">Metadata item identifier</a>, which contains a GUID</td></tr>
 
 <tr><td>16</td><td>4</td><td></td><td>Metadata item offset, which contains an offset relative to the start of the metadata region. According to MS-VHDX this value must be greater than 64 KiB</td></tr>
 
@@ -5881,7 +5881,7 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h3 id="metadata-items"><a class="header" href="#metadata-items">Metadata items</a></h3>
-<h4 id="metdata_item_identifiers"><a class="header" href="#metdata_item_identifiers">Metadata item identifiers</a></h4>
+<h4 id="metadata_item_identifiers"><a class="header" href="#metadata_item_identifiers">Metadata item identifiers</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -5927,7 +5927,7 @@ checkum value is considered to be 0 during calculation.</p>
 </div>
 
 <h4 id="parent-locator-metadata-item"><a class="header" href="#parent-locator-metadata-item">Parent locator metadata item</a></h4>
-<p>The parent locator metadata item is of variable size and consits of:</p>
+<p>The parent locator metadata item is of variable size and consists of:</p>
 <ul>
 <li>parent locator header</li>
 <li>0 or more parent locator entry</li>
@@ -7007,16 +7007,17 @@ by VMWare</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="volume-system-formats"><a class="header" href="#volume-system-formats">Volume system formats</a></h1>
-<p>A volume (or logical drive) is a single continous accessible storage area, typically containing a
+<p>A volume (or logical drive) is a single continuous accessible storage area, typically containing a
 file system. A volume system is used to manage the storage of one or more volumes.</p>
 <p>A partition is a part of (typically) storage media. A partition is different conceptually, but
 its usage is comparable to a volume.</p>
-<p>This documentation uses the term volume systems in a broad sense to describe:</p>
+<p>This documentation uses the term volume systems in a broad sense to describe a format that
+contains other volumes, e.g.</p>
 <ul>
-<li>encrypted volumes;</li>
-<li>logical volume managers;</li>
-<li>partitioning schemes;</li>
-<li>and volume snapshots.</li>
+<li>encrypted volumes, such as BDE and LUKS;</li>
+<li>logical volume managers, such as Linux LVM;</li>
+<li>partitioning schemes, such as APM, GPT and MBR;</li>
+<li>and volume snapshots, such as volsnap.</li>
 </ul>
 <h2 id="formats-1"><a class="header" href="#formats-1">Formats</a></h2>
 <ul>
@@ -7029,6 +7030,7 @@ its usage is comparable to a volume.</p>
 <li><a href="#linux-unified-key-setup-luks-disk-encryption-format">Linux Unified Key Setup (LUKS) Disk Encryption</a></li>
 <li><a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR)</a></li>
 <li><a href="#sgi-silicon-graphics-disklabel-format">SGI disklabel (sgilabel)</a></li>
+<li><a href="#volume-shadow-snapshot-volsnap-format">Volume Shadow Snapshot (volsnap)</a></li>
 </ul>
 <p>Also see: <a href="#hybrid-volume-and-file-system-formats">hybrid volume and file system formats</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -7514,7 +7516,7 @@ These are sectors to store:</p>
 <li>BitLocker metadata</li>
 </ul>
 <h4 id="bitlocker-version-10-1"><a class="header" href="#bitlocker-version-10-1">BitLocker Version 1.0</a></h4>
-<p>In BitLocker version 1.0 the first sector of the unencrypted boot recored sector is reconstructed
+<p>In BitLocker version 1.0 the first sector of the unencrypted boot record sector is reconstructed
 by replacing values in the BitLocker boot record, namely:</p>
 <ul>
 <li>replacing the “File system signature” with “NTFS\x20\x20\x20\x20”</li>
@@ -7526,7 +7528,7 @@ by replacing values in the BitLocker boot record, namely:</p>
 <p>In BitLocker Version 2.0 stores an encrypted version of the unencrypted boot record in a specific
 location. This location is defined in the <a href="#metadata_area_descriptors">metadata area descriptors</a>.</p>
 <p>The encrypted boot record is commonly 8192 bytes an size, entailing the first 16 sectors.</p>
-<p>The sectors that contain the encrypted boot recored and the BDE metadata are shown as empty sectors;
+<p>The sectors that contain the encrypted boot record and the BDE metadata are shown as empty sectors;
 containing 0-byte values.</p>
 <blockquote>
 <p>Note that in later versions of Bitlocker Windows 10 the metadata area descriptors are not always
@@ -8445,7 +8447,7 @@ consists of:</p>
 data.</p>
 <p>The identifier of the VMK should match the identifier in the BEK file header.</p>
 <h2 id="encrypt-on-write-eow"><a class="header" href="#encrypt-on-write-eow">Encrypt-on-Write (EOW)</a></h2>
-<p>Checksums use a CRC-32 with the polynominal 0xedb88320 and initial value 0.</p>
+<p>Checksums use a CRC-32 with the polynomial 0xedb88320 and initial value 0.</p>
 <h3 id="encrypt_on_write_descriptor"><a class="header" href="#encrypt_on_write_descriptor">Encrypt-on-Write (FVE-EOW) descriptor</a></h3>
 <p>The Encrypt-on-Write (FVE-EOW) descriptor is variable of size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -8500,7 +8502,7 @@ areas.</p>
 </ul>
 <blockquote>
 <p>Note that “FVE2.{09cf57b8-9e6c-43d4-ae1f-0408882a397d}.[1-6]” masks the Encrypt-on-Write block
-map area, with a 4096 aligment size.</p>
+map area, with a 4096 alignment size.</p>
 </blockquote>
 <h4 id="encrypt-on-write-block-map-fve-eowbm"><a class="header" href="#encrypt-on-write-block-map-fve-eowbm">Encrypt-on-Write block map (FVE-EOWBM)</a></h4>
 <p>The Encrypt-on-Write block map (FVE-EOWBM) is variable of size, stored as a (physical) sector, and
@@ -8600,7 +8602,7 @@ number is authoritative.</p>
 </ul>
 <blockquote>
 <p>Note that “FVE2.{c9ca54a3-6983-46b7-8684-a7e5e23499e3}.[1-6]” masks the Encrypt-on-Write
-relocation log area, with a 4096 aligment size.</p>
+relocation log area, with a 4096 alignment size.</p>
 </blockquote>
 <h4 id="encrypt-on-write-relocation-log-area-olrdhevf2-header"><a class="header" href="#encrypt-on-write-relocation-log-area-olrdhevf2-header">Encrypt-on-Write relocation log area (OLRDHEVF2) header</a></h4>
 <p>The Encrypt-on-Write relocation log area (OLRDHEVF2) header is variable of size, stored as a
@@ -8818,7 +8820,7 @@ the number of partitions in use.</p>
 
 <tr><td>0x00000002</td><td>D_ECC</td><td>Media supports error-correction codes (ECC)</td></tr>
 
-<tr><td>0x00000004</td><td>D_BADSECT</td><td>Media suppors bad sectro forwarding</td></tr>
+<tr><td>0x00000004</td><td>D_BADSECT</td><td>Media supports bad sectro forwarding</td></tr>
 
 <tr><td>0x00000008</td><td>D_RAMDISK</td><td>Emulated media using RAM</td></tr>
 
@@ -8848,7 +8850,7 @@ the number of partitions in use.</p>
 </div>
 
 <blockquote>
-<p>Note that an emtpy partition entry consists of 0-byte values.</p>
+<p>Note that an empty partition entry consists of 0-byte values.</p>
 </blockquote>
 <h4 id="file_system_types"><a class="header" href="#file_system_types">File system types</a></h4>
 <div class="table-wrapper">
@@ -8988,10 +8990,10 @@ entries not the number of used partition entries. Empty partition entries have a
 partition type identifier.</p>
 </blockquote>
 <h3 id="checksum-calculation-1"><a class="header" href="#checksum-calculation-1">Checksum calculation</a></h3>
-<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynominal 0x04c11db7 and
+<p>The <a href="https://www.ietf.org/rfc/rfc1952.txt">CRC-32 algorithm</a> with polynomial 0x04c11db7 and
 initial value of 0 is used to calculate the checksums.</p>
 <p>The checksum is calculated over the 92 bytes of the table header data, where the header data
-checkum value is considered to be 0 during calculation.</p>
+checksum value is considered to be 0 during calculation.</p>
 <h2 id="gpt-partition-entries"><a class="header" href="#gpt-partition-entries">GPT partition entries</a></h2>
 <h3 id="gpt-partition-entry"><a class="header" href="#gpt-partition-entry">GPT Partition entry</a></h3>
 <p>The GPT partition entry is 128 bytes in size and consists of:</p>
@@ -9405,7 +9407,7 @@ checkum value is considered to be 0 during calculation.</p>
 
 <p>According to “RHEL 5 - Logical Volume Manager Administration” the number of bytes per sector is 512.</p>
 <p>Checksums use a “weak” CRC-32, which is a CRC-32 without the initial and final XOR with 0xffffffff,
-using the polynominal 0xedb88320 and initial value 0xf597a6cf.</p>
+using the polynomial 0xedb88320 and initial value 0xf597a6cf.</p>
 <h3 id="terminology-3"><a class="header" href="#terminology-3">Terminology</a></h3>
 <div class="table-wrapper">
 <table>
@@ -9689,7 +9691,7 @@ values.</p>
 
 <tr><td>"creation_host"</td><td>The hostname of the system on which metadata area was created, which can contain a trailing comment that contains the output equivalent to "uname -a"</td></tr>
 
-<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an integer containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
 <tr><td>"description"</td><td>Unknown (Description of the metadata area?)</td></tr>
 
@@ -9705,10 +9707,10 @@ values.</p>
 </blockquote>
 <h3 id="metadata_names"><a class="header" href="#metadata_names">Volume group and logical volume names</a></h3>
 <ul>
-<li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hypen)</li>
-<li>A volume group name should not start with a hypen</li>
-<li>A logical volume name can start with a hypen, but it is reserved for logical volumes that have
-been removed but are stil being tracked by the format</li>
+<li>Allowed characters: “a-z”, “A-Z”, “0-9”, “_”, “+”, “.”, and “-” (hyphen)</li>
+<li>A volume group name should not start with a hyphen</li>
+<li>A logical volume name can start with a hyphen, but it is reserved for logical volumes that have
+been removed but are still being tracked by the format</li>
 </ul>
 <blockquote>
 <p>Note that some implementations use lv_ as the prefix for a logical volume, however this is not
@@ -9797,7 +9799,7 @@ enforced by the format.</p>
 <thead><th>Value</th><th>Description</th></thead>
 <tr><td>"creation_host"</td><td>The hostname of the system on which the logical volume was created</td></tr>
 
-<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an interger containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
+<tr><td>"creation_time"</td><td>The creation time of the metadata area, which contains an integer containing the number of seconds since January 1, 1970 00:00:00 UTC and can contain a trailing comment that contains the creation time as a ctime (function) string in UTC</td></tr>
 
 <tr><td>"flags"</td><td><a href="#flags-1">Flags</a></td></tr>
 
@@ -10193,7 +10195,7 @@ Size of initialization vector?</p>
 
 <h2 id="json_area"><a class="header" href="#json_area">JSON area</a></h2>
 <p>The JSON area is stored directly after the volume header and must be 4096-byte aligned. The JSON
-area is of variable size and constists of:</p>
+area is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11097,7 +11099,7 @@ start of the <strong>first</strong> extended partition record.</p>
 <p>The SGI disklabel format is a partitioning schema mainly used by the SGI Irix operating system.</p>
 <h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
 <p>A SGI disklabel consists of one or more partition entries.</p>
-<p>Certain paritions have a predefined meaning, such as:</p>
+<p>Certain partitions have a predefined meaning, such as:</p>
 <ul>
 <li>entry 9 the volume header (partition type 0);</li>
 <li>entry 11 the entire volume (partition type 6).</li>
@@ -11261,23 +11263,24 @@ execute boot file. These execute boot files are stored within the volume header 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="volume-shadow-snapshot-volsnap-format"><a class="header" href="#volume-shadow-snapshot-volsnap-format">Volume Shadow Snapshot (volsnap) format</a></h1>
 <p>As of Windows Vista the Volume Shadow Snapshot (VSS) stores persistent shadow copies on the local
-NTFS volume.</p>
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
-<p>According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a volume. A shadow
-copy can be part of a set which contains a collection of shadow copies of various volumes, taken at
-the same time.</p>
+NTFS volume. According to “Shadow Copies and Shadow Copy Sets” a shadow copy is a snapshot of a
+volume. A shadow copy can be part of a set which contains a collection of shadow copies of various
+volumes, taken at the same time.</p>
 <p>Volume Shadow Snapshot (VSS) can use different providers to store shadow copies, this document
 focuses on the “Microsoft Software Shadow Copy provider 1.0” (GUID:
-b5946137-7b9f-4925-af80-51abd60b20d5) and will refer to it as volsnap. The volsnap provider stores
-the copies on the local volume using 16 KiB blocks.</p>
-<p>Volsnap uses the GUID 3808876b-c176-4e48-b7ae-04046e6cc752 to identify its data or metadata files.
-It leverages several metadata files in “\System Volume Information” directory:</p>
+b5946137-7b9f-4925-af80-51abd60b20d5) which relies on volsnap.sys.</p>
+<p>The volsnap driver manages the metadata and copies of 16 KiB blocks of volume data.</p>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<p>A volsnap backing volume consists of:</p>
 <ul>
-<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
-<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+<li><a href="#backing_volume_header">Backing volume header</a></li>
+<li><a href="#catalog">Catalog</a></li>
+<li>Optional <a href="#block_store">(block) store</a></li>
 </ul>
-<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and
-%GUID% contains a time/MAC based GUID.</p>
+<blockquote>
+<p>Note that a volsnap backing volume can be a snapshot and/or storage volume.</p>
+</blockquote>
+<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -11290,22 +11293,35 @@ It leverages several metadata files in “\System Volume Information” director
 </table>
 </div>
 
-<h2 id="volume-header-1"><a class="header" href="#volume-header-1">Volume header</a></h2>
-<p>The volsnap volume header is part of the NTFS volume header (or $Boot metadata file). The volsnap
-volume header data is stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in
-size, but presumably 512 bytes, and consists of:</p>
+<h3 id="identifiers-1"><a class="header" href="#identifiers-1">Identifiers</a></h3>
+<p>Volsnap is known to use the following identifiers:</p>
+<ul>
+<li>3808876b-c176-4e48-b7ae-04046e6cc752, which this document refers to as {%VOLSNAPGUID%}</li>
+</ul>
+<h2 id="metadata-files-1"><a class="header" href="#metadata-files-1">Metadata files</a></h2>
+<p>Volsnap exposes various files in the “\System Volume Information” directory:</p>
+<ul>
+<li>Volsnap catalog; stored in the metadata file named {%VOLSNAPGUID%}</li>
+<li>Volsnap store; stored in the metadata file named {%GUID%}{%VOLSNAPGUID%}</li>
+</ul>
+<p>Where %VOLSNAPGUID% (_VSP_DIFF_AREA_FILE_GUID) contains the volsnap identifier and %GUID% contains
+a time/MAC based GUID.</p>
+<h2 id="backing_volume_header"><a class="header" href="#backing_volume_header">Backing volume header</a></h2>
+<p>The volsnap volume header is part of the NTFS $Boot metadata file. The volsnap volume header is
+stored at offset 7680 (0x1e00) of the volume and is at least 100 bytes in size, but presumably 512
+bytes, and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Signature (or format identifier), which contains a volsnap GUID</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Format version</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1 and 2)</td></tr>
 
-<tr><td>20</td><td>4</td><td>0x01</td><td>Record type</td></tr>
+<tr><td>20</td><td>4</td><td>1</td><td>Block (or record) type</td></tr>
 
-<tr><td>24</td><td>8</td><td>0x1e00</td><td>Current offset, which is relative to the start of the volume</td></tr>
+<tr><td>24</td><td>8</td><td>0x1e00</td><td>Unknown (offset?)</td></tr>
 
-<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (Next offset?), which is relative to the start of the volume</td></tr>
+<tr><td>32</td><td>8</td><td>0x1e00</td><td>Unknown (offset?)</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Unknown (empty value)</td></tr>
 
@@ -11313,9 +11329,9 @@ size, but presumably 512 bytes, and consists of:</p>
 
 <tr><td>56</td><td>8</td><td></td><td>Maximum size, in number of bytes or contains 0 if unbounded</td></tr>
 
-<tr><td>64</td><td>16</td><td></td><td>Volume identifierwhich contains a GUID</td></tr>
+<tr><td>64</td><td>16</td><td></td><td>(Snapshot backing) volume identifier, which contains a GUID</td></tr>
 
-<tr><td>80</td><td>16</td><td></td><td>Shadow copy storage volume identifier, which contains a GUID</td></tr>
+<tr><td>80</td><td>16</td><td></td><td>Storage (backing) volume identifier, which contains a GUID</td></tr>
 
 <tr><td>96</td><td>4</td><td></td><td>Unknown</td></tr>
 
@@ -11324,17 +11340,12 @@ size, but presumably 512 bytes, and consists of:</p>
 </table>
 </div>
 
-<h3 id="version"><a class="header" href="#version">Version</a></h3>
-<div class="table-wrapper">
-<table>
-<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>1</td><td></td><td>Windows Vista, Windows 7</td></tr>
-
-<tr><td>2</td><td></td><td>Windows 8</td></tr>
-
-</table>
-</div>
-
+<blockquote>
+<p>Note that the storage volume identifier can be different from the (snapshot) volume identifier,
+which means that the volsnap (block) store is stored on a different volsnap volume. In such a
+case the source volume will contain the catalog type 2 entries and the storage volume the catalog
+type 3 entries.</p>
+</blockquote>
 <h2 id="catalog"><a class="header" href="#catalog">Catalog</a></h2>
 <p>The catalog contains information about the individual stores. The catalog consists of one or more
 catalog blocks. Each catalog block is 16384 (0x4000) bytes in size and consists of:</p>
@@ -11350,11 +11361,11 @@ enabled.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Signature (or format identifier), which contains a volsnap GUID</td></tr>
 
-<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1)</td></tr>
 
-<tr><td>20</td><td>4</td><td>0x02</td><td>Record type</td></tr>
+<tr><td>20</td><td>4</td><td>2</td><td>Block (or record) type</td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Relative (catalog block) offset, which is relative to the start of the first catalog block</td></tr>
 
@@ -11368,20 +11379,16 @@ enabled.</p>
 </div>
 
 <h3 id="catalog-entry"><a class="header" href="#catalog-entry">Catalog entry</a></h3>
-<p>Each catalog entry consists of a catalog entry type 0x02. A corresponding type 0x03 is required if
+<p>Each catalog entry consists of a catalog type 2 entry. A corresponding type 3 entry is required if
 the shadow copy is stored in a store, which is the case as of Windows Vista.</p>
-<blockquote>
-<p>Note that a Windows 2003 R2 catalog does not contain catalog entry type 0x03.</p>
-</blockquote>
-<p>TODO: Determine how Windows 2003 R2 volumes store the snapshot data</p>
-<p>The type 0x02 and type 0x03 entries are not necessarily stored directly after one-and-other and can
-be scattered over the catalog. For now it is assumed that entry type 0x02 must be defined before
-entry type 0x03.</p>
+<p>The type 2 and type 3 entries are not necessarily stored directly after one-and-other and can be
+scattered over the catalog. For now it is assumed that entry type 2 must be defined before entry
+type 3.</p>
 <p>Also these entries are not necessarily stored in order of age.</p>
-<p>There can be unused catalog entries (of type 0x01) as well. Empty catalog entries seem to consist
+<p>There can be unused catalog entries (of type 1) as well. Empty catalog entries seem to consist
 entirely of 0-bytes.</p>
-<h4 id="unused-catalog-entry-type-0x01"><a class="header" href="#unused-catalog-entry-type-0x01">Unused catalog entry (type 0x01)</a></h4>
-<p>An unused catalog entry (type 0x01) is 128 bytes in size and consists of:</p>
+<h4 id="unused-catalog-entry-type-1"><a class="header" href="#unused-catalog-entry-type-1">Unused catalog entry (type 1)</a></h4>
+<p>An unused catalog entry (type 1) is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -11392,12 +11399,12 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h4 id="catalog-entry-type-0x02"><a class="header" href="#catalog-entry-type-0x02">Catalog entry type 0x02</a></h4>
-<p>A catalog entry type 0x02 is 128 bytes in size and consists of:</p>
+<h4 id="catalog-entry-type-2"><a class="header" href="#catalog-entry-type-2">Catalog entry type 2</a></h4>
+<p>A catalog entry type 2 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td>0x02</td><td>Catalog entry type</td></tr>
+<tr><td>0</td><td>8</td><td>2</td><td>Catalog entry type</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Volume size</td></tr>
 
@@ -11414,12 +11421,12 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h4 id="catalog-entry-type-0x03"><a class="header" href="#catalog-entry-type-0x03">Catalog entry type 0x03</a></h4>
-<p>A catalog entry type 0x03 is 128 bytes in size and consists of:</p>
+<h4 id="catalog-entry-type-3"><a class="header" href="#catalog-entry-type-3">Catalog entry type 3</a></h4>
+<p>A catalog entry type 3 is 128 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td>0x03</td><td>Catalog entry type</td></tr>
+<tr><td>0</td><td>8</td><td>3</td><td>Catalog entry type</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Store block list offset, which is relative to the start of the volume</td></tr>
 
@@ -11444,13 +11451,13 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h2 id="store"><a class="header" href="#store">Store</a></h2>
-<p>The store contains information about the shadow volume; it actually contains copies of previous
-versions of data blocks on the volume.</p>
+<h2 id="block_store"><a class="header" href="#block_store">Block store</a></h2>
+<p>The block store (or diff area) contains information about the volume snapshot; it contains copies
+of previous versions of data blocks of the snapshot volume.</p>
 <p>The stores must be applied starting with the most recent on top of the current volume. E.g. if
-there are 3 stores and we want to access the state of the oldest (number 1) we must first apply the
-changes in store 3 over the current volume, the changes in store 2 over the resulting volume, and
-finally the changes in store 1 over the resulting volume.</p>
+there are 3 stores and we want to access the snapshot of the oldest (number 1) we must first apply
+the changes in store 3 over the current volume, the changes in store 2 over the resulting volume,
+and finally the changes in store 1 over the resulting volume.</p>
 <p>The store consists of:</p>
 <ul>
 <li>store header</li>
@@ -11813,7 +11820,7 @@ otherwise.</p>
 <p>The volume size of one of the catalog entries exceeds the size of the underlying volume and does
 not corresponds with the volume size defined by the rest of the catalog entries.</p>
 <h3 id="scope-snapshots"><a class="header" href="#scope-snapshots">Scope snapshots</a></h3>
-<p>Technically scoped snaphots are a feature of volsnapa as of of Windows 8 or Windws Server 2012 and
+<p>Technically scoped snapshots are a feature of volsnapa as of of Windows 8 or Windows Server 2012 and
 not a corruption scenario. It has been captured as a corruption scenario since it leads to some
 interesting side effects within file content of the snapshot.</p>
 <p>Scope snapshots functionality can be controlled via the Windows Registry value:</p>
@@ -11874,7 +11881,7 @@ and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
 <li>an extended attribute named “com.apple.decmpfs”</li>
 <li>compressed file content data</li>
 </ul>
-<h3 id="characteristics-17"><a class="header" href="#characteristics-17">Characteristics</a></h3>
+<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12152,7 +12159,7 @@ otherwise the block should start with 0x78.</p>
 <ul>
 <li>one or more block groups</li>
 </ul>
-<h3 id="characteristics-18"><a class="header" href="#characteristics-18">Characteristics</a></h3>
+<h3 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -12203,7 +12210,7 @@ and corresponding locations of backups.</p>
 <p>Successive group descriptor tables, for example [16384, 16447], are stored in the first block
 group of a meta block group and backups in the second and last block groups of the meta block group.</p>
 <h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
-<p>The volume is devided in blocks:</p>
+<p>The volume is divided in blocks:</p>
 <pre><code class="language-python">block offset = block number * block size
 </code></pre>
 <p>The block size is defined in the superblock.</p>
@@ -12261,7 +12268,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -12351,7 +12358,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -12467,7 +12474,7 @@ group of a meta block group and backups in the second and last block groups of t
 
 <tr><td>72</td><td>4</td><td></td><td><a href="#creator_operating_system">Creator operating system</a></td></tr>
 
-<tr><td>76</td><td>4</td><td></td><td><a href="#format_revisision">Format revision</a></td></tr>
+<tr><td>76</td><td>4</td><td></td><td><a href="#format_revision">Format revision</a></td></tr>
 
 <tr><td>80</td><td>2</td><td></td><td>Reserved block owner (or user) identifier (UID)</td></tr>
 
@@ -12706,7 +12713,7 @@ should be used instead of calculating it based on the file system identifier.</p
 </table>
 </div>
 
-<h3 id="format_revisision"><a class="header" href="#format_revisision">Format revision</a></h3>
+<h3 id="format_revision"><a class="header" href="#format_revision">Format revision</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -13015,7 +13022,7 @@ than the total data size defined by the extent descriptors.</p>
 
 <tr><td>4</td><td>2</td><td></td><td>Maximum number of entries</td></tr>
 
-<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 reprensents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
+<tr><td>6</td><td>2</td><td></td><td>Depth, where 0 represents a leaf node and 1 to 5 different levels of branch nodes</td></tr>
 
 <tr><td>8</td><td>4</td><td></td><td>Generation, which is used by Lustre, but not by standard ext4</td></tr>
 
@@ -13104,7 +13111,7 @@ combination with format revision 1 and inode size &gt; 128 created by mkfs.ext2.
 
 <tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
 
@@ -13171,7 +13178,7 @@ extension.</p>
 
 <tr><td>26</td><td>2</td><td></td><td>Number of (hard) links</td></tr>
 
-<tr><td>28</td><td>4</td><td></td><td>Numer of blocks</td></tr>
+<tr><td>28</td><td>4</td><td></td><td>Number of blocks</td></tr>
 
 <tr><td>32</td><td>4</td><td></td><td><a href="#inode_flags">Flags</a></td></tr>
 
@@ -13411,9 +13418,9 @@ correct one being accessed.</p>
 
 <tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
 
-<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifier (GID) on execution</td></tr>
 
-<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifier (UID) on execution</td></tr>
 
 <tr><td colspan="3"><em>Type of file, Bitmask: 0xf000 (S_IFMT)</em></td></tr>
 
@@ -13836,20 +13843,20 @@ kernel documentation</li>
 </li>
 <li>File Allocation Table region
 <ul>
-<li>Aligment padding</li>
+<li>Alignment padding</li>
 <li>First cluster block allocation tables</li>
 <li>Zero or more backup block allocation tables</li>
 </ul>
 </li>
 <li>Data region
 <ul>
-<li>Aligment padding</li>
+<li>Alignment padding</li>
 <li>Cluster heap</li>
 <li>File and directory data</li>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-19"><a class="header" href="#characteristics-19">Characteristics</a></h3>
+<h3 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -14328,7 +14335,7 @@ by Microsoft</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="file-allocation-table-fat-file-system-format"><a class="header" href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT) file system format</a></h1>
-<p>The File Allocation Table (FAT) is widely used a file sytem and is the default file system for DOS
+<p>The File Allocation Table (FAT) is widely used a file system and is the default file system for DOS
 and Windows.</p>
 <p>There are multiple known variants or derivatives of FAT, such as:</p>
 <ul>
@@ -14344,7 +14351,7 @@ and Windows.</p>
 <li>One or more reserved sectors
 <ul>
 <li>a boot record (or boot sector)</li>
-<li>file system informartion for FAT-32</li>
+<li>file system information for FAT-32</li>
 </ul>
 </li>
 <li>One or more cluster block allocation tables</li>
@@ -14354,7 +14361,7 @@ and Windows.</p>
 <blockquote>
 <p>Note that FAT-32 stores the root directory as part of the file and directory data.</p>
 </blockquote>
-<h3 id="characteristics-20"><a class="header" href="#characteristics-20">Characteristics</a></h3>
+<h3 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -14376,7 +14383,7 @@ and Windows.</p>
 </table>
 </div>
 
-<h3 id="determing-the-fat-format-version"><a class="header" href="#determing-the-fat-format-version">Determing the FAT format version</a></h3>
+<h3 id="determining-the-fat-format-version"><a class="header" href="#determining-the-fat-format-version">Determining the FAT format version</a></h3>
 <p>To distinguish between FAT-12, FAT-16 and FAT-32, compute the number of clusters in the data area:</p>
 <pre><code class="language-python">data_area_size = total_number_of_sectors - (number_of_reserved_sectors + (
     number_of_allocation_tables * allocation_table_size) + size_of_root_directory)
@@ -15035,7 +15042,7 @@ volume.</p>
 <li>optional backup (or alternate) <a href="#hfs_master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h4 id="characteristics-21"><a class="header" href="#characteristics-21">Characteristics</a></h4>
+<h4 id="characteristics-22"><a class="header" href="#characteristics-22">Characteristics</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -15325,7 +15332,7 @@ second 2 bytes before that, e.g. 508, etc.</p>
 
 <tr><td>36</td><td>1</td><td></td><td><a href="#btree_header_record_file_types">B-tree file type</a></td></tr>
 
-<tr><td>37</td><td>1</td><td></td><td><a href="#btree_header_record_key_comparion_method">Key comparision method</a></td></tr>
+<tr><td>37</td><td>1</td><td></td><td><a href="#btree_header_record_key_comparison_method">Key comparison method</a></td></tr>
 
 <tr><td>38</td><td>4</td><td></td><td><a href="#btree_header_record_flags">Flags</a> (or attributes)</td></tr>
 
@@ -15349,7 +15356,7 @@ second 2 bytes before that, e.g. 508, etc.</p>
 </table>
 </div>
 
-<h5 id="btree_header_record_key_comparion_method"><a class="header" href="#btree_header_record_key_comparion_method">Key comparision methodtype</a></h5>
+<h5 id="btree_header_record_key_comparison_method"><a class="header" href="#btree_header_record_key_comparison_method">Key comparison methodtype</a></h5>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
@@ -15439,7 +15446,7 @@ to the type of B-tree.</p>
 
 <tr><td>18</td><td>2</td><td></td><td>Number of blocks, where a volume can contain at most 65535 blocks</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Block size (drAlBlkSiz), in bytes, must be a multitude of 512</td></tr>
+<tr><td>20</td><td>4</td><td></td><td>Block size (<!-- typos:disable -->drAlBlkSiz<!-- typos:enable -->), in bytes, must be a multitude of 512</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Clump size, in bytes</td></tr>
 
@@ -15961,7 +15968,7 @@ padding is not included in the key data size.</p>
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
 <p>Note that the characters ‘:’ and U+2400 are stored as ‘/’ and U+0 respectively and must be
-converted before comparision.</p>
+converted before comparison.</p>
 </blockquote>
 <h3 id="the-catalog-data"><a class="header" href="#the-catalog-data">The catalog data</a></h3>
 <p>A catalog leaf node can contain four different types of records:</p>
@@ -16602,7 +16609,7 @@ is represented by an extent descriptor.</p>
 </code></pre>
 <p>An unused extent descriptor should have both the block number and number of blocks set to 0.</p>
 <h3 id="bad-block-file"><a class="header" href="#bad-block-file">Bad Block File</a></h3>
-<p>The extents overflow file is also used to hold information about the bad blocks; refered to as the
+<p>The extents overflow file is also used to hold information about the bad blocks; referred to as the
 bad block file. The bad block file is used to mark areas on the disk as bad, unable to be used for
 storing data; typically to map out bad sectors on the storage medium.</p>
 <p>Typically, blocks are larger than sectors. If a single sector is found to be bad, the entire block
@@ -16664,8 +16671,8 @@ is_used = (byte_value &amp; (1 &lt;&lt; (7 - (block_number % 8)))) != 0
 
 <!-- rumdl-enable MD033 MD056 -->
 <blockquote>
-<p>Note that the name of an extended attribute appears to be case senstive even on a case insensitive
-file system.</p>
+<p>Note that the name of an extended attribute appears to be case sensitive even on a case
+insensitive file system.</p>
 </blockquote>
 <h3 id="the-attributes-file-data"><a class="header" href="#the-attributes-file-data">The attributes file data</a></h3>
 <p>The attributes file defines two types of attributes:</p>
@@ -16763,7 +16770,7 @@ the purpose of the startup file is defeated.</p>
 <p>The next block number is used by Mac OS as a hint for where to start searching for available blocks
 when allocating space for a file.</p>
 <h2 id="metadata-zone-and-hot-files"><a class="header" href="#metadata-zone-and-hot-files">Metadata zone and hot files</a></h2>
-<p>In Mac OS X 10.3 a metadata zone was instroduced to store certain file system metadata, such as
+<p>In Mac OS X 10.3 a metadata zone was introduced to store certain file system metadata, such as
 allocation bitmap file, extents overflow file, and the catalog file, the journal file and
 frequently used small files (also referred to as “hot files”) near each other to reduces seek time
 for typical accesses.</p>
@@ -16777,7 +16784,7 @@ made. The journal makes it quick and easy to restore the volume structures to a 
 without having to scan all of the structures. The journal is used only for the volume structures
 and metadata; it does not protect the contents of a fork.</p>
 <p>The volume header specifies if journalling is activated.</p>
-<p>The journal data stuctures consist of:</p>
+<p>The journal data structures consist of:</p>
 <ul>
 <li>a journal information block, contains the location and size of the journal header and journal
 buffer;</li>
@@ -17284,7 +17291,7 @@ floppy disks.</p>
 <li>optional backup (or alternate) <a href="#master_directory_block">master directory block (MDB)</a></li>
 </ul>
 <p>The backup master directory block (MDB), is stored in the last 2 sectors of the volume.</p>
-<h3 id="characteristics-22"><a class="header" href="#characteristics-22">Characteristics</a></h3>
+<h3 id="characteristics-23"><a class="header" href="#characteristics-23">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -17540,7 +17547,7 @@ versions that are based on Windows NT.</p>
 <li>Master File Table (MFT)</li>
 <li>Mirror Master File Table (MFT)</li>
 </ul>
-<h3 id="characteristics-23"><a class="header" href="#characteristics-23">Characteristics</a></h3>
+<h3 id="characteristics-24"><a class="header" href="#characteristics-24">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -17592,7 +17599,7 @@ name is an equivalent of the file name in the (DOS) 8.3 format. The long name is
 name of the file. The term long refers to the aspect that the name is longer than the short
 variant. Because most documentation refer to the (full) name as the long name, for clarity sake so
 will this document.</p>
-<h4 id="metadata-files-1"><a class="header" href="#metadata-files-1">Metadata files</a></h4>
+<h4 id="metadata-files-2"><a class="header" href="#metadata-files-2">Metadata files</a></h4>
 <p>NTFS uses the Master File Table (MFT) to store information about files and directories. The MFT
 entries reference the different volume and file system metadata. There are several predefined
 metadata files.</p>
@@ -18183,7 +18190,7 @@ where the runlist can contain both sparse and non-sparse data runs.</p>
 <p>Note that $BadClus:$Bad also defines a data run with a cluster block number value size of 0,
 without setting the ATTRIBUTE_FLAG_SPARSE flag.</p>
 </blockquote>
-<h5 id="compresssed-data-runs"><a class="header" href="#compresssed-data-runs">Compresssed data runs</a></h5>
+<h5 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data runs</a></h5>
 <p>The MFT attribute data flags (0x00ff) indicate if the data stream is compressed or not.</p>
 <p>Windows supports compressed data runs for NTFS file systems with a cluster block size of 4096 bytes
 or less.</p>
@@ -18320,7 +18327,7 @@ of:</p>
 <p>Note that MFT entries have been observed without a $STANDARD_INFORMATION attribute, but with
 other attributes such as $FILE_NAME and an $I30 index.</p>
 </blockquote>
-<p>Recent version of NTFS support case-sentive file names. If a directory is case-sensitive the
+<p>Recent version of NTFS support case-sensitive file names. If a directory is case-sensitive the
 corresponding $STANDARD_INFORMATION attribute will have a maximum number of versions of 0 and a
 version number of 1.</p>
 <h3 id="the-attribute-list-attribute"><a class="header" href="#the-attribute-list-attribute">The attribute list attribute</a></h3>
@@ -18588,7 +18595,7 @@ the attribute is of variable size.</p>
 <h3 id="the-reparse-point-attribute"><a class="header" href="#the-reparse-point-attribute">The reparse point attribute</a></h3>
 <p>The reparse point attribute ($REPARSE_POINT) contains information about a file system-level link.
 It is stored as a resident MFT attribute.</p>
-<p>Als see <a href="#reparse_point">the reparse point</a>.</p>
+<p>Also see <a href="#reparse_point">the reparse point</a>.</p>
 <h3 id="the-hpfs-extended-attribute-information"><a class="header" href="#the-hpfs-extended-attribute-information">The (HPFS) extended attribute information</a></h3>
 <p>The (HPFS) extended attribute information ($EA_INFORMATION) contains information about the extended
 attribute ($EA).</p>
@@ -18905,7 +18912,7 @@ be used by the $Secure metadata file.</p>
 <p>Also see <a href="#security_descriptor_identifier_index_value">the security descriptor identifier index value</a>.</p>
 <!-- rumdl-enable MD013 -->
 <h2 id="compression"><a class="header" href="#compression">Compression</a></h2>
-<h3 id="compressed-data-runs"><a class="header" href="#compressed-data-runs">Compressed data-runs</a></h3>
+<h3 id="compressed-data-runs-1"><a class="header" href="#compressed-data-runs-1">Compressed data-runs</a></h3>
 <p>NTFS compression groups 16 cluster blocks together. This group of 16 cluster blocks also named a
 compression unit, which is either “compressed” or uncompressed.</p>
 <p>The term compressed is quoted here because the group of cluster blocks can also contain
@@ -20159,7 +20166,7 @@ compressed chunk size                     : 1
 signature value                           : 0
 is compressed flag                        : 0
 </code></pre>
-<p>It was observed in 2 differnt NTFS implementations that the entire block is filled with 0-byte
+<p>It was observed in 2 different NTFS implementations that the entire block is filled with 0-byte
 values.</p>
 <p>TODO: verify behavior of Windows NTFS implementation.</p>
 <h3 id="truncated-lznt1-compressed-block"><a class="header" href="#truncated-lznt1-compressed-block">Truncated LZNT1 compressed block</a></h3>
@@ -20193,7 +20200,7 @@ cluster block number                      : 0 (0) (offset: 0x00000000)
 <pre><code class="language-text">compressed data offset                    : 16384 (0x00004000)
 compression flag byte                     : 0x00
 </code></pre>
-<p>Different behavior was observed in 2 differnt NTFS implementations:</p>
+<p>Different behavior was observed in 2 different NTFS implementations:</p>
 <ul>
 <li>one implementation fills the compressed block with the uncompressed data it could read and the
 rest with with 0-byte values</li>
@@ -20297,7 +20304,7 @@ file_offset = (allocation_group_block_number + relative_block_number) * block_si
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>"XFSB"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td>Block size, which is typicaly 4096 bytes (4 KiB) and can range from 512 to 65536 bytes</td></tr>
+<tr><td>4</td><td>4</td><td></td><td>Block size, which is typically 4096 bytes (4 KiB) and can range from 512 to 65536 bytes</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Total number of blocks</td></tr>
 
@@ -21267,9 +21274,9 @@ following:</p>
 
 <tr><td>0x0200</td><td>S_ISTXT</td><td>Sticky bit</td></tr>
 
-<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifer (GID) on execution</td></tr>
+<tr><td>0x0400</td><td>S_ISGID</td><td>Set group identifier (GID) on execution</td></tr>
 
-<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifer (UID) on execution</td></tr>
+<tr><td>0x0800</td><td>S_ISUID</td><td>Set owner (or user) identifier (UID) on execution</td></tr>
 
 <tr><td colspan="3"><em>Type of file, bitmask: 0xf000 (S_IFMT)</em></td></tr>
 
@@ -21299,13 +21306,13 @@ following:</p>
 
 <tr><td>1</td><td>XFS_DINODE_FMT_LOCAL</td><td>Data is stored inline (in the inode)</td></tr>
 
-<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referrenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
+<tr><td>2</td><td>XFS_DINODE_FMT_EXTENTS</td><td>Data is referenced by extents stored in <a href="#extents_list">an extents list</a></td></tr>
 
-<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is referrence by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
+<tr><td>3</td><td>XFS_DINODE_FMT_BTREE</td><td>Data is reference by extents stored in <a href="#extents_tree">an extents tree</a></td></tr>
 
 <tr><td>4</td><td>XFS_DINODE_FMT_UUID</td><td>Unknown (currently not used)</td></tr>
 
-<tr><td>5</td><td>XFS_DINODE_FMT_RMAP</td><td>Data is referrence by a reverse mapping</td></tr>
+<tr><td>5</td><td>XFS_DINODE_FMT_RMAP</td><td>Data is reference by a reverse mapping</td></tr>
 
 </table>
 </div>
@@ -21936,7 +21943,7 @@ stored in multiple ways:</p>
 <p>The start of the attributes fork can be determined using the attributes fork descriptor offset.</p>
 <h3 id="short-form-attributes-table"><a class="header" href="#short-form-attributes-table">Short-form attributes table</a></h3>
 <p>If the inode attributes fork type is XFS_DINODE_FMT_LOCAL the extended attributes are stored in a
-short-form attributes table (xfs_attr_shortform) inline in the attribtes fork. The short-form
+short-form attributes table (xfs_attr_shortform) inline in the attributes fork. The short-form
 attributes table consist of:</p>
 <ul>
 <li>a short-form attributes table header</li>
@@ -22257,7 +22264,7 @@ Sierra (10.13) and iOS 10.3.</p>
 </ul>
 </li>
 </ul>
-<h3 id="characteristics-24"><a class="header" href="#characteristics-24">Characteristics</a></h3>
+<h3 id="characteristics-25"><a class="header" href="#characteristics-25">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -22929,13 +22936,13 @@ NX stands for.</p>
 
 <blockquote>
 <p>Note that according to the Apple File System Reference documentation the pre-release version 1
-and release version 2 are incompatble.</p>
+and release version 2 are incompatible.</p>
 </blockquote>
 <h4 id="container_counters"><a class="header" href="#container_counters">Container counters</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td>NX_CNTR_OBJ_CKSUM_SET</td><td>Number of times a checksum has been calculated when wrting to disk</td></tr>
+<tr><td>0</td><td>NX_CNTR_OBJ_CKSUM_SET</td><td>Number of times a checksum has been calculated when writing to disk</td></tr>
 
 <tr><td>1</td><td>NX_CNTR_OBJ_CKSUM_FAIL</td><td>Number of checksum errors when reading from disk</td></tr>
 
@@ -23643,7 +23650,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 </table>
 </div>
 
-<p>The volume master key is encryped with a volume key.</p>
+<p>The volume master key is encrypted with a volume key.</p>
 <h5 id="volume-key-bag-entry-types"><a class="header" href="#volume-key-bag-entry-types">Volume key bag entry types</a></h5>
 <div class="table-wrapper">
 <table>
@@ -23655,7 +23662,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 </table>
 </div>
 
-<p>The volume key is encryped with an user key.</p>
+<p>The volume key is encrypted with an user key.</p>
 <h4 id="key_bag_packed_object"><a class="header" href="#key_bag_packed_object">Key bag packed object</a></h4>
 <p>The packed object consist of:</p>
 <ul>
@@ -23674,7 +23681,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 
 <tr><td colspan="4"><em>If extended size flag is set</em></td></tr>
 
-<tr><td>2</td><td>...</td><td></td><td>Extended value data size</td></tr>
+<tr><td>2</td><td>...</td><td></td><td>Extended value data size, in big-endian</td></tr>
 
 <tr><td colspan="4"><em> </em></td></tr>
 
@@ -23688,7 +23695,7 @@ OBJECT_TYPE_SPACEMAN_CAB block when necessary.</p>
 <p>Note that the meaning of the value tags differ per packed object type.</p>
 </blockquote>
 <p>If the most-significant bit is set the value data size is stored in the next <code>(value &amp; 0x7f)</code> bytes.
-E.g. if value data size is 0x82 the first 2 bytes of the extened value data size contain the value
+E.g. if value data size is 0x82 the first 2 bytes of the extended value data size contain the value
 data size.</p>
 <h5 id="key_bag_kek_packed_object"><a class="header" href="#key_bag_kek_packed_object">Key encryption key (KEK) packed object</a></h5>
 <p>The packed object value tag of a key encryption key is 0x30 and contains the following attribute
@@ -23717,7 +23724,7 @@ attribute value tags:</p>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
 <tr><td>0x80</td><td></td><td>Unknown</td></tr>
 
-<tr><td>0x81</td><td></td><td>Volume identifier, which contains a big-endian UUID</td></tr>
+<tr><td>0x81</td><td></td><td>Identifier, which contains a big-endian UUID</td></tr>
 
 <tr><td>0x82</td><td></td><td><a href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></td></tr>
 
@@ -23727,9 +23734,21 @@ attribute value tags:</p>
 
 <tr><td>0x85</td><td></td><td>Salt for the PBKDF2 algorithm</td></tr>
 
+<tr><td>0x86</td><td></td><td>Unknown (16 bytes in size)</td></tr>
+
+<tr><td>0x87</td><td></td><td>Unknown (16 bytes in size)</td></tr>
+
+<tr><td>0x88</td><td></td><td>Unknown</td></tr>
+
 </table>
 </div>
 
+<blockquote>
+<p>Note that the Wrapped Key Encryption Key (KEK) packed object can represent multiple different
+keys, e.g. in the container key bag it will contain the Volume Master Key (VMK) and in a volume
+key bag a user key, where identifier (0x81) corresponds with the the identifier shown by:
+<code>diskutil apfs listCryptoGraphicUsers /</code></p>
+</blockquote>
 <h4 id="wrapped_kek_metadata"><a class="header" href="#wrapped_kek_metadata">Wrapped Key Encryption Key (KEK) metadata</a></h4>
 <p>The Wrapped Key Encryption Key (KEK) metadata is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
@@ -23888,7 +23907,7 @@ directly read.</p>
 
 <tr><td>992</td><td>8</td><td></td><td>Largest clone transaction identifier (apfs_cloneinfo_xid)</td></tr>
 
-<tr><td>1000</td><td>8</td><td></td><td>Extended snapsnot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
+<tr><td>1000</td><td>8</td><td></td><td>Extended snapshot metadata (virtual) object identifier (apfs_snap_meta_ext_oid)</td></tr>
 
 <tr><td>1008</td><td>16</td><td></td><td>Volume group identifier (apfs_volume_group_id), which contains a big-endian UUID</td></tr>
 
@@ -24387,7 +24406,7 @@ file system B-tree key represents the first key in the branch.</p>
 </div>
 
 <blockquote>
-<p>Note that the name of an extended attribute appears to be case senstive even on a case
+<p>Note that the name of an extended attribute appears to be case sensitive even on a case
 insensitive file system.</p>
 </blockquote>
 <h4 id="extended-attribute-value-data"><a class="header" href="#extended-attribute-value-data">Extended attribute value data</a></h4>
@@ -24609,7 +24628,7 @@ interchangeably.</p>
 </ul>
 <!-- rumdl-disable MD028 -->
 <blockquote>
-<p>Note that apprears that current APFS file system use a key with name and hash. Apple File System
+<p>Note that appears that current APFS file system use a key with name and hash. Apple File System
 Reference documentation does not indicate how to distinguish between the two, but one method is
 to compare calculated and stored size of the key data.</p>
 </blockquote>
@@ -24774,7 +24793,7 @@ calculation, which is also referred to as weak CRC-32 calculation.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>60 bits</td><td></td><td>Snapshot metdata object identifier</td></tr>
+<tr><td>0</td><td>60 bits</td><td></td><td>Snapshot metadata object identifier</td></tr>
 
 <tr><td>7.4</td><td>4 bits</td><td>0x1</td><td><a href="#file_system_data_types">File system data type</a></td></tr>
 
@@ -25205,6 +25224,205 @@ by Apple</li>
 </ul>
 <!-- rumdl-enable MD013 -->
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="archive-formats"><a class="header" href="#archive-formats">Archive formats</a></h1>
+<p>Archive formats combine multiple files and metadata into one or more portable files for backups or
+distribution.</p>
+<h2 id="formats-4"><a class="header" href="#formats-4">Formats</a></h2>
+<ul>
+<li><a href="#copy-in-and-out-cpio-archive-format">Copy in and out (CPIO) archive format</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="copy-in-and-out-cpio-archive-format"><a class="header" href="#copy-in-and-out-cpio-archive-format">Copy in and out (CPIO) archive format</a></h1>
+<p>The copy in and out (CPIO) archive format is an archive format that predates TAR but is still being
+used e.g. in initramfs or rpm.</p>
+<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
+<p>There are multiple variants of the CPIO format:</p>
+<ul>
+<li>binary CPIO format</li>
+<li>portable ASCII CPIO format</li>
+<li>new ASCII CPIO format</li>
+</ul>
+<p>A CPIO file consists of:</p>
+<ul>
+<li>An array of CPIO file records where the last record contains the path “TRAILER!!!”</li>
+<li>Trailing 0-byte values</li>
+</ul>
+<blockquote>
+<p>Note that the format does not require (or enforce) parent directory file records to exist within
+the archive file.</p>
+</blockquote>
+<div class="table-wrapper">
+<table>
+<thead><th>Characteristics</th><th>Description</th></thead>
+<tr><td>Byte order</td><td>format dependent</td></tr>
+
+<tr><td>Date and time values</td><td>POSIX timestamp in UTC</td></tr>
+
+<tr><td>Character strings</td><td>UTF-8 or a narrow character (Single Byte Character (SBC) or Multi Byte Character (MBC)) stored using a system defined codepage</td></tr>
+
+</table>
+</div>
+
+<h2 id="binary-cpio-format"><a class="header" href="#binary-cpio-format">Binary CPIO format</a></h2>
+<p>The binary CPIO format (or “bin”), sometimes referred to as the old CPIO format, stores the values
+as either big-endian or little-endian binary data.</p>
+<h3 id="binary-cpio-file-record"><a class="header" href="#binary-cpio-file-record">Binary CPIO file record</a></h3>
+<p>The binary CPIO file record is variable of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>2</td><td>0x71c7</td><td>Signature, which is 070707 in octal where 0x71 0xc7 indicates the format is in big-endian and 0xc7 0x71 little-endian</td></tr>
+
+<tr><td>2</td><td>2</td><td></td><td>Device number of the host file system</td></tr>
+
+<tr><td>4</td><td>2</td><td></td><td>Inode number</td></tr>
+
+<tr><td>6</td><td>2</td><td></td><td><a href="#file_mode-3">File mode</a> (permissions and type)</td></tr>
+
+<tr><td>8</td><td>2</td><td></td><td>Owner identifier (uid)</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td>Group identifier (gid)</td></tr>
+
+<tr><td>12</td><td>2</td><td></td><td>Number of links</td></tr>
+
+<tr><td>14</td><td>2</td><td></td><td>Block or character special device identifier or 0 if not set</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Modification time, where the most significant 16-bits are stored in the first 2 bytes and the least significant 16-bits in the last 2 bytes</td></tr>
+
+<tr><td>20</td><td>2</td><td></td><td>Size of path string, including the end-of-string character (NUL)</td></tr>
+
+<tr><td>22</td><td>4</td><td></td><td>File data size, where the most the most significant 16-bits in the first 2 bytes and the least significant 16-bits in the last 2 bytes</td></tr>
+
+<tr><td>26</td><td>...</td><td></td><td>Path string</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>16-bit alignment padding, which should be set to 0</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>File data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>16-bit alignment padding, which should be set to 0</td></tr>
+
+</table>
+</div>
+
+<h2 id="portable-ascii-cpio-format"><a class="header" href="#portable-ascii-cpio-format">Portable ASCII CPIO format</a></h2>
+<p>The portable ASCII CPIO format (or “odc”), sometimes referred to as the old character or POSIX.1
+format, stores the values are as octal strings.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>6</td><td>"070707"</td><td>Signature</td></tr>
+
+<tr><td>6</td><td>6</td><td></td><td>Device number of the host file system</td></tr>
+
+<tr><td>12</td><td>6</td><td></td><td>Inode number</td></tr>
+
+<tr><td>18</td><td>6</td><td></td><td><a href="#file_mode-3">File mode</a> (permissions and type)</td></tr>
+
+<tr><td>24</td><td>6</td><td></td><td>Owner identifier (uid)</td></tr>
+
+<tr><td>30</td><td>6</td><td></td><td>Group identifier (gid)</td></tr>
+
+<tr><td>36</td><td>6</td><td></td><td>Number of links</td></tr>
+
+<tr><td>42</td><td>6</td><td></td><td>Block or character special device identifier or 0 if not set</td></tr>
+
+<tr><td>48</td><td>11</td><td></td><td>Modification time</td></tr>
+
+<tr><td>59</td><td>6</td><td></td><td>Size of path string, including the end-of-string character (NUL)</td></tr>
+
+<tr><td>65</td><td>11</td><td></td><td>File data size</td></tr>
+
+<tr><td>76</td><td>...</td><td></td><td>Path string</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>File data</td></tr>
+
+</table>
+</div>
+
+<h2 id="new-ascii-cpio-format"><a class="header" href="#new-ascii-cpio-format">New ASCII CPIO format</a></h2>
+<p>The new (SVR4) ASCII CPIO format stores the values as hexadecimal strings. The new ASCII CPIO
+format is technically 2 different formats one without (“newc”) and one with a checksum (“crc”).
+Both support file systems having more than 65536 inodes.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>6</td><td>"070701" or "070702"</td><td>Signature</td></tr>
+
+<tr><td>6</td><td>8</td><td></td><td>Inode number</td></tr>
+
+<tr><td>14</td><td>8</td><td></td><td><a href="#file_mode-3">File mode</a> (permissions and type)</td></tr>
+
+<tr><td>22</td><td>8</td><td></td><td>Owner identifier (uid)</td></tr>
+
+<tr><td>30</td><td>8</td><td></td><td>Group identifier (gid)</td></tr>
+
+<tr><td>38</td><td>8</td><td></td><td>Number of links</td></tr>
+
+<tr><td>46</td><td>8</td><td></td><td>Modification time</td></tr>
+
+<tr><td>54</td><td>8</td><td></td><td>File data size</td></tr>
+
+<tr><td>62</td><td>8</td><td></td><td>Device major number of the host file system</td></tr>
+
+<tr><td>70</td><td>8</td><td></td><td>Device minor number of the host file system</td></tr>
+
+<tr><td>78</td><td>8</td><td></td><td>Block or character special device major number</td></tr>
+
+<tr><td>86</td><td>8</td><td></td><td>Block or character special device minor number</td></tr>
+
+<tr><td>94</td><td>8</td><td></td><td>Size of path string, including the end-of-string character (NUL)</td></tr>
+
+<tr><td>102</td><td>8</td><td></td><td>Checksum, which contains a a Sum32 if signature is "070702", or 0 otherwise</td></tr>
+
+<tr><td>110</td><td>...</td><td></td><td>Path string</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>32-bit alignment padding, which should be set to 0</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>File data</td></tr>
+
+<tr><td>...</td><td>...</td><td></td><td>32-bit alignment padding, which Should be set to 0</td></tr>
+
+</table>
+</div>
+
+<h3 id="checksum-1"><a class="header" href="#checksum-1">Checksum</a></h3>
+<p>TODO: complete section</p>
+<h2 id="file_mode-3"><a class="header" href="#file_mode-3">File mode</a></h2>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x01ff</td><td></td><td>Permissions</td></tr>
+
+<tr><td>0x0200</td><td></td><td>Sticky bit</td></tr>
+
+<tr><td>0x0400</td><td></td><td>SGID bit</td></tr>
+
+<tr><td>0x0800</td><td></td><td>SUID bit</td></tr>
+
+<tr><td colspan="4"><em>File type (0xf000)</em></td></tr>
+
+<tr><td>0x1000</td><td></td><td>Named pipe or FIFO</td></tr>
+
+<tr><td>0x2000</td><td></td><td>Character special device</td></tr>
+
+<tr><td>0x4000</td><td></td><td>Directory</td></tr>
+
+<tr><td>0x6000</td><td></td><td>Block special device</td></tr>
+
+<tr><td>0x8000</td><td></td><td>Regular file</td></tr>
+
+<tr><td>0xa000</td><td></td><td>Symbolic link</td></tr>
+
+<tr><td>0xc000</td><td></td><td>Socket</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h2 id="symbolic-links-3"><a class="header" href="#symbolic-links-3">Symbolic links</a></h2>
+<p>The link target of a symbolic link is stored as file data.</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="assorted-formats"><a class="header" href="#assorted-formats">Assorted formats</a></h1>
 <ul>
 <li><a href="#apple-data-compression-adc-data-format">Apple Data Compression (ADC)</a></li>
@@ -25217,12 +25435,12 @@ by Apple</li>
 <h1 id="apple-data-compression-adc-data-format"><a class="header" href="#apple-data-compression-adc-data-format">Apple Data Compression (ADC) data format</a></h1>
 <p>ADC compression is used in various data formats used on Mac OS, including
 <a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg).</p>
-<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
+<h2 id="overview-29"><a class="header" href="#overview-29">Overview</a></h2>
 <p>ADC compressed data consist of:</p>
 <ul>
 <li>one or more <a href="#adc_chunk">chunks</a></li>
 </ul>
-<h3 id="characteristics-25"><a class="header" href="#characteristics-25">Characteristics</a></h3>
+<h3 id="characteristics-26"><a class="header" href="#characteristics-26">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -25271,12 +25489,12 @@ by Apple</li>
 <a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg) and
 <a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
 <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
-<h2 id="overview-29"><a class="header" href="#overview-29">Overview</a></h2>
+<h2 id="overview-30"><a class="header" href="#overview-30">Overview</a></h2>
 <p>LZFSE compressed data stream consist of:</p>
 <ul>
 <li>one or more <a href="#lzfse_block">blocks</a></li>
 </ul>
-<h3 id="characteristics-26"><a class="header" href="#characteristics-26">Characteristics</a></h3>
+<h3 id="characteristics-27"><a class="header" href="#characteristics-27">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -25286,7 +25504,7 @@ by Apple</li>
 </div>
 
 <h2 id="lzfse_block"><a class="header" href="#lzfse_block">LZFSE block</a></h2>
-<p>A LZFSE block is of variable size and consits of:</p>
+<p>A LZFSE block is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -25319,7 +25537,7 @@ by Apple</li>
 </div>
 
 <h3 id="end-of-stream-block"><a class="header" href="#end-of-stream-block">End-of-stream block</a></h3>
-<p>An end-of-stream block is 4 bytes in size and consits of:</p>
+<p>An end-of-stream block is 4 bytes in size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -25333,7 +25551,7 @@ by Apple</li>
 
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="uncompressed-block"><a class="header" href="#uncompressed-block">Uncompressed block</a></h3>
-<p>An uncompressed block is of variable size and consits of:</p>
+<p>An uncompressed block is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -25354,7 +25572,7 @@ by Apple</li>
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="lzfse-compressed-block-with-uncompressed-tables"><a class="header" href="#lzfse-compressed-block-with-uncompressed-tables">LZFSE compressed block with uncompressed tables</a></h3>
 <p>A LZFSE compressed block with uncompressed tables (lzfse_compressed_block_header_v1) is of variable
-size and consits of:</p>
+size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -25407,7 +25625,7 @@ size and consits of:</p>
 <!-- rumdl-enable MD033 MD056 -->
 <h3 id="lzfse-compressed-block-with-compressed-tables"><a class="header" href="#lzfse-compressed-block-with-compressed-tables">LZFSE compressed block with compressed tables</a></h3>
 <p>A LZFSE compressed block with compressed tables (lzfse_compressed_block_header_v2)
-is of variable size and consits of:</p>
+is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -25472,7 +25690,7 @@ is of variable size and consits of:</p>
 <p>Note that if the block header size is 32 the block does not contain frequency tables.</p>
 </blockquote>
 <h3 id="lzvn-compressed-block"><a class="header" href="#lzvn-compressed-block">LZVN compressed block</a></h3>
-<p>A LZVN compressed block is of variable size and consits of:</p>
+<p>A LZVN compressed block is of variable size and consists of:</p>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -25526,12 +25744,12 @@ lzfse_freq_value_table[32] = {
 <p>LZVN compression is used in various data formats used on Mac OS, including
 <a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
 <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
-<h2 id="overview-30"><a class="header" href="#overview-30">Overview</a></h2>
+<h2 id="overview-31"><a class="header" href="#overview-31">Overview</a></h2>
 <p>LZVN compressed data consist of:</p>
 <ul>
 <li>a stream of <a href="#lzvn_opcodes">opcodes</a></li>
 </ul>
-<h3 id="characteristics-27"><a class="header" href="#characteristics-27">Characteristics</a></h3>
+<h3 id="characteristics-28"><a class="header" href="#characteristics-28">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -25574,7 +25792,7 @@ lzfse_freq_value_table[32] = {
 <p>The property list (plist) formats are used to store various kinds of data, for example
 configuration data. The format is know to be used stand-alone as well as embedded in other data
 formats.</p>
-<h2 id="overview-31"><a class="header" href="#overview-31">Overview</a></h2>
+<h2 id="overview-32"><a class="header" href="#overview-32">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -25793,14 +26011,14 @@ of 1 will refer to the first object in the (object) offset table.</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
 RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
 LZ77, is used.</p>
-<h2 id="overview-32"><a class="header" href="#overview-32">Overview</a></h2>
+<h2 id="overview-33"><a class="header" href="#overview-33">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
 <li>compressed data</li>
 <li>Adler-32 checksum of the uncompressed data</li>
 </ul>
-<h3 id="characteristics-28"><a class="header" href="#characteristics-28">Characteristics</a></h3>
+<h3 id="characteristics-29"><a class="header" href="#characteristics-29">Characteristics</a></h3>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
