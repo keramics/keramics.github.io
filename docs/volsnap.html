@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-12de7b3e.js";
+            window.path_to_searchindex_js = "searchindex-9cc59f4e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -181,15 +181,15 @@ NTFS volume. According to “Shadow Copies and Shadow Copy Sets” a shadow copy
 volume. A shadow copy can be part of a set which contains a collection of shadow copies of various
 volumes, taken at the same time.</p>
 <p>Volume Shadow Snapshot (VSS) can use different providers to store shadow copies, this document
-focuses on the “Microsoft Software Shadow Copy provider 1.0” (GUID:
-b5946137-7b9f-4925-af80-51abd60b20d5) which relies on volsnap.sys.</p>
+focuses on the “Microsoft Software Shadow Copy provider 1.0” (b5946137-7b9f-4925-af80-51abd60b20d5)
+which relies on volsnap.sys.</p>
 <p>The volsnap driver manages the metadata and copies of 16 KiB blocks of volume data.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A volsnap backing volume consists of:</p>
 <ul>
 <li><a href="#backing_volume_header">Backing volume header</a></li>
 <li><a href="#catalog">Catalog</a></li>
-<li>Optional <a href="#block_store">(block) store</a></li>
+<li>Optional <a href="#store">store</a></li>
 </ul>
 <blockquote>
 <p>Note that a volsnap backing volume can be a snapshot and/or storage volume.</p>
@@ -231,7 +231,7 @@ bytes, and consists of:</p>
 
 <tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1 and 2)</td></tr>
 
-<tr><td>20</td><td>4</td><td>1</td><td>Block (or record) type</td></tr>
+<tr><td>20</td><td>4</td><td>1</td><td><a href="#block_types">Block type</a></td></tr>
 
 <tr><td>24</td><td>8</td><td>0x1e00</td><td>Unknown (offset?)</td></tr>
 
@@ -279,7 +279,7 @@ enabled.</p>
 
 <tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1)</td></tr>
 
-<tr><td>20</td><td>4</td><td>2</td><td>Block (or record) type</td></tr>
+<tr><td>20</td><td>4</td><td>2</td><td><a href="#block_types">Block type</a></td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Relative (catalog block) offset, which is relative to the start of the first catalog block</td></tr>
 
@@ -346,7 +346,7 @@ entirely of 0-bytes.</p>
 
 <tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID, that is used in the store filename</td></tr>
 
-<tr><td>32</td><td>8</td><td></td><td>Store header offset, which is relative to the start of the volume</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Store metadata offset, which is relative to the start of the volume</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Store block range list offset, which is relative to the start of the volume</td></tr>
 
@@ -365,16 +365,16 @@ entirely of 0-bytes.</p>
 </table>
 </div>
 
-<h2 id="block_store"><a class="header" href="#block_store">Block store</a></h2>
-<p>The block store (or diff area) contains information about the volume snapshot; it contains copies
-of previous versions of data blocks of the snapshot volume.</p>
+<h2 id="store"><a class="header" href="#store">Store</a></h2>
+<p>The store contains information about the volume snapshot; it contains copies of previous versions
+of data blocks of the snapshot volume.</p>
 <p>The stores must be applied starting with the most recent on top of the current volume. E.g. if
 there are 3 stores and we want to access the snapshot of the oldest (number 1) we must first apply
 the changes in store 3 over the current volume, the changes in store 2 over the resulting volume,
 and finally the changes in store 1 over the resulting volume.</p>
 <p>The store consists of:</p>
 <ul>
-<li>store header</li>
+<li>store metadata</li>
 <li>store block list</li>
 <li>store block range list</li>
 <li>store bitmaps</li>
@@ -385,11 +385,11 @@ and finally the changes in store 1 over the resulting volume.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>16</td><td></td><td>volsnap identifier, which contains a GUID</td></tr>
+<tr><td>0</td><td>16</td><td></td><td>Signature (or format identifier), which contains a volsnap GUID</td></tr>
 
-<tr><td>16</td><td>4</td><td>0x01</td><td>Version</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Unknown (Format version?, seen 1)</td></tr>
 
-<tr><td>20</td><td>4</td><td></td><td>Record type</td></tr>
+<tr><td>20</td><td>4</td><td></td><td><a href="#block_types">Block type</a></td></tr>
 
 <tr><td>24</td><td>8</td><td></td><td>Relative (block) offset, which is relative to the start of the store</td></tr>
 
@@ -397,37 +397,37 @@ and finally the changes in store 1 over the resulting volume.</p>
 
 <tr><td>40</td><td>8</td><td></td><td>Next (block) offset, which is relative to the start of the volume or contains 0 if this is the last block</td></tr>
 
-<tr><td>48</td><td>8</td><td></td><td>Size of store information, whichis only used in first block header and should be 0 in successive block headers</td></tr>
+<tr><td>48</td><td>8</td><td></td><td>Size of store metadata, which appears to be only used in block type 4 and contains 0 for block types 3, 5 and 6</td></tr>
 
 <tr><td>56</td><td>72</td><td></td><td>Unknown (empty value)</td></tr>
 
 </table>
 </div>
 
-<h4 id="store-block-record-types"><a class="header" href="#store-block-record-types">Store block record types</a></h4>
+<h4 id="block_types"><a class="header" href="#block_types">Store block types</a></h4>
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0x0000</td><td></td><td>Unknown</td></tr>
+<tr><td>0</td><td></td><td>Unknown</td></tr>
 
-<tr><td>0x0001</td><td></td><td>Volume header</td></tr>
+<tr><td>1</td><td></td><td>Backing volume header</td></tr>
 
-<tr><td>0x0002</td><td></td><td>Catalog block header</td></tr>
+<tr><td>2</td><td></td><td>Catalog</td></tr>
 
-<tr><td>0x0003</td><td></td><td>Block descriptor list (Diff area table)</td></tr>
+<tr><td>3</td><td></td><td><a href="#store_block_list">Store block list</a> (or diff area table)</td></tr>
 
-<tr><td>0x0004</td><td></td><td>Store header</td></tr>
+<tr><td>4</td><td></td><td><a href="#store_metadata">Store metadata</a></td></tr>
 
-<tr><td>0x0005</td><td></td><td>Unknown (Store block ranges list)</td></tr>
+<tr><td>5</td><td></td><td>Store range list</td></tr>
 
-<tr><td>0x0006</td><td></td><td>Store bitmap</td></tr>
+<tr><td>6</td><td></td><td>Store bitmap</td></tr>
 
 </table>
 </div>
 
-<h3 id="store-information"><a class="header" href="#store-information">Store information</a></h3>
-<p>The store information is stored directly after the store header.</p>
-<p>The store information is of variable size and consists of:</p>
+<h3 id="store_metadata"><a class="header" href="#store_metadata">Store metadata</a></h3>
+<p>The store metadata is stored directly after the store block header.</p>
+<p>The store metadata is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
@@ -546,24 +546,24 @@ _VSS_VOLUME_SNAPSHOT_ATTRIBUTES.</p>
 </table>
 </div>
 
-<h3 id="store-block-list"><a class="header" href="#store-block-list">Store block list</a></h3>
+<h3 id="store_block_list"><a class="header" href="#store_block_list">Store block list</a></h3>
 <p>The store block list contains information about the data block ranges used by the snapshot.</p>
 <p>The store block list is stored in blocks of 16384 (0x4000) bytes. Each store block list block
 consists of:</p>
 <ul>
 <li>a store block header of type 3</li>
-<li>an array of store block descriptors</li>
+<li>an array of <a href="#block_descriptor">block descriptors</a></li>
 </ul>
-<h4 id="block-descriptor"><a class="header" href="#block-descriptor">Block descriptor</a></h4>
+<h4 id="block_descriptor"><a class="header" href="#block_descriptor">Block descriptor</a></h4>
 <p>The block descriptor is 32 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Original data block offset, which is relative to the start of the volume</td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Logical data block offset, which contains the offset of the original location of the data relative to the start of the volume</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Relative store data block offset, which is relative to the start of the store. TODO: determine if the lower bits are used for different purpose</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Store data block offset, which is relative to the start of the volume</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Physical data block offset, which is relative to the start of the volume</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Flags</td></tr>
 
@@ -606,38 +606,34 @@ their flags and position in the block list. The block list is scanned front to b
     * Ignore the new block descriptor
 
 * If the overlay flag (0x02) is not set:
-    * If there is a corresponding block descriptor in the reverse block list:
-      Meaning that the original offset (of the new block descriptor) matches
-      the relative offset of a forwarder block descriptor in the reverse block
-      list.
-        * Replace the original offset with that of the forwarder block
-          descriptor in the reverse block list.
+    * If there is a corresponding block descriptor in the reverse block list: Meaning that the
+      original offset (of the new block descriptor) matches the relative offset of a forwarder
+      block descriptor in the reverse block list.
+        * Replace the original offset with that of the forwarder block descriptor in the reverse
+          block list.
         * Remove the forwarder block descriptor from the reverse block list.
         * If the forwarder flag (0x01) (of the new block descriptor) is set:
-            * If the original offset (of the new block descriptor) is the same
-              as the relative offset:
+            * If the original offset (of the new block descriptor) is the same as the relative
+              offset:
                 * Ignore the new block descriptor
 
 * If no previous block descriptor was found:
     * Add the new block descriptor to the block list.
 * Else:
     * If the overlay flag (0x02) is set:
-      The new block descriptor contains an overlay. The allocation bitmap
-      contains information about which part of the block is used. Every bit
-      in the allocation bitmap signifies a block of 512 bytes. The LSB in
-      the allocation bitmap represent the first 512 bytes in the block.
-      Normally the relative offset is should not be 1, but this seems to be
-      ignored if it is.
+      The new block descriptor contains an overlay. The allocation bitmap contains information
+      about which part of the block is used. Every bit in the allocation bitmap signifies a block
+      of 512 bytes. The LSB in the allocation bitmap represent the first 512 bytes in the block.
+      Normally the relative offset should not be 1, but this seems to be ignored if it is.
 
         * If an existing overlay block descriptor was defined:
             * Extended the existing overlay.
-              Normally the relative offset should be 1 and the original offset
-              should match that of the existing overlay block descriptor. If
-              not these values seem to be ignored and the existing overlay
-              is extended with the allocation bitmap in the new block descriptor.
+              Normally the relative offset should be 1 and the original offset should match that of
+              the existing overlay block descriptor. If not these values seem to be ignored and the
+              existing overlay is extended with the allocation bitmap in the new block descriptor.
         * Else:
-            * Replace the existing block descriptor. Existing overlay block
-              descriptors are applied to the new block descriptor.
+            * Replace the existing block descriptor. Existing overlay block descriptors are applied
+              to the new block descriptor.
 
 * If the forwarder flag (0x01) is set:
     * If no previous reverse block descriptor was found:
@@ -653,18 +649,18 @@ NTFS file entry data runs are applied on the file system layer.</p>
 block consists of:</p>
 <ul>
 <li>a store block header of type 5</li>
-<li>an array of store block range list entries</li>
+<li>an array of <a href="#range_descriptor">range descriptors</a></li>
 </ul>
-<h4 id="store-block-range-entry"><a class="header" href="#store-block-range-entry">Store block range entry</a></h4>
-<p>The store block range entry is 24 bytes in size and consists of:</p>
+<h4 id="range_descriptor"><a class="header" href="#range_descriptor">Range descriptor</a></h4>
+<p>The range descriptor is 24 bytes in size and consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Store (block range start) offset, which is relative to the start of the volume</td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Range offset, which is relative to the start of the volume</td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Relative (block range start) offset, which is relative to the start of the store</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Block range size</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Range size</td></tr>
 
 </table>
 </div>
