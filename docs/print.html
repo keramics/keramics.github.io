@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9cc59f4e.js";
+            window.path_to_searchindex_js = "searchindex-90874199.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -4517,7 +4517,7 @@ level1_table_size *= 8
 
 <tr><td>0x0000000000000004</td><td>QCOW2_INCOMPAT_DATA_FILE</td><td>Uses data file</td></tr>
 
-<tr><td>0x0000000000000008</td><td>QCOW2_INCOMPAT_COMPRESSION</td><td>Uses non-standard compression, where "standard compression" refers to zlib</td></tr>
+<tr><td>0x0000000000000008</td><td>QCOW2_INCOMPAT_COMPRESSION</td><td>Uses non-standard compression, where "standard compression" refers to DEFLATE</td></tr>
 
 <tr><td>0x0000000000000010</td><td>QCOW2_INCOMPAT_EXTL2</td><td>Has extended L2 (table) entries</td></tr>
 
@@ -4548,7 +4548,7 @@ level1_table_size *= 8
 <div class="table-wrapper">
 <table>
 <thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
-<tr><td>0</td><td></td><td><a href="#zlib-compressed-data-format">zlib compression</a></td></tr>
+<tr><td>0</td><td></td><td><a href="#deflate_compressed_data">DEFLATE compression</a></td></tr>
 
 <tr><td>1</td><td></td><td>zstd compression (RFC 8878)</td></tr>
 
@@ -11410,7 +11410,7 @@ entirely of 0-bytes.</p>
 
 <tr><td>16</td><td>16</td><td></td><td>Store identifier, which contains a GUID that is used in the store filename</td></tr>
 
-<tr><td>32</td><td>8</td><td></td><td>Unknown (Sequence number)</td></tr>
+<tr><td>32</td><td>8</td><td></td><td>Unknown (Sequence number?)</td></tr>
 
 <tr><td>40</td><td>8</td><td></td><td>Unknown (Flags?), seen 0x40 in Windows in Vista and 7 and 0x440 in Windows 8 (file backup?)</td></tr>
 
@@ -11645,11 +11645,11 @@ consists of:</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>8</td><td></td><td>Logical data block offset, which contains the offset of the original location of the data relative to the start of the volume</td></tr>
+<tr><td>0</td><td>8</td><td></td><td>Original offset, which is relative to the start of the volume</td></tr>
 
-<tr><td>8</td><td>8</td><td></td><td>Relative store data block offset, which is relative to the start of the store. TODO: determine if the lower bits are used for different purpose</td></tr>
+<tr><td>8</td><td>8</td><td></td><td>Relative offset, which is relative to the start of the store. TODO: determine if the lower bits are used for different purpose</td></tr>
 
-<tr><td>16</td><td>8</td><td></td><td>Physical data block offset, which is relative to the start of the volume</td></tr>
+<tr><td>16</td><td>8</td><td></td><td>Offset, which is relative to the start of the volume</td></tr>
 
 <tr><td>24</td><td>4</td><td></td><td>Flags</td></tr>
 
@@ -11767,8 +11767,10 @@ is the first bit in a byte.</p>
 <p>Every bit in the store previous bitmap represents a block of 16384 (0x4000) bytes, where the LSB is
 the first bit in a byte.</p>
 <p>If a bit is set, the corresponding block is not in-use (or not allocated) by the previous store.</p>
+<blockquote>
 <p>Note that the first store can also contain a previous bitmap if an older store before it was
 removed.</p>
+</blockquote>
 <p>The use of this bitmap is described in the section: <a href="#reading_snapshot_data">reading snapshot data</a>.</p>
 <h3 id="store-data-block"><a class="header" href="#store-data-block">Store data block</a></h3>
 <p>The store data is stored in blocks of 16384 (0x4000) bytes.</p>
@@ -11807,7 +11809,6 @@ block will return successful but will not alter the buffer passed to the read. F
 purposes Keramics will zero-fill the block.</p>
 </blockquote>
 <h2 id="format-edge-cases-and-corruption-scenarios-4"><a class="header" href="#format-edge-cases-and-corruption-scenarios-4">Format edge cases and corruption scenarios</a></h2>
-<p>This chapter contains several corruption scenarios that have been encountered “in the wild”.</p>
 <h3 id="catalog-volume-size-out-of-bounds"><a class="header" href="#catalog-volume-size-out-of-bounds">Catalog volume size out of bounds</a></h3>
 <blockquote>
 <p>Note that this currently considered a corruption scenario future findings may or may not prove
@@ -11816,9 +11817,9 @@ otherwise.</p>
 <p>The volume size of one of the catalog entries exceeds the size of the underlying volume and does
 not corresponds with the volume size defined by the rest of the catalog entries.</p>
 <h3 id="scope-snapshots"><a class="header" href="#scope-snapshots">Scope snapshots</a></h3>
-<p>Technically scoped snapshots are a feature of volsnapa as of of Windows 8 or Windows Server 2012 and
-not a corruption scenario. It has been captured as a corruption scenario since it leads to some
-interesting side effects within file content of the snapshot.</p>
+<p>Scoped snapshots are a feature of volsnap as of of Windows 8 or Windows Server 2012 and not a
+corruption scenario. The feature leads to some interesting side effects within file content of a
+snapshot.</p>
 <p>Scope snapshots functionality can be controlled via the Windows Registry value:</p>
 <pre><code class="language-text">Key path: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore
 Value name: ScopeSnapshots
@@ -26111,8 +26112,8 @@ are not allowed according to RFC1950 and thus the maximum window size is 32768 b
 </div>
 
 <h2 id="compressed-data"><a class="header" href="#compressed-data">Compressed data</a></h2>
-<h3 id="deflate_compressed_data"><a class="header" href="#deflate_compressed_data">Deflate compressed data</a></h3>
-<p>The deflate compressed data consists of one or more deflate compressed blocks. Each block consists
+<h3 id="deflate_compressed_data"><a class="header" href="#deflate_compressed_data">DEFLATE compressed data</a></h3>
+<p>The DEFLATE compressed data consists of one or more DEFLATE compressed blocks. Each block consists
 of:</p>
 <ul>
 <li>block header</li>
