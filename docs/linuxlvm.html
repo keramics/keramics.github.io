@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-90874199.js";
+            window.path_to_searchindex_js = "searchindex-0af5c294.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -272,9 +272,9 @@ can be stored in any of the first 4 sectors.</p>
 
 <tr><td>32</td><td>8</td><td></td><td>Physical volume size, in number of bytes</td></tr>
 
-<tr><td>40</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">data area descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>40</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">data area descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">metadata area descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">metadata area descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
 </table>
 </div>
@@ -321,7 +321,7 @@ updated. The metadata area, therefore, can contain copies of older versions of t
 
 <tr><td>32</td><td>8</td><td></td><td>Metadata area size, in number of bytes</td></tr>
 
-<tr><td>40</td><td>4 x 24 = 96</td><td></td><td>List of <a href="#raw_location_descriptor">raw location descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>40</td><td>4 x 24 = 96</td><td></td><td>List of <a href="#raw_location_descriptor">raw location descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
 <tr><td>136</td><td>376</td><td>0</td><td>Unknown (unused)</td></tr>
 

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-90874199.js";
+            window.path_to_searchindex_js = "searchindex-0af5c294.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -470,10 +470,14 @@ level1_table_size *= 8
 </div>
 
 <h3 id="file-header-extensions"><a class="header" href="#file-header-extensions">File header extensions</a></h3>
-<p>A file header extension consist of:</p>
+<p>The file header extensions consists of one or more file header extension where the last file header
+extension is a terminator and consists of 0-byte values. The file header extensions are store 8-byte
+aligned.</p>
+<p>An individual file header extension consist of:</p>
 <ul>
 <li>file header extension header</li>
 <li>file header extension data</li>
+<li>optional alignment padding</li>
 </ul>
 <h4 id="file-header-extension-header"><a class="header" href="#file-header-extension-header">File header extension header</a></h4>
 <p>The file header extension header is 8 bytes in size and consist of:</p>
@@ -539,7 +543,20 @@ level1_table_size *= 8
 </div>
 
 <h4 id="feature-table-file-header-extension"><a class="header" href="#feature-table-file-header-extension">Feature table file header extension</a></h4>
-<p>TODO: complete section</p>
+<p>The feature table file header extension contains one or more feature table entries.</p>
+<p>A feature table entry is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Feature flags type, where 0 (Incompatible feature flags), 1 (Compatible feature flags) and 2 (Autoclear feature flags)</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Flag bit index, where 0 is the LSB</td></tr>
+
+<tr><td>2</td><td>...</td><td></td><td>Feature name, which contains an ASCII string with end-of-string character</td></tr>
+
+</table>
+</div>
+
 <h2 id="level-1-table"><a class="header" href="#level-1-table">Level 1 table</a></h2>
 <p>The level 1 table contains level 2 table references.</p>
 <p>A reference value of 0 represents unused or unallocated and is considered as sparse or stored in a

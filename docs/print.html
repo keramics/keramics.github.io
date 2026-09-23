@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-90874199.js";
+            window.path_to_searchindex_js = "searchindex-0af5c294.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -4556,10 +4556,14 @@ level1_table_size *= 8
 </div>
 
 <h3 id="file-header-extensions"><a class="header" href="#file-header-extensions">File header extensions</a></h3>
-<p>A file header extension consist of:</p>
+<p>The file header extensions consists of one or more file header extension where the last file header
+extension is a terminator and consists of 0-byte values. The file header extensions are store 8-byte
+aligned.</p>
+<p>An individual file header extension consist of:</p>
 <ul>
 <li>file header extension header</li>
 <li>file header extension data</li>
+<li>optional alignment padding</li>
 </ul>
 <h4 id="file-header-extension-header"><a class="header" href="#file-header-extension-header">File header extension header</a></h4>
 <p>The file header extension header is 8 bytes in size and consist of:</p>
@@ -4625,7 +4629,20 @@ level1_table_size *= 8
 </div>
 
 <h4 id="feature-table-file-header-extension"><a class="header" href="#feature-table-file-header-extension">Feature table file header extension</a></h4>
-<p>TODO: complete section</p>
+<p>The feature table file header extension contains one or more feature table entries.</p>
+<p>A feature table entry is of variable size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>1</td><td></td><td>Feature flags type, where 0 (Incompatible feature flags), 1 (Compatible feature flags) and 2 (Autoclear feature flags)</td></tr>
+
+<tr><td>1</td><td>1</td><td></td><td>Flag bit index, where 0 is the LSB</td></tr>
+
+<tr><td>2</td><td>...</td><td></td><td>Feature name, which contains an ASCII string with end-of-string character</td></tr>
+
+</table>
+</div>
+
 <h2 id="level-1-table"><a class="header" href="#level-1-table">Level 1 table</a></h2>
 <p>The level 1 table contains level 2 table references.</p>
 <p>A reference value of 0 represents unused or unallocated and is considered as sparse or stored in a
@@ -8464,7 +8481,7 @@ data.</p>
 
 <tr><td>12</td><td>4</td><td></td><td>Logical sector size (or EOW data sector size?)</td></tr>
 
-<tr><td>16</td><td>4</td><td></td><td>Physical sector size (or block record size?)</td></tr>
+<tr><td>16</td><td>4</td><td></td><td>Physical sector size</td></tr>
 
 <tr><td>20</td><td>4</td><td></td><td>Relocation block size</td></tr>
 
@@ -8556,7 +8573,7 @@ consists of:</p>
 
 <tr><td>10</td><td>2</td><td>36</td><td>Header size</td></tr>
 
-<tr><td>12</td><td>4</td><td></td><td>Physical sector size</td></tr>
+<tr><td>12</td><td>4</td><td></td><td>Block record size</td></tr>
 
 <tr><td>16</td><td>4</td><td></td><td>Number of bits (in the bitmap)</td></tr>
 
@@ -9480,9 +9497,9 @@ can be stored in any of the first 4 sectors.</p>
 
 <tr><td>32</td><td>8</td><td></td><td>Physical volume size, in number of bytes</td></tr>
 
-<tr><td>40</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">data area descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>40</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">data area descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
-<tr><td>...</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">metadata area descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>...</td><td>...</td><td></td><td>List of <a href="#data_area_descriptor">metadata area descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
 </table>
 </div>
@@ -9529,7 +9546,7 @@ updated. The metadata area, therefore, can contain copies of older versions of t
 
 <tr><td>32</td><td>8</td><td></td><td>Metadata area size, in number of bytes</td></tr>
 
-<tr><td>40</td><td>4 x 24 = 96</td><td></td><td>List of <a href="#raw_location_descriptor">raw location descriptors</a>, where the last descriptor in the list is terminator and consists of 0-byte values</td></tr>
+<tr><td>40</td><td>4 x 24 = 96</td><td></td><td>List of <a href="#raw_location_descriptor">raw location descriptors</a>, where the last descriptor in the list is a terminator and consists of 0-byte values</td></tr>
 
 <tr><td>136</td><td>376</td><td>0</td><td>Unknown (unused)</td></tr>
 
@@ -25268,7 +25285,7 @@ as either big-endian or little-endian binary data.</p>
 <div class="table-wrapper">
 <table>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
-<tr><td>0</td><td>2</td><td>0x71c7</td><td>Signature, which is 070707 in octal where 0x71 0xc7 indicates the format is in big-endian and 0xc7 0x71 little-endian</td></tr>
+<tr><td>0</td><td>2</td><td></td><td>Signature, which is 070707 in octal where [0x71, 0xc7] indicates the format is in big-endian and [0xc7, 0x71] little-endian</td></tr>
 
 <tr><td>2</td><td>2</td><td></td><td>Device number of the host file system</td></tr>
 
