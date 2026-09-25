@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0af5c294.js";
+            window.path_to_searchindex_js = "searchindex-9556b59e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -191,7 +191,7 @@ a floppy or optical disk like CD-ROM or DVD.</p>
 <h2 id="formats"><a class="header" href="#formats">Formats</a></h2>
 <ul>
 <li><a href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a></li>
-<li><a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2 (EWF2)</a></li>
+<li><a href="#ewf-2-specification">Expert Witness Compression Format version 2 (EWF2)</a></li>
 <li><a href="#mac-os-sparse-bundle-sparsebundle-format">Mac OS sparse bundle</a></li>
 <li><a href="#mac-os-sparse-image-sparseimage-format">Mac OS sparse image</a></li>
 <li><a href="#parallels-disk-image-pdi-format">Parallels Disk Image (PDI)</a></li>
@@ -208,7 +208,7 @@ images for digital forensic purposes. It is currently widely used in the field o
 forensics in proprietary tooling like EnCase en FTK.</p>
 <p>The “ASR Data - E01 Compression Format” is the earliest known specification of the format was
 provided by ASR Data for the SMART application.</p>
-<p>The EWF format was superseded by the <a href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2</a> in
+<p>The EWF format was superseded by the <a href="#ewf-2-specification">Expert Witness Compression Format version 2</a> in
 EnCase 7 (EWF2-Ex01 and EWF2-Lx01). EnCase 7 also uses a different version of EWF-L01 then its
 predecessors.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -831,7 +831,7 @@ compression.</p>
 <ul>
 <li>The header section is defined only once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values“</p>
@@ -865,7 +865,7 @@ compression.</p>
 <ul>
 <li>The header section is defined once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data is always processed by zlib, however the same compression level is used as for
+<li>The header data always is zlib compressed data, however the same compression level is used as for
 the chunks. This could mean compression level 0 which is no compression.</li>
 </ul>
 <blockquote>
@@ -878,7 +878,7 @@ could be something FTK Imager specific.</p>
 <li>The same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -917,7 +917,7 @@ segment files.</li>
 <li>The header is defined only once.</li>
 <li>It resides after the header2 sections of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -954,7 +954,7 @@ segment files.</li>
 <li>The same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a newline (0x0a).</li>
 </ul>
 <p>The header information consist of 18 lines</p>
@@ -1152,7 +1152,7 @@ local time. Where as before both values were in local time.</p>
 <li>In FTK Imager (EWF-E01) the same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib. Note that the compression level can be none and
+<li>The header data is zlib compressed data. Note that the compression level can be none and
 therefore the header looks uncompressed.</li>
 <li>In FTK Imager the end of line character(s) is a newline (0x0a).</li>
 </ul>
@@ -1520,8 +1520,8 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="optical-disc-images"><a class="header" href="#optical-disc-images">Optical disc images</a></h4>
 <p>For a MODE-1 CD-ROM optical disc image EnCase only seems to support 2048 bytes per sector (the
 data).</p>
@@ -1612,8 +1612,8 @@ The resulting size of the “compressed” chunk can therefore be larger than th
 <blockquote>
 <p>Note that this was deducted from the behavior of FTK Imager for SMART (EWF-S01).</p>
 </blockquote>
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="smart-ewf-s01-3"><a class="header" href="#smart-ewf-s01-3">SMART (EWF-S01)</a></h4>
 <p>The table section in the SMART (EWF-S01) format is equivalent to that of the EWF specification.</p>
 <h4 id="encase-1-ewf-e01-1"><a class="header" href="#encase-1-ewf-e01-1">EnCase 1 (EWF-E01)</a></h4>
@@ -1687,8 +1687,8 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="#zlib-compressed-data-format">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01">FTK Imager and EnCase 2 to 5 and linen 5 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -1898,7 +1898,7 @@ section are:</p>
 </table>
 </div>
 
-<h4 id="ltree-data"><a class="header" href="#ltree-data">Ltree data</a></h4>
+<h4 id="ltree_data"><a class="header" href="#ltree_data">Ltree data</a></h4>
 <p>The ltree data string consists of an UTF-16 little-endian encoded string without byte order mark.
 The ltree data is not strict UTF-16 since it allows for unpaired surrogates, such as “U+d800” and
 “U+dc00”.</p>
@@ -3048,8 +3048,8 @@ values.</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
 <p>In this corruption scenario the copy of uncompressed data size value of the
-<a href="#zlib-compressed-data-format">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
-uncompressed data size.</p>
+<a href="#deflate_uncompressed_block_data">DEFLATE uncompressed block data</a> is set to 0 instead of
+the 1s complement of the uncompressed data size.</p>
 <p>Keramics currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
 <p>TODO: add description</p>
@@ -3118,8 +3118,1037 @@ passphrase or a certificate.</p>
 </ul>
 <!-- rumdl-enable MD013 -->
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="expert-witness-compression-format-version-2-ewf2"><a class="header" href="#expert-witness-compression-format-version-2-ewf2">Expert Witness Compression Format version 2 (EWF2)</a></h1>
-<p>TODO: add description</p>
+<h1 id="ewf-2-specification"><a class="header" href="#ewf-2-specification">EWF 2 specification</a></h1>
+<p>In EnCase 7 Guidance Software introduced a version 2 of the
+<a href="#expert-witness-compression-format-ewf">Expert Witness Compression Format (EWF)</a>. At the conceptual level both version 1 (EWF1)
+and 2 (EWF2) are comparable. The data format is different.</p>
+<p>This document will use EWF2 as the name of the format, although Guidance named the format “EnCase
+Evidence File Format Version 2”. The first observed version of EWF2 is 2.1.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>There are 2 different versions of EWF2:</p>
+<ul>
+<li>EWF2-Ex01; to store disk, volume and memory images.</li>
+<li>EWF2-Lx01; logical evidence file to store files and directories.</li>
+</ul>
+<p>In EWF2 the data is either compressed or non-compressed, EWF2 no longer distinguishes between
+multiple compression levels. Also support was added to encrypt the data and relevant metadata.</p>
+<h2 id="segment-files"><a class="header" href="#segment-files">Segment files</a></h2>
+<p>EWF2 stores data in one or more segment files (or segments). Each segment file consists of:</p>
+<ul>
+<li>A <a href="#file_header">file header</a></li>
+<li>One or more sections; which “EnCase Evidence File Format Version 2” refers to as link records and
+data.</li>
+</ul>
+<p>EnCase 7 allows for the segment file size to be set at 30 MB at minimum and about 8.8 TB at maximum.</p>
+<h3 id="file_header"><a class="header" href="#file_header">File header</a></h3>
+<p>Each segment file starts with file header, the file header differs for EWF2-Ex01 and EWF2-Lx01.</p>
+<h4 id="ewf2-ex01"><a class="header" href="#ewf2-ex01">EWF2-Ex01</a></h4>
+<p>The file header is 32 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"EVF2\r\n\x81\x00"</td><td>Signature</td></tr>
+
+<tr><td>8</td><td>1</td><td>2</td><td>Major version</td></tr>
+
+<tr><td>9</td><td>1</td><td>1</td><td>Minor version</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Segment file number (Series)</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Segment file set identifier, which contains a little-endian version 4 GUID</td></tr>
+
+</table>
+</div>
+
+<h4 id="ewf2-lx01"><a class="header" href="#ewf2-lx01">EWF2-Lx01</a></h4>
+<p>The file header is 32 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td>"LEF2\r\n\x81\x00"</td><td>Signature</td></tr>
+
+<tr><td>8</td><td>1</td><td>2</td><td>Major version</td></tr>
+
+<tr><td>9</td><td>1</td><td>1</td><td>Minor version</td></tr>
+
+<tr><td>10</td><td>2</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Segment file number (Series)</td></tr>
+
+<tr><td>16</td><td>16</td><td></td><td>Segment file set identifier, which contains a little-endian version 4 GUID</td></tr>
+
+</table>
+</div>
+
+<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0</td><td>COMPRESSION_NONE</td><td>No compression</td></tr>
+
+<tr><td>1</td><td>COMPRESSION_LZ</td><td><a href="#zlib-compressed-data-format">zlib compression</a> )</td></tr>
+
+<tr><td>2</td><td>COMPRESSION_BZIP2</td><td>BZip2 compression</td></tr>
+
+</table>
+</div>
+
+<p>“EnCase Evidence File Format Version 2” states that “COMPRESSION_NONE will be never used”, even so
+EnCase 7 does not even seem to supports this compression method and indicates the file header is
+corrupt.</p>
+<blockquote>
+<p>Note that EnCase 7 does not appear to provide an option to set the compression method to bzip2.</p>
+</blockquote>
+<h3 id="segment-file-extensions-1"><a class="header" href="#segment-file-extensions-1">Segment file extensions</a></h3>
+<h4 id="ewf2-ex01-1"><a class="header" href="#ewf2-ex01-1">EWF2-Ex01</a></h4>
+<ul>
+<li>The first segment file has the extension ‘.Ex01’.</li>
+<li>The next segment file has the extension ’.Ex02.</li>
+<li>This will continue up to ‘.Ex99’.</li>
+<li>After which the next segment file has the extension ‘.ExAA’.
+<ul>
+<li>The next segment file has the extension ‘.ExAA’.</li>
+<li>This will continue up to ‘.ExAZ’.</li>
+<li>The next segment file has the extension <!-- typos:disable -->‘.ExBA’<!-- typos:enable -->.</li>
+<li>This will continue up to ‘.ExZZ’.</li>
+<li>The next segment file has the extension ’.EyAA ’.</li>
+<li>This will continue up to ‘.EzZZ’.</li>
+</ul>
+</li>
+</ul>
+<p>Keramics supports extensions up to .EzZZ</p>
+<p>TODO: determine what comes after .EzZZ</p>
+<h4 id="ewf2-lx01-1"><a class="header" href="#ewf2-lx01-1">EWF2-Lx01</a></h4>
+<ul>
+<li>The first segment file has the extension ‘.Lx01’.</li>
+<li>The next segment file has the extension ’.Lx02.</li>
+<li>This will continue up to ‘.Lx99’.</li>
+<li>After which the next segment file has the extension ‘.LxAA’.
+<ul>
+<li>The next segment file has the extension ‘.LxAA’.</li>
+<li>This will continue up to ‘.LxAZ’.</li>
+<li>The next segment file has the extension <!-- typos:disable -->‘.LxBA’<!-- typos:enable -->.</li>
+<li>This will continue up to ‘.LxZZ’.</li>
+<li>The next segment file has the extension ’.LyAA ’.</li>
+<li>This will continue up to ‘.LzZZ’.</li>
+</ul>
+</li>
+</ul>
+<p>Keramics supports extensions up to .LzZZ</p>
+<p>TODO: determine what comes after .LzZZ</p>
+<h2 id="the-sections-1"><a class="header" href="#the-sections-1">The sections</a></h2>
+<p>The remainder of the segment file consists of sections. Every section ends with a section
+descriptor. In contrast to EWF1 the section descriptor is at the end of the section and the
+section descriptor points to its previous section so the sections need to be read from
+back-to-front.</p>
+<h3 id="section-descriptor"><a class="header" href="#section-descriptor">Section descriptor</a></h3>
+<p>The section descriptor is 64 bytes in size and consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td><a href="#section_types">Section type</a></td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td><a href="#data_flags">Data flags</a></td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Previous section offset, which is relative from the start of the segment file or 0 if there is no previous section</td></tr>
+
+<tr><td>16</td><td>8</td><td></td><td>Data size</td></tr>
+
+<tr><td>24</td><td>4</td><td></td><td>Section descriptor size</td></tr>
+
+<tr><td>28</td><td>4</td><td></td><td>16-byte alignment padding size, in number of bytes</td></tr>
+
+<tr><td>32</td><td>16</td><td></td><td>Data integrity hash, which contains an MD5 of the data including padding. If the data is encrypted the integrity hash is calculated of the encrypted data</td></tr>
+
+<tr><td>48</td><td>3 x 4 = 12</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>60</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the section descriptor</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that the data size includes the padding size. The padding is not always at the end of the
+section data, it can also be after a table header followed by more section data.</p>
+</blockquote>
+<p>A section can contain additional data not defined by the data size. This was observed in the sector
+data section of an EWF2 file that was aborted and restarted.</p>
+<h4 id="section_types"><a class="header" href="#section_types">Section types</a></h4>
+<!-- rumdl-disable MD033 MD056 -->
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td colspan="4"><em>Defined by "EnCase Evidence File Format Version 2"</em></td></tr>
+
+<tr><td>0x00000001</td><td></td><td>Device information</td></tr>
+
+<tr><td>0x00000002</td><td></td><td>Case data</td></tr>
+
+<tr><td>0x00000003</td><td></td><td>Sector data</td></tr>
+
+<tr><td>0x00000004</td><td></td><td>Sector table</td></tr>
+
+<tr><td>0x00000005</td><td></td><td>Error table</td></tr>
+
+<tr><td>0x00000006</td><td></td><td>Session table</td></tr>
+
+<tr><td>0x00000007</td><td></td><td>Increment data</td></tr>
+
+<tr><td>0x00000008</td><td></td><td>MD5 hash</td></tr>
+
+<tr><td>0x00000009</td><td></td><td>SHA1 hash</td></tr>
+
+<tr><td>0x0000000a</td><td></td><td>Restart data</td></tr>
+
+<tr><td>0x0000000b</td><td></td><td>Encryption keys</td></tr>
+
+<tr><td>0x0000000c</td><td></td><td>Memory extents table</td></tr>
+
+<tr><td>0x0000000d</td><td></td><td>Next</td></tr>
+
+<tr><td>0x0000000e</td><td></td><td>Final information</td></tr>
+
+<tr><td>0x0000000f</td><td></td><td>Done</td></tr>
+
+<tr><td>0x00000010</td><td></td><td>Analytical data</td></tr>
+
+<tr><td colspan="4"><em>Not defined by "EnCase Evidence File Format Version 2"</em></td></tr>
+
+<tr><td>0x00000020</td><td></td><td>Single files data</td></tr>
+
+<tr><td>0x00000021</td><td></td><td>Single files unknown table</td></tr>
+
+<tr><td>0x00000022</td><td></td><td>Single files MD5 hash table</td></tr>
+
+<tr><td>0x00000023</td><td></td><td>Unknown (Single files unknown table)</td></tr>
+
+</table>
+</div>
+
+<!-- rumdl-enable MD033 MD056 -->
+<h4 id="data_flags"><a class="header" href="#data_flags">Data flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>MD5HASHED</td><td>The data integrity hash is set</td></tr>
+
+<tr><td>0x00000002</td><td>ENCRYPTED</td><td>The data is encrypted</td></tr>
+
+</table>
+</div>
+
+<h3 id="device-information"><a class="header" href="#device-information">Device information</a></h3>
+<p>The device information section can be found:</p>
+<ul>
+<li>in every segment file after the file header in EWF2-Ex01</li>
+<li>in every segment file after section 0x00000020 in EWF2-Lx01</li>
+</ul>
+<p>When encryption is enabled the device information is encrypted.</p>
+<p>The device information section contains a serialized object string that consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Line</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td>1</td><td>Number of objects</td></tr>
+
+<tr><td>2</td><td>"main"</td><td>Object name</td></tr>
+
+<tr><td>3</td><td></td><td>Attribute tags</td></tr>
+
+<tr><td>4</td><td></td><td>Attribute values</td></tr>
+
+<tr><td>5</td><td></td><td>Empty line</td></tr>
+
+</table>
+</div>
+
+<h4 id="attribute-tags"><a class="header" href="#attribute-tags">Attribute tags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Type</th><th>Description</th></thead>
+<tr><td>sn</td><td>Text</td><td>Drive serial number</td></tr>
+
+<tr><td>md</td><td>Text</td><td>Drive model</td></tr>
+
+<tr><td>lb</td><td>Text</td><td>Drive label</td></tr>
+
+<tr><td>ts</td><td>Integer 64-bit</td><td>Number of sectors</td></tr>
+
+<tr><td>hs</td><td>Integer 64-bit</td><td>Number of sectors of the HPA protected sectors</td></tr>
+
+<tr><td>dc</td><td>Integer 64-bit</td><td>Number of sectors of the DCO protected sectors</td></tr>
+
+<tr><td>dt</td><td>Enumeration</td><td><a href="#drive_type">Drive type</a></td></tr>
+
+<tr><td>pid</td><td>Integer 32-bit</td><td>Process identifier, which is set when the memory of an individual process is acquired</td></tr>
+
+<tr><td>rs</td><td>Integer 32-bit</td><td>Number of sectors of a PALM RAM device</td></tr>
+
+<tr><td>ls</td><td>Integer 32-bit</td><td>Number of sectors in the SMART or ATA general logs, where the latter is returned by the ATA READ_LOG_EXT command</td></tr>
+
+<tr><td>bp</td><td>Integer 32-bit</td><td>Bytes per sector</td></tr>
+
+<tr><td>ph</td><td>Boolean</td><td>Is physical</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that EnCase 7 has been observed to generated strange values for the device serial number.</p>
+</blockquote>
+<h4 id="drive_type"><a class="header" href="#drive_type">Drive type</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>a</td><td></td><td>RAM disk</td></tr>
+
+<tr><td>c</td><td></td><td>Optical disc (CD-ROM)</td></tr>
+
+<tr><td>f</td><td></td><td>Fixed</td></tr>
+
+<tr><td>l</td><td></td><td>Single files (Logical evidence)</td></tr>
+
+<tr><td>m</td><td></td><td>Memory</td></tr>
+
+<tr><td>p</td><td></td><td>PALM</td></tr>
+
+<tr><td>r</td><td></td><td>Removable</td></tr>
+
+</table>
+</div>
+
+<h3 id="case-data"><a class="header" href="#case-data">Case data</a></h3>
+<p>The case data section can be found:</p>
+<ul>
+<li>in every segment file after the device information section in EWF2-Ex01</li>
+<li>in every segment file after the file header in EWF2-Lx01</li>
+</ul>
+<p>When encryption is enabled the case data is encrypted.</p>
+<p>The case data section contains a serialized object string that consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Line</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td>1</td><td>Number of objects</td></tr>
+
+<tr><td>2</td><td>"main"</td><td>Object name</td></tr>
+
+<tr><td>3</td><td></td><td>Attribute tags</td></tr>
+
+<tr><td>4</td><td></td><td>Attribute values</td></tr>
+
+<tr><td>5</td><td></td><td>Empty line</td></tr>
+
+</table>
+</div>
+
+<h4 id="attribute-tags-1"><a class="header" href="#attribute-tags-1">Attribute tags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Type</th><th>Description</th></thead>
+<tr><td>nm</td><td>Text</td><td>Name, which is similar to Description in EWF1</td></tr>
+
+<tr><td>cn</td><td>Text</td><td>Case number</td></tr>
+
+<tr><td>en</td><td>Text</td><td>Evidence number</td></tr>
+
+<tr><td>ex</td><td>Text</td><td>Examiner name</td></tr>
+
+<tr><td>nt</td><td>Text</td><td>Notes</td></tr>
+
+<tr><td>av</td><td>Text</td><td>Application version, which contains the version of the application used for acquisition</td></tr>
+
+<tr><td>os</td><td>Text</td><td>Operating system, which contains the operating system used used for acquisition</td></tr>
+
+<tr><td>tt</td><td>Timestamp</td><td>Target time, which contains the date and time of the system used for acquisition in UTC and is similar to Acquired date in EWF1</td></tr>
+
+<tr><td>at</td><td>Timestamp</td><td>Actual time, which contains an user provided date and time and is similar to System date in EWF1</td></tr>
+
+<tr><td>tb</td><td>Integer 64-bit</td><td>Number of chunks (blocks)</td></tr>
+
+<tr><td>cp</td><td>Integer 32-bit</td><td><a href="#compression_methods">Compression method</a>, which is empty (not 0) when the compression method is no compression</td></tr>
+
+<tr><td>sb</td><td>Integer 32-bit</td><td>Number of sectors per chunk (block)</td></tr>
+
+<tr><td>gr</td><td>Integer 32-bit</td><td>Error granularity</td></tr>
+
+<tr><td>wb</td><td>Integer 32-bit</td><td>Write-blocker type</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that EnCase 7 only provides the following number of sectors per chunk: 64, 128, 256, 512,
+1024 which is referred by the application as block size. The thorough error granularity in
+EnCase 7 corresponds to 1 sector.</p>
+</blockquote>
+<p>TODO: “EnCase Evidence File Format Version 2” defines the “Actual time” as in UTC, but if this is
+user provided can UTC still be guaranteed?</p>
+<h4 id="write-blocker-type"><a class="header" href="#write-blocker-type">Write-blocker type</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>FastBloc</td></tr>
+
+<tr><td>2</td><td></td><td>Tableau</td></tr>
+
+</table>
+</div>
+
+<h3 id="sector-data"><a class="header" href="#sector-data">Sector data</a></h3>
+<p>The first sector data section can be found in every segment file after the case data section.
+Successive sector data sections are found after the sector table section.</p>
+<p>When encryption is enabled the sector data is encrypted.</p>
+<p>The sector data is stored in chunks. “EnCase Evidence File Format Version 2” states that each chunk
+must be stored 16-byte aligned and padded with 0-byte values if necessary. Although it can read non
+16-byte aligned chunks.</p>
+<p>If the sector compression method defined in case data section is set the chunk is compressed and
+the chunk data flag COMPRESSED is set. The checksum intrinsic to the compression method is used to
+verify the integrity of the chunk data. The chunk data flag CHECKSUMED is not set.</p>
+<p>If a chunk is not compressed an Adler32 checksum of the data is stored after the chunk data and the
+chunk data flag CHECKSUMED is set.</p>
+<p>Pattern fill seems to be a special case of compression and the COMPRESSED flag is set in
+combination with the PATTERNFILL flag. In EnCase pattern fill is not used when writing files and
+the compression is set to none. Keramics, when reading files, ignores the PATTERNFILL flag if the
+corresponding COMPRESSED flag is not set.</p>
+<p>If the PATTERNFILL flag is set the chunk data size in the sector table entry is set to 0 and the
+chunk data offset contains a 64-bit pattern to fill the chunk data.</p>
+<h3 id="sector-table"><a class="header" href="#sector-table">Sector table</a></h3>
+<p>The sector table is stored as an array of sector table entries (chunk descriptor or block offset).
+It defines the location of the chunk data in the segment file.</p>
+<p>The sector table section can be found in every segment file after the sector data section. Every
+sector data section should be followed by a section table section.</p>
+<p>When encryption is enabled the sector table is encrypted.</p>
+<p>The sector table consists of:</p>
+<ul>
+<li>the sector table header</li>
+<li>an array of sector table entries</li>
+<li>the sector table footer</li>
+</ul>
+<h4 id="sector-table-header"><a class="header" href="#sector-table-header">Sector table header</a></h4>
+<p>The sector table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>First chunk number, where 0 is the first chunk number for the entire image</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>12</td><td>4</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the sector table header</td></tr>
+
+</table>
+</div>
+
+<p>The sector table header should be followed by 12 bytes of alignment padding.</p>
+<p>TODO: determine if EnCase support non-contiguous images.</p>
+<p>TODO: determine if EnCase writes about 1600 entries per section.</p>
+<h4 id="sector-table-entry"><a class="header" href="#sector-table-entry">Sector table entry</a></h4>
+<p>A sector table entry is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Chunk data offset or fill pattern if corresponding flag is set</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Chunk data size</td></tr>
+
+<tr><td>12</td><td>4</td><td></td><td>Chunk data flags</td></tr>
+
+</table>
+</div>
+
+<h4 id="chunk-data-flags"><a class="header" href="#chunk-data-flags">Chunk data flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td>COMPRESSED</td><td>The chunk is compressed</td></tr>
+
+<tr><td>0x00000002</td><td>CHECKSUMED</td><td>The chunk is followed by an Adler32 checksum</td></tr>
+
+<tr><td>0x00000004</td><td>PATTERNFILL</td><td>The chunk is sparse and the value in the chunk data offset is used to fill the chunk data at run-time</td></tr>
+
+</table>
+</div>
+
+<p>The PATTERNFILL flag should be ignored if the COMPRESSED flag is not set.</p>
+<h4 id="sector-table-footer"><a class="header" href="#sector-table-footer">Sector table footer</a></h4>
+<p>The sector table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the sector table entries</td></tr>
+
+</table>
+</div>
+
+<p>The sector table footer should be followed by 12 bytes of alignment padding.</p>
+<h3 id="error-table"><a class="header" href="#error-table">Error table</a></h3>
+<p>The error table is stored as an array of error table entries. It defines the sector ranges that
+could not be read correctly during acquisition.</p>
+<p>The error table section is optional, it does not need to be present. If it does it resides in the
+last segment file before the MD5 hash section.</p>
+<p>When encryption is enabled the error table is encrypted.</p>
+<p>The error table consists of:</p>
+<ul>
+<li>the error table header</li>
+<li>an array of error table entries</li>
+<li>the error table footer</li>
+</ul>
+<h4 id="error-table-header"><a class="header" href="#error-table-header">Error table header</a></h4>
+<p>The error table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>4</td><td>12</td><td></td><td>Unknown (Empty value)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the error table header</td></tr>
+
+</table>
+</div>
+
+<p>The error table header should be followed by 12 bytes of alignment padding.</p>
+<blockquote>
+<p>Note that this differs from what is documented in “EnCase Evidence File Format Version 2”.</p>
+</blockquote>
+<h4 id="error-table-entry"><a class="header" href="#error-table-entry">Error table entry</a></h4>
+<p>An error table entry is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Start sector</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Number of sectors</td></tr>
+
+<tr><td>12</td><td>4</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<h4 id="error-table-footer"><a class="header" href="#error-table-footer">Error table footer</a></h4>
+<p>The error table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the array of error table entries</td></tr>
+
+</table>
+</div>
+
+<p>The error table footer should be followed by 12 bytes of alignment padding.</p>
+<h3 id="session-table"><a class="header" href="#session-table">Session table</a></h3>
+<p>The session table is stored as an array of session table entries. It defines the sessions of the
+optical disc stored in the set of segment files.</p>
+<p>The session table section is optional, it does not need to be present. If it does it resides in the
+last segment file before the error table section.</p>
+<p>When encryption is enabled the session table is encrypted.</p>
+<p>The session table consists of:</p>
+<ul>
+<li>the session table header</li>
+<li>an array of session table entries</li>
+<li>the session table footer</li>
+</ul>
+<h4 id="session-table-header"><a class="header" href="#session-table-header">Session table header</a></h4>
+<p>The session table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>4</td><td>12</td><td></td><td>Unknown (Empty value)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which contains an Adler-32 of all the previous data within the session table header</td></tr>
+
+</table>
+</div>
+
+<p>The session table header should be followed by 12 bytes of alignment padding.</p>
+<blockquote>
+<p>Note that this differs from what is documented in “EnCase Evidence File Format Version 2”.</p>
+</blockquote>
+<h4 id="session-table-entry"><a class="header" href="#session-table-entry">Session table entry</a></h4>
+<p>A session table entry is 32 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>First sector</td></tr>
+
+<tr><td>8</td><td>4</td><td></td><td>Session flags</td></tr>
+
+<tr><td>12</td><td>5 x 4 = 20</td><td>0</td><td>Unknown (Padding)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that for an optical disc, observed for a CD, the first session sector is stored as 16,
+although the actual session starts at sector 0. Could this value be overloaded to indicate
+the size of the reserved space between the start of the session and the ISO 9660 volume
+descriptor.</p>
+</blockquote>
+<h4 id="session-flags-1"><a class="header" href="#session-flags-1">Session flags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x00000001</td><td></td><td>If set the track is an audio track otherwise the track is a data track</td></tr>
+
+</table>
+</div>
+
+<p>EnCase stores the data of audio tracks of an optical disc as 0-byte data with a sector size
+of 2048. It is therefore assumed that the format is only to support data tracks with a sector size
+of 2048.</p>
+<h4 id="session-table-footer"><a class="header" href="#session-table-footer">Session table footer</a></h4>
+<p>The session table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the array of session table entries</td></tr>
+
+</table>
+</div>
+
+<p>The session table footer should be followed by 12 bytes of alignment padding.</p>
+<h3 id="increment-data"><a class="header" href="#increment-data">Increment data</a></h3>
+<p>TODO: complete this section, need example data.</p>
+<h3 id="md5-hash"><a class="header" href="#md5-hash">MD5 hash</a></h3>
+<p>The MD5 hash section contains the MD5 hash of the data stored in the set of segment files.</p>
+<p>The MD5 hash section is optional, it does not need to be present. If it does it resides in the last
+segment file before the SHA1 hash section.</p>
+<p>When encryption is enabled the MD5 hash is encrypted.</p>
+<p>The MD5 hash data is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>MD5 hash</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of the MD5 hash</td></tr>
+
+</table>
+</div>
+
+<p>The MD5 hash data should be followed by 12 bytes of alignment padding.</p>
+<h3 id="sha1-hash"><a class="header" href="#sha1-hash">SHA1 hash</a></h3>
+<p>The SHA1 hash section contains the SHA1 hash of the data stored in the set of segment files.</p>
+<p>The SHA1 hash section is optional, it does not need to be present. If it does it resides in the
+last segment file before the analytical data section.</p>
+<p>When encryption is enabled the SHA1 hash is encrypted.</p>
+<p>The SHA1 hash data is 24 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>20</td><td></td><td>SHA1 hash</td></tr>
+
+<tr><td>20</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of the SHA1 hash</td></tr>
+
+</table>
+</div>
+
+<p>The MD5 hash data should be followed by 8 bytes of alignment padding.</p>
+<h3 id="restart-data"><a class="header" href="#restart-data">Restart data</a></h3>
+<p>The restart data section is optional, it does not need to be present. If it does it resides in the
+last segment file before the done section.</p>
+<p>TODO: determine if the restart data stored after or before the encryption keys</p>
+<blockquote>
+<p>Note that the “main” and “rl” object tags are not explicitly defined in the string.</p>
+</blockquote>
+<p>The restart data section contains a serialized object string that consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Line</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>Object tags</td></tr>
+
+<tr><td>2</td><td></td><td>Attribute tags</td></tr>
+
+<tr><td>3</td><td></td><td>Segments of the restart object</td></tr>
+
+</table>
+</div>
+
+<p>The segments of the restart object likely represent the “tree view” in the evidence view within
+EnCase. In the example below there are 3 segments, the first segment having a sub object that has
+“expanded” properties and containing another sub object that contains the actual restart data.</p>
+<pre><code class="language-text">1	1
+p	d	sr	sp
+0	1
+
+0	1
+5
+0	0
+			1216
+</code></pre>
+<h4 id="object-tags"><a class="header" href="#object-tags">Object tags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Column</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td>1</td><td>Number of child objects, where the restart data should contain a single restart object</td></tr>
+
+<tr><td>2</td><td>1</td><td>Unknown (Constant value)</td></tr>
+
+</table>
+</div>
+
+<h4 id="attribute-tags-2"><a class="header" href="#attribute-tags-2">Attribute tags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>p</td><td>Integer 32-bit</td><td><a href="#attribute_tag_proprerties">Properties</a>, which contains flags, see next paragraph, defaults to 0 if not set</td></tr>
+
+<tr><td>d</td><td>Timestamp</td><td>Start date and time, which contains the date and time the acquisition process was (re-)started</td></tr>
+
+<tr><td>sr</td><td>Integer 64-bit</td><td>First sector acquired in the acquisition process</td></tr>
+
+<tr><td>sp</td><td>Integer 64-bit</td><td>Last sector acquired in the acquisition process</td></tr>
+
+</table>
+</div>
+
+<h4 id="attribute_tag_proprerties"><a class="header" href="#attribute_tag_proprerties">Properties</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x01</td><td>STATEFOLDER</td><td>Item is a folder/container</td></tr>
+
+<tr><td>0x02</td><td>STATESELECTED</td><td>Item is selected (highlighted in blue)</td></tr>
+
+<tr><td>0x04</td><td>STATEEXPANDED</td><td>Item is expanded</td></tr>
+
+<tr><td>0x08</td><td>STATEINCLUDE</td><td>Item is included (green-plated)</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note hat according to Guidance Software this value is used to store saved stated. In this context
+the value should always set to 0 but can contain other values in different contexts. EnCase can
+choose to ignore these values.</p>
+</blockquote>
+<h3 id="encryption-keys"><a class="header" href="#encryption-keys">Encryption keys</a></h3>
+<p>In EWF2 the data and some of the metadata can be encrypted, the encrypted keys section contains
+information necessary for decrypting the data.</p>
+<p>The encryption keys section is optional, it does not need to be present. If it does it resides in
+the last segment file before the done section.</p>
+<p>TODO: determine if the encryption keys are stored after or before the restart data.</p>
+<p>The encryption keys is variable of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Size, which includes the size of the padding</td></tr>
+
+<tr><td>4</td><td>4</td><td></td><td>Unknown (Checksum?)</td></tr>
+
+<tr><td>8</td><td>8</td><td>2</td><td>Unknown (Algorithm ID?), where 2 represents AES-256</td></tr>
+
+<tr><td>16</td><td>...</td><td></td><td>Unknown (Encrypted data?)</td></tr>
+
+</table>
+</div>
+
+<p>The encryption keys should be followed by 12 bytes of alignment padding.</p>
+<p>“EnCase Evidence File Format Version 2” refers to a separate “document outlining the encryption
+support for Ex01 for further detail”. This document was never made public and after inquiring with
+Guidance Software, they indicated that they were not disclosing information about Ex01 encryption.</p>
+<h3 id="memory-extents-table"><a class="header" href="#memory-extents-table">Memory extents table</a></h3>
+<p>The memory extents table is stored as an array of memory extents table entries. It defines the
+extents of memory stored in the set of segment files.</p>
+<p>TODO: determine the location in segment files, and if this section is affected by encryption.</p>
+<p>TODO: determine if this table also comes with a table header and footer.</p>
+<h4 id="memory-extents-table-entry"><a class="header" href="#memory-extents-table-entry">Memory extents table entry</a></h4>
+<p>A memory extents table entry is 16 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Start page</td></tr>
+
+<tr><td>8</td><td>8</td><td></td><td>Number of pages</td></tr>
+
+</table>
+</div>
+
+<h3 id="next"><a class="header" href="#next">Next</a></h3>
+<p>The next section is without data and marks the end of the segment file indicating more segment
+files are in the set. It should be the last section in a segment file, other than the last segment
+file.</p>
+<h3 id="final-information"><a class="header" href="#final-information">Final information</a></h3>
+<blockquote>
+<p>Note that “EnCase Evidence File Format Version 2” defines this section as currently unused.</p>
+</blockquote>
+<h3 id="done"><a class="header" href="#done">Done</a></h3>
+<p>The done section is without data and marks the end of the segment file indicating this is the last
+segment file in the set. It should be the last section in the last segment file.</p>
+<h3 id="analytical-data"><a class="header" href="#analytical-data">Analytical data</a></h3>
+<p>The analytical data section is optional, it does not need to be present. If it does it resides in
+the last segment file before the restart data section.</p>
+<p>When encryption is enabled the analytical data is encrypted.</p>
+<p>The analytical data section contains a serialized object string that consist of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Line</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td>1</td><td>Number of objects</td></tr>
+
+<tr><td>2</td><td>"main"</td><td>Object name</td></tr>
+
+<tr><td>3</td><td></td><td>Attribute tags</td></tr>
+
+<tr><td>4</td><td></td><td>Attribute values</td></tr>
+
+<tr><td>5</td><td></td><td>Empty line</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that “EnCase Evidence File Format Version 2” does not define the format of this section in
+detail.</p>
+</blockquote>
+<h4 id="attribute-tags-3"><a class="header" href="#attribute-tags-3">Attribute tags</a></h4>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Type</th><th>Description</th></thead>
+<tr><td>tps</td><td>Integer 64-bit</td><td>The (total) number of bytes not written for use of pattern fill</td></tr>
+
+</table>
+</div>
+
+<h3 id="single-files-data"><a class="header" href="#single-files-data">Single files data</a></h3>
+<p>The single files data section is only present in EWF2-Lx01.</p>
+<p>The single files data section can be found in the last segment file after the last sector table
+section.</p>
+<p>TODO: determine how the single files data section behaves in non-closed LEF files.</p>
+<p>This section has the section integrity hash set.</p>
+<p>The single files data section contains a non-compressed serialized object data which is similar to
+the EnCase 7 <a href="#ltree_data">ltree data</a> in EWF-L01.</p>
+<h3 id="0x00000021-table"><a class="header" href="#0x00000021-table">0x00000021 table</a></h3>
+<p>The 0x00000021 table consists of:</p>
+<ul>
+<li>the 0x00000021 table header</li>
+<li>an array of 0x00000021 table entries</li>
+<li>the 0x00000021 table footer</li>
+</ul>
+<h4 id="0x00000021-table-header"><a class="header" href="#0x00000021-table-header">0x00000021 table header</a></h4>
+<p>The 0x00000021 table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>4</td><td>12</td><td></td><td>Unknown (Empty value)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the 0x00000021 table header</td></tr>
+
+</table>
+</div>
+
+<p>The 0x00000021 table header should be followed by 12 bytes of alignment padding.</p>
+<h4 id="0x00000021-table-entry"><a class="header" href="#0x00000021-table-entry">0x00000021 table entry</a></h4>
+<p>An 0x00000021 table entry is 8 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Unknown (Start offset in the data?)</td></tr>
+
+</table>
+</div>
+
+<h4 id="0x00000021-table-footer"><a class="header" href="#0x00000021-table-footer">0x00000021 table footer</a></h4>
+<p>The 0x00000021 table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the array of 0x00000021 table entries</td></tr>
+
+</table>
+</div>
+
+<p>The 0x00000021 table footer should be followed by 12 bytes of alignment padding.</p>
+<h3 id="single-files-md5-hash-table"><a class="header" href="#single-files-md5-hash-table">Single files MD5 hash table</a></h3>
+<p>The single files MD5 hash table consists of:</p>
+<ul>
+<li>the single files MD5 hash table header</li>
+<li>an array of single files MD5 hash table entries</li>
+<li>the single files MD5 hash table footer</li>
+</ul>
+<h4 id="single-files-md5-hash-table-header"><a class="header" href="#single-files-md5-hash-table-header">single files MD5 hash table header</a></h4>
+<p>The 0x00000021 table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>4</td><td>12</td><td></td><td>Unknown (Empty value)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the single files MD5 hash table header</td></tr>
+
+</table>
+</div>
+
+<p>The single files MD5 hash table header should be followed by 12 bytes of alignment padding.</p>
+<h4 id="single-files-md5-hash-table-entry"><a class="header" href="#single-files-md5-hash-table-entry">single files MD5 hash table entry</a></h4>
+<p>A single files MD5 hash table entry is 8 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>16</td><td></td><td>MD5 hash</td></tr>
+
+</table>
+</div>
+
+<h4 id="single-files-md5-hash-table-footer"><a class="header" href="#single-files-md5-hash-table-footer">single files MD5 hash table footer</a></h4>
+<p>The single files MD5 hash table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the array of single files MD5 hash table entries</td></tr>
+
+</table>
+</div>
+
+<p>The single files MD5 hash table footer should be followed by 12 bytes of alignment padding.</p>
+<h3 id="0x00000023-table"><a class="header" href="#0x00000023-table">0x00000023 table</a></h3>
+<p>The 0x00000023 table consists of:</p>
+<ul>
+<li>the 0x00000023 table header</li>
+<li>an array of 0x00000023 table entries</li>
+<li>the 0x00000023 table footer</li>
+</ul>
+<h4 id="0x00000023-table-header"><a class="header" href="#0x00000023-table-header">0x00000023 table header</a></h4>
+<p>The 0x00000023 table header is 20 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Number of entries</td></tr>
+
+<tr><td>4</td><td>12</td><td></td><td>Unknown (Empty value)</td></tr>
+
+<tr><td>16</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the 0x00000023 table header</td></tr>
+
+</table>
+</div>
+
+<p>The 0x00000023 table header should be followed by 12 bytes of alignment padding.</p>
+<h4 id="0x00000023-table-entry"><a class="header" href="#0x00000023-table-entry">0x00000023 table entry</a></h4>
+<p>An 0x00000023 table entry is 8 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>8</td><td></td><td>Unknown (Start offset in the data?)</td></tr>
+
+</table>
+</div>
+
+<h4 id="0x00000023-table-footer"><a class="header" href="#0x00000023-table-footer">0x00000023 table footer</a></h4>
+<p>The 0x00000023 table footer is 4 bytes of size and consists of:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
+<tr><td>0</td><td>4</td><td></td><td>Checksum, which is an Adler-32 of all the previous data within the array of 0x00000023 table entries</td></tr>
+
+</table>
+</div>
+
+<p>The 0x00000023 table footer should be followed by 12 bytes of alignment padding.</p>
+<blockquote>
+<p>Note that if the number of table entries is odd the alignment padding is only 4 bytes.</p>
+</blockquote>
+<h2 id="serialized-file-object-data"><a class="header" href="#serialized-file-object-data">Serialized (file) object data</a></h2>
+<p>The serialized object data is stored as a compressed UTF-16 string with byte-order-mark. Commonly
+the string is encoded in little-endian. The compression method is defined in the file header of the
+segment file.</p>
+<p>The serialized object data consists of:</p>
+<ul>
+<li>the first line containing the number of objects in the string</li>
+<li>the object data</li>
+</ul>
+<p>The object serialization format uses the following special character values:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Value</th><th>Identifier</th><th>Description</th></thead>
+<tr><td>0x0001</td><td></td><td>Escaped line feed</td></tr>
+
+<tr><td>0x0002</td><td></td><td>Escaped carriage return</td></tr>
+
+<tr><td>0x0003</td><td></td><td>Escaped tab</td></tr>
+
+<tr><td></td><td></td><td></td></tr>
+
+<tr><td>0x0009</td><td></td><td>Value delimiter</td></tr>
+
+<tr><td>0x000a</td><td></td><td>Line delimiter</td></tr>
+
+</table>
+</div>
+
+<blockquote>
+<p>Note that “EnCase Evidence File Format Version 2” states line feed (0x000d) as line delimiter
+this should be line feed (0x000a).</p>
+</blockquote>
+<h3 id="object"><a class="header" href="#object">Object</a></h3>
+<p>An object consists of multiple lines:</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Line</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>Object name</td></tr>
+
+<tr><td>2</td><td></td><td>Attribute tags</td></tr>
+
+</table>
+</div>
+
+<h3 id="data-types"><a class="header" href="#data-types">Data types</a></h3>
+<div class="table-wrapper">
+<table>
+<thead><th>Identifier</th><th>Type</th><th>Description</th></thead>
+<tr><td></td><td>Boolean</td><td>Boolean defined as: false =&gt; (empty) or true =&gt; a single character containing "1"</td></tr>
+
+<tr><td></td><td>Enumeration</td><td>Single character that represent a value in an enumeration</td></tr>
+
+<tr><td></td><td>Array of Integer 64-bit</td><td>A space separated list of 64-bit unsigned integers</td></tr>
+
+<tr><td></td><td>Integer 32-bit</td><td>Decimal representation of a 32-bit unsigned integer</td></tr>
+
+<tr><td></td><td>Integer 64-bit</td><td>Decimal representation of a 64-bit unsigned integer</td></tr>
+
+<tr><td></td><td>Object</td><td>Sub (or child) object</td></tr>
+
+<tr><td></td><td>Text</td><td>Text, where EnCase appearst to limit the string to 3000 characters</td></tr>
+
+<tr><td></td><td>Timestamp</td><td>Decimal representation of a 32-bit unsigned integer containing the number of seconds since Jan 1, 1970 00:00:00 UTC</td></tr>
+
+</table>
+</div>
+
+<h3 id="sub-objects"><a class="header" href="#sub-objects">Sub objects</a></h3>
+<p>Sub object are represented using the following value pairs.</p>
+<div class="table-wrapper">
+<table>
+<thead><th>Column</th><th>Value</th><th>Description</th></thead>
+<tr><td>1</td><td></td><td>Object type (Save Code), which according to Guidance Software this value should be 0 (NodeClass) for most use cases</td></tr>
+
+<tr><td>2</td><td></td><td>Number of child objects</td></tr>
+
+</table>
+</div>
+
+<p>So if there are 3 objects, all 3 have the attribute tags x, y and z:</p>
+<ul>
+<li>A: which has 2 sub objects B and C</li>
+<li>B: which has no children</li>
+<li>C: which has no children</li>
+</ul>
+<p>This is serialized as:</p>
+<pre><code class="language-text">x	y	z
+0       2
+A	A	A
+0       0
+B	B	B
+0       0
+C	C	C
+</code></pre>
+<p>For sake of the example the attribute values have been marked with the identifier of the object.</p>
+<h2 id="encryption"><a class="header" href="#encryption">Encryption</a></h2>
+<p>TODO: complete this section.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="mac-os-encrypted-encoding"><a class="header" href="#mac-os-encrypted-encoding">Mac OS Encrypted Encoding</a></h1>
 <p>Mac OS uses encrypted encoding (CEncryptedEncoding) to encrypt various formats, such as:</p>
@@ -3128,7 +4157,7 @@ passphrase or a certificate.</p>
 <li><a href="#mac-os-sparse-image-sparseimage-format">Mac OS sparse image</a></li>
 <li><a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a></li>
 </ul>
-<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>There are 2 known versions of Encrypted Encoding.</p>
 <h3 id="encrypted-encoding-version-1"><a class="header" href="#encrypted-encoding-version-1">Encrypted Encoding version 1</a></h3>
 <p>A version 1 encrypted container consist of:</p>
@@ -3804,7 +4833,7 @@ vector if applicable.</li>
 by Mac OS.</p>
 <p>Mac OS refers to the sparse image format as CSparseBundleDiskImage and was introduced in Mac OS X
 Leopard (10.5).</p>
-<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
+<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
 <p>A sparse bundle consists of a directory (bundle) with the .sparsbundle suffix containing:</p>
 <ul>
 <li>“Info.bckup” file</li>
@@ -3881,7 +4910,7 @@ the 16th, etc.</p>
 <p>The Mac OS sparse image (.sparseimage) format is one of the disk image formats supported natively
 by Mac OS.</p>
 <p>Mac OS refers to the sparse image format as CSparseDiskImage.</p>
-<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
+<h2 id="overview-4"><a class="header" href="#overview-4">Overview</a></h2>
 <p>Sparse images can be encrypted. An encrypted sparse image uses a
 <a href="#mac-os-encrypted-encoding">Encrypted Encoding container</a>.</p>
 <h3 id="characteristics-2"><a class="header" href="#characteristics-2">Characteristics</a></h3>
@@ -3984,7 +5013,7 @@ offset 4096 and the corresponding media offset is: <code>3 * sectors_per_band * 
 <h1 id="parallels-disk-image-pdi-format"><a class="header" href="#parallels-disk-image-pdi-format">Parallels Disk Image (PDI) format</a></h1>
 <p>The Parallels Disk Image format used in Parallels virtualization products as one of its image
 formats. It is both used the store hard disk images and snapshots.</p>
-<h2 id="overview-4"><a class="header" href="#overview-4">Overview</a></h2>
+<h2 id="overview-5"><a class="header" href="#overview-5">Overview</a></h2>
 <p>A Parallels Disk Image consists of a directory, typically named “{NAME}.hdd” containing:</p>
 <ul>
 <li>Descriptor file (DiskDescriptor.xml) and backup (DiskDescriptor.xml.Backup)</li>
@@ -4111,7 +5140,7 @@ values.</p>
 </table>
 </div>
 
-<h4 id="encryption"><a class="header" href="#encryption">Encryption</a></h4>
+<h4 id="encryption-1"><a class="header" href="#encryption-1">Encryption</a></h4>
 <pre><code class="language-xml">&lt;Encryption&gt;
     &lt;Engine&gt;{00000000-0000-0000-0000-000000000000}&lt;/Engine&gt;
     &lt;Data&gt;&lt;/Data&gt;
@@ -4264,7 +5293,7 @@ of 0x800 the corresponding data block is stored at file offset 0x100000 (0x800 x
 <h1 id="qemu-copy-on-write-qcow-image-file-format"><a class="header" href="#qemu-copy-on-write-qcow-image-file-format">QEMU Copy-On-Write (QCOW) image file format</a></h1>
 <p>The QEMU Copy-On-Write (QCOW) image file format is used by the QEMU Open Source Process Emulator to
 store disk images (storage media)</p>
-<h2 id="overview-5"><a class="header" href="#overview-5">Overview</a></h2>
+<h2 id="overview-6"><a class="header" href="#overview-6">Overview</a></h2>
 <p>A QCOW image file consists of:</p>
 <ul>
 <li>the file header
@@ -4306,7 +5335,7 @@ extended version of QCOW2.</p>
 <p>Note that this document assumes that character strings are stored in UTF-8.</p>
 </blockquote>
 <p>The number of bytes per sector is 512.</p>
-<h3 id="encryption-1"><a class="header" href="#encryption-1">Encryption</a></h3>
+<h3 id="encryption-2"><a class="header" href="#encryption-2">Encryption</a></h3>
 <p>The QCOW image format can encrypted the media data stored in the image format. Currently supported
 encryption methods are:</p>
 <ul>
@@ -4830,7 +5859,7 @@ by Mark McLoughlin</li>
 by Mac OS. UDIF supersedes the New Disk Image Format (NDIF) format and was introduced in Max OS
 X 10.0 (Cheetah).</p>
 <p>Mac OS refers to the UDIF image format as CUDIFEncoding.</p>
-<h2 id="overview-6"><a class="header" href="#overview-6">Overview</a></h2>
+<h2 id="overview-7"><a class="header" href="#overview-7">Overview</a></h2>
 <p>An UDIF image can consists of one or more segment files, where:</p>
 <ul>
 <li>the first segment file is named: “image.dmg”</li>
@@ -5410,7 +6439,7 @@ contain multiple images.</p>
 <h1 id="virtual-hard-disk-vhd-image-format"><a class="header" href="#virtual-hard-disk-vhd-image-format">Virtual Hard Disk (VHD) image format</a></h1>
 <p>The Virtual Hard Disk (VHD) format is used by Microsoft visualization products as one of its image
 formats. It is both used the store hard disk images and snapshots.</p>
-<h2 id="overview-7"><a class="header" href="#overview-7">Overview</a></h2>
+<h2 id="overview-8"><a class="header" href="#overview-8">Overview</a></h2>
 <p>There are multiple types of VHD images, namely:</p>
 <ul>
 <li>Fixed-size VHD image</li>
@@ -5703,7 +6732,7 @@ sparse (bit set to 0).</p>
 <h1 id="virtual-hard-disk-version-2-vhdx-image-format"><a class="header" href="#virtual-hard-disk-version-2-vhdx-image-format">Virtual Hard Disk version 2 (VHDX) image format</a></h1>
 <p>The Virtual Hard Disk version 2 (VHDX) format is used by Microsoft visualization products as one of
 its image formats. It is both used the store hard disk images and snapshots.</p>
-<h2 id="overview-8"><a class="header" href="#overview-8">Overview</a></h2>
+<h2 id="overview-9"><a class="header" href="#overview-9">Overview</a></h2>
 <p>A VHDX image file consist of:</p>
 <ul>
 <li>file header</li>
@@ -6140,7 +7169,7 @@ by Microsoft</li>
 <h1 id="vmware-virtual-disk-vmdk-format"><a class="header" href="#vmware-virtual-disk-vmdk-format">VMware Virtual Disk (VMDK) format</a></h1>
 <p>The VMware Virtual Disk (VMDK) format is used by VMware virtualization products as one of its image
 format.</p>
-<h2 id="overview-9"><a class="header" href="#overview-9">Overview</a></h2>
+<h2 id="overview-10"><a class="header" href="#overview-10">Overview</a></h2>
 <p>A VMDK disk image can consist of multiple files, such as:</p>
 <ul>
 <li>descriptor file</li>
@@ -7054,7 +8083,7 @@ contains other volumes, e.g.</p>
 <h1 id="apple-partition-map-apm-format"><a class="header" href="#apple-partition-map-apm-format">Apple Partition Map (APM) format</a></h1>
 <p>The Apple Partition Map (APM) format is used on Motorola based Macintosh computers. On Intel based
 Macintosh computers the <a href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a> is used.</p>
-<h2 id="overview-10"><a class="header" href="#overview-10">Overview</a></h2>
+<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
 <p>An Apple Partition Map (APM) consists of:</p>
 <ul>
 <li>a drive descriptor</li>
@@ -7294,7 +8323,7 @@ therefore the first entry in the partition map describes the partition map itsel
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="bitlocker-drive-encryption-bde-format"><a class="header" href="#bitlocker-drive-encryption-bde-format">BitLocker Drive Encryption (BDE) format</a></h1>
 <p>The BitLocker Drive Encryption (BDE) format is used by Microsoft Windows to encrypt volumes.</p>
-<h2 id="overview-11"><a class="header" href="#overview-11">Overview</a></h2>
+<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
 <p>There are multiple versions of BitLocker Drive Encryption (BDE):</p>
 <ul>
 <li>BitLocker Version 1.0 (in Windows Vista) or Version 2.0 (in Windows 7 and later); used to encrypt
@@ -8693,7 +9722,7 @@ by N. Ferguson</li>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="bsd-disklabel-format"><a class="header" href="#bsd-disklabel-format">BSD disklabel format</a></h1>
 <p>The BSD disklabel format is a partitioning schema mainly used by BSD operating systems.</p>
-<h2 id="overview-12"><a class="header" href="#overview-12">Overview</a></h2>
+<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
 <p>A BSD disklabel consists of one or more partition entries, labeled alphabetically from “a” to “h”
 (or “p” in some BSD variants).</p>
 <blockquote>
@@ -8920,7 +9949,7 @@ the number of partitions in use.</p>
 <h1 id="guid-partition-table-gpt-format"><a class="header" href="#guid-partition-table-gpt-format">GUID Partition Table (GPT) format</a></h1>
 <p>The GUID Partition Table (GPT) is a partitioning schema that is the successor to the
 <a href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) Partition Table</a> for Intel x86 based computers.</p>
-<h2 id="overview-13"><a class="header" href="#overview-13">Overview</a></h2>
+<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
 <p>A GUID Partition Table (GPT) consists of:</p>
 <ul>
 <li>A protective or hybrid Master Boot Record (MBR) stored in block (LBA) 0</li>
@@ -9402,7 +10431,7 @@ checksum value is considered to be 0 during calculation.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linux-logical-volume-manager-lvm-format"><a class="header" href="#linux-logical-volume-manager-lvm-format">Linux Logical Volume Manager (LVM) format</a></h1>
 <p>The Linux Logical Volume Manager (LVM) format is used by the Logical Volume Manager (LVM) on Linux.</p>
-<h2 id="overview-14"><a class="header" href="#overview-14">Overview</a></h2>
+<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
 <p>A Linux LVM consist of:</p>
 <ul>
 <li>Volume group</li>
@@ -9980,7 +11009,7 @@ area.</li>
 <h1 id="linux-unified-key-setup-luks-disk-encryption-format"><a class="header" href="#linux-unified-key-setup-luks-disk-encryption-format">Linux Unified Key Setup (LUKS) Disk Encryption format</a></h1>
 <p>Linux Unified Key Setup (LUKS) Disk Encryption is commonly used by Linux to encrypt storage media
 volumes.</p>
-<h2 id="overview-15"><a class="header" href="#overview-15">Overview</a></h2>
+<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
 <p>There are 2 versions of the Linux Unified Key Setup (LUKS) Disk Encryption format, each with a
 separate layout.</p>
 <h3 id="characteristics-14"><a class="header" href="#characteristics-14">Characteristics</a></h3>
@@ -10636,7 +11665,7 @@ by Milan Broz</li>
 <h1 id="master-boot-record-mbr-partition-table-format"><a class="header" href="#master-boot-record-mbr-partition-table-format">Master Boot Record (MBR) partition table format</a></h1>
 <p>The Master Boot Record (MBR) partition table is mainly used on the family of Intel x86 based
 computers.</p>
-<h2 id="overview-16"><a class="header" href="#overview-16">Overview</a></h2>
+<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
 <p>A MBR partition table consists of:</p>
 <ul>
 <li>Master Boot Record (MBR)</li>
@@ -11114,7 +12143,7 @@ start of the <strong>first</strong> extended partition record.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="sgi-silicon-graphics-disklabel-format"><a class="header" href="#sgi-silicon-graphics-disklabel-format">SGI (Silicon Graphics) disklabel format</a></h1>
 <p>The SGI disklabel format is a partitioning schema mainly used by the SGI Irix operating system.</p>
-<h2 id="overview-17"><a class="header" href="#overview-17">Overview</a></h2>
+<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
 <p>A SGI disklabel consists of one or more partition entries.</p>
 <p>Certain partitions have a predefined meaning, such as:</p>
 <ul>
@@ -11287,7 +12316,7 @@ volumes, taken at the same time.</p>
 focuses on the “Microsoft Software Shadow Copy provider 1.0” (b5946137-7b9f-4925-af80-51abd60b20d5)
 which relies on volsnap.sys.</p>
 <p>The volsnap driver manages the metadata and copies of 16 KiB blocks of volume data.</p>
-<h2 id="overview-18"><a class="header" href="#overview-18">Overview</a></h2>
+<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
 <p>A volsnap backing volume consists of:</p>
 <ul>
 <li><a href="#backing_volume_header">Backing volume header</a></li>
@@ -11889,7 +12918,7 @@ sectors. Can be compressed, encrypted or sparse.</li>
 System Compression (decmpfs) to compress file contents.</p>
 <p>decmpfs is sometimes referred to as AFSC (Apple File System Compression) or HFS/HFS+ compression
 and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
-<h2 id="overview-19"><a class="header" href="#overview-19">Overview</a></h2>
+<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
 <p>An Apple File System Compression (decmpfs) compressed file consists of:</p>
 <ul>
 <li>an extended attribute named “com.apple.decmpfs”</li>
@@ -11917,7 +12946,7 @@ and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
 <thead><th>Offset</th><th>Size</th><th>Value</th><th>Description</th></thead>
 <tr><td>0</td><td>4</td><td>"fpmc"</td><td>Signature</td></tr>
 
-<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods">Compression method</a></td></tr>
+<tr><td>4</td><td>4</td><td></td><td><a href="#compression_methods-1">Compression method</a></td></tr>
 
 <tr><td>8</td><td>8</td><td></td><td>Uncompressed data size</td></tr>
 
@@ -11927,7 +12956,7 @@ and was introduced in Mac OS X 10.6 (Snow Leopard).</p>
 <blockquote>
 <p>Note that the signature is likely stored in little-endian and represents “cmpf”.</p>
 </blockquote>
-<h4 id="compression_methods"><a class="header" href="#compression_methods">Compression methods</a></h4>
+<h4 id="compression_methods-1"><a class="header" href="#compression_methods-1">Compression methods</a></h4>
 <!-- rumdl-disable MD033 MD056 -->
 <div class="table-wrapper">
 <table>
@@ -11992,7 +13021,7 @@ indicates faulting files are deprecated since Mac OS X Yosemite (10.10).</p>
 <li>compressed data stored in resource fork</li>
 </ul>
 <h3 id="sparse-data"><a class="header" href="#sparse-data">Sparse data</a></h3>
-<p><a href="#compression_methods">Compression method</a> 5 has been observed to be used for sparse data,
+<p><a href="#compression_methods-1">Compression method</a> 5 has been observed to be used for sparse data,
 the file content data contains 0-byte values.</p>
 <p>There are 12 bytes stored after the decmpfs compressed data header that consists of:</p>
 <div class="table-wrapper">
@@ -12008,11 +13037,11 @@ the file content data contains 0-byte values.</p>
 </div>
 
 <h3 id="compressed-data-stored-in-extended-attribute"><a class="header" href="#compressed-data-stored-in-extended-attribute">Compressed data stored in extended attribute</a></h3>
-<p><a href="#compression_methods">Compression method</a> 3, 5, 7, 9 and 11 store the compressed file
+<p><a href="#compression_methods-1">Compression method</a> 3, 5, 7, 9 and 11 store the compressed file
 content data in the extended attribute after the decmpfs compressed data header.</p>
 <p>The compressed data consist of 1 compressed data block.</p>
 <h3 id="compressed-data-stored-in-resource-fork"><a class="header" href="#compressed-data-stored-in-resource-fork">Compressed data stored in resource fork</a></h3>
-<p><a href="#compression_methods">Compression method</a> 4, 8, 10 and 12 store the compressed file
+<p><a href="#compression_methods-1">Compression method</a> 4, 8, 10 and 12 store the compressed file
 content data in the resource fork of the file.</p>
 <p>The compressed data starts with metadata that contains the offsets of the compressed data blocks.</p>
 <h2 id="lzfse-compressed-data"><a class="header" href="#lzfse-compressed-data">LZFSE compressed data</a></h2>
@@ -12168,7 +13197,7 @@ otherwise the block should start with 0x78.</p>
 </table>
 </div>
 
-<h2 id="overview-20"><a class="header" href="#overview-20">Overview</a></h2>
+<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
 <p>An Extended File System (ext) consists of:</p>
 <ul>
 <li>one or more block groups</li>
@@ -13834,7 +14863,7 @@ kernel documentation</li>
 <h1 id="extensible-file-allocation-table-exfat-file-system-format"><a class="header" href="#extensible-file-allocation-table-exfat-file-system-format">Extensible File Allocation Table (exFAT) file system format</a></h1>
 <p>The Extensible File Allocation Table (exFAT) file system format is a successor of the
 <a href="#file-allocation-table-fat-file-system-format">File Allocation Table (FAT)</a> file system format.</p>
-<h2 id="overview-21"><a class="header" href="#overview-21">Overview</a></h2>
+<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
 <p>An exFAT file system consists of:</p>
 <ul>
 <li>Main boot region (11 sectors)
@@ -14359,7 +15388,7 @@ and Windows.</p>
 <li>FAT-32</li>
 <li><a href="#extensible-file-allocation-table-exfat-file-system-format">exFAT</a></li>
 </ul>
-<h2 id="overview-22"><a class="header" href="#overview-22">Overview</a></h2>
+<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
 <p>A FAT file system consists of:</p>
 <ul>
 <li>One or more reserved sectors
@@ -15024,7 +16053,7 @@ OS 10.0 or later.</p>
 HFS+. One such feature is case-sensitive file names. A HFSX volume may be either case-sensitive or
 case-insensitive. Case sensitivity (or lack thereof) applies to all file and directory names on the
 volume.</p>
-<h2 id="overview-23"><a class="header" href="#overview-23">Overview</a></h2>
+<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Feature</th><th>HFS</th><th>HFS+ and HFSX</th></thead>
@@ -17295,7 +18324,7 @@ by Apple Inc.</li>
 <h1 id="macintosh-file-system-mfs"><a class="header" href="#macintosh-file-system-mfs">Macintosh File System (MFS)</a></h1>
 <p>The Macintosh File System (MFS) is the first file system created for Mac OS, intended for 400 KiB
 floppy disks.</p>
-<h2 id="overview-24"><a class="header" href="#overview-24">Overview</a></h2>
+<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
 <p>A MFS file system consists of:</p>
 <ul>
 <li>optional <a href="#boot_block">boot block</a></li>
@@ -17553,7 +18582,7 @@ multiple blocks</li>
 <h1 id="new-technologies-file-system-ntfs-format"><a class="header" href="#new-technologies-file-system-ntfs-format">New Technologies File System (NTFS) format</a></h1>
 <p>The New Technologies File System (NTFS) format is the primary file system for Microsoft Windows
 versions that are based on Windows NT.</p>
-<h2 id="overview-25"><a class="header" href="#overview-25">Overview</a></h2>
+<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
 <p>An New Technologies File System (NTFS) consists of:</p>
 <ul>
 <li>boot record</li>
@@ -20259,7 +21288,7 @@ by Microsoft</li>
 <p>The X File System (XFS) is a file system that originates from SGI but is used in various Linux
 distributions like RHEL. Some sources indicate that X was a a placeholder for a name that never
 given.</p>
-<h2 id="overview-26"><a class="header" href="#overview-26">Overview</a></h2>
+<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
 <div class="table-wrapper">
 <table>
 <thead><th>Characteristics</th><th>Description</th></thead>
@@ -22269,7 +23298,7 @@ blocks.</p>
 <p>The Apple File System (APFS) is a volume and file system mainly used on platforms such as Mac OS and
 iOS. APFS supersedes the <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and was introduced in macOS High
 Sierra (10.13) and iOS 10.3.</p>
-<h2 id="overview-27"><a class="header" href="#overview-27">Overview</a></h2>
+<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
 <p>APFS consists of:</p>
 <ul>
 <li>A container
@@ -25249,7 +26278,7 @@ distribution.</p>
 <h1 id="copy-in-and-out-cpio-archive-format"><a class="header" href="#copy-in-and-out-cpio-archive-format">Copy in and out (CPIO) archive format</a></h1>
 <p>The copy in and out (CPIO) archive format is an archive format that predates TAR but is still being
 used e.g. in initramfs or rpm.</p>
-<h2 id="overview-28"><a class="header" href="#overview-28">Overview</a></h2>
+<h2 id="overview-29"><a class="header" href="#overview-29">Overview</a></h2>
 <p>There are multiple variants of the CPIO format:</p>
 <ul>
 <li>binary CPIO format</li>
@@ -25449,7 +26478,7 @@ Both support file systems having more than 65536 inodes.</p>
 <h1 id="apple-data-compression-adc-data-format"><a class="header" href="#apple-data-compression-adc-data-format">Apple Data Compression (ADC) data format</a></h1>
 <p>ADC compression is used in various data formats used on Mac OS, including
 <a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg).</p>
-<h2 id="overview-29"><a class="header" href="#overview-29">Overview</a></h2>
+<h2 id="overview-30"><a class="header" href="#overview-30">Overview</a></h2>
 <p>ADC compressed data consist of:</p>
 <ul>
 <li>one or more <a href="#adc_chunk">chunks</a></li>
@@ -25503,7 +26532,7 @@ Both support file systems having more than 65536 inodes.</p>
 <a href="#universal-disk-image-format-udif">Universal Disk Image Format (UDIF)</a> files (.dmg) and
 <a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
 <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
-<h2 id="overview-30"><a class="header" href="#overview-30">Overview</a></h2>
+<h2 id="overview-31"><a class="header" href="#overview-31">Overview</a></h2>
 <p>LZFSE compressed data stream consist of:</p>
 <ul>
 <li>one or more <a href="#lzfse_block">blocks</a></li>
@@ -25758,7 +26787,7 @@ lzfse_freq_value_table[32] = {
 <p>LZVN compression is used in various data formats used on Mac OS, including
 <a href="#apple-file-system-compression-decmpfs">Apple File System Compression (decmpfs)</a>, which is used in
 <a href="#hierarchical-file-system-hfs-format">Hierarchical File System (HFS)</a> and <a href="#apple-file-system-apfs">Apple File System (APFS)</a>.</p>
-<h2 id="overview-31"><a class="header" href="#overview-31">Overview</a></h2>
+<h2 id="overview-32"><a class="header" href="#overview-32">Overview</a></h2>
 <p>LZVN compressed data consist of:</p>
 <ul>
 <li>a stream of <a href="#lzvn_opcodes">opcodes</a></li>
@@ -25806,7 +26835,7 @@ lzfse_freq_value_table[32] = {
 <p>The property list (plist) formats are used to store various kinds of data, for example
 configuration data. The format is know to be used stand-alone as well as embedded in other data
 formats.</p>
-<h2 id="overview-32"><a class="header" href="#overview-32">Overview</a></h2>
+<h2 id="overview-33"><a class="header" href="#overview-33">Overview</a></h2>
 <p>Known plist formats are:</p>
 <ul>
 <li>ASCII plist format</li>
@@ -26025,7 +27054,7 @@ of 1 will refer to the first object in the (object) offset table.</p>
 <p>Zlib compression is commonly used in file formats. The zlib compressed data format, as defined in
 RFC1950, allows for multiple techniques but only the Deflate compression method, a variation of
 LZ77, is used.</p>
-<h2 id="overview-33"><a class="header" href="#overview-33">Overview</a></h2>
+<h2 id="overview-34"><a class="header" href="#overview-34">Overview</a></h2>
 <p>Zlib compressed data consist of:</p>
 <ul>
 <li>data header</li>
@@ -26166,7 +27195,7 @@ of:</p>
 </table>
 </div>
 
-<h4 id="uncompressed-block-data"><a class="header" href="#uncompressed-block-data">Uncompressed block data</a></h4>
+<h4 id="deflate_uncompressed_block_data"><a class="header" href="#deflate_uncompressed_block_data">Uncompressed block data</a></h4>
 <p>The uncompressed block data is of variable size and consists of:</p>
 <div class="table-wrapper">
 <table>

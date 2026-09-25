@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0af5c294.js";
+            window.path_to_searchindex_js = "searchindex-9556b59e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6538e4b1.js"></script>
@@ -804,7 +804,7 @@ compression.</p>
 <ul>
 <li>The header section is defined only once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values“</p>
@@ -838,7 +838,7 @@ compression.</p>
 <ul>
 <li>The header section is defined once.</li>
 <li>It is the first section of the first segment file. It is not found in subsequent segment files.</li>
-<li>The header data is always processed by zlib, however the same compression level is used as for
+<li>The header data always is zlib compressed data, however the same compression level is used as for
 the chunks. This could mean compression level 0 which is no compression.</li>
 </ul>
 <blockquote>
@@ -851,7 +851,7 @@ could be something FTK Imager specific.</p>
 <li>The same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -890,7 +890,7 @@ segment files.</li>
 <li>The header is defined only once.</li>
 <li>It resides after the header2 sections of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a carriage return (0x0d) followed by a newline (0x0a).</li>
 </ul>
 <p>The 3rd and the 4th line consist of the following tab (0x09) separated values:</p>
@@ -927,7 +927,7 @@ segment files.</li>
 <li>The same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib.</li>
+<li>The header data is zlib compressed data.</li>
 <li>The end of line character(s) is a newline (0x0a).</li>
 </ul>
 <p>The header information consist of 18 lines</p>
@@ -1125,7 +1125,7 @@ local time. Where as before both values were in local time.</p>
 <li>In FTK Imager (EWF-E01) the same header section defined twice.</li>
 <li>It is the first and second section of the first segment file. It is not found in subsequent
 segment files.</li>
-<li>The header data itself is compressed using zlib. Note that the compression level can be none and
+<li>The header data is zlib compressed data. Note that the compression level can be none and
 therefore the header looks uncompressed.</li>
 <li>In FTK Imager the end of line character(s) is a newline (0x0a).</li>
 </ul>
@@ -1493,8 +1493,8 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="optical-disc-images"><a class="header" href="#optical-disc-images">Optical disc images</a></h4>
 <p>For a MODE-1 CD-ROM optical disc image EnCase only seems to support 2048 bytes per sector (the
 data).</p>
@@ -1585,8 +1585,8 @@ The resulting size of the “compressed” chunk can therefore be larger than th
 <blockquote>
 <p>Note that this was deducted from the behavior of FTK Imager for SMART (EWF-S01).</p>
 </blockquote>
-<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="smart-ewf-s01-3"><a class="header" href="#smart-ewf-s01-3">SMART (EWF-S01)</a></h4>
 <p>The table section in the SMART (EWF-S01) format is equivalent to that of the EWF specification.</p>
 <h4 id="encase-1-ewf-e01-1"><a class="header" href="#encase-1-ewf-e01-1">EnCase 1 (EWF-E01)</a></h4>
@@ -1660,8 +1660,8 @@ data (without the checksum) the data chunk is stored uncompressed. The default s
 </table>
 </div>
 
-<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The checksum of the
-compressed data chunk is part the zlib compressed data format.</p>
+<p>The compressed data chunk consist of <a href="zlib.html">zlib compressed data</a>. The Adler-32 checksum of the
+compressed data chunk is part of the zlib compressed data.</p>
 <h4 id="ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01"><a class="header" href="#ftk-imager-and-encase-2-to-5-and-linen-5-ewf-e01">FTK Imager and EnCase 2 to 5 and linen 5 (EWF-E01)</a></h4>
 <p>Some aspects of this section are:</p>
 <ul>
@@ -1871,7 +1871,7 @@ section are:</p>
 </table>
 </div>
 
-<h4 id="ltree-data"><a class="header" href="#ltree-data">Ltree data</a></h4>
+<h4 id="ltree_data"><a class="header" href="#ltree_data">Ltree data</a></h4>
 <p>The ltree data string consists of an UTF-16 little-endian encoded string without byte order mark.
 The ltree data is not strict UTF-16 since it allows for unpaired surrogates, such as “U+d800” and
 “U+dc00”.</p>
@@ -3021,8 +3021,8 @@ values.</p>
 <h3 id="deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0"><a class="header" href="#deflate-uncompressed-block-data-with-copy-of-uncompressed-data-size-of-0">DEFLATE uncompressed block data with copy of uncompressed data size of 0</a></h3>
 <p>Seen in combination with some firmware versions of Tableau TD3 forensic imager.</p>
 <p>In this corruption scenario the copy of uncompressed data size value of the
-<a href="zlib.html">DEFLATE uncompressed block data</a> is set to 0 instead of the 1s complement of the
-uncompressed data size.</p>
+<a href="zlib.html#deflate_uncompressed_block_data">DEFLATE uncompressed block data</a> is set to 0 instead of
+the 1s complement of the uncompressed data size.</p>
 <p>Keramics currently does not handle this corruption scenario.</p>
 <h3 id="corrupt-section-header"><a class="header" href="#corrupt-section-header">Corrupt section header</a></h3>
 <p>TODO: add description</p>
